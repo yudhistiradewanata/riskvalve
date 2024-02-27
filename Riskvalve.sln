@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 25.0.1706.9
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Riskvalve", "Riskvalve\Riskvalve.csproj", "{A3ECE507-229D-4215-B9C7-0685FC62A03F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3ECE507-229D-4215-B9C7-0685FC62A03F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3ECE507-229D-4215-B9C7-0685FC62A03F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3ECE507-229D-4215-B9C7-0685FC62A03F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3ECE507-229D-4215-B9C7-0685FC62A03F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {F9041039-155A-4844-87A8-D41844E5A370}
+	EndGlobalSection
+EndGlobal
