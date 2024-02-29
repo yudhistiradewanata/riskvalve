@@ -1,0 +1,34 @@
+@{
+    ViewData["Title"] = "Area";
+    var areaList = ViewData["areaList"] as List<AreaModel>;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Area @ViewData["AreaListCount"]</h1>
+</div>
+<a asp-controller="AssetRegister" asp-action="AddArea" class="btn btn-primary">Add Area</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th>No</th>
+            <th>Business Area</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            if (areaList != null)
+            {
+                foreach (var item in areaList)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        <td>@item.BusinessArea</td>
+                        <td>
+                            <a asp-controller="AssetRegister" asp-action="EditArea" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Detail</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+</table>
