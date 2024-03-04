@@ -3,3 +3,8 @@
 
 // Write your JavaScript code.
 
+$(document).ready(function () {
+  $(".btn-inspection").click(function () {
+    console.log("clicked");
+  });
+});

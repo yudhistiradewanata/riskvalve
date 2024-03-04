@@ -4,8 +4,10 @@ public class AssetModel
 {
     public int Id { get; set; }
     public string? TagNo { get; set; }
-    public PlatformModel? Platform { get; set; }
-    public ValveTypeModel? ValveType { get; set; }
+    // public PlatformModel? Platform { get; set; }
+    public string? PlatformID { get; set; }
+    // public ValveTypeModel? ValveType { get; set; }
+    public int ValveTypeID { get; set; }
     public int Size { get; set; }
     public int ClassRating { get; set; }
     public string? ParentEquitpmentNo { get; set; }
@@ -17,7 +19,8 @@ public class AssetModel
     public string? BodyMaterial { get; set; }
     public string? EndConnection { get; set; }
     public string? SerialNo { get; set; }
-    public ManualOverrideModel? ManualOverride { get; set; }
+    // public ManualOverrideModel? ManualOverride { get; set; }
+    public int ManualOverrideID { get; set; }
     public string? ActuatorMfg { get; set; }
     public string? ActuatorSerialNo { get; set; }
     public string? ActuatorTypeModel { get; set; }
@@ -26,14 +29,29 @@ public class AssetModel
     public string? OperatingPressure { get; set; }
     public string? FlowRate { get; set; }
     public string? ServiceFluid { get; set; }
-    public FluidPhaseModel? FluidPhase { get; set; }
-    public ToxicOrFlamableFluidModel? ToxicOrFlamableFluid { get; set; }
+    // public FluidPhaseModel? FluidPhase { get; set; }
+    public int FluidPhaseID { get; set; }
+    // public ToxicOrFlamableFluidModel? ToxicOrFlamableFluid { get; set; }
+    public int ToxicOrFlamableFluidID { get; set; }
 }
 
 public class ValveTypeModel
 {
     public int Id { get; set; }
     public string? ValveType { get; set; }
+
+    public static List<ValveTypeModel> GetValveTypeList()
+    {
+        List<ValveTypeModel> valveTypeList =
+            new()
+            {
+                new() { Id = 1, ValveType = "Air Release Valve" },
+                new() { Id = 2, ValveType = "Blowdown Valve" },
+                new() { Id = 3, ValveType = "Check Valve" },
+                new() { Id = 4, ValveType = "Deluge Valve" },
+            };
+        return valveTypeList;
+    }
 }
 
 public class ManualOverrideModel
