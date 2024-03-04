@@ -15,12 +15,7 @@ namespace Riskvalve.Controllers
 
         public IActionResult Index()
         {
-			var json = "";
-            List<AssetModel> AssetList = new List<AssetModel>();
-            AssetList.Add(new AssetModel { Id = 1, TagNo = "WIB-PSV-V05A-4" });
             return View();
         }
-
-
     }
 }
