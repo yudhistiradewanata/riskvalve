@@ -7,4 +7,12 @@ $(document).ready(function () {
   $(".btn-inspection").click(function () {
     console.log("clicked");
   });
+
+  $(".datepicker").datepicker(
+    {
+      format: "yyyy-mm-dd",
+      autoclose: true,
+      todayHighlight: true,
+    }
+  );
 });

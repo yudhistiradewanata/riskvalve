@@ -24,3 +24,26 @@ body {
 a {
   color: black;
 }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:focus, .nav-tabs > li.active > a:hover {
+  color: black;
+  background-color: rgb(242, 242, 242);;
+  border: 1px solid rgb(242, 242, 242);;
+}
+
+a:hover {
+  color: black;
+  background-color: rgb(242, 242, 242);
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: square;
+  padding: 0;
+  padding-left: 10px;
+  margin: 0;
+}
+
+.form-control {
+  border-radius: 0;
+}

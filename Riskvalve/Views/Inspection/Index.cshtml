@@ -10,62 +10,81 @@
 }
 
 <div class="row">
-    <div class="col-md-3">
+    <div class="col-xs-3">
         <aside class="main-sidebar">
             <!-- search form (Optional) -->
             <form action="#" method="get" class="sidebar-form">
                 <div class="input-group">
                     <input type="text" id="menu-search" class="form-control"
                         placeholder="Search Area / Platform / Equipment">
-                    <span class="input-group-btn">
-                        <a class="btn btn-flat" readonly>
-                            <i class="fa fa-search"></i>
-                        </a>
-                    </span>
+                    @* <span class="input-group-btn">
+                    <a class="btn btn-flat" readonly>
+                    <i class="fa fa-search"></i>
+                    </a>
+                    </span> *@
                 </div>
             </form>
             <section class="sidebar" id="tree-menu">
                 <ul class="sidebar-menu">
                     <li class="treeview">
-                        <a href="#">
-                            <i class="fa fa-user"></i> <span>NBU</span> <i class="fa fa-angle-left pull-right"></i>
-                        </a>
+                        <a>NBU</a>
                         <ul class="treeview-menu">
                             <li class="treeview">
-                                <a href="#">
-                                    <i class="fa fa-user"></i> <span>AIDA-A</span> <i
-                                        class="fa fa-angle-left pull-right"></i>
-                                </a>
+                                <a>AIDA-A</a>
                                 <ul class="treeview-menu">
                                     <li class="treeview">
-                                        <a href="#">
-                                            <i class="fa fa-user"></i> <span>WIB-PSV-V05A-4</span> <i
-                                                class="fa fa-angle-left pull-right"></i>
-                                        </a>
+                                        <a>WIB-PSV-V05A-4</a>
                                         <ul class="treeview-menu">
-                                            <li class="tf-leaf"><a><i class="fa fa-circle-o"></i>[Add New
-                                                    Inspection]</a></li>
-                                            <li class="tf-leaf"><a><i class="fa fa-circle-o"></i>Inspection 001</a></li>
-                                            <li class="tf-leaf"><a><i class="fa fa-circle-o"></i>Inspection 002</a></li>
+                                            <li><a>[Add New Inspection]</a></li>
+                                            <li><a>Inspection 001</a></li>
+                                            <li><a>Inspection 002</a></li>
                                         </ul>
                                     </li>
                                 </ul>
                             </li>
+                            <li class="treeview">
+                                <a>ARYANI-A</a>
+                            </li>
+                            <li class="treeview">
+                                <a>CHESSY-A</a>
+                            </li>
                         </ul>
+                    </li>
+                    <li class="treeview">
+                        <a>CBU</a>
+                        <ul class="treeview-menu">
+                            <li class="treeview">
+                                <a>ASTI-A</a>
+                            </li>
+                            <li class="treeview">
+                                <a>ATTI-A</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="treeview">
+                        <a>SBU</a>
+                    </li>
+                    <li class="treeview">
+                        <a>GMS Cilegon</a>
+                    </li>
+                    <li class="treeview">
+                        <a>Pabelokan</a>
                     </li>
                 </ul>
             </section>
         </aside>
     </div>
-    <div class="col-md-9">
+    <div class="col-xs-9">
         <div>
             <ul class="nav nav-tabs">
                 <li class="active">
                     <a href="#welcome" data-toggle="tab">Welcome</a>
                 </li>
                 <li>
-                    <a href="#inspection1" data-toggle="tab">Inspection 1 <button type="button" class="btn-inspection"
-                            style="margin: 0;padding: 5;">X</button> </a>
+                    <a href="#inspection1" data-toggle="tab">New Inspection WIB-PSV-V05A-4 <button type="button"
+                            class="btn-inspection"
+                            style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button>
+                    </a>
                 </li>
             </ul>
             <div class="tab-content">
@@ -86,80 +105,87 @@
                             </div>
                             <div class="box-body">
                                 <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label for="ValveTagNo">Valve Tag No</label>
-                                        <input type="text" class="form-control" id="ValveTagNo" value="WIB-PSV-V05A-4"
-                                            readonly>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="CurrentConditionLimitStateA">Current Condition Limit State A</label>
-                                        <select class="form-control" id="CurrentConditionLimitStateA">
-                                            @foreach (var item in limitState)
-                                            {
-                                                <option value="@item.Id">@item.LimitState</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="InspectionDate">Inspection Date</label>
-                                        <input type="text" class="form-control" id="InspectionDate"
-                                            value="@DateTime.Today.ToString("yyyy-MM-dd")">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="CurrentConditionLimitStateB">Current Condition Limit State B</label>
-                                        <select class="form-control" id="CurrentConditionLimitStateB">
-                                            @foreach (var item in limitState)
-                                            {
-                                                <option value="@item.Id">@item.LimitState</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="InspectionMethod">Inspection Method</label>
-                                        <input type="text" class="form-control" id="InspectionMethod"
-                                            value="Visual Inspection">
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="CurrentConditionLimitStateC">Current Condition Limit State C</label>
-                                        <select class="form-control" id="CurrentConditionLimitStateC">
-                                            @foreach (var item in limitState)
-                                            {
-                                                <option value="@item.Id">@item.LimitState</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="InspectionEffectiveness">Inspection Effectiveness</label>
-                                        <select class="form-control" id="InspectionEffectiveness">
-                                            @foreach (var item in inspectionEffectivenessStates)
-                                            {
-                                                <option value="@item.Id">@item.Effectiveness</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="FunctionCondition">Function Condition</label>
-                                        <input type="text" class="form-control" id="FunctionCondition"
-                                            value="Packing Leak">
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="InspectionDescription">Inspection Description</label>
-                                        <textarea class="form-control" id="InspectionDescription"
-                                            rows="10">N/A</textarea>
-                                    </div>
-                                    <div class="col-md-6">
+                                    <div class="col-xs-8">
                                         <div class="row">
-                                            <div class="form-group col-md-12">
-                                                <label for="TestPressureIfAny">Test Pressure if Any</label>
-                                                <input type="text" class="form-control" id="TestPressureIfAny"
-                                                    value="N/A">
+                                            <div class="form-group col-md-6">
+                                                <label for="ValveTagNo">Valve Tag No</label>
+                                                <input type="text" class="form-control" id="ValveTagNo"
+                                                    value="WIB-PSV-V05A-4" readonly>
                                             </div>
-                                            <div class="col-md-12">
-                                                <label for="InspectionImage">Inspection Image</label>
-                                                <input type="file" class="form-control" id="InspectionImage1">
-                                                <input type="file" class="form-control" id="InspectionImage2">
-                                                <input type="file" class="form-control" id="InspectionImage3">
-                                                <input type="file" class="form-control" id="InspectionImage4">
+                                            <div class="form-group col-md-6">
+                                                <label for="CurrentConditionLimitStateA">Current Condition Limit State
+                                                    A</label>
+                                                <select class="form-control" id="CurrentConditionLimitStateA">
+                                                    @foreach (var item in limitState)
+                                                    {
+                                                        <option value="@item.Id">@item.LimitState</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="InspectionDate">Inspection Date</label>
+                                                <input type="text" class="form-control datepicker" id="InspectionDate"
+                                                    value="@DateTime.Today.ToString("yyyy-MM-dd")">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="CurrentConditionLimitStateB">Current Condition Limit State
+                                                    B</label>
+                                                <select class="form-control" id="CurrentConditionLimitStateB">
+                                                    @foreach (var item in limitState)
+                                                    {
+                                                        <option value="@item.Id">@item.LimitState</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="InspectionMethod">Inspection Method</label>
+                                                <input type="text" class="form-control" id="InspectionMethod"
+                                                    value="Visual Inspection">
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="CurrentConditionLimitStateC">Current Condition Limit State
+                                                    C</label>
+                                                <select class="form-control" id="CurrentConditionLimitStateC">
+                                                    @foreach (var item in limitState)
+                                                    {
+                                                        <option value="@item.Id">@item.LimitState</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="InspectionEffectiveness">Inspection Effectiveness</label>
+                                                <select class="form-control" id="InspectionEffectiveness">
+                                                    @foreach (var item in inspectionEffectivenessStates)
+                                                    {
+                                                        <option value="@item.Id">@item.Effectiveness</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="FunctionCondition">Function Condition</label>
+                                                <input type="text" class="form-control" id="FunctionCondition"
+                                                    value="Packing Leak">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="InspectionDescription">Inspection Description</label>
+                                                <textarea class="form-control" id="InspectionDescription"
+                                                    rows="10">N/A</textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="row">
+                                                    <div class="form-group col-md-12">
+                                                        <label for="TestPressureIfAny">Test Pressure if Any</label>
+                                                        <input type="text" class="form-control" id="TestPressureIfAny"
+                                                            value="N/A">
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        <label for="InspectionImage">Inspection Image</label>
+                                                        <input type="file" class="form-control" id="InspectionImage1">
+                                                        <input type="file" class="form-control" id="InspectionImage2">
+                                                        <input type="file" class="form-control" id="InspectionImage3">
+                                                        <input type="file" class="form-control" id="InspectionImage4">
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -173,31 +199,35 @@
                             </div>
                             <div class="box-body">
                                 <div class="row">
-                                    <div class="form-group col-md-6">
-                                        <label for="ValveTagNo">Valve Tag No</label>
-                                        <input type="text" class="form-control" id="ValveTagNo" value="WIB-PSV-V05A-4"
-                                            readonly>
-                                    </div>
-                                    <div class="form-group col-md-6">
-                                        <label for="CurrentConditionLimitStateA">Is Valve Repaired</label>
-                                        <select class="form-control" id="CurrentConditionLimitStateA">
-                                            @foreach (var item in isValveRepairedStates)
-                                            {
-                                                <option value="@item.Id">@item.IsValveRepaired</option>
-                                            }
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="InspectionDescription">Inspection Description</label>
-                                        <textarea class="form-control" id="InspectionDescription"
-                                            rows="5"></textarea>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="MaintenanceImage">Maintenance Image</label>
-                                        <input type="file" class="form-control" id="MaintenanceImage1">
-                                        <input type="file" class="form-control" id="MaintenanceImage2">
-                                        <input type="file" class="form-control" id="MaintenanceImage3">
-                                        <input type="file" class="form-control" id="MaintenanceImage4">
+                                    <div class="col-xs-8">
+                                        <div class="row">
+                                            <div class="form-group col-md-6">
+                                                <label for="ValveTagNo">Valve Tag No</label>
+                                                <input type="text" class="form-control" id="ValveTagNo"
+                                                    value="WIB-PSV-V05A-4" readonly>
+                                            </div>
+                                            <div class="form-group col-md-6">
+                                                <label for="CurrentConditionLimitStateA">Is Valve Repaired</label>
+                                                <select class="form-control" id="CurrentConditionLimitStateA">
+                                                    @foreach (var item in isValveRepairedStates)
+                                                    {
+                                                        <option value="@item.Id">@item.IsValveRepaired</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="InspectionDescription">Inspection Description</label>
+                                                <textarea class="form-control" id="InspectionDescription"
+                                                    rows="5"></textarea>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="MaintenanceImage">Maintenance Image</label>
+                                                <input type="file" class="form-control" id="MaintenanceImage1">
+                                                <input type="file" class="form-control" id="MaintenanceImage2">
+                                                <input type="file" class="form-control" id="MaintenanceImage3">
+                                                <input type="file" class="form-control" id="MaintenanceImage4">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
