@@ -16,45 +16,49 @@
     <header>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="#">Riskvalve</a>
-                </div>
-                <div class="collapse navbar-collapse" id="myNavbar">
-                    <ul class="nav navbar-nav">
-                        <li>
-                            <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Asset Register
-                                <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a></li>
-                                <li><a asp-area="" asp-controller="AssetRegister" asp-action="Platform">Platform</a>
+                <div class="row nav-row-custom">
+                    <div class="col-xs-3" style="background-color: white;">
+                        <img src="~/lib/images/logo.jpg" class="img-responsive" alt="Riskvalve"
+                            style="max-height:75px; aspect-ratio:1/1" />
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="collapse navbar-collapse" id="myNavbar">
+                            <ul class="nav navbar-nav">
+                                <li>
+                                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                                 </li>
-                                <li><a asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a></li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Asset Register
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
+                                        </li>
+                                        <li><a asp-area="" asp-controller="AssetRegister"
+                                                asp-action="Platform">Platform</a>
+                                        </li>
+                                        <li><a asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a asp-area="" asp-controller="Inspection" asp-action="Index">IMR</a>
+                                </li>
+                                <li>
+                                    <a asp-area="" asp-controller="Home" asp-action="Privacy">Assesment</a>
+                                </li>
+                                <li class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tool
+                                        <span class="caret"></span></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a asp-area="" asp-controller="Tool" asp-action="Import">Import</a></li>
+                                        <li><a asp-area="" asp-controller="Tool" asp-action="Export">Export</a></li>
+                                    </ul>
+                                </li>
                             </ul>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Inspection" asp-action="Index">IMR</a>
-                        </li>
-                        <li>
-                            <a asp-area="" asp-controller="Home" asp-action="Privacy">Assesment</a>
-                        </li>
-                        <li class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tool
-                                <span class="caret"></span></a>
-                            <ul class="dropdown-menu">
-                                <li><a asp-area="" asp-controller="Tool" asp-action="Import">Import</a></li>
-                                <li><a asp-area="" asp-controller="Tool" asp-action="Export">Export</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                    <p class="navbar-text navbar-right" style="text-align: right;"><a class="navbar-link">Aldo Febrian<br/>Surface Facility Engineer</a></p>
+                            <p class="navbar-text navbar-right" style="text-align: right;"><a class="navbar-link">Aldo
+                                    Febrian<br />Surface Facility Engineer</a></p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
