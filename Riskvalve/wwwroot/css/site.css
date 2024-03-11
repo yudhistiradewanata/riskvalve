@@ -49,7 +49,9 @@ a {
   background-color: rgb(71, 109, 173);
 }
 
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:focus, .navbar-default .navbar-nav > .open > a:hover {
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
   background-color: rgb(71, 109, 173);
   color: white;
 }
@@ -70,4 +72,18 @@ ul {
 
 .form-control {
   border-radius: 0;
+}
+
+.btn {
+  border-radius: 0;
+}
+
+.table > tbody > tr > td,
+.table > tbody > tr > th,
+.table > tfoot > tr > td,
+.table > tfoot > tr > th,
+.table > thead > tr > td,
+.table > thead > tr > th {
+  padding-top: 1px;
+  padding-bottom: 1px;
 }

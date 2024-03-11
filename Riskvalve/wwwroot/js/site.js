@@ -4,15 +4,20 @@
 // Write your JavaScript code.
 
 $(document).ready(function () {
+  $(".datatable").DataTable({
+    scrollX: true,
+    scrollCollapse: true,
+    ordering: false,
+    // lengthChange: false,
+  });
+
   $(".btn-inspection").click(function () {
     console.log("clicked");
   });
 
-  $(".datepicker").datepicker(
-    {
-      format: "yyyy-mm-dd",
-      autoclose: true,
-      todayHighlight: true,
-    }
-  );
+  $(".datepicker").datepicker({
+    format: "yyyy-mm-dd",
+    autoclose: true,
+    todayHighlight: true,
+  });
 });

@@ -3,32 +3,153 @@
     var areaList = ViewData["areaList"] as List<AreaModel>;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Area @ViewData["AreaListCount"]</h1>
-</div>
-<a asp-controller="AssetRegister" asp-action="AddArea" class="btn btn-primary">Add Area</a>
-<table class="table">
-    <thead>
-        <tr>
-            <th>No</th>
-            <th>Business Area</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        @{
-            if (areaList != null)
-            {
-                foreach (var item in areaList)
-                {
-                    <tr>
-                        <td>@item.Id</td>
-                        <td>@item.BusinessArea</td>
-                        <td>
-                            <a asp-controller="AssetRegister" asp-action="EditArea" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Detail</a>
-                        </td>
-                    </tr>
+<div class="row">
+    <div class="col-xs-3">
+        <aside class="main-sidebar">
+            <section class="sidebar" id="tree-menu">
+                <ul class="sidebar-menu">
+                    <li class="treeview">
+                        <a>Asset Register</a>
+                        <ul class="treeview-menu">
+                            <li class="treeview"><a asp-area="" asp-controller="AssetRegister"
+                                    asp-action="Area">Area</a>
+                            </li>
+                            <li class="treeview"><a asp-area="" asp-controller="AssetRegister"
+                                    asp-action="Platform">Platform</a>
+                            </li>
+                            <li class="treeview"><a asp-area="" asp-controller="AssetRegister"
+                                    asp-action="Asset">Asset</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+    </div>
+    <div class="col-xs-9">
+        <h3>Area</h3>
+        <button type="button" class="btn btn-primary btn-area-action" attr-mode="create">
+            Add New
+        </button>
+        <br /><br />
+        <table class="table table-bordered datatable" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Business Area</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int ctr = 0;
+                    if (areaList != null)
+                    {
+                        foreach (var item in areaList)
+                        {
+                            ctr++;
+                            <tr style="margin: 0;padding;0;">
+                                <td>@ctr</td>
+                                <td>@item.BusinessArea</td>
+                                <td>
+                                    <button class="btn btn-primary btn-area-action" attr-mode="view" attr-itemid="@item.Id">Detail</button>
+                                </td>
+                            </tr>
+                        }
+                    }
                 }
-            }
-        }
-</table>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="addAreaModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <div class="modal-header">
+                    <h4 class="modal-title">Add/Edit New Area</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-2">Business Area Name</label>
+                        <div class="col-md-2">
+                            <input id="field-business-area-mode" type="hidden">
+                            <input id="field-business-area-id" name="businessareaid" type="hidden">
+                            <input id="field-business-area-name" name="businessareaname" class="form-control"
+                                placeholder="Business Area Name" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-area-modal-delete" class="pull-left btn btn-danger">Delete</button>
+                    <button type="button" id="btn-area-modal-save" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.btn-area-action').click(function () {
+                var mode = $(this).attr('attr-mode');
+                if (mode == 'create') {
+                    $('#field-business-area-mode').val('create');
+                    $('#btn-area-modal-delete').hide();
+                    $('#addAreaModal').modal('show');
+                } else if (mode == 'view') {
+                    var id = $(this).attr('attr-itemid');
+                    $.ajax({
+                        url: '/AssetRegister/GetAreaDetail',
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (data) {
+                            $('#field-business-area-mode').val('update');
+                            $('#field-business-area-id').val(data.id);
+                            $('#field-business-area-name').val(data.businessArea);
+                            $('#btn-area-modal-delete').show();
+                            $('#addAreaModal').modal('show');
+                        }
+                    });
+                }
+            });
+            $('#btn-area-modal-save').click(function () {
+                var mode = $('#field-business-area-mode').val();
+                if (mode == 'create') {
+                    $.ajax({
+                        url: '/AssetRegister/AddArea',
+                        type: 'POST',
+                        data: { businessArea: $('#field-business-area-name').val() },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                } else if (mode == 'update') {
+                    var id = $('#field-business-area-id').val();
+                    $.ajax({
+                        url: '/AssetRegister/UpdateArea',
+                        type: 'POST',
+                        data: { id: id, businessArea: $('#field-business-area-name').val() },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+            $('#btn-area-modal-delete').click(function () {
+                var id = $('#field-business-area-id').val();
+                $.ajax({
+                    url: '/AssetRegister/DeleteArea',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+}

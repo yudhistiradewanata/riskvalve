@@ -15,14 +15,48 @@ public class AssetRegisterController : Controller
 
     public IActionResult Area()
     {
-        List<AreaModel> areaList = new List<AreaModel>();
-        areaList.Add(new AreaModel { Id = 1, BusinessArea = "Area 1" });
-        areaList.Add(new AreaModel { Id = 2, BusinessArea = "Area 2" });
-        areaList.Add(new AreaModel { Id = 3, BusinessArea = "Area 3" });
-        areaList.Add(new AreaModel { Id = 4, BusinessArea = "Area 4" });
-        areaList.Add(new AreaModel { Id = 5, BusinessArea = "Area 5" });
+        AreaModel areaModel = new AreaModel();
+        List<AreaModel> areaList = areaModel.GetAreaList();
         ViewData["AreaList"] = areaList;
         return View();
+    }
+
+    [HttpGet]
+    public IActionResult GetAreaDetail()
+    {
+        AreaModel areaModel = new AreaModel();
+        int id = Convert.ToInt32(Request.Query["id"]);
+        AreaModel area = areaModel.GetAreaModel(id);
+        return Json(area);
+    }
+
+    [HttpPost]
+    public IActionResult UpdateArea()
+    {
+        AreaModel areaModel = new AreaModel();
+        areaModel.Id = Convert.ToInt32(Request.Form["Id"]);
+        areaModel.BusinessArea = Request.Form["BusinessArea"];
+        areaModel.UpdateArea(areaModel);
+        return RedirectToAction("Area");
+    }
+
+    [HttpPost]
+    public IActionResult AddArea()
+    {
+        AreaModel areaModel = new AreaModel();
+        areaModel.BusinessArea = Request.Form["BusinessArea"];
+        // areaModel.BusinessArea = "Lanjutan";
+        areaModel.AddArea(areaModel);
+        return RedirectToAction("Area");
+    }
+
+    [HttpPost]
+    public IActionResult DeleteArea()
+    {
+        AreaModel areaModel = new AreaModel();
+        int id = Convert.ToInt32(Request.Form["Id"]);
+        areaModel.DeleteArea(id);
+        return RedirectToAction("Area");
     }
 
     public IActionResult Platform()
