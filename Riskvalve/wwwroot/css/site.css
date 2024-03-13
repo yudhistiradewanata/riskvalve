@@ -1,4 +1,14 @@
-﻿html {
+﻿.modal-body {
+  overflow-y: auto;
+}
+
+.form-control,
+.btn {
+  border-radius: 0;
+}
+
+/*
+html {
   font-size: 14px;
 }
 
@@ -58,7 +68,6 @@ a {
 
 a:hover {
   color: black;
-  /* background-color: rgb(242, 242, 242); */
   cursor: pointer;
   text-decoration: none;
 }
@@ -70,13 +79,6 @@ ul {
   margin: 0;
 }
 
-.form-control {
-  border-radius: 0;
-}
-
-.btn {
-  border-radius: 0;
-}
 
 .table > tbody > tr > td,
 .table > tbody > tr > th,
@@ -86,4 +88,4 @@ ul {
 .table > thead > tr > th {
   padding-top: 1px;
   padding-bottom: 1px;
-}
+} */
