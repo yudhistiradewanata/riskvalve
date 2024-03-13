@@ -1,8 +1,179 @@
 @{
     ViewData["Title"] = "Platform";
+    var platformList = ViewData["PlatformList"] as List<PlatformModel>;
+    var areaList = ViewData["AreaList"] as List<AreaModel>;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Platform</h1>
+<div class="row">
+    <div class="col-xs-3" style="padding-right:0;">
+        <partial name="Sidebar" />
+    </div>
+    <div class="col-xs-7">
+        <h3>Platform</h3>
+        <button type="button" class="btn btn-primary btn-platform-action" attr-mode="create">
+            Add New
+        </button>
+        <br /><br />
+        <table class="table table-bordered datatable" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Business Area</th>
+                    <th>Platform</th>
+                    <th>Code</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int ctr = 0;
+                    if (platformList != null)
+                    {
+                        foreach (var item in platformList)
+                        {
+                            ctr++;
+                            <tr style="margin: 0;padding;0;">
+                                <td>@ctr</td>
+                                <td>@item.BusinessArea</td>
+                                <td>@item.Platform</td>
+                                <td>@item.Code</td>
+                                <td>
+                                    <button class="btn btn-primary btn-platform-action" attr-mode="view"
+                                        attr-itemid="@item.Id">Detail</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
 </div>
 
+<div class="modal fade" id="addPlatformModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <input id="field-platform-mode" type="hidden">
+                <input id="field-platform-id" name="platformid" type="hidden">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add/Edit New Platform</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Business Area</label>
+                        <div class="col-md-6">
+                            <select id="field-platform-area" name="businessarea" class="form-control" required>
+                                <option value="">Select Business Area</option>
+                                @foreach (var item in areaList)
+                                {
+                                    <option value="@item.Id">@item.BusinessArea</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Platform Name</label>
+                        <div class="col-md-6">
+                            <input id="field-platform-name" name="platformname" class="form-control"
+                                placeholder="Platform Name" required>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">Platform Code</label>
+                        <div class="col-md-6">
+                            <input id="field-platform-code" name="platformcode" class="form-control"
+                                placeholder="Platform Code" required>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-platform-modal-delete"
+                        class="pull-left btn btn-danger">Delete</button>
+                    <button type="button" id="btn-platform-modal-save" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.btn-platform-action').click(function () {
+                $('#field-platform-area').val('');
+                $('#field-platform-name').val('');
+                $('#field-platform-code').val('');
+                var mode = $(this).attr('attr-mode');
+                if (mode == 'create') {
+                    $('#field-platform-mode').val('create');
+                    $('#btn-platform-modal-delete').hide();
+                    $('#addPlatformModal').modal('show');
+                } else if (mode == 'view') {
+                    var id = $(this).attr('attr-itemid');
+                    $.ajax({
+                        url: '/AssetRegister/GetPlatformDetail',
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (data) {
+                            $('#field-platform-mode').val('update');
+                            $('#field-platform-id').val(data.id);
+                            $('#field-platform-area').val(data.areaID);
+                            $('#field-platform-name').val(data.platform);
+                            $('#field-platform-code').val(data.code);
+                            $('#btn-platform-modal-delete').show();
+                            $('#addPlatformModal').modal('show');
+                        }
+                    });
+                }
+            });
+            $('#btn-platform-modal-save').click(function () {
+                var mode = $('#field-platform-mode').val();
+                if (mode == 'create') {
+                    $.ajax({
+                        url: '/AssetRegister/AddPlatform',
+                        type: 'POST',
+                        data: {
+                            areaID: $('#field-platform-area').val(),
+                            platform: $('#field-platform-name').val(),
+                            code: $('#field-platform-code').val()
+                        },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                } else if (mode == 'update') {
+                    var id = $('#field-platform-id').val();
+                    $.ajax({
+                        url: '/AssetRegister/UpdatePlatform',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            areaID: $('#field-platform-area').val(),
+                            platform: $('#field-platform-name').val(),
+                            code: $('#field-platform-code').val()
+                        },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+            $('#btn-platform-modal-delete').click(function () {
+                var id = $('#field-platform-id').val();
+                $.ajax({
+                    url: '/AssetRegister/DeletePlatform',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            });
+        });
+    </script>
+}

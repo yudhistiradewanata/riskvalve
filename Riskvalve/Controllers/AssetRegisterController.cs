@@ -33,9 +33,11 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult UpdateArea()
     {
-        AreaModel areaModel = new AreaModel();
-        areaModel.Id = Convert.ToInt32(Request.Form["Id"]);
-        areaModel.BusinessArea = Request.Form["BusinessArea"];
+        AreaModel areaModel = new()
+        {
+            Id = Convert.ToInt32(Request.Form["Id"]),
+            BusinessArea = Request.Form["BusinessArea"]
+        };
         areaModel.UpdateArea(areaModel);
         return RedirectToAction("Area");
     }
@@ -43,9 +45,10 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult AddArea()
     {
-        AreaModel areaModel = new AreaModel();
-        areaModel.BusinessArea = Request.Form["BusinessArea"];
-        // areaModel.BusinessArea = "Lanjutan";
+        AreaModel areaModel = new()
+        {
+            BusinessArea = Request.Form["BusinessArea"]
+        };
         areaModel.AddArea(areaModel);
         return RedirectToAction("Area");
     }
@@ -53,7 +56,7 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult DeleteArea()
     {
-        AreaModel areaModel = new AreaModel();
+        AreaModel areaModel = new();
         int id = Convert.ToInt32(Request.Form["Id"]);
         areaModel.DeleteArea(id);
         return RedirectToAction("Area");
@@ -61,7 +64,59 @@ public class AssetRegisterController : Controller
 
     public IActionResult Platform()
     {
+        PlatformModel platformModel = new();
+        List<PlatformModel> platformList = platformModel.GetPlatformList();
+        ViewData["PlatformList"] = platformList;
+        List<AreaModel> areaList = new AreaModel().GetAreaList();
+        ViewData["AreaList"] = areaList;
         return View();
+    }
+
+    [HttpGet]
+    public IActionResult GetPlatformDetail()
+    {
+        PlatformModel platformModel = new();
+        int id = Convert.ToInt32(Request.Query["id"]);
+        PlatformModel platform = platformModel.GetPlatformModel(id);
+        return Json(platform);
+    }
+
+    [HttpPost]
+    public IActionResult UpdatePlatform()
+    {
+        PlatformModel platformModel = new();
+        PlatformDB platformDb = new()
+        {
+            Id = Convert.ToInt32(Request.Form["Id"]),
+            AreaID = Convert.ToInt32(Request.Form["AreaID"]),
+            Platform = Request.Form["Platform"],
+            Code = Request.Form["Code"]
+        };
+        platformModel.UpdatePlatform(platformDb);
+        return RedirectToAction("Platform");
+    }
+
+    [HttpPost]
+    public IActionResult AddPlatform()
+    {
+        PlatformModel platformModel = new();
+        PlatformDB platformDb = new()
+        {
+            AreaID = Convert.ToInt32(Request.Form["AreaID"]),
+            Platform = Request.Form["Platform"],
+            Code = Request.Form["Code"]
+        };
+        platformModel.AddPlatform(platformDb);
+        return RedirectToAction("Platform");
+    }
+
+    [HttpPost]
+    public IActionResult DeletePlatform()
+    {
+        PlatformModel platformModel = new();
+        int id = Convert.ToInt32(Request.Form["Id"]);
+        platformModel.DeletePlatform(id);
+        return RedirectToAction("Platform");
     }
 
     public IActionResult Asset()
