@@ -62,32 +62,24 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label class="control-label col-md-4">Business Area</label>
-                        <div class="col-md-6">
-                            <select id="field-platform-area" name="businessarea" class="form-control" required>
-                                <option value="">Select Business Area</option>
-                                @foreach (var item in areaList)
-                                {
-                                    <option value="@item.Id">@item.BusinessArea</option>
-                                }
-                            </select>
-                        </div>
+                        <label for="field-plarfoem-area">Business Area</label>
+                        <select id="field-platform-area" name="businessarea" class="form-control" required>
+                            <option value="">Select Business Area</option>
+                            @foreach (var item in areaList)
+                            {
+                                <option value="@item.Id">@item.BusinessArea</option>
+                            }
+                        </select>
                     </div>
-                    <br/>
                     <div class="form-group">
-                        <label class="control-label col-md-4">Platform Name</label>
-                        <div class="col-md-6">
-                            <input id="field-platform-name" name="platformname" class="form-control"
-                                placeholder="Platform Name" required>
-                        </div>
+                        <label for="field-platform-name">Platform Name</label>
+                        <input id="field-platform-name" name="platformname" class="form-control"
+                            placeholder="Platform Name" required>
                     </div>
-                    <br/>
                     <div class="form-group">
-                        <label class="control-label col-md-4">Platform Code</label>
-                        <div class="col-md-6">
-                            <input id="field-platform-code" name="platformcode" class="form-control"
-                                placeholder="Platform Code" required>
-                        </div>
+                        <label for="field-platform-code">Platform Code</label>
+                        <input id="field-platform-code" name="platformcode" class="form-control"
+                            placeholder="Platform Code" required>
                     </div>
                 </div>
                 <div class="modal-footer">
