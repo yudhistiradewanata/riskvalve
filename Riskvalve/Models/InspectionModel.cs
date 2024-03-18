@@ -1,5 +1,27 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace Riskvalve.Models
 {
+    public class InspectionContext : DbContext
+    {
+        public DbSet<AssetDB> Asset { get; set; }
+        public DbSet<PlatformDB> Platform { get; set; }
+        public DbSet<AreaModel> Area { get; set; }
+
+        // public DbSet<InspectionDB> Inspection { get; set; }
+        public DbSet<InspectionEffectivenessModel> InspectionEffectiveness { get; set; }
+
+        // public DbSet<ConditionLimitStateDB> ConditionLimitState { get; set; }
+        // public DbSet<IsValveRepairedDB> IsValveRepaired { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder options) =>
+            options
+                .UseSqlServer(
+                    "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;Connection Timeout=30;"
+                )
+                .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+    }
+
     public class InspectionModel
     {
         public int Id { get; set; }
@@ -15,10 +37,44 @@ namespace Riskvalve.Models
         public string? TestPressureIfAny { get; set; }
     }
 
-    public class InspectionSidebarModel {
+    public class InspectionSidebarModel
+    {
         public int Id { get; set; }
         public string? Name { get; set; }
-        public InspectionSidebarModel? Child { get; set; }
+        public List<InspectionSidebarModel>? Child { get; set; }
+    }
+
+    public class InspectionSidebarHistory
+    {
+        public List<InspectionSidebarModel> GetInspectionSidebarHistory()
+        {
+            List<InspectionSidebarModel> inspectionSidebar = new();
+            using (var context = new InspectionContext())
+            {
+                inspectionSidebar = context.Area.Select(a => new InspectionSidebarModel
+                {
+                    Id = a.Id,
+                    Name = a.BusinessArea,
+                    Child = context.Platform.Where(p => p.AreaID == a.Id).Select(p => new InspectionSidebarModel
+                    {
+                        Id = p.Id,
+                        Name = p.Platform,
+                        Child = context.Asset.Where(asset => asset.PlatformID == p.Id).Select(asset => new InspectionSidebarModel
+                        {
+                            Id = asset.Id,
+                            Name = asset.TagNo,
+                            // Child = context.Inspection.Where(inspection => inspection.ValveTagNo == asset.TagNo).Select(inspection => new InspectionSidebarModel
+                            // {
+                            //     Id = inspection.Id,
+                            //     Name = inspection.InspectionDate
+                            // }).ToList()
+                        }).ToList()
+                    }).ToList()
+                }).ToList();
+            }
+            return inspectionSidebar;
+        }
+        // Area -> Platform -> Asset -> Inspection
     }
 
     public class ConditionLimitStateModel
@@ -46,22 +102,11 @@ namespace Riskvalve.Models
 
         public List<InspectionEffectivenessModel> GetInspectionEffectivenessStates()
         {
-            List<InspectionEffectivenessModel> inspectionEffectiveness =
-                new()
-                {
-                    new InspectionEffectivenessModel
-                    {
-                        Id = 1,
-                        Effectiveness = "Hightly Effective"
-                    },
-                    new InspectionEffectivenessModel
-                    {
-                        Id = 2,
-                        Effectiveness = "Ussualy Effective"
-                    },
-                    new InspectionEffectivenessModel { Id = 3, Effectiveness = "Fairly Effective" },
-                    new InspectionEffectivenessModel { Id = 4, Effectiveness = "Ineffective" }
-                };
+            List<InspectionEffectivenessModel> inspectionEffectiveness = new();
+            using (var context = new InspectionContext())
+            {
+                inspectionEffectiveness = context.InspectionEffectiveness.ToList();
+            }
             return inspectionEffectiveness;
         }
     }

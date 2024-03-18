@@ -1,4 +1,6 @@
 @{
+    var inspectionSidebar = ViewData["InspectionSidebar"] as List<InspectionSidebarModel>;
+    
     var ConditionLimitStateModel = new ConditionLimitStateModel();
     var limitState = ConditionLimitStateModel.GetConditionLimitStates();
 
@@ -12,92 +14,71 @@
 <div class="row">
     <div class="col-xs-3">
         <aside class="main-sidebar">
-            <!-- search form (Optional) -->
-            <form action="#" method="get" class="sidebar-form">
-                <div class="input-group">
-                    <input type="text" id="menu-search" class="form-control"
-                        placeholder="Search Area / Platform / Equipment">
-                    @* <span class="input-group-btn">
-                    <a class="btn btn-flat" readonly>
-                    <i class="fa fa-search"></i>
-                    </a>
-                    </span> *@
-                </div>
-            </form>
             <section class="sidebar" id="tree-menu">
                 <ul class="sidebar-menu">
-                    <li class="treeview">
-                        <a>NBU</a>
-                        <ul class="treeview-menu">
-                            <li class="treeview">
-                                <a>AIDA-A</a>
-                                <ul class="treeview-menu">
+                    @foreach (var item in inspectionSidebar)
+                    {
+                        <li class="treeview">
+                            <a>@item.Name</a>
+                            <ul class="treeview-menu">
+                                @foreach (var platform in item.Child as List<InspectionSidebarModel>)
+                                {
                                     <li class="treeview">
-                                        <a>WIB-PSV-V05A-4</a>
+                                        <a>@platform.Name</a>
                                         <ul class="treeview-menu">
-                                            <li><a>[Add New Inspection]</a></li>
-                                            <li><a>Inspection 001</a></li>
-                                            <li><a>Inspection 002</a></li>
+                                            @foreach (var equipment in platform.Child)
+                                            {
+                                                <li class="treeview">
+                                                    <a>@equipment.Name</a>
+                                                    <ul class="treeview-menu">
+                                                        <li class="treeview">
+                                                            <a class="btn-add-new-inspection" attr-id="@equipment.Id" attr-name="@equipment.Name">[Add New Inspection]</a>
+                                                        </li>
+                                                        @*foreach (var inspection in equipment.Child)
+                                                        {
+                                                            <li class="treeview">
+                                                                <a>@equipment.Name</a>
+                                                            </li>
+                                                        }*@
+                                                    </ul>
+                                                </li>
+                                            }
                                         </ul>
                                     </li>
-                                </ul>
-                            </li>
-                            <li class="treeview">
-                                <a>ARYANI-A</a>
-                            </li>
-                            <li class="treeview">
-                                <a>CHESSY-A</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a>CBU</a>
-                        <ul class="treeview-menu">
-                            <li class="treeview">
-                                <a>ASTI-A</a>
-                            </li>
-                            <li class="treeview">
-                                <a>ATTI-A</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="treeview">
-                        <a>SBU</a>
-                    </li>
-                    <li class="treeview">
-                        <a>GMS Cilegon</a>
-                    </li>
-                    <li class="treeview">
-                        <a>Pabelokan</a>
-                    </li>
+                                }
+                            </ul>
+                        </li>
+                    }
                 </ul>
             </section>
         </aside>
     </div>
     <div class="col-xs-9">
         <div>
-            <ul class="nav nav-tabs nav-tab-menus">
+            <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader">
                 <li class="active">
                     <a href="#welcome" data-toggle="tab">Welcome</a>
                 </li>
-                <li>
+                <li id="template_inspection_header">
                     <a href="#inspection1" data-toggle="tab">New Inspection WIB-PSV-V05A-4 <button type="button"
-                            class="btn-inspection"
+                            class="btn-close-inspection"
                             style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button>
                     </a>
                 </li>
             </ul>
-            <div class="tab-content">
+            <div class="tab-content" id="tabcontentcontainer">
                 <div class="tab-pane active" id="welcome">
                     <div class="row">
                         <h1>Welcome to Inspection</h1>
                         To start Inspection please choose assessment in tree view <br /> <br />
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Est sit minima corporis! Iste
-                        assumenda ipsum nemo animi corrupti, facere nulla fugit non cupiditate illo quis qui veritatis
-                        officiis quam consectetur.
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
+                            aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
+                            tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
+                        </p>
                     </div>
                 </div>
-                <div class="tab-pane" id="inspection1">
+                <div class="tab-pane" id="template_inspection">
                     <form>
                         <div class="box">
                             <div class="box-header">
@@ -108,14 +89,14 @@
                                     <div class="col-xs-8">
                                         <div class="row">
                                             <div class="form-group col-md-6">
-                                                <label for="ValveTagNo">Valve Tag No</label>
-                                                <input type="text" class="form-control" id="ValveTagNo"
+                                                <label for="field-inspection-valvetagno">Valve Tag No</label>
+                                                <input type="text" class="form-control" id="field-inspection-valvetagno"
                                                     value="WIB-PSV-V05A-4" readonly>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="CurrentConditionLimitStateA">Current Condition Limit State
+                                                <label for="field-inspection-current-condition-limit-state-a">Current Condition Limit State
                                                     A</label>
-                                                <select class="form-control" id="CurrentConditionLimitStateA">
+                                                <select class="form-control" id="field-inspection-current-condition-limit-state-a">
                                                     @foreach (var item in limitState)
                                                     {
                                                         <option value="@item.Id">@item.LimitState</option>
@@ -123,14 +104,12 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="InspectionDate">Inspection Date</label>
-                                                <input type="text" class="form-control datepicker" id="InspectionDate"
-                                                    value="@DateTime.Today.ToString("yyyy-MM-dd")">
+                                                <label for="field-inspection-date">Inspection Date</label>
+                                                <input id="field-inspection-date" type="text" class="form-control datepicker" />
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="CurrentConditionLimitStateB">Current Condition Limit State
-                                                    B</label>
-                                                <select class="form-control" id="CurrentConditionLimitStateB">
+                                                <label for="field-inspection-current-condition-limit-state-b">Current Condition Limit State B</label>
+                                                <select class="form-control" id="field-inspection-current-condition-limit-state-b">
                                                     @foreach (var item in limitState)
                                                     {
                                                         <option value="@item.Id">@item.LimitState</option>
@@ -138,14 +117,12 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="InspectionMethod">Inspection Method</label>
-                                                <input type="text" class="form-control" id="InspectionMethod"
-                                                    value="Visual Inspection">
+                                                <label for="field-inspection-inspection-method">Inspection Method</label>
+                                                <input type="text" class="form-control" id="field-inspection-inspection-method" value="Visual Inspection">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="CurrentConditionLimitStateC">Current Condition Limit State
-                                                    C</label>
-                                                <select class="form-control" id="CurrentConditionLimitStateC">
+                                                <label for="field-inspection-current-condition-limit-state-c">Current Condition Limit State C</label>
+                                                <select class="form-control" id="field-inspection-current-condition-limit-state-c">
                                                     @foreach (var item in limitState)
                                                     {
                                                         <option value="@item.Id">@item.LimitState</option>
@@ -153,8 +130,8 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="InspectionEffectiveness">Inspection Effectiveness</label>
-                                                <select class="form-control" id="InspectionEffectiveness">
+                                                <label for="field-inspection-effectiveness">Inspection Effectiveness</label>
+                                                <select class="form-control" id="field-inspection-effectiveness">
                                                     @foreach (var item in inspectionEffectivenessStates)
                                                     {
                                                         <option value="@item.Id">@item.Effectiveness</option>
@@ -162,28 +139,25 @@
                                                 </select>
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="FunctionCondition">Function Condition</label>
-                                                <input type="text" class="form-control" id="FunctionCondition"
-                                                    value="Packing Leak">
+                                                <label for="field-inspection-function-condition">Function Condition</label>
+                                                <input type="text" class="form-control" id="field-inspection-function-condition" value="Packing Leak">
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="InspectionDescription">Inspection Description</label>
-                                                <textarea class="form-control" id="InspectionDescription"
-                                                    rows="10">N/A</textarea>
+                                                <label for="field-inspection-description">Inspection Description</label>
+                                                <textarea class="form-control" id="field-inspection-description" rows="10">N/A</textarea>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="row">
                                                     <div class="form-group col-md-12">
-                                                        <label for="TestPressureIfAny">Test Pressure if Any</label>
-                                                        <input type="text" class="form-control" id="TestPressureIfAny"
-                                                            value="N/A">
+                                                        <label for="field-inspection-test-pressure-if-any">Test Pressure if Any</label>
+                                                        <input type="text" class="form-control" id="field-inspection-test-pressure-if-any" value="N/A">
                                                     </div>
                                                     <div class="col-md-12">
-                                                        <label for="InspectionImage">Inspection Image</label>
-                                                        <input type="file" class="form-control" id="InspectionImage1">
-                                                        <input type="file" class="form-control" id="InspectionImage2">
-                                                        <input type="file" class="form-control" id="InspectionImage3">
-                                                        <input type="file" class="form-control" id="InspectionImage4">
+                                                        <label for="field-inspection-image">Inspection Image</label>
+                                                        <input type="file" class="form-control" id="field-inspection-image-1">
+                                                        <input type="file" class="form-control" id="field-inspection-image-2">
+                                                        <input type="file" class="form-control" id="field-inspection-image-3">
+                                                        <input type="file" class="form-control" id="field-inspection-image-4">
                                                     </div>
                                                 </div>
                                             </div>
@@ -202,13 +176,12 @@
                                     <div class="col-xs-8">
                                         <div class="row">
                                             <div class="form-group col-md-6">
-                                                <label for="ValveTagNo">Valve Tag No</label>
-                                                <input type="text" class="form-control" id="ValveTagNo"
-                                                    value="WIB-PSV-V05A-4" readonly>
+                                                <label for="field-inspection-maintenancecate">Maintenance Date</label>
+                                                <input type="text" class="form-control datepicker" id="field-inspection-maintenancedate">
                                             </div>
                                             <div class="form-group col-md-6">
-                                                <label for="CurrentConditionLimitStateA">Is Valve Repaired</label>
-                                                <select class="form-control" id="CurrentConditionLimitStateA">
+                                                <label for="field-inspection-isvalverepaired">Is Valve Repaired</label>
+                                                <select class="form-control" id="field-inspection-isvalverepaired">
                                                     @foreach (var item in isValveRepairedStates)
                                                     {
                                                         <option value="@item.Id">@item.IsValveRepaired</option>
@@ -216,20 +189,26 @@
                                                 </select>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="InspectionDescription">Inspection Description</label>
-                                                <textarea class="form-control" id="InspectionDescription"
+                                                <label for="field-inspection-maintenancedescription">Maintenance Description</label>
+                                                <textarea class="form-control" id="field-inspection-maintenancedescription"
                                                     rows="5"></textarea>
                                             </div>
                                             <div class="col-md-6">
-                                                <label for="MaintenanceImage">Maintenance Image</label>
-                                                <input type="file" class="form-control" id="MaintenanceImage1">
-                                                <input type="file" class="form-control" id="MaintenanceImage2">
-                                                <input type="file" class="form-control" id="MaintenanceImage3">
-                                                <input type="file" class="form-control" id="MaintenanceImage4">
+                                                <label for="field-inspection-image">Maintenance Image</label>
+                                                <input type="file" class="form-control" id="field-inspection-image1">
+                                                <input type="file" class="form-control" id="field-inspection-image2">
+                                                <input type="file" class="form-control" id="field-inspection-image3">
+                                                <input type="file" class="form-control" id="field-inspection-image4">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="box">
+                            <div class="box-footer">
+                                <button type="submit" class="btn btn-primary form-submit" id="btn-submit">Save</button>
                             </div>
                         </div>
                         <hr />
@@ -239,4 +218,123 @@
         </div>
     </div>
 </div>
-</div>
+
+@section Scripts{
+    <script>
+        function close_inspection(ctr) {
+            bootbox.confirm({
+                message: "Are you sure you want to close this inspection?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        $('#inspectionheader' + ctr).remove();
+                        $('#inspection' + ctr).remove();
+                        var lasttab = $('#inspectiontabheader li:last-child');
+                        lasttab.find('a').click();
+                    }
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            var template_inspection = $('#template_inspection');
+            var template_inspection_html = template_inspection.html();
+            template_inspection.remove();
+            var template_inspection_header = $('#template_inspection_header');
+            var template_inspection_header_html = template_inspection_header.html();
+            template_inspection_header.remove();
+
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+
+            var idx = 0;
+            $('.btn-add-new-inspection').click(function () {
+                var ctr = idx;
+                var id = $(this).attr('attr-id');
+                var name = $(this).attr('attr-name');
+                var tabheadercontainer = $('#inspectiontabheader');
+                var tabcontentcontainer = $('#tabcontentcontainer');
+                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-toggle="tab">New Inspection ' + name + ' <button type="button" class="btn-close-inspection" style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button></a></li>');
+                tabcontentcontainer.append('<div class="tab-pane" id="inspection' + ctr + '">' + template_inspection_html + '</div>');
+                var tabcontent = tabcontentcontainer.find('.form-control');
+                tabcontent.each(function () {
+                    var name = $(this).attr('id') + ctr;
+                    $(this).attr('id', name);
+                });
+                //find button submit then add ctr on id
+                var submitbtn = tabcontentcontainer.find('.form-submit');
+                submitbtn.each(function() {
+                    var name = $(this).attr('id') + ctr;
+                    $(this).attr('id', name);
+                })
+
+                $('#inspectionheader' + ctr).find('a').click();
+
+                $('#field-inspection-valvetagno' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-a' + ctr).val('');
+                $('#field-inspection-date' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-b' + ctr).val('');
+                $('#field-inspection-inspection-method' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-c' + ctr).val('');
+                $('#field-inspection-effectiveness' + ctr).val('');
+                $('#field-inspection-function-condition' + ctr).val('');
+                $('#field-inspection-description' + ctr).val('');
+                $('#field-inspection-test-pressure-if-any' + ctr).val('');
+                $('#field-inspection-image-1' + ctr).val('');
+                $('#field-inspection-image-2' + ctr).val('');
+                $('#field-inspection-image-3' + ctr).val('');
+                $('#field-inspection-image-4' + ctr).val('');
+                $('#field-inspection-maintenancedate' + ctr).val('');
+                $('#field-inspection-isvalverepaired' + ctr).val('');
+                $('#field-inspection-maintenancedescription' + ctr).val('');
+                $('#field-inspection-image1' + ctr).val('');
+                $('#field-inspection-image2' + ctr).val('');
+                $('#field-inspection-image3' + ctr).val('');
+                $('#field-inspection-image4' + ctr).val('');
+                $.ajax({
+                    url: '/AssetRegister/GetAssetDetail',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (data) {
+                        $('#field-inspection-valvetagno' + ctr).val(data.tagNo);
+                    },
+                    error: function (error) {
+                        alert('Valve Tag not found');
+                        $('#inspectionheader' + ctr).remove();
+                        $('#inspection' + ctr).remove();
+                        var lasttab = $('#inspectiontabheader li:last-child');
+                        lasttab.find('a').click();
+                    }
+                });
+
+                $('.btn-close-inspection').click(function () {
+                    close_inspection(ctr);
+                });
+
+                $('.datepicker').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+                idx++;
+            });
+
+            $('.btn-close-inspection').click(function () {
+                var currctr = $(this).parent().parent().attr('id').replace('inspectionheader', '');
+                close_inspection(currctr);
+            });
+        });
+    </script>
+}

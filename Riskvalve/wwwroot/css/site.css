@@ -21,7 +21,7 @@ label,
   margin-bottom: 0;
 }
 
-/*
+
 html {
   font-size: 14px;
 }
@@ -88,13 +88,10 @@ a:hover {
 
 ul {
   list-style-type: square;
-  padding: 0;
-  padding-left: 10px;
-  margin: 0;
 }
 
 
-.table > tbody > tr > td,
+/* .table > tbody > tr > td,
 .table > tbody > tr > th,
 .table > tfoot > tr > td,
 .table > tfoot > tr > th,

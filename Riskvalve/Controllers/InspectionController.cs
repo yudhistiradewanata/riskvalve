@@ -15,6 +15,9 @@ namespace Riskvalve.Controllers
 
         public IActionResult Index()
         {
+            InspectionSidebarHistory inspectionSidebarHistory = new();
+            List<InspectionSidebarModel> inspectionSidebar = inspectionSidebarHistory.GetInspectionSidebarHistory();
+            ViewData["InspectionSidebar"] = inspectionSidebar;
             return View();
         }
     }
