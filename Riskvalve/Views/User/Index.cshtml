@@ -1,0 +1,154 @@
+@{
+    ViewData["Title"] = "User";
+    var userList = ViewData["UserList"] as List<UserModel>;
+}
+
+<div class="row">
+    <div class="col-xs-3" style="padding-right:0;">
+    </div>
+    <div class="col-xs-7">
+        <h3>User</h3>
+        <button type="button" class="btn btn-primary btn-user-action" attr-mode="create">
+            Add New
+        </button>
+        <br /><br />
+        <table class="table table-bordered datatable" style="width: 100%;">
+            <thead>
+                <tr>
+                    <th>No</th>
+                    <th>Username</th>
+                    <th>Role</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    int ctr = 0;
+                    if (userList != null)
+                    {
+                        foreach (var user in userList)
+                        {
+                            ctr++;
+                            <tr style="margin: 0;padding;0;">
+                                <td>@ctr</td>
+                                <td>@user.Username</td>
+                                <td>@user.Role</td>
+                                <td>
+                                    <button class="btn btn-primary btn-user-action" attr-mode="view"
+                                        attr-itemid="@user.Id">Detail</button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                }
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="addUserModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <input id="field-user-mode" type="hidden">
+                <input id="field-user-id" name="userid" type="hidden">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add/Edit New user</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="field-username">Username</label>
+                        <input id="field-username" name="username" class="form-control" placeholder="Username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="field-password">Password</label>
+                        <input type="password" id="field-password" name="password" class="form-control" placeholder="Password" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="field-role">Role</label>
+                        <select id="field-role" name="role" class="form-control" required>
+                            @* <option value="Super Administrator">Super Administrator</option> *@
+                            <option value="Surface Facility Engineer">Surface Facility Engineer</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-user-modal-delete" class="pull-left btn btn-danger">Delete</button>
+                    <button type="button" id="btn-user-modal-save" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.btn-user-action').click(function () {
+                $('#field-user-id').val('');
+                $('#field-username').val('');
+                $('#field-password').val('');
+                $('#field-role').val('');
+                var mode = $(this).attr('attr-mode');
+                if (mode == 'create') {
+                    $('#field-user-mode').val('create');
+                    $('#btn-user-modal-delete').hide();
+                    $('#addUserModal').modal('show');
+                } else if (mode == 'view') {
+                    var id = $(this).attr('attr-itemid');
+                    $.ajax({
+                        url: '/User/GetUser',
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (data) {
+                            $('#field-user-id').val(data.id);
+                            $('#field-username').val(data.username);
+                            $('#field-password').attr('placeholder', 'Leave blank if you don\'t want to change the password');
+                            $('#field-role').val(data.role);
+                            $('#field-user-mode').val('update');
+                            $('#btn-user-modal-delete').show();
+                            $('#addUserModal').modal('show');
+                        }
+                    });
+                }
+            });
+            $('#btn-user-modal-save').click(function () {
+                var mode = $('#field-user-mode').val();
+                var id = $('#field-user-id').val();
+                var username = $('#field-username').val();
+                var password = $('#field-password').val();
+                var role = $('#field-role').val();
+                if (mode == 'create') {
+                    $.ajax({
+                        url: '/User/AddUser',
+                        type: 'POST',
+                        data: { username: username, password: password, role: role },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                } else if (mode == 'update') {
+                    $.ajax({
+                        url: '/User/UpdateUser',
+                        type: 'POST',
+                        data: { id: id, username: username, password: password, role: role },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
+            });
+            $('#btn-user-modal-delete').click(function () {
+                var id = $('#field-user-id').val();
+                $.ajax({
+                    url: '/User/DeleteUser',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (data) {
+                        location.reload();
+                    }
+                });
+            });
+        })
+    </script>
+}

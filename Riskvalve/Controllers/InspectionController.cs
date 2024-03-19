@@ -15,6 +15,12 @@ namespace Riskvalve.Controllers
 
         public IActionResult Index()
         {
+            UserModel login = new();
+            if (!login.isLogin(HttpContext))
+            {
+                TempData["Message"] = "Please login first";
+                return Redirect("/Login/Index");
+            }
             InspectionSidebarHistory inspectionSidebarHistory = new();
             List<InspectionSidebarModel> inspectionSidebar = inspectionSidebarHistory.GetInspectionSidebarHistory();
             ViewData["InspectionSidebar"] = inspectionSidebar;

@@ -15,6 +15,12 @@ public class AssetRegisterController : Controller
 
     public IActionResult Area()
     {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
         AreaModel areaModel = new AreaModel();
         List<AreaModel> areaList = areaModel.GetAreaList();
         ViewData["AreaList"] = areaList;
@@ -62,6 +68,12 @@ public class AssetRegisterController : Controller
 
     public IActionResult Platform()
     {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
         PlatformModel platformModel = new();
         List<PlatformModel> platformList = platformModel.GetPlatformList();
         ViewData["PlatformList"] = platformList;
@@ -121,6 +133,12 @@ public class AssetRegisterController : Controller
 
     public IActionResult Asset()
     {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
         AssetModel assetModel = new();
         List<AssetModel> assetList = assetModel.GetAssetList();
         ViewData["AssetList"] = assetList;

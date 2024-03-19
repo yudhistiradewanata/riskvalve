@@ -1,4 +1,8 @@
-﻿<!DOCTYPE html>
+﻿@{
+    bool isLogin = ViewData["isLogin"] as bool? ?? true;
+}
+
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -16,7 +20,9 @@
     <link rel="stylesheet" href="~/Riskvalve.styles.css" asp-append-version="true" />
 </head>
 
-<body>
+@if (isLogin)
+{
+    <body>
     <header>
         <nav class="navbar navbar-default">
             <div class="container-fluid">
@@ -58,8 +64,11 @@
                                         <li><a asp-area="" asp-controller="Tool" asp-action="Export">Export</a></li>
                                     </ul>
                                 </li>
+                                <li>
+                                    <a asp-area="" asp-controller="User" asp-action="Index">User</a>
+                                </li>
                             </ul>
-                            <p class="navbar-text navbar-right" style="text-align: right;"><a class="navbar-link">Aldo
+                            <p id="btn-signout" class="navbar-text navbar-right" style="text-align: right;"><a class="navbar-link">Aldo
                                     Febrian<br />Surface Facility Engineer</a></p>
                         </div>
                     </div>
@@ -78,18 +87,47 @@
             &copy; 2024 - Riskvalve - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
-    <script src="~/lib/js/jquery.js"></script>
-    <script src="~/lib/js/bootstrap.js"></script>
-    <script src="~/lib/js/datepicker.js"></script>
-    <script src="~/lib/js/bootbox.js"></script>
-    <script src="~/lib/js/bootbox.js"></script>
-    <script src="~/lib/ext/datatables/jquery.dataTables.min.js"></script>
-    <script src="~/lib/ext/datatables/dataTables.bootstrap.min.js"></script>
-    <script src="~/lib/ext/datatables/buttons/dataTables.buttons.min.js"></script>
-    <script src="~/lib/ext/datatables/buttons/jszip.min.js"></script>
-    <script src="~/lib/ext/datatables/buttons/buttons.html5.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
 </body>
+}
+else
+{
+    @RenderBody()
+}
+<script src="~/lib/js/jquery.js"></script>
+<script src="~/lib/js/bootstrap.js"></script>
+<script src="~/lib/js/datepicker.js"></script>
+<script src="~/lib/js/bootbox.js"></script>
+<script src="~/lib/js/bootbox.js"></script>
+<script src="~/lib/ext/datatables/jquery.dataTables.min.js"></script>
+<script src="~/lib/ext/datatables/dataTables.bootstrap.min.js"></script>
+<script src="~/lib/ext/datatables/buttons/dataTables.buttons.min.js"></script>
+<script src="~/lib/ext/datatables/buttons/jszip.min.js"></script>
+<script src="~/lib/ext/datatables/buttons/buttons.html5.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+<script>
+    $(document).ready(function () {
+        $("#btn-signout").click(function () {
+            bootbox.confirm({
+                message: "Are you sure you want to sign out?",
+                buttons: {
+                    confirm: {
+                        label: 'Yes',
+                        className: 'btn-success'
+                    },
+                    cancel: {
+                        label: 'No',
+                        className: 'btn-danger'
+                    }
+                },
+                callback: function (result) {
+                    if (result) {
+                        window.location.href = "/Login/Logout";
+                    }
+                }
+            });
+        });
+    });
+</script>
 
 </html>

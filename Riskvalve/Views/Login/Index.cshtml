@@ -1,0 +1,68 @@
+@{
+    ViewData["Title"] = "Login";
+    var message = TempData["Message"];
+}
+
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <img src="~/lib/images/logo.jpg" style="max-width: 200px;"></img>
+        </div>
+        @if (message != null)
+        {
+            <div class="alert alert-warning alert-dismissible">
+                @message
+            </div>
+        }
+        <div class="login-box-body">
+            <p class="login-box-msg">Sign in</p>
+            <form>
+                <div class="form-group has-feedback" style="margin-bottom: 10px;">
+                    <input type="text" class="form-control" placeholder="Username" name="username" autocomplete="off"
+                        required autofocus>
+                    <span class="glyphicon glyphicon-user form-control-feedback"></span>
+                </div>
+                <div class="form-group has-feedback" style="margin-bottom: 10px;">
+                    <input type="password" class="form-control" placeholder="Password" name="password" required>
+                    <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+                </div>
+                <div class="form-group">
+                    <input id="timezone" type="hidden" name="timezone" required>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <button id="btn-signin" type="submit" class="btn btn-primary btn-block btn-flat">Sign
+                            In</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#btn-signin').click(function (e) {
+                e.preventDefault();
+                var username = $('input[name="username"]').val();
+                var password = $('input[name="password"]').val();
+                $.ajax({
+                    url: '/Login/Login',
+                    type: 'POST',
+                    data: {
+                        username: username,
+                        password: password
+                    },
+                    success: function (data) {
+                        if (data == true) {
+                            location.href = '/Home/Index';
+                        } else {
+                            alert('Invalid username or password');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
