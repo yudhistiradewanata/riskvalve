@@ -245,7 +245,13 @@
                         <hr />
                         <div class="box">
                             <div class="box-footer">
-                                <button type="submit" class="btn btn-primary form-submit" id="btn-submit">Save</button>
+                                <div class="col-xs-6">
+                                <button type="button" class="btn btn-primary form-submit" id="btn-submit">Save</button>
+                                <button type="button" class="btn btn-warning form-submit" id="btn-submit">Print</button></div>
+                                <div class="col-xs-2 text-right">
+                                    <button type="button" class="btn btn-danger form-submit pull-right"
+                                        id="btn-submit">Delete</button>
+                                </div>
                             </div>
                         </div>
                         <hr />
@@ -282,6 +288,15 @@
             });
         }
 
+        function fold_all_sidebar_menu() {
+            for (var i = 2; i <= 4; i++) {
+                $('.sidebar-menu').find('a[attr-sidebar-level="' + i + '"]').each(function () {
+                    var parent = $(this).parent();
+                    parent.hide();
+                });
+            }
+        }
+
         $(document).ready(function () {
             var template_inspection = $('#template_inspection');
             var template_inspection_html = template_inspection.html();
@@ -292,9 +307,16 @@
 
             $("#searchForm").on("keyup", function () {
                 var value = $(this).val().toLowerCase();
-                $(".sidebar-menu li").filter(function () {
-                    $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                });
+                if (value == '') {
+                    $(".sidebar-menu li").filter(function () {
+                        $(this).show();
+                    });
+                    fold_all_sidebar_menu();
+                } else {
+                    $(".sidebar-menu li").filter(function () {
+                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+                    });
+                }
             });
 
             $('.sidebartreea').click(function () {
@@ -381,12 +403,7 @@
                 }
             });
 
-            for (var i = 2; i <= 4; i++) {
-                $('.sidebar-menu').find('a[attr-sidebar-level="' + i + '"]').each(function () {
-                    var parent = $(this).parent();
-                    parent.hide();
-                });
-            }
+            fold_all_sidebar_menu();
 
             $('.datepicker').datepicker({
                 format: 'dd/mm/yyyy',
