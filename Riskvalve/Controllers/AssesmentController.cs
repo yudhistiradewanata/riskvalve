@@ -4,11 +4,11 @@ using Riskvalve.Models;
 
 namespace Riskvalve.Controllers;
 
-public class AssessmentController : Controller
+public class AssesmentController : Controller
 {
-    private readonly ILogger<AssessmentController> _logger;
+    private readonly ILogger<AssesmentController> _logger;
 
-    public AssessmentController(ILogger<AssessmentController> logger)
+    public AssesmentController(ILogger<AssesmentController> logger)
     {
         _logger = logger;
     }
@@ -22,9 +22,9 @@ public class AssessmentController : Controller
             return Redirect("/Login/Index");
         }
         InspectionSidebarHistory inspectionSidebarHistory = new();
-        List<InspectionSidebarModel> inspectionSidebar =
-            inspectionSidebarHistory.GetInspectionSidebarHistory();
+        List<InspectionSidebarModel> inspectionSidebar = inspectionSidebarHistory.GetInspectionSidebarHistory();
         ViewData["InspectionSidebar"] = inspectionSidebar;
+        ViewData["pageType"] = "Assesment";
         return View();
     }
 }

@@ -1,5 +1,6 @@
 @{
-    ViewData["Title"] = "Inspection";
+    ViewData["Title"] = "Assessment";
+
     var ConditionLimitStateModel = new ConditionLimitStateModel();
     var limitState = ConditionLimitStateModel.GetConditionLimitStates();
 
@@ -30,7 +31,7 @@
             <div class="tab-content" id="tabcontentcontainer">
                 <div class="tab-pane active" id="welcome">
                     <div class="row">
-                        <h1>Welcome to Inspection</h1>
+                        <h1>Welcome to Assesment</h1>
                         To start Inspection please choose assessment in tree view <br /> <br />
                         <p>
                             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
@@ -191,11 +192,8 @@
                         <div class="box">
                             <div class="box-footer">
                                 <div class="col-xs-6">
-                                    <button type="button" class="btn btn-primary form-submit"
-                                        id="btn-submit">Save</button>
-                                    <button type="button" class="btn btn-warning form-submit"
-                                        id="btn-submit">Print</button>
-                                </div>
+                                <button type="button" class="btn btn-primary form-submit" id="btn-submit">Save</button>
+                                <button type="button" class="btn btn-warning form-submit" id="btn-submit">Print</button></div>
                                 <div class="col-xs-2 text-right">
                                     <button type="button" class="btn btn-danger form-submit pull-right"
                                         id="btn-submit">Delete</button>

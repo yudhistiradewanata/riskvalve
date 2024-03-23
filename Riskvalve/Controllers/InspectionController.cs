@@ -24,6 +24,7 @@ namespace Riskvalve.Controllers
             InspectionSidebarHistory inspectionSidebarHistory = new();
             List<InspectionSidebarModel> inspectionSidebar = inspectionSidebarHistory.GetInspectionSidebarHistory();
             ViewData["InspectionSidebar"] = inspectionSidebar;
+            ViewData["pageType"] = "Inspection";
             return View();
         }
     }

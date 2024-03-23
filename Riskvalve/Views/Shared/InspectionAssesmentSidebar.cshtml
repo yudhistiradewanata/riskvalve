@@ -1,0 +1,59 @@
+@{
+    var inspectionSidebar = ViewData["InspectionSidebar"] as List<InspectionSidebarModel>;
+    var pageType = ViewData["PageType"] as string;
+}
+
+<aside class="main-sidebar">
+    <section class="sidebar" id="tree-menu">
+        <form class="form-inline" role="form" style="margin-left:20px; margin-bottom:20px">
+            <div class="form-group">
+                <input type="text" class="form-control" id="searchForm" placeholder="Search">
+            </div>
+        </form>
+        <ul class="sidebar-menu">
+            @if (inspectionSidebar != null)
+            {
+                @foreach (var item in inspectionSidebar as List<InspectionSidebarModel>)
+                {
+                    <li class="treeview">
+                        <a class="sidebartreea" attr-sidebar-level="1" attr-find-inspection="@item.Name">@item.Name</a>
+                        <ul class="treeview-menu">
+                            @foreach (var platform in item.Child as List<InspectionSidebarModel>)
+                            {
+                                <li class="treeview">
+                                    <a class="sidebartreea" attr-sidebar-level="2" attr-find-inspection="@item.Name"
+                                        attr-find-platform="@platform.Name">@platform.Name</a>
+                                    <ul class="treeview-menu">
+                                        @foreach (var equipment in platform.Child)
+                                        {
+                                            <li class="treeview">
+                                                <a class="sidebartreea" attr-sidebar-level="3" attr-find-inspection="@item.Name"
+                                                    attr-find-platform="@platform.Name"
+                                                    attr-find-equipment="@equipment.Name">@equipment.Name</a>
+                                                <ul class="treeview-menu">
+                                                    <li class="treeview">
+                                                        <a class="btn-add-new-inspection" attr-id="@equipment.Id"
+                                                            attr-name="@equipment.Name" attr-sidebar-level="4"
+                                                            attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
+                                                            attr-find-equipment="@equipment.Name" attr-find-imr="NEW">[Add New
+                                                            @pageType]</a>
+                                                    </li>
+                                                    @*foreach (var inspection in equipment.Child)
+                                    {
+                                    <li class="treeview">
+                                    <a>@equipment.Name</a>
+                                    </li>
+                                    }*@
+                                                </ul>
+                                            </li>
+                                        }
+                                    </ul>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+                }
+            }
+        </ul>
+    </section>
+</aside>
