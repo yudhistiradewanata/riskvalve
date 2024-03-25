@@ -35,6 +35,23 @@ public class HomeController : Controller
         AssetModel assetModel = new();
         List<AssetModel> assetList = assetModel.GetAssetList();
         ViewData["AssetList"] = assetList;
+
+        List<PlatformModel> platformList = new PlatformModel().GetPlatformList();
+        ViewData["PlatformList"] = platformList;
+
+        List<ValveTypeModel> valveTypeList = new ValveTypeModel().GetValveTypeList();
+        ViewData["ValveTypeList"] = valveTypeList;
+
+        List<ManualOverrideModel> manualOverrideList =
+            new ManualOverrideModel().GetManualOverrideList();
+        ViewData["ManualOverrideList"] = manualOverrideList;
+
+        List<FluidPhaseModel> fluidPhaseList = new FluidPhaseModel().GetFluidPhaseList();
+        ViewData["FluidPhaseList"] = fluidPhaseList;
+
+        List<ToxicOrFlamableFluidModel> toxicOrFlamableFluidList =
+            new ToxicOrFlamableFluidModel().GetToxicOrFlamableFluidList();
+        ViewData["ToxicOrFlamableFluidList"] = toxicOrFlamableFluidList;
         return View();
     }
 
