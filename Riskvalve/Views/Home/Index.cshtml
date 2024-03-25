@@ -1,9 +1,275 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Summary";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<style>
+    td {
+        height: 30px;
+        width: 30px;
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+
+    .risk-veryhigh {
+        background-color: rgb(233, 50, 35);
+    }
+
+    .risk-high {
+        background-color: rgb(237, 109, 45);
+    }
+
+    .risk-medium {
+        background-color: rgb(255, 254, 84);
+    }
+
+    .risk-low {
+        background-color: rgb(55, 125, 34);
+    }
+
+    .risk-verylow {
+        background-color: rgb(123, 163, 63);
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-2" style="padding-right:0;">
+        <partial name="HomeSidebar" />
+    </div>
+    <div class="col-xs-8" style="padding-right: 50px">
+        <div class="row no-padding">
+            <div class="col-xs-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Risk Distribution</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table table-bordered">
+                                    <tbody class="tbody-chart">
+                                        <tr>
+                                            <td style="text-align:center">E</td>
+                                            <td class="risk-high"></td>
+                                            <td class="risk-high"></td>
+                                            <td class="risk-veryhigh"></td>
+                                            <td class="risk-veryhigh"></td>
+                                            <td class="risk-veryhigh"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center">D</td>
+                                            <td class="risk-medium"></td>
+                                            <td class="risk-high"></td>
+                                            <td class="risk-high"></td>
+                                            <td class="risk-veryhigh"></td>
+                                            <td class="risk-veryhigh"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center">C</td>
+                                            <td class="risk-low"></td>
+                                            <td class="risk-medium"></td>
+                                            <td class="risk-medium"></td>
+                                            <td class="risk-high"></td>
+                                            <td class="risk-veryhigh"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center">B</td>
+                                            <td class="risk-verylow"></td>
+                                            <td class="risk-low"></td>
+                                            <td class="risk-medium"></td>
+                                            <td class="risk-high"></td>
+                                            <td class="risk-high"></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="text-align:center">A</td>
+                                            <td class="risk-verylow"></td>
+                                            <td class="risk-verylow"></td>
+                                            <td class="risk-low"></td>
+                                            <td class="risk-medium"></td>
+                                            <td class="risk-high"></td>
+                                        </tr>
+                                        <tr>
+                                            <td></td>
+                                            <td style="text-align:center">1</td>
+                                            <td style="text-align:center">2</td>
+                                            <td style="text-align:center">3</td>
+                                            <td style="text-align:center">4</td>
+                                            <td style="text-align:center">5</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Risk Distribution</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="chart">
+                                    <canvas id="riskDistributonDoughnut" style="height: 155px; width: 300px;"
+                                        height="620" width="1242"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="box">
+                    <div class="box-header">
+                        <h3 class="box-title">Risk Distribution Per Area</h3>
+                    </div>
+                    <div class="box-body">
+                        <div class="chart">
+                            <canvas id="barChart" style="height: 260px; width: 621px;" height="520"
+                                width="1242"></canvas>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var pieChartCanvas = $('#riskDistributonDoughnut').get(0).getContext('2d')
+            var pieChart = new Chart(pieChartCanvas)
+            var PieData = [{
+                value: 112,
+                color: '#009900',
+                highlight: '#009900',
+                label: 'Very Low'
+            },
+            {
+                value: 13,
+                color: '#00A65A',
+                highlight: '#00A65A',
+                label: 'Low'
+            },
+            {
+                value: 38,
+                color: '#FFFF00',
+                highlight: '#FFFF00',
+                label: 'Medium'
+            },
+            {
+                value: 7,
+                color: '#F39C12',
+                highlight: '#F39C12',
+                label: 'High'
+            },
+            {
+                value: 5,
+                color: '#FF0000',
+                highlight: '#FF0000',
+                label: 'Very High'
+            }
+            ]
+            var pieOptions = {
+                segmentShowStroke: true,
+                segmentStrokeColor: '#fff',
+                segmentStrokeWidth: 2,
+                percentageInnerCutout: 50,
+                animationSteps: 10,
+                animationEasing: 'easeOutBounce',
+                animateRotate: false,
+                animateScale: false,
+                responsive: true,
+                maintainAspectRatio: true,
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
+            }
+            pieChart.Doughnut(PieData, pieOptions)
+
+            var areaChartData = {
+                labels: ['NBU', 'CBU', 'SBD', 'TAK', 'ALDO'],
+                datasets: [
+                    {
+                        label: 'Very Low',
+                        fillColor: '#009900',
+                        strokeColor: '#009900',
+                        pointColor: 'rgba(210, 214, 222, 1)',
+                        pointStrokeColor: '#c1c7d1',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(220,220,220,1)',
+                        data: [65, 59, 80, 81, 56,]
+                    },
+                    {
+                        label: 'Low',
+                        fillColor: '#00A65A',
+                        strokeColor: '#00A65A',
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: [28, 48, 40, 19, 86]
+                    },
+                    {
+                        label: 'Medium',
+                        fillColor: '#FFFF00',
+                        strokeColor: '#FFFF00',
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: [5, 0, 33, 4, 19]
+                    },
+                    {
+                        label: 'High',
+                        fillColor: '#F39C12',
+                        strokeColor: '#F39C12',
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: [7, 3, 8, 11, 3]
+                    },
+                    {
+                        label: 'Very High',
+                        fillColor: '#FF0000',
+                        strokeColor: '#FF0000',
+                        pointColor: '#3b8bba',
+                        pointStrokeColor: 'rgba(60,141,188,1)',
+                        pointHighlightFill: '#fff',
+                        pointHighlightStroke: 'rgba(60,141,188,1)',
+                        data: [10, 11, 2, 4, 6]
+                    }
+                ]
+            }
+
+            var barChartCanvas = $('#barChart').get(0).getContext('2d')
+            var barChart = new Chart(barChartCanvas)
+            var barChartData = areaChartData
+            barChartData.datasets[1].fillColor = '#00a65a'
+            barChartData.datasets[1].strokeColor = '#00a65a'
+            barChartData.datasets[1].pointColor = '#00a65a'
+            var barChartOptions = {
+                scaleBeginAtZero: true,
+                scaleShowGridLines: true,
+                scaleGridLineColor: 'rgba(0,0,0,.05)',
+                scaleGridLineWidth: 1,
+                scaleShowHorizontalLines: true,
+                scaleShowVerticalLines: true,
+                barShowStroke: true,
+                barStrokeWidth: 2,
+                barValueSpacing: 5,
+                barDatasetSpacing: 1,
+                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
+                responsive: true,
+                maintainAspectRatio: true
+            }
+
+            barChartOptions.datasetFill = false
+            barChart.Bar(barChartData, barChartOptions)
+        });
+    </script>
+}

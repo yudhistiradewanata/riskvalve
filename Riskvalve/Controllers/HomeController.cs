@@ -24,6 +24,17 @@ public class HomeController : Controller
         return View();
     }
 
+    public IActionResult Detail()
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
+        return View();
+    }
+
     public IActionResult Privacy()
     {
         UserModel login = new();
