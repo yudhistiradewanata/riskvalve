@@ -32,6 +32,9 @@ public class HomeController : Controller
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
         }
+        AssetModel assetModel = new();
+        List<AssetModel> assetList = assetModel.GetAssetList();
+        ViewData["AssetList"] = assetList;
         return View();
     }
 
