@@ -101,6 +101,10 @@ public class UserModel
             UserModel oldUser = context.User.Find(user.Id);
             oldUser.Username = user.Username;
             oldUser.Role = user.Role;
+            if(user.Password != null)
+            {
+                oldUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
+            }
             context.User.Update(oldUser);
             context.SaveChanges();
         }
