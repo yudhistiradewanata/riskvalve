@@ -98,8 +98,10 @@ public class UserModel
     {
         using (var context = new UserContext())
         {
-            user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
-            context.User.Update(user);
+            UserModel oldUser = context.User.Find(user.Id);
+            oldUser.Username = user.Username;
+            oldUser.Role = user.Role;
+            context.User.Update(oldUser);
             context.SaveChanges();
         }
     }
