@@ -62,7 +62,7 @@
                                                     id="field-inspection-current-condition-limit-state-a">
                                                     @foreach (var item in limitState)
                                                     {
-                                                        <option value="@item.Id">@item.LimitState</option>
+                                                            <option value="@item.Id">@item.LimitState</option>
                                                     }
                                                 </select>
                                             </div>
@@ -78,7 +78,7 @@
                                                     id="field-inspection-current-condition-limit-state-b">
                                                     @foreach (var item in limitState)
                                                     {
-                                                        <option value="@item.Id">@item.LimitState</option>
+                                                            <option value="@item.Id">@item.LimitState</option>
                                                     }
                                                 </select>
                                             </div>
@@ -95,7 +95,7 @@
                                                     id="field-inspection-current-condition-limit-state-c">
                                                     @foreach (var item in limitState)
                                                     {
-                                                        <option value="@item.Id">@item.LimitState</option>
+                                                            <option value="@item.Id">@item.LimitState</option>
                                                     }
                                                 </select>
                                             </div>
@@ -105,7 +105,7 @@
                                                 <select class="form-control" id="field-inspection-effectiveness">
                                                     @foreach (var item in inspectionEffectivenessStates)
                                                     {
-                                                        <option value="@item.Id">@item.Effectiveness</option>
+                                                            <option value="@item.Id">@item.Effectiveness</option>
                                                     }
                                                 </select>
                                             </div>
@@ -165,7 +165,7 @@
                                                 <select class="form-control" id="field-inspection-isvalverepaired">
                                                     @foreach (var item in isValveRepairedStates)
                                                     {
-                                                        <option value="@item.Id">@item.IsValveRepaired</option>
+                                                            <option value="@item.Id">@item.IsValveRepaired</option>
                                                     }
                                                 </select>
                                             </div>
@@ -211,230 +211,97 @@
 </div>
 
 @section Scripts {
-    <script>
-        function close_inspection(ctr) {
-            bootbox.confirm({
-                message: "Are you sure you want to close this inspection?",
-                buttons: {
-                    confirm: {
-                        label: 'Yes',
-                        className: 'btn-success'
-                    },
-                    cancel: {
-                        label: 'No',
-                        className: 'btn-danger'
-                    }
-                },
-                callback: function (result) {
-                    if (result) {
-                        $('#inspectionheader' + ctr).remove();
-                        $('#inspection' + ctr).remove();
-                        var lasttab = $('#inspectiontabheader li:last-child');
-                        lasttab.find('a').click();
-                    }
-                }
-            });
-        }
-
-        function fold_all_sidebar_menu() {
-            for (var i = 2; i <= 4; i++) {
-                $('.sidebar-menu').find('a[attr-sidebar-level="' + i + '"]').each(function () {
-                    var parent = $(this).parent();
-                    parent.hide();
-                });
-            }
-        }
-
-        $(document).ready(function () {
-            var template_inspection = $('#template_inspection');
-            var template_inspection_html = template_inspection.html();
-            template_inspection.remove();
-            var template_inspection_header = $('#template_inspection_header');
-            var template_inspection_header_html = template_inspection_header.html();
-            template_inspection_header.remove();
-
-            $("#searchForm").on("keyup", function () {
-                var value = $(this).val().toLowerCase();
-                if (value == '') {
-                    $(".sidebar-menu li").filter(function () {
-                        $(this).show();
-                    });
-                    fold_all_sidebar_menu();
-                } else {
-                    $(".sidebar-menu li").filter(function () {
-                        $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
-                    });
-                }
-            });
-
-            $('.sidebartreea').click(function () {
-                for (var i = 2; i <= 4; i++) {
-                    $('.sidebar-menu').find('a[attr-sidebar-level="' + i + '"]').each(function () {
-                        var parent = $(this).parent();
-                        parent.hide();
-                    });
-                }
-                var level = $(this).attr('attr-sidebar-level');
-                var level_1 = $(this).attr('attr-find-inspection');
-                var level_2 = $(this).attr('attr-find-platform');
-                var level_3 = $(this).attr('attr-find-equipment');
-
-                if (level == 3) {
-                    $('.sidebar-menu').find('a[attr-sidebar-level="2"]').each(function () {
-                        var parent = $(this).parent();
-                        if ($(this).attr('attr-find-inspection') != level_1) {
-                            parent.hide();
-                        }
-                        else {
-                            parent.show();
-                        }
-                    });
-                    $('.sidebar-menu').find('a[attr-sidebar-level="3"]').each(function () {
-                        var parent = $(this).parent();
-                        if ($(this).attr('attr-find-platform') != level_2) {
-                            parent.hide();
-                        }
-                        else {
-                            parent.show();
-                        }
-                    });
-                    $('.sidebar-menu').find('a[attr-sidebar-level="4"]').each(function () {
-                        var parent = $(this).parent();
-                        if ($(this).attr('attr-find-equipment') != level_3) {
-                            parent.hide();
-                        }
-                        else {
-                            parent.show();
-                        }
-                    });
-                } else if (level == 2) {
-                    $('.sidebar-menu').find('a[attr-sidebar-level="2"]').each(function () {
-                        var parent = $(this).parent();
-                        if ($(this).attr('attr-find-inspection') != level_1) {
-                            parent.hide();
-                        }
-                        else {
-                            parent.show();
-                        }
-                    });
-                    $('.sidebar-menu').find('a[attr-sidebar-level="3"]').each(function () {
-                        var parent = $(this).parent();
-                        if ($(this).attr('attr-find-platform') != level_2) {
-                            parent.hide();
-                        }
-                        else {
-                            parent.show();
-                        }
-                    });
-                    $('.sidebar-menu').find('a[attr-sidebar-level="4"]').each(function () {
-                        var parent = $(this).parent();
-                        parent.hide();
-                    });
-                } else if (level == 1) {
-                    $('.sidebar-menu').find('a[attr-sidebar-level="2"]').each(function () {
-                        var parent = $(this).parent();
-                        if ($(this).attr('attr-find-inspection') != level_1) {
-                            parent.hide();
-                        }
-                        else {
-                            parent.show();
-                        }
-                    });
-                    $('.sidebar-menu').find('a[attr-sidebar-level="3"]').each(function () {
-                        var parent = $(this).parent();
-                        parent.hide();
-                    });
-                    $('.sidebar-menu').find('a[attr-sidebar-level="4"]').each(function () {
-                        var parent = $(this).parent();
-                        parent.hide();
-                    });
-                }
-            });
-
-            fold_all_sidebar_menu();
-
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
-
-            var idx = 0;
-            $('.btn-add-new-inspection').click(function () {
-                var ctr = idx;
-                var id = $(this).attr('attr-id');
-                var name = $(this).attr('attr-name');
-                var tabheadercontainer = $('#inspectiontabheader');
-                var tabcontentcontainer = $('#tabcontentcontainer');
-                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-toggle="tab">New Inspection ' + name + ' <button type="button" class="btn-close-inspection" style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button></a></li>');
-                tabcontentcontainer.append('<div class="tab-pane" id="inspection' + ctr + '">' + template_inspection_html + '</div>');
-                var tabcontent = tabcontentcontainer.find('.form-control');
-                tabcontent.each(function () {
-                    var name = $(this).attr('id') + ctr;
-                    $(this).attr('id', name);
-                });
-                //find button submit then add ctr on id
-                var submitbtn = tabcontentcontainer.find('.form-submit');
-                submitbtn.each(function () {
-                    var name = $(this).attr('id') + ctr;
-                    $(this).attr('id', name);
-                })
-
-                $('#inspectionheader' + ctr).find('a').click();
-
-                $('#field-inspection-valvetagno' + ctr).val('');
-                $('#field-inspection-current-condition-limit-state-a' + ctr).val('');
-                $('#field-inspection-date' + ctr).val('');
-                $('#field-inspection-current-condition-limit-state-b' + ctr).val('');
-                $('#field-inspection-inspection-method' + ctr).val('');
-                $('#field-inspection-current-condition-limit-state-c' + ctr).val('');
-                $('#field-inspection-effectiveness' + ctr).val('');
-                $('#field-inspection-function-condition' + ctr).val('');
-                $('#field-inspection-description' + ctr).val('');
-                $('#field-inspection-test-pressure-if-any' + ctr).val('');
-                $('#field-inspection-image-1' + ctr).val('');
-                $('#field-inspection-image-2' + ctr).val('');
-                $('#field-inspection-image-3' + ctr).val('');
-                $('#field-inspection-image-4' + ctr).val('');
-                $('#field-inspection-maintenancedate' + ctr).val('');
-                $('#field-inspection-isvalverepaired' + ctr).val('');
-                $('#field-inspection-maintenancedescription' + ctr).val('');
-                $('#field-inspection-image1' + ctr).val('');
-                $('#field-inspection-image2' + ctr).val('');
-                $('#field-inspection-image3' + ctr).val('');
-                $('#field-inspection-image4' + ctr).val('');
-                $.ajax({
-                    url: '/AssetRegister/GetAssetDetail',
-                    type: 'GET',
-                    data: { id: id },
-                    success: function (data) {
-                        $('#field-inspection-valvetagno' + ctr).val(data.tagNo);
-                    },
-                    error: function (error) {
-                        alert('Valve Tag not found');
-                        $('#inspectionheader' + ctr).remove();
-                        $('#inspection' + ctr).remove();
-                        var lasttab = $('#inspectiontabheader li:last-child');
-                        lasttab.find('a').click();
-                    }
-                });
-
-                $('.btn-close-inspection').click(function () {
-                    close_inspection(ctr);
-                });
+        <script>
+            $(document).ready(function () {
+                var template_inspection = $('#template_inspection');
+                var template_inspection_html = template_inspection.html();
+                template_inspection.remove();
+                var template_inspection_header = $('#template_inspection_header');
+                var template_inspection_header_html = template_inspection_header.html();
+                template_inspection_header.remove();
 
                 $('.datepicker').datepicker({
                     format: 'dd/mm/yyyy',
                     autoclose: true,
                     todayHighlight: true
                 });
-                idx++;
-            });
 
-            $('.btn-close-inspection').click(function () {
-                var currctr = $(this).parent().parent().attr('id').replace('inspectionheader', '');
-                close_inspection(currctr);
+                var idx = 0;
+                $('.btn-add-new-inspection').click(function () {
+                    var ctr = idx;
+                    var id = $(this).attr('attr-id');
+                    var name = $(this).attr('attr-name');
+                    var tabheadercontainer = $('#inspectiontabheader');
+                    var tabcontentcontainer = $('#tabcontentcontainer');
+                    tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-toggle="tab">New Inspection ' + name + ' <button type="button" class="btn-close-inspection" style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button></a></li>');
+                    tabcontentcontainer.append('<div class="tab-pane" id="inspection' + ctr + '">' + template_inspection_html + '</div>');
+                    var tabcontent = tabcontentcontainer.find('.form-control');
+                    tabcontent.each(function () {
+                        var name = $(this).attr('id') + ctr;
+                        $(this).attr('id', name);
+                    });
+                    //find button submit then add ctr on id
+                    var submitbtn = tabcontentcontainer.find('.form-submit');
+                    submitbtn.each(function () {
+                        var name = $(this).attr('id') + ctr;
+                        $(this).attr('id', name);
+                    })
+
+                    $('#inspectionheader' + ctr).find('a').click();
+
+                    $('#field-inspection-valvetagno' + ctr).val('');
+                    $('#field-inspection-current-condition-limit-state-a' + ctr).val('');
+                    $('#field-inspection-date' + ctr).val('');
+                    $('#field-inspection-current-condition-limit-state-b' + ctr).val('');
+                    $('#field-inspection-inspection-method' + ctr).val('');
+                    $('#field-inspection-current-condition-limit-state-c' + ctr).val('');
+                    $('#field-inspection-effectiveness' + ctr).val('');
+                    $('#field-inspection-function-condition' + ctr).val('');
+                    $('#field-inspection-description' + ctr).val('');
+                    $('#field-inspection-test-pressure-if-any' + ctr).val('');
+                    $('#field-inspection-image-1' + ctr).val('');
+                    $('#field-inspection-image-2' + ctr).val('');
+                    $('#field-inspection-image-3' + ctr).val('');
+                    $('#field-inspection-image-4' + ctr).val('');
+                    $('#field-inspection-maintenancedate' + ctr).val('');
+                    $('#field-inspection-isvalverepaired' + ctr).val('');
+                    $('#field-inspection-maintenancedescription' + ctr).val('');
+                    $('#field-inspection-image1' + ctr).val('');
+                    $('#field-inspection-image2' + ctr).val('');
+                    $('#field-inspection-image3' + ctr).val('');
+                    $('#field-inspection-image4' + ctr).val('');
+                    $.ajax({
+                        url: '/AssetRegister/GetAssetDetail',
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (data) {
+                            $('#field-inspection-valvetagno' + ctr).val(data.tagNo);
+                        },
+                        error: function (error) {
+                            alert('Valve Tag not found');
+                            $('#inspectionheader' + ctr).remove();
+                            $('#inspection' + ctr).remove();
+                            var lasttab = $('#inspectiontabheader li:last-child');
+                            lasttab.find('a').click();
+                        }
+                    });
+
+                    $('.btn-close-inspection').click(function () {
+                        close_inspection(ctr);
+                    });
+
+                    $('.datepicker').datepicker({
+                        format: 'dd/mm/yyyy',
+                        autoclose: true,
+                        todayHighlight: true
+                    });
+                    idx++;
+                });
+
+                $('.btn-close-inspection').click(function () {
+                    var currctr = $(this).parent().parent().attr('id').replace('inspectionheader', '');
+                    close_inspection(currctr);
+                });
             });
-        });
-    </script>
+        </script>
 }
