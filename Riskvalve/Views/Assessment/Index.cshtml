@@ -1,0 +1,1326 @@
+@{
+    ViewData["Title"] = "Assessment";
+    var CurrentConditionLimitStateModel = new CurrentConditionLimitStateModel();
+    var limitState = CurrentConditionLimitStateModel.GetConditionLimitStates();
+    var InspectionEffectivenessModel = new InspectionEffectivenessModel();
+    var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
+    var IsValveRepairedModel = new IsValveRepairedModel();
+    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedStates();
+    }
+    <div class="container-fluid">
+        <div class="row">
+            <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+                <b class="inspection-sidebar-title">Risk Assessment</b>
+                <partial name="InspectionAssessmentSidebar" />
+            </div>
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+                <div>
+                    <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#welcome" data-bs-toggle="tab" data-bs-target="#welcome" type="button" role="tab">
+                                Welcome
+                            </a>
+                        </li>
+                        <li class="nav-item" id="template_inspection_header">
+                            <a
+                                href="#inspection1" data-bs-toggle="tab"
+                            >New Assessment Template
+                                <button 
+                                    type="button"
+                                    class="btn-close-inspection"
+                                ><i class="fa-solid fa-xmark"></i></button>
+                            </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="tabcontentcontainer">
+                        <div class="tab-pane active show" id="welcome">
+                            <div class="assessment-welcome">
+                                <div class="content">
+                                    <h3>Welcome to Assessment</h3>
+                                    <div>To start Inspection please choose assessment in tree view</div>
+                                    <p style="margin-top: 24px;">
+                                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
+                                        aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
+                                        tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="template_inspection">
+                            <form class="assessment-form">
+                                @*
+                                <div class="row">
+                                    <div class="col-xs-2">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <aside class="main-sidebar">
+                                                    <section class="sidebar" id="tree-menu">
+                                                        <ul class="sidebar-menu" style="list-style-type:none; padding:0">
+                                                            <li class="treeview">
+                                                                <ul class="treeview-menu"
+                                                                    style="list-style-type:none; padding:0">
+                                                                    <li class="treeview">
+                                                                        <div
+                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                                                                            <a>Valve Properties</a>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="treeview">
+                                                                        <div
+                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                                                                            <a>Inspection History</a>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="treeview">
+                                                                        <div
+                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                                                                            <a>Risk Assessment</a>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="treeview">
+                                                                        <div
+                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                                                                            <a>Risk Matrix</a>
+                                                                        </div>
+                                                                    </li>
+                                                                    <li class="treeview">
+                                                                        <div
+                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                                                                            <a>Integrity Plan</a>
+                                                                        </div>
+                                                                    </li>
+                                                                </ul>
+                                                            </li>
+                                                        </ul>
+                                                    </section>
+                                                </aside>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <div class="row">
+                                                    <div class="col-xs-6">
+                                                        <button type="button" class="btn btn-primary" style="width: 100%;"
+                                                            id="btn-submit">Save</button>
+                                                    </div>
+                                                    <div class="col-xs-6">
+                                                        <button type="button" class="btn btn-warning" style="width: 100%;"
+                                                            id="btn-print">Print</button>
+                                                    </div>
+                                                    <div class="col-xs-12">
+                                                        <button type="button" class="btn btn-danger" style="width: 100%;"
+                                                            id="btn-delete">Delete</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-10">
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <h3 class="box-title">Assessment Information</h3>
+                                            </div>
+                                            <div class="box-body">
+                                                <div class="row">
+                                                    <div class="col-xs-8">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-valvetagno">Valve Tag No</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="field-inspection-valvetagno" value="WIB-PSV-V05A-4"
+                                                                    readonly>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label
+                                                                    for="field-inspection-current-condition-limit-state-a">Current
+                                                                Condition Limit State
+                                                                A</label>
+                                                                <select class="form-control"
+                                                                    id="field-inspection-current-condition-limit-state-a">
+                                                                    @foreach (var item in limitState)
+                                                                    {
+                                                                    <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-date">Inspection Date</label>
+                                                                <input id="field-inspection-date" type="text"
+                                                                    class="form-control datepicker" />
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label
+                                                                    for="field-inspection-current-condition-limit-state-b">Current
+                                                                Condition Limit State B</label>
+                                                                <select class="form-control"
+                                                                    id="field-inspection-current-condition-limit-state-b">
+                                                                    @foreach (var item in limitState)
+                                                                    {
+                                                                    <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-inspection-method">Inspection
+                                                                Method</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="field-inspection-inspection-method"
+                                                                    value="Visual Inspection">
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label
+                                                                    for="field-inspection-current-condition-limit-state-c">Current
+                                                                Condition Limit State C</label>
+                                                                <select class="form-control"
+                                                                    id="field-inspection-current-condition-limit-state-c">
+                                                                    @foreach (var item in limitState)
+                                                                    {
+                                                                    <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-effectiveness">Inspection
+                                                                Effectiveness</label>
+                                                                <select class="form-control"
+                                                                    id="field-inspection-effectiveness">
+                                                                    @foreach (var item in inspectionEffectivenessStates)
+                                                                    {
+                                                                    <option value="@item.Id">@item.Effectiveness</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-function-condition">Function
+                                                                Condition</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="field-inspection-function-condition"
+                                                                    value="Packing Leak">
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="field-inspection-description">Inspection
+                                                                Description</label>
+                                                                <textarea class="form-control" id="field-inspection-description"
+                                                                    rows="10">N/A</textarea>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <div class="row">
+                                                                    <div class="form-group col-md-12">
+                                                                        <label for="field-inspection-test-pressure-if-any">Test
+                                                                        Pressure
+                                                                        if Any</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="field-inspection-test-pressure-if-any"
+                                                                            value="N/A">
+                                                                    </div>
+                                                                    <div class="col-md-12">
+                                                                        <label for="field-inspection-image">Inspection
+                                                                        Image</label>
+                                                                        <input type="file" class="form-control"
+                                                                            id="field-inspection-image-1">
+                                                                        <input type="file" class="form-control"
+                                                                            id="field-inspection-image-2">
+                                                                        <input type="file" class="form-control"
+                                                                            id="field-inspection-image-3">
+                                                                        <input type="file" class="form-control"
+                                                                            id="field-inspection-image-4">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        <div class="box">
+                                            <div class="box-header">
+                                                <h3 class="box-title">Maintenance Information</h3>
+                                            </div>
+                                            <div class="box-body">
+                                                <div class="row">
+                                                    <div class="col-xs-8">
+                                                        <div class="row">
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-maintenancecate">Maintenance
+                                                                Date</label>
+                                                                <input type="text" class="form-control datepicker"
+                                                                    id="field-inspection-maintenancedate">
+                                                            </div>
+                                                            <div class="form-group col-md-6">
+                                                                <label for="field-inspection-isvalverepaired">Is Valve
+                                                                Repaired</label>
+                                                                <select class="form-control"
+                                                                    id="field-inspection-isvalverepaired">
+                                                                    @foreach (var item in isValveRepairedStates)
+                                                                    {
+                                                                    <option value="@item.Id">@item.IsValveRepaired</option>
+                                                                    }
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="field-inspection-maintenancedescription">Maintenance
+                                                                Description</label>
+                                                                <textarea class="form-control"
+                                                                    id="field-inspection-maintenancedescription"
+                                                                    rows="5"></textarea>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <label for="field-inspection-image">Maintenance Image</label>
+                                                                <input type="file" class="form-control"
+                                                                    id="field-inspection-image1">
+                                                                <input type="file" class="form-control"
+                                                                    id="field-inspection-image2">
+                                                                <input type="file" class="form-control"
+                                                                    id="field-inspection-image3">
+                                                                <input type="file" class="form-control"
+                                                                    id="field-inspection-image4">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <hr />
+                                    </div>
+                                </div>
+                                *@
+
+                                <div class="row">
+                                    <div class="col-lg-2">
+                                        <div class="assessment-tab-content-submenu">
+                                            <div class="submenu-item active" onclick="changeContentCard('valveproperties', this)">Valve Properties</div>
+                                            <div class="submenu-item" onclick="changeContentCard('inspectionhistory', this)">Inspection History</div>
+                                            <div class="submenu-item" onclick="changeContentCard('maintenancehistory', this)">Maintenance History</div>
+                                            <div class="submenu-item" onclick="changeContentCard('riskassessment', this)">Risk Assessment</div>
+                                            <div class="submenu-item" onclick="changeContentCard('riskmatrix', this)">Risk Matrix</div>
+                                            <div class="submenu-item" onclick="changeContentCard('integrityplan', this)">Integrity Plan</div>
+                                        </div>
+                                        <div class="submenu-action">
+                                            <div class="top-row">
+                                                <button class="btn btn-block btn-primary btn-maincolor">Save</button>
+                                                <button class="btn btn-block btn-warning">Print</button>
+                                            </div>
+                                            <div class="bottom-row">
+                                                <button class="btn btn-block btn-danger">Delete</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-10">
+                                        <div class="assessment-content-card card-group-valveproperties active">
+                                            <div class="card-header">
+                                                Asset Information
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Asset ID</label>
+                                                            </div>
+                                                            <div class="col-9">
+                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-valveproperties active">
+                                            <div class="card-header">
+                                                Assessment Information
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Assessment No</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input class="form-control form-control-sm" value="Assessment1">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Assessment Date</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input class="form-control datepicker form-control-sm" value="01-Jan-1971">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Time Period (Month)</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input class="form-control form-control-sm" value="18">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-8">
+                                                                <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <input class="form-control form-control-sm" value="60">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-8">
+                                                                <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <input class="form-control form-control-sm" value="60">
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-8">
+                                                                <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <input class="form-control form-control-sm" value="60">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-inspectionhistory">
+                                            <div class="card-header">
+                                                Inspection History
+                                            </div>
+                                            <div class="card-content" style="min-height: 500px;">
+                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4">Add Inspection Data</a>
+                                                <table class="datatable table custom-table" style="width: 100%;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Inspection Date</th>
+                                                            <th>Inspection Method</th>
+                                                            <th>Inspection Description</th>
+                                                            <th>Function Condition</th>
+                                                            <th>Test Pressure  (if any)</th>
+                                                            <th style="width:200px">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>11-Jun-2015</td>
+                                                            <td>Visual Inspection</td>
+                                                            <td>Good condition</td>
+                                                            <td>Packing Leak</td>
+                                                            <td>No</td>
+                                                            <td>
+                                                                <a class="btn btn-light btn-sm">Detail</a>
+                                                                <a class="btn btn-light btn-sm">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>11-Jun-2015</td>
+                                                            <td>Visual Inspection</td>
+                                                            <td>Good condition</td>
+                                                            <td>Packing Leak</td>
+                                                            <td>No</td>
+                                                            <td>
+                                                                <a class="btn btn-light btn-sm">Detail</a>
+                                                                <a class="btn btn-light btn-sm">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>11-Jun-2015</td>
+                                                            <td>Visual Inspection</td>
+                                                            <td>Good condition</td>
+                                                            <td>Packing Leak</td>
+                                                            <td>No</td>
+                                                            <td>
+                                                                <a class="btn btn-light btn-sm">Detail</a>
+                                                                <a class="btn btn-light btn-sm">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-maintenancehistory">
+                                            <div class="card-header">
+                                                Maintenance  History
+                                            </div>
+                                            <div class="card-content" style="min-height: 500px;">
+                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4">Add Maintenance Data</a>
+                                                <table class="datatable table table-bordered" style="width:100%">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Maintenance Date</th>
+                                                            <th>Is Valve Repaired?</th>
+                                                            <th>Maintenance Description</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>11-Jun-2015</td>
+                                                            <td>Yes</td>
+                                                            <td>replace packing ...</td>
+                                                            <td>
+                                                                <a class="btn btn-light btn-sm">Detail</a>
+                                                                <a class="btn btn-light btn-sm">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>11-Jun-2015</td>
+                                                            <td>Yes</td>
+                                                            <td>replace packing ...</td>
+                                                            <td>
+                                                                <a class="btn btn-light btn-sm">Detail</a>
+                                                                <a class="btn btn-light btn-sm">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>1</td>
+                                                            <td>11-Jun-2015</td>
+                                                            <td>Yes</td>
+                                                            <td>replace packing ...</td>
+                                                            <td>
+                                                                <a class="btn btn-light btn-sm">Detail</a>
+                                                                <a class="btn btn-light btn-sm">Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-riskassessment">
+                                            <div class="card-header">
+                                                Likelihood of Failure
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-12">
+                                                                LF1 - Current Condition
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Good</option>
+                                                                    <option>Fair</option>
+                                                                    <option>Poor</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Good</option>
+                                                                    <option>Fair</option>
+                                                                    <option>Poor</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-5">
+                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Good</option>
+                                                                    <option>Fair</option>
+                                                                    <option>Poor</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center mt-2">
+                                                            <div class="col-12">
+                                                                LF2 - Time To Limit State
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-4">
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <b>TP1</b>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <b>TP2</b>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <b>TP3</b>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm">
+                                                                            <option>Improbable</option>
+                                                                            <option>Doubtful</option>
+                                                                            <option>Expected</option>
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center mt-2">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">LF3 - Inspection Effectiveness</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Highly Effective</option>
+                                                                    <option>Usually Effective</option>
+                                                                    <option>Faily Effective</option>
+                                                                    <option>Ineffective</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">LF4 - Impact of Internal Fluid Impurities</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>No Expected Effect</option>
+                                                                    <option>Moderate Effect</option>
+                                                                    <option>Signigicant Effect</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">LF5 - Impact of Operating Envelopes</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>No Expected Effect</option>
+                                                                    <option>Moderate Effect</option>
+                                                                    <option>Signigicant Effect</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">LF6 - Used within OEM Specification</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Significantly Below Expectation</option>
+                                                                    <option>Moderate Effect</option>
+                                                                    <option>Signigicant Effect</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">LF7 - Repaired</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Yes</option>
+                                                                    <option>No</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-riskassessment">
+                                            <div class="card-header">
+                                                Consequence  of Failure
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">Product loss definition (bbls)</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <input class="form-control form-control-sm" value="1"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-6">
+                                                                <label class="col-form-label">HSSE Definision</label>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>Multiple Fatalities</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-riskmatrix">
+                                            <div class="card-header">
+                                                Risk
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="row g-3 mb-4 mt-1">
+                                                            <div class="col-12 d-flex">
+                                                                <div class="risk-table-container">
+                                                                    <svg class="risk-table-legend" viewBox="0 0 550 440">
+                                                                        <defs>
+                                                                            <path d="M 0 0  L 550 0  L 550 440  L 0 440  Z " fill-rule="evenodd" fill="black" id="path33" />
+                                                                            <clipPath id="clip34">
+                                                                                <use xlink:href="#path33" />
+                                                                            </clipPath>
+                                                                            <filter x="-50.00%" y="-50.00%" width="200.00%" height="200.00%" filterUnits="objectBoundingBox" id="filter35">
+                                                                                <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0  " in="SourceGraphic" />
+                                                                            </filter>
+                                                                        </defs>
+                                                                        <g transform="matrix(1 0 0 1 -174 -55 )">
+                                                                            <g transform="matrix(0.902272727272727 0 0 0.902272727272727 200.875 55 )" clip-path="url(#clip34)" filter="url(#filter35)">
+                                                                                <text x="125" y="275" font-size="12">A</text>
+                                                                                <text x="125" y="225" font-size="12">B</text>
+                                                                                <text x="125" y="175" font-size="12">C</text>
+                                                                                <text x="125" y="125" font-size="12">D</text>
+                                                                                <text x="125" y="75" font-size="12">E</text>
+                                                                                <text x="175" y="322" font-size="12">1</text>
+                                                                                <text x="225" y="322" font-size="12">2</text>
+                                                                                <text x="275" y="322" font-size="12">3</text>
+                                                                                <text x="325" y="322" font-size="12">4</text>
+                                                                                <text x="375" y="322" font-size="12">5</text>
+                                                                                <text x="225" y="350" font-size="12" font-weight="bold">Likelihood of Failure</text>
+                                                                                <g transform="translate(100,242)">
+                                                                                    <g transform="rotate(-90)">
+                                                                                        <text font-size="12" font-weight="bold">Consequence of Failure</text>
+                                                                                    </g>
+                                                                                </g>
+                                                                                <g class="legend">
+                                                                                    <polygon points="425,55 420,65 430,65" fill="white" stroke-width="2" stroke="gray"></polygon>
+                                                                                    <text x="440" y="65" font-size="12">TP1 A</text>
+                                                                                    <circle cx="425" cy="78" r="5" fill="white" stroke-width="2" stroke="gray"></circle>
+                                                                                    <text x="440" y="83" font-size="12">TP2 A</text>
+                                                                                    <rect x="420" y="91" width="10" height="10" fill="white" stroke-width="2" stroke="gray"></rect>
+                                                                                    <text x="440" y="101" font-size="12">TP3 A</text>
+                                                                                    <polygon points="425,110 420,120 430,120" fill="black" stroke-width="2" stroke="gray"></polygon>
+                                                                                    <text x="440" y="120" font-size="12">TP1 B</text>
+                                                                                    <circle cx="425" cy="134" r="5" fill="black" stroke-width="2" stroke="gray"></circle>
+                                                                                    <text x="440" y="139" font-size="12">TP2 B</text>
+                                                                                    <rect x="420" y="148" width="10" height="10" fill="black" stroke-width="2" stroke="gray"></rect>
+                                                                                    <text x="440" y="158" font-size="12">TP3 B</text>
+                                                                                    <polygon points="425,167 420,177 430,177" fill="pink" stroke-width="2" stroke="gray"></polygon>
+                                                                                    <text x="440" y="177" font-size="12">TP1 C</text>
+                                                                                    <circle cx="425" cy="191" r="5" fill="pink" stroke-width="2" stroke="gray"></circle>
+                                                                                    <text x="440" y="196" font-size="12">TP2 C</text>
+                                                                                    <rect x="420" y="205" width="10" height="10" fill="pink" stroke-width="2" stroke="gray"></rect>
+                                                                                    <text x="440" y="215" font-size="12">TP3 C</text>
+                                                                                </g>
+                                                                            </g>
+                                                                        </g>
+                                                                    </svg>
+                                                                    <svg class="risk-table" id="risk-table" width="250" height="250">
+                                                                        <g>
+                                                                            <g>
+                                                                                <rect x="0" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="50" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="100" y="200" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="150" y="200" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="200" y="200" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="0" y="150" width="50" height="50" fill="#6FA529" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="50" y="150" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="100" y="150" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="150" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="200" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="0" y="100" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="50" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="100" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="150" y="100" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="200" y="100" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="0" y="50" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="50" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="100" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="150" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="200" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="0" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="50" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="100" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="150" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                            <g>
+                                                                                <rect x="200" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                            </g>
+                                                                        </g>
+                                                                    </svg>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center">
+                                                            <div class="col-3">
+                                                                <label class="col-form-label">Limit Sale</label>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>All</option>
+                                                                    <option>Leakage to atmosphere</option>
+                                                                    <option>Failure of Function</option>
+                                                                    <option>Passing Across Valve</option>
+                                                                </select>
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <select class="form-select form-select-sm">
+                                                                    <option>All</option>
+                                                                    <option>TP1</option>
+                                                                    <option>TP2</option>
+                                                                    <option>TP3</option>
+                                                                </select>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3">
+                                                            <div class="col-12">
+                                                                <table id="example" class="table table-hover custom-table basic-th mt-4" style="width:100%">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="ta-center header-cell">Limit Sale</td>
+                                                                            <td class="ta-center header-cell">Risk TP1</td>
+                                                                            <td class="ta-center header-cell">Risk TP2</td>
+                                                                            <td class="ta-center header-cell">Risk TP3</td>
+                                                                            <td class="ta-center header-cell">Time To Action</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="header-cell">Leakage Atmosphere</td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box green"></div>
+                                                                                    2B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                14-02-2028
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="header-cell">Failure of function</td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box green"></div>
+                                                                                    2B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                14-02-2028
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="header-cell">Passing across valve</td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box green"></div>
+                                                                                    2B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                14-02-2028
+                                                                            </td>
+                                                                        </tr>
+                                                                    <tfoot class="bg-grey">
+                                                                        <tr>
+                                                                            <td class="header-cell">Risk</td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box green"></div>
+                                                                                    2B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                <div class="d-flex">
+                                                                                    <div class="status-box yellow"></div>
+                                                                                    3B
+                                                                                </div>
+                                                                            </td>
+                                                                            <td>
+                                                                                14-02-2028
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tfoot>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-integrityplan">
+                                            <div class="card-header">
+                                                Integrity Plan
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-8">
+                                                        <div class="row g-3">
+                                                            <div class="col-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Integrity Status</label>                                  
+                                                                    <div class="input-group input-group-sm input-search">
+                                                                        <span class="input-group-text disabled">
+                                                                            <div class="status-box green">
+                                                                            </div>
+                                                                        </span>
+                                                                        <input type="text" class="form-control form-control-sm" disabled value="Low Priority">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Summary</label>
+                                                                    <textarea class="form-control form-control-sm" style="height: 200px;">Valve in good condition</textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Time To Action</label>
+                                                                    <input class="form-control form-control-sm" value="14-Feb-2028" disabled/>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Recommendation Action</label>
+                                                                    <select class="form-select form-select-sm">
+                                                                        <option>Inspection</option>
+                                                                    </select>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Detailed Recommendation</label>
+                                                                    <textarea class="form-control form-control-sm" style="height: 124px;">Conduct Visual Inspection</textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    @section Scripts {
+    <script>
+        $(document).on('click', '.btn-close-inspection', function () {
+            const ctr = $(this).closest('a').attr('tab-num')
+            close_inspection(ctr);
+        })
+
+
+        $(document).ready(function () {
+            var template_inspection = $('#template_inspection');
+            var template_inspection_html = template_inspection.html();
+            template_inspection.remove();
+            var template_inspection_header = $('#template_inspection_header');
+            var template_inspection_header_html = template_inspection_header.html();
+            template_inspection_header.remove();
+        
+            $('.datepicker').datepicker({
+                format: 'dd/mm/yyyy',
+                autoclose: true,
+                todayHighlight: true
+            });
+        
+            var idx = 0;
+            $('.btn-add-new-inspection').click(function () {
+                var ctr = idx;
+                var id = $(this).attr('attr-id');
+                var name = $(this).attr('attr-name');
+                var tabheadercontainer = $('#inspectiontabheader');
+                var tabcontentcontainer = $('#tabcontentcontainer');
+                // tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" >New Assessment ' + name + ' <button type="button" class="btn-close-inspection" style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button></a></li>');
+                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">New Inspection ' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
+                tabcontentcontainer.append('<div class="tab-pane" id="inspection' + ctr + '">' + template_inspection_html + '</div>');
+                var tabcontent = tabcontentcontainer.find('.form-control');
+                tabcontent.each(function () {
+                    var name = $(this).attr('id') + ctr;
+                    $(this).attr('id', name);
+                });
+                //find button submit then add ctr on id
+                var submitbtn = tabcontentcontainer.find('.form-submit');
+                submitbtn.each(function () {
+                    var name = $(this).attr('id') + ctr;
+                    $(this).attr('id', name);
+                })
+        
+                $('#inspectionheader' + ctr).find('a').click();
+        
+                $('#field-inspection-valvetagno' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-a' + ctr).val('');
+                $('#field-inspection-date' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-b' + ctr).val('');
+                $('#field-inspection-inspection-method' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-c' + ctr).val('');
+                $('#field-inspection-effectiveness' + ctr).val('');
+                $('#field-inspection-function-condition' + ctr).val('');
+                $('#field-inspection-description' + ctr).val('');
+                $('#field-inspection-test-pressure-if-any' + ctr).val('');
+                $('#field-inspection-image-1' + ctr).val('');
+                $('#field-inspection-image-2' + ctr).val('');
+                $('#field-inspection-image-3' + ctr).val('');
+                $('#field-inspection-image-4' + ctr).val('');
+                $('#field-inspection-maintenancedate' + ctr).val('');
+                $('#field-inspection-isvalverepaired' + ctr).val('');
+                $('#field-inspection-maintenancedescription' + ctr).val('');
+                $('#field-inspection-image1' + ctr).val('');
+                $('#field-inspection-image2' + ctr).val('');
+                $('#field-inspection-image3' + ctr).val('');
+                $('#field-inspection-image4' + ctr).val('');
+                $.ajax({
+                    url: '/AssetRegister/GetAssetDetail',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (data) {
+                        $('#field-inspection-valvetagno' + ctr).val(data.tagNo);
+                    },
+                    error: function (error) {
+                        alert('Valve Tag not found');
+                        $('#inspectionheader' + ctr).remove();
+                        $('#inspection' + ctr).remove();
+                        var lasttab = $('#inspectiontabheader li:last-child');
+                        lasttab.find('a').click();
+                    }
+                });
+        
+                $('.datepicker').datepicker({
+                    format: 'dd/mm/yyyy',
+                    autoclose: true,
+                    todayHighlight: true
+                });
+                moveToLastTab()
+                initDatatable({
+                    scrollable: false,
+                    selector: `#inspection${idx} .datatable`
+                })
+                idx++;
+            });
+        });
+
+        const changeContentCard = (key, el) => {
+            $('.assessment-content-card').removeClass('active');
+            $('.assessment-content-card.card-group-'+key).addClass('active')
+            $(el).closest('.assessment-tab-content-submenu').find('.submenu-item').removeClass('active')
+            $(el).addClass('active')
+        }
+    </script>
+}

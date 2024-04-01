@@ -8,9 +8,7 @@ public class UserContext : DbContext
 
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
-            .UseSqlServer(
-                "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;"
-            )
+            .UseSqlServer(Environment.GetConnectionStringDB())
             .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
 }
 
@@ -20,6 +18,9 @@ public class UserModel
     public string? Username { get; set; }
     public string? Password { get; set; }
     public string? Role { get; set; }
+    public bool IsAdmin { get; set; }
+    public bool IsEngineer { get; set; }
+    public bool IsViewer { get; set; }
 
     public bool isLogin(HttpContext context)
     {
@@ -27,7 +28,8 @@ public class UserModel
         {
             if (context.Session.GetString("IsLogin") != null)
             {
-                return Convert.ToBoolean(context.Session.GetString("IsLogin"));
+                bool status = Convert.ToBoolean(context.Session.GetString("IsLogin"));
+                return status;
             }
             return false;
         }
@@ -35,6 +37,34 @@ public class UserModel
         {
             return false;
         }
+    }
+
+    public UserModel GetLogin(HttpContext context)
+    {
+        UserModel login = new()
+        {
+            Username = context.Session.GetString("Username"),
+            Role = context.Session.GetString("Role"),
+            IsAdmin = Convert.ToBoolean(context.Session.GetString("IsAdmin")),
+            IsEngineer = Convert.ToBoolean(context.Session.GetString("IsEngineer")),
+            IsViewer = Convert.ToBoolean(context.Session.GetString("IsViewer"))
+        };
+        return login;
+    }
+
+    public Dictionary<string, string> GetLoginSession(HttpContext context)
+    {
+        Dictionary<string, string> session = new()
+        {
+            { "IsLogin", context.Session.GetString("IsLogin") },
+            { "Username", context.Session.GetString("Username") },
+            { "Role", context.Session.GetString("Role") },
+            { "Id", context.Session.GetString("Id") },
+            { "IsAdmin", context.Session.GetString("IsAdmin") },
+            { "IsEngineer", context.Session.GetString("IsEngineer") },
+            { "IsViewer", context.Session.GetString("IsViewer") }
+        };
+        return session;
     }
 
     public bool doLogin(HttpContext httpcontext, string username, string password)
@@ -52,6 +82,10 @@ public class UserModel
                 httpcontext.Session.SetString("IsLogin", "true");
                 httpcontext.Session.SetString("Username", login.Username);
                 httpcontext.Session.SetString("Role", login.Role);
+                httpcontext.Session.SetString("Id", login.Id.ToString());
+                httpcontext.Session.SetString("isAdmin", login.IsAdmin.ToString());
+                httpcontext.Session.SetString("isEngineer", login.IsEngineer.ToString());
+                httpcontext.Session.SetString("isViewer", login.IsViewer.ToString());
                 return true;
             }
         }
@@ -101,10 +135,13 @@ public class UserModel
             UserModel oldUser = context.User.Find(user.Id);
             oldUser.Username = user.Username;
             oldUser.Role = user.Role;
-            if(user.Password != null)
+            if (user.Password != null)
             {
                 oldUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             }
+            oldUser.IsAdmin = user.IsAdmin;
+            oldUser.IsEngineer = user.IsEngineer;
+            oldUser.IsViewer = user.IsViewer;
             context.User.Update(oldUser);
             context.SaveChanges();
         }

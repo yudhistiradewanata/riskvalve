@@ -8,68 +8,128 @@
     var toxicOrFlamableFluidList = ViewData["ToxicOrFlamableFluidList"] as List<ToxicOrFlamableFluidModel>;
 }
 
-<div class="row">
-    <div class="col-xs-2" style="padding-right:0;">
-        <partial name="Sidebar" />
-    </div>
-    <div class="col-xs-10" style="padding-right: 50px">
-        <h3>Asset</h3>
-        <button type="button" class="btn btn-primary btn-asset-action" attr-mode="create">
-            Add New
-        </button>
-        <br /><br />
-        <table class="table table-bordered datatable" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Tag No</th>
-                    <th>Business Area</th>
-                    <th>Platform</th>
-                    <th>Valve Type</th>
-                    <th>Size (inch)</th>
-                    <th>Rating</th>
-                    <th>PID Number</th>
-                    <th>Parent Equipment No</th>
-                    <th>Parent Equipment Description</th>
-                    <th>Service Fluid</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int ctr = 0;
-                    if (assetList != null)
-                    {
-                        foreach (var item in assetList)
-                        {
-                            ctr++;
-                            <tr style="margin: 0;padding;0;">
-                                <td>@ctr</td>
-                                <td>@item.TagNo</td>
-                                <td>@item.BusinessArea</td>
-                                <td>@item.Platform</td>
-                                <td>@item.ValveType</td>
-                                <td>@item.Size</td>
-                                <td>@item.ClassRating</td>
-                                <td>@item.PIDNo</td>
-                                <td>@item.ParentEquipmentNo</td>
-                                <td>@item.ParentEquipmentDescription</td>
-                                <td>@item.ServiceFluid</td>
-                                <td>
-                                    <button class="btn btn-primary btn-asset-action" attr-mode="view"
-                                        attr-itemid="@item.Id">Detail</button>
-                                </td>
-                            </tr>
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <partial name="Sidebar" />
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
+            <div class="subheader">
+                <b>Asset</b>
+            </div>
+            <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn btn-primary custom btn-asset-action btn-with-icon" attr-mode="create">
+                        <i class="fa-solid fa-plus"></i> Add New
+                    </button>
+                    <div class="">
+                        <div class="input-group input-group-sm input-search">
+                            <span class="input-group-text" id="basic-addon1">
+                            <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control form-control-sm" placeholder="Search" oninput="dataTableSearch(this.value)">
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered datatable" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Tag No</th>
+                            <th>Business Area</th>
+                            <th>Platform</th>
+                            <th>Valve Type</th>
+                            <th>Size (inch)</th>
+                            <th>Rating</th>
+                            <th>PID Number</th>
+                            <th>Parent Equipment No</th>
+                            <th>Parent Equipment Description</th>
+                            <th>Service Fluid</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int ctr = 0;
+                            if (assetList != null)
+                            {
+                                foreach (var item in assetList)
+                                {
+                                    ctr++;
+                                    <tr style="margin: 0;padding;0;">
+                                        <td>@ctr</td>
+                                        <td>@item.TagNo</td>
+                                        <td>@item.BusinessArea</td>
+                                        <td>@item.Platform</td>
+                                        <td>@item.ValveType</td>
+                                        <td>@item.Size</td>
+                                        <td>@item.ClassRating</td>
+                                        <td>@item.PIDNo</td>
+                                        <td>@item.ParentEquipmentNo</td>
+                                        <td>@item.ParentEquipmentDescription</td>
+                                        <td>@item.ServiceFluid</td>
+                                        <td>
+                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-asset-action" attr-mode="view"
+                                                attr-itemid="@item.Id"><i class="fa-solid fa-magnifying-glass"></i>Detail</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
                         }
-                    }
-                }
-        </table>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
+
 <partial name="ModalAsset" />
+@*
+<div class="modal fade" id="addAssetModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form>
+                <input id="field-platform-mode" type="hidden">
+                <input id="field-platform-id" name="platformid" type="hidden">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add/Edit New Platform</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="field-plarfoem-area">Business Area</label>
+                        <select id="field-platform-area" name="businessarea" class="form-control" required>
+                            <option value="">Select Business Area</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="field-platform-name">Platform Name</label>
+                        <input id="field-platform-name" name="platformname" class="form-control"
+                            placeholder="Platform Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="field-platform-code">Platform Code</label>
+                        <input id="field-platform-code" name="platformcode" class="form-control"
+                            placeholder="Platform Code" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-platform-modal-save" class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+*@
+
+@* <partial name="ModalAsset" /> *@
 
 @section Scripts {
     <script>
+        initDatatable()
+
+        $('.btn-asset-action').click(function () {
+            $('#addAssetModal').modal('show');
+        })
     </script>
 }

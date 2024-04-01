@@ -33,115 +33,166 @@
     }
 </style>
 
-<div class="row">
-    <div class="col-xs-2" style="padding-right:0;">
-        <partial name="HomeSidebar" />
-    </div>
-    <div class="col-xs-8" style="padding-right: 50px">
-        <div class="row no-padding">
-            <div class="col-xs-6">
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Risk Distribution</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <table class="table table-bordered">
-                                    <tbody class="tbody-chart">
-                                        <tr>
-                                            <td style="text-align:center">E</td>
-                                            <td class="risk-high"></td>
-                                            <td class="risk-high"></td>
-                                            <td class="risk-veryhigh"></td>
-                                            <td class="risk-veryhigh"></td>
-                                            <td class="risk-veryhigh"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:center">D</td>
-                                            <td class="risk-medium"></td>
-                                            <td class="risk-high"></td>
-                                            <td class="risk-high"></td>
-                                            <td class="risk-veryhigh"></td>
-                                            <td class="risk-veryhigh"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:center">C</td>
-                                            <td class="risk-low"></td>
-                                            <td class="risk-medium"></td>
-                                            <td class="risk-medium"></td>
-                                            <td class="risk-high"></td>
-                                            <td class="risk-veryhigh"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:center">B</td>
-                                            <td class="risk-verylow"></td>
-                                            <td class="risk-low"></td>
-                                            <td class="risk-medium"></td>
-                                            <td class="risk-high"></td>
-                                            <td class="risk-high"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align:center">A</td>
-                                            <td class="risk-verylow"></td>
-                                            <td class="risk-verylow"></td>
-                                            <td class="risk-low"></td>
-                                            <td class="risk-medium"></td>
-                                            <td class="risk-high"></td>
-                                        </tr>
-                                        <tr>
-                                            <td></td>
-                                            <td style="text-align:center">1</td>
-                                            <td style="text-align:center">2</td>
-                                            <td style="text-align:center">3</td>
-                                            <td style="text-align:center">4</td>
-                                            <td style="text-align:center">5</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+@*
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-2 no-pad">
+            <partial name="HomeSidebar" />
+        </div>
+        <div class="col-xs-8 col-border-left">
+            <div class="row no-padding">
+                <div class="col-xs-6">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Risk Distribution</h3>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xs-6">
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Risk Distribution</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="row">
-                            <div class="col-md-12">
-                                <div class="chart">
-                                    <canvas id="riskDistributonDoughnut" style="height: 155px; width: 300px;"
-                                        height="620" width="1242"></canvas>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <table class="table table-bordered">
+                                        <tbody class="tbody-chart">
+                                            <tr>
+                                                <td style="text-align:center">E</td>
+                                                <td class="risk-high"></td>
+                                                <td class="risk-high"></td>
+                                                <td class="risk-veryhigh"></td>
+                                                <td class="risk-veryhigh"></td>
+                                                <td class="risk-veryhigh"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center">D</td>
+                                                <td class="risk-medium"></td>
+                                                <td class="risk-high"></td>
+                                                <td class="risk-high"></td>
+                                                <td class="risk-veryhigh"></td>
+                                                <td class="risk-veryhigh"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center">C</td>
+                                                <td class="risk-low"></td>
+                                                <td class="risk-medium"></td>
+                                                <td class="risk-medium"></td>
+                                                <td class="risk-high"></td>
+                                                <td class="risk-veryhigh"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center">B</td>
+                                                <td class="risk-verylow"></td>
+                                                <td class="risk-low"></td>
+                                                <td class="risk-medium"></td>
+                                                <td class="risk-high"></td>
+                                                <td class="risk-high"></td>
+                                            </tr>
+                                            <tr>
+                                                <td style="text-align:center">A</td>
+                                                <td class="risk-verylow"></td>
+                                                <td class="risk-verylow"></td>
+                                                <td class="risk-low"></td>
+                                                <td class="risk-medium"></td>
+                                                <td class="risk-high"></td>
+                                            </tr>
+                                            <tr>
+                                                <td></td>
+                                                <td style="text-align:center">1</td>
+                                                <td style="text-align:center">2</td>
+                                                <td style="text-align:center">3</td>
+                                                <td style="text-align:center">4</td>
+                                                <td style="text-align:center">5</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="col-xs-12">
-                <div class="box">
-                    <div class="box-header">
-                        <h3 class="box-title">Risk Distribution Per Area</h3>
-                    </div>
-                    <div class="box-body">
-                        <div class="chart">
-                            <canvas id="barChart" style="height: 260px; width: 621px;" height="520"
-                                width="1242"></canvas>
+                <div class="col-xs-6">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Risk Distribution</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="chart">
+                                        <canvas id="riskDistributonDoughnut" style="height: 155px; width: 300px;"
+                                            height="620" width="1242"></canvas>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
+                </div>
+                <div class="col-xs-12">
+                    <div class="box">
+                        <div class="box-header">
+                            <h3 class="box-title">Risk Distribution Per Area</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="chart">
+                                <canvas id="barChart" style="height: 260px; width: 621px;" height="520"
+                                    width="1242"></canvas>
+                            </div>
+                        </div>
+    
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+*@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <partial name="HomeSidebar" />
+            
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
+            <div class="content-container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                Risk Distribution
+                            </div>
+                            <div class="card-body">
+                                <div id="risk-heatmap"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                Risk Distribution
+                            </div>
+                            <div class="card-body">
+                                <div id="risk-piechart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-4">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                Risk Distribution Area
+                            </div>
+                            <div class="card-body">
+                                <div id="risk-barchart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
+        /*$(document).ready(function () {
             var pieChartCanvas = $('#riskDistributonDoughnut').get(0).getContext('2d')
             var pieChart = new Chart(pieChartCanvas)
             var PieData = [{
@@ -270,6 +321,273 @@
 
             barChartOptions.datasetFill = false
             barChart.Bar(barChartData, barChartOptions)
+        });
+        */
+
+        /* globals Chart:false */
+
+        $(function () {
+
+        $('#risk-heatmap').highcharts({
+            
+            chart: {
+                type: 'heatmap',
+                marginTop: 40,
+                marginBottom: 60,
+                plotBackgroundColor: 'none',
+                events:{
+                    load:function() {
+                        var points = this.series[0].data,
+                            lenY = this.yAxis[0].tickPositions.length - 1,
+                            lenX = this.xAxis[0].tickPositions.length - 1,
+                            x = lenX,
+                            tmpX = 0,
+                            y = 0,
+                            j = 0;
+                        
+                        $.each(points, function(i, p){
+                            
+                            if(p.x == 0 || p.y == 0) {
+                                p.update({
+                                    color: 'red'
+                                },false);
+                            } else if(p.x > 0 && p.y > 0 && (p.y == x  || (p.y + 1) == x)) {
+                                p.update({
+                                    color: 'green'
+                                },false);
+                                
+                                if(p.y == x)
+                                    x--;
+                                
+                            } else if(p.x > 1 && p.y > 0 && p.y > x) {
+                                p.update({
+                                    color: 'orange'
+                                },false);
+                            } else if(p.x > 0 && p.y > 0 && x > 2) {
+                                p.update({
+                                    color: 'yellow'
+                                },false);
+                            }
+                            
+                        });
+                        
+                        this.isDirty = true;
+                        this.redraw();
+                    }
+                }
+            },
+
+
+            title: null,
+
+            xAxis: {
+                categories: ['1', '2', '3', '4', '5'],
+                title: {
+                    text: "Likelihood of Failure"
+                }
+            },
+
+            yAxis: {
+                categories: ['A', 'B', 'C', 'D', 'E'],
+                title: {
+                    text: "Consequance of Failure"
+                }
+            },
+
+            colorAxis: {
+                min: 0,
+                minColor: 'transparent',
+                maxColor:'transparent'
+                //maxColor: Highcharts.getOptions().colors[0]
+            },
+
+            legend: {
+                align: 'right',
+                layout: 'vertical',
+                margin: 0,
+                verticalAlign: 'top',
+                y: 25,
+                symbolHeight: 320
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
+                        this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+                }
+            },
+
+            /*want to make this part dynamically populated*/
+                series:[{
+                    data:[
+                    {x:0,y:0, value:100 },//color:'red'},
+                    {x:0,y:1, value:10 },//color:'red'},
+                    {x:0,y:2, value:20 },//color:'red'},
+                    {x:0,y:3, value:30 },//color:'red'},
+                    {x:0,y:4, value:40 },//color:'red'},
+                    {x:0,y:0, value:50 },//color:'red'},
+                        
+                    {x:1,y:0, value:60 },//color:'red'},
+                    {x:2,y:0, value:70 },//color:'red'},
+                    {x:3,y:0, value:80 },//color:'red'},
+                    {x:4,y:0, value:90 },//color:'red'},
+                    {x:1,y:1, value:70 },//color:'yellow'},
+                    {x:1,y:2, value:80 },//color:'yellow'},
+                    {x:2,y:1, value:90 },//color:'yellow'},
+                    
+                    {x:1,y:3, value:80 },//color:'green'},
+                    {x:1,y:4, value:90 },//color:'green'},
+                    {x:2,y:2, value:90 },//color:'green'},
+                    {x:2,y:3, value:80 },//color:'green'},
+                    {x:1,y:4, value:90 },//color:'green'},                
+                    {x:3,y:1, value:90 },//color:'green'},
+                    {x:3,y:2, value:90 },//color:'green'},
+                    {x:4,y:1, value:190 },//color:'green'},
+                    {x:3,y:3, value:80 },//color:'green'},
+                    {x:3,y:4, value:90 },//color:'orange'},
+                    {x:4,y:4, value:90 },//color:'orange'},
+                    {x:3,y:3, value:90 },//color:'orange'},
+                    {x:4,y:3, value:90 },//color:'orange'},
+                    {x:4,y:2, value:90 },//color:'orange'},
+                    {x:2,y:4, value:90} //color:'orange'}
+                        ],
+                    dataLabels: {
+                    enabled: true,
+                    color: 'black',
+                    style: {
+                        textShadow: 'none'
+                    }
+                }
+            
+            }]
+
+        });
+        
+        $('#risk-piechart').highcharts({
+            chart: {
+                type: 'pie'
+            },
+            title: {
+                text: 'Risk Distribution'
+            },
+            tooltip: {
+            },
+            plotOptions: {
+                pie: {
+                colors: [
+                    '#DDDF00', 
+                    '#50B432', 
+                    '#FFFF00', 
+                    '#ED561B', 
+                    '#FF0000',
+                ],
+                },
+                series: {
+                    allowPointSelect: true,
+                    cursor: 'pointer',
+                    dataLabels: [{
+                        enabled: false,
+                        distance: 20
+                    }, {
+                        enabled: true,
+                        distance: -40,
+                        format: '{point.y:.1f}',
+                        style: {
+                            fontSize: '1.2em',
+                            textOutline: 'none',
+                            opacity: 0.7
+                        },
+                        filter: {
+                            operator: '>',
+                            property: 'percentage',
+                            value: 10
+                        }
+                    }],
+                    showInLegend: true
+                }
+            },
+            series: [
+                {
+                    name: 'Percentage',
+                    data: [
+                        {
+                            name: 'Very Low',
+                            y: 55.02
+                        },
+                        {
+                            name: 'Low',
+                            y: 26.71
+                        },
+                        {
+                            name: 'Medium',
+                            y: 1.09
+                        },
+                        {
+                            name: 'High',
+                            y: 15.5
+                        },
+                        {
+                            name: 'Very High',
+                            y: 5
+                        }
+                    ]
+                }
+            ]
+        });
+        
+        
+        $('#risk-barchart').highcharts({
+            chart: {
+                type: 'column'
+            },
+            title: {
+                text: 'Area Risk Status',
+            },
+            xAxis: {
+                categories: ['NBU', 'CBU', 'SBU', 'GMS CILEGON', 'PABELOKAN'],
+                crosshair: true,
+            },
+            yAxis: {
+                min: 0,
+            },
+            tooltip: {
+            },
+            plotOptions: {
+                column: {
+                    pointPadding: 0.2,
+                    borderWidth: 0,
+                }
+            },
+            colors: [
+            '#DDDF00', 
+            '#50B432', 
+            '#FFFF00', 
+            '#ED561B', 
+            '#FF0000',
+            ],
+            series: [
+            {
+                name: 'Very Low',
+                data: [10, 43, 31, 34, 4]
+            },
+            {
+                name: 'Low',
+                data: [7, 3, 3, 2, 1]
+            },
+            {
+                name: 'Medium',
+                data: [3, 1, 33, 2, 1]
+            },
+            {
+                name: 'High',
+                data: [2, 0, 3, 2, 1]
+            },
+            {
+                name: 'Very High',
+                data: [1, 0, 3, 2, 1]
+            },
+            ]
+        } );
         });
     </script>
 }

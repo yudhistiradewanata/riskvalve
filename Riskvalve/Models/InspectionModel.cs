@@ -1,130 +1,266 @@
 using Microsoft.EntityFrameworkCore;
 
-namespace Riskvalve.Models
+namespace Riskvalve.Models;
+
+public class InspectionContext : DbContext
 {
-    public class InspectionContext : DbContext
+    public DbSet<AssetDB> Asset { get; set; }
+    public DbSet<InspectionDB> Inspection { get; set; }
+    public DbSet<InspectionEffectivenessModel> InspectionEffectiveness { get; set; }
+    public DbSet<CurrentConditionLimitStateModel> CurrentConditionLimitState { get; set; }
+    public DbSet<InspectionMethodModel> InspectionMethod { get; set; }
+    public DbSet<UserModel> User { get; set; }
+    protected override void OnConfiguring(DbContextOptionsBuilder options) =>
+        options
+            .UseSqlServer(Environment.GetConnectionStringDB())
+            .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+}
+
+public class InspectionDB
+{
+    public int Id { get; set; }
+    public int AssetID { get; set; } //FK
+    public string? InspectionDate { get; set; }
+    public int InspectionMethodID { get; set; } //FK
+    public int InspectionEffectivenessID { get; set; } //FK
+    public string? InspectionDescription { get; set; }
+    public int CurrentConditionLeakeageToAtmosphereID { get; set; } //FK
+    public int CurrentConditionFailureOfFunctionID { get; set; } //FK
+    public int CurrentConditionPassingAcrossValveID { get; set; } //FK
+    public string? FunctionCondition { get; set; }
+    public string? TestPressureIfAny { get; set; }
+    public bool? IsDeleted { get; set; }
+    public int? CreatedBy { get; set; }
+    public string? CreatedAt { get; set; }
+    public int? DeletedBy { get; set; }
+    public string? DeletedAt { get; set; }
+}
+
+public class InspectionModel : InspectionDB
+{
+    public AssetModel? Asset { get; set; }
+    public string? InspectionMethod { get; set; }
+    public string? InspectionEffectiveness { get; set; }
+    public string? CurrentConditionLeakeageToAtmosphere { get; set; }
+    public string? CurrentConditionFailureOfFunction { get; set; }
+    public string? CurrentConditionPassingAcrossValve { get; set; }
+    public List<InspectionFileModel>? InspectionFiles { get; set; }
+    public string? CreatedByUser { get; set; }
+    public string? DeletedByUser { get; set; }
+
+    public InspectionModel GetInspectionModel(int id)
     {
-        public DbSet<AssetDB> Asset { get; set; }
-        public DbSet<PlatformDB> Platform { get; set; }
-        public DbSet<AreaModel> Area { get; set; }
-
-        // public DbSet<InspectionDB> Inspection { get; set; }
-        public DbSet<InspectionEffectivenessModel> InspectionEffectiveness { get; set; }
-
-        // public DbSet<ConditionLimitStateDB> ConditionLimitState { get; set; }
-        // public DbSet<IsValveRepairedDB> IsValveRepaired { get; set; }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder options) =>
-            options
-                .UseSqlServer(
-                    "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;Connection Timeout=30;"
-                )
-                .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
-    }
-
-    public class InspectionModel
-    {
-        public int Id { get; set; }
-        public string? ValveTagNo { get; set; }
-        public string? InspectionDate { get; set; }
-        public string? InspectionMethod { get; set; }
-        public int? InspectionEffectivenessID { get; set; }
-        public string? InspectionDescription { get; set; }
-        public int? InspectionCurrentLimitStateAID { get; set; }
-        public int? InspectionCurrentLimitStateBID { get; set; }
-        public int? InspectionCurrentLimitStateCID { get; set; }
-        public string? FunctionCondition { get; set; }
-        public string? TestPressureIfAny { get; set; }
-    }
-
-    public class InspectionSidebarModel
-    {
-        public int Id { get; set; }
-        public string? Name { get; set; }
-        public List<InspectionSidebarModel>? Child { get; set; }
-    }
-
-    public class InspectionSidebarHistory
-    {
-        public List<InspectionSidebarModel> GetInspectionSidebarHistory()
+        InspectionModel inspectionData = new();
+        using (var context = new InspectionContext())
         {
-            List<InspectionSidebarModel> inspectionSidebar = new();
-            using (var context = new InspectionContext())
+            List<InspectionModel> inspecionList = (
+                from inspection in context.Inspection
+                join asset in context.Asset on inspection.AssetID equals asset.Id
+                join inspectionMethod in context.InspectionMethod
+                    on inspection.InspectionMethodID equals inspectionMethod.Id
+                join inspectionEffectiveness in context.InspectionEffectiveness
+                    on inspection.InspectionEffectivenessID equals inspectionEffectiveness.Id
+                join currentConditionLimitStateA in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionLeakeageToAtmosphereID equals currentConditionLimitStateA.Id
+                join currentConditionLimitStateB in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionFailureOfFunctionID equals currentConditionLimitStateB.Id
+                join currentConditionLimitStateC in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionPassingAcrossValveID equals currentConditionLimitStateC.Id
+                where inspection.Id == id
+                select new InspectionModel
+                {
+                    Id = inspection.Id,
+                    AssetID = inspection.AssetID,
+                    InspectionDate = inspection.InspectionDate,
+                    InspectionMethodID = inspection.InspectionMethodID,
+                    InspectionEffectivenessID = inspection.InspectionEffectivenessID,
+                    InspectionDescription = inspection.InspectionDescription,
+                    CurrentConditionLeakeageToAtmosphereID =
+                        inspection.CurrentConditionLeakeageToAtmosphereID,
+                    CurrentConditionFailureOfFunctionID =
+                        inspection.CurrentConditionFailureOfFunctionID,
+                    CurrentConditionPassingAcrossValveID =
+                        inspection.CurrentConditionPassingAcrossValveID,
+                    FunctionCondition = inspection.FunctionCondition,
+                    TestPressureIfAny = inspection.TestPressureIfAny,
+                    Asset = new AssetModel().GetAssetModel(inspection.AssetID),
+                    InspectionMethod = inspectionMethod.InspectionMethod,
+                    InspectionEffectiveness = inspectionEffectiveness.Effectiveness,
+                    CurrentConditionLeakeageToAtmosphere =
+                        currentConditionLimitStateA.CurrentConditionLimitState,
+                    CurrentConditionFailureOfFunction =
+                        currentConditionLimitStateB.CurrentConditionLimitState,
+                    CurrentConditionPassingAcrossValve =
+                        currentConditionLimitStateC.CurrentConditionLimitState,
+                    InspectionFiles = new InspectionFileModel().GetInspectionFiles(inspection.Id),
+                    IsDeleted = inspection.IsDeleted,
+                    CreatedBy = inspection.CreatedBy,
+                    CreatedAt = inspection.CreatedAt,
+                    DeletedBy = inspection.DeletedBy,
+                    DeletedAt = inspection.DeletedAt,
+                    CreatedByUser = context.User.Where(u => u.Id == inspection.CreatedBy).FirstOrDefault().Username,
+                    DeletedByUser = context.User.Where(u => u.Id == inspection.DeletedBy).FirstOrDefault().Username
+                }
+            ).ToList();
+            inspectionData = inspecionList.FirstOrDefault();
+        }
+        return inspectionData;
+    }
+
+    public List<InspectionModel> GetInspectionModels()
+    {
+        List<InspectionModel> inspectionData = new();
+        using (var context = new InspectionContext())
+        {
+            inspectionData = (
+                from inspection in context.Inspection
+                join asset in context.Asset on inspection.AssetID equals asset.Id
+                join inspectionMethod in context.InspectionMethod
+                    on inspection.InspectionMethodID equals inspectionMethod.Id
+                join inspectionEffectiveness in context.InspectionEffectiveness
+                    on inspection.InspectionEffectivenessID equals inspectionEffectiveness.Id
+                join currentConditionLimitStateA in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionLeakeageToAtmosphereID equals currentConditionLimitStateA.Id
+                join currentConditionLimitStateB in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionFailureOfFunctionID equals currentConditionLimitStateB.Id
+                join currentConditionLimitStateC in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionPassingAcrossValveID equals currentConditionLimitStateC.Id
+                select new InspectionModel
+                {
+                    Id = inspection.Id,
+                    AssetID = inspection.AssetID,
+                    InspectionDate = inspection.InspectionDate,
+                    InspectionMethodID = inspection.InspectionMethodID,
+                    InspectionEffectivenessID = inspection.InspectionEffectivenessID,
+                    InspectionDescription = inspection.InspectionDescription,
+                    CurrentConditionLeakeageToAtmosphereID =
+                        inspection.CurrentConditionLeakeageToAtmosphereID,
+                    CurrentConditionFailureOfFunctionID =
+                        inspection.CurrentConditionFailureOfFunctionID,
+                    CurrentConditionPassingAcrossValveID =
+                        inspection.CurrentConditionPassingAcrossValveID,
+                    FunctionCondition = inspection.FunctionCondition,
+                    TestPressureIfAny = inspection.TestPressureIfAny,
+                    Asset = new AssetModel().GetAssetModel(inspection.AssetID),
+                    InspectionMethod = inspectionMethod.InspectionMethod,
+                    InspectionEffectiveness = inspectionEffectiveness.Effectiveness,
+                    CurrentConditionLeakeageToAtmosphere =
+                        currentConditionLimitStateA.CurrentConditionLimitState,
+                    CurrentConditionFailureOfFunction =
+                        currentConditionLimitStateB.CurrentConditionLimitState,
+                    CurrentConditionPassingAcrossValve =
+                        currentConditionLimitStateC.CurrentConditionLimitState,
+                    InspectionFiles = new InspectionFileModel().GetInspectionFiles(inspection.Id),
+                    IsDeleted = inspection.IsDeleted,
+                    CreatedBy = inspection.CreatedBy,
+                    CreatedAt = inspection.CreatedAt,
+                    DeletedBy = inspection.DeletedBy,
+                    DeletedAt = inspection.DeletedAt,
+                    CreatedByUser = context.User.Where(u => u.Id == inspection.CreatedBy).FirstOrDefault().Username,
+                    DeletedByUser = context.User.Where(u => u.Id == inspection.DeletedBy).FirstOrDefault().Username
+                }
+            ).ToList();
+        }
+        return inspectionData;
+    }
+
+    public int AddInspection(InspectionDB inspection)
+    {
+        using (var context = new InspectionContext())
+        {
+            context.Inspection.Add(inspection);
+            context.SaveChanges();
+            return inspection.Id;
+        }
+    }
+
+    public bool UpdateInspection(InspectionDB inspection)
+    {
+        using (var context = new InspectionContext())
+        {
+            context.Inspection.Update(inspection);
+            context.SaveChanges();
+        }
+        return true;
+    }
+
+    public bool DeleteInspection(InspectionDB inspection)
+    {
+        using (var context = new InspectionContext())
+        {
+            InspectionDB oldInspection = context.Inspection.Find(inspection.Id);
+            oldInspection.IsDeleted = true;
+            oldInspection.DeletedAt = inspection.DeletedAt;
+            oldInspection.DeletedBy = inspection.DeletedBy;
+            context.Inspection.Update(oldInspection);
+            context.SaveChanges();
+        }
+        return true;
+    }
+}
+
+// Helper class is below
+public class CurrentConditionLimitStateModel
+{
+    public int Id { get; set; }
+    public string? CurrentConditionLimitState { get; set; }
+
+    public List<CurrentConditionLimitStateModel> GetConditionLimitStates()
+    {
+        List<CurrentConditionLimitStateModel> currentConditionLimitStates = new();
+        using (var context = new InspectionContext())
+        {
+            currentConditionLimitStates = context.CurrentConditionLimitState.ToList();
+        }
+        return currentConditionLimitStates;
+    }
+}
+
+public class InspectionEffectivenessModel
+{
+    public int Id { get; set; }
+    public string? Effectiveness { get; set; }
+
+    public List<InspectionEffectivenessModel> GetInspectionEffectivenessStates()
+    {
+        List<InspectionEffectivenessModel> inspectionEffectiveness = new();
+        using (var context = new InspectionContext())
+        {
+            inspectionEffectiveness = context.InspectionEffectiveness.ToList();
+        }
+        return inspectionEffectiveness;
+    }
+}
+
+public class InspectionMethodModel
+{
+    public int Id { get; set; }
+    public string? InspectionMethod { get; set; }
+
+    public List<InspectionMethodModel> GetInspectionMethods()
+    {
+        List<InspectionMethodModel> inspectionMethods = new();
+        using (var context = new InspectionContext())
+        {
+            inspectionMethods = context.InspectionMethod.ToList();
+        }
+        return inspectionMethods;
+    }
+}
+
+public class IsValveRepairedModel
+{
+    public int Id { get; set; }
+    public string? IsValveRepaired { get; set; }
+
+    public List<IsValveRepairedModel> GetIsValveRepairedStates()
+    {
+        List<IsValveRepairedModel> isValveRepaired =
+            new()
             {
-                inspectionSidebar = context.Area.Select(a => new InspectionSidebarModel
-                {
-                    Id = a.Id,
-                    Name = a.BusinessArea,
-                    Child = context.Platform.Where(p => p.AreaID == a.Id).Select(p => new InspectionSidebarModel
-                    {
-                        Id = p.Id,
-                        Name = p.Platform,
-                        Child = context.Asset.Where(asset => asset.PlatformID == p.Id).Select(asset => new InspectionSidebarModel
-                        {
-                            Id = asset.Id,
-                            Name = asset.TagNo,
-                            // Child = context.Inspection.Where(inspection => inspection.ValveTagNo == asset.TagNo).Select(inspection => new InspectionSidebarModel
-                            // {
-                            //     Id = inspection.Id,
-                            //     Name = inspection.InspectionDate
-                            // }).ToList()
-                        }).ToList()
-                    }).ToList()
-                }).ToList();
-            }
-            return inspectionSidebar;
-        }
-        // Area -> Platform -> Asset -> Inspection
-    }
-
-    public class ConditionLimitStateModel
-    {
-        public int Id { get; set; }
-        public string? LimitState { get; set; }
-
-        public List<ConditionLimitStateModel> GetConditionLimitStates()
-        {
-            List<ConditionLimitStateModel> conditionLimitStates =
-                new()
-                {
-                    new ConditionLimitStateModel { Id = 1, LimitState = "Good" },
-                    new ConditionLimitStateModel { Id = 2, LimitState = "Fair" },
-                    new ConditionLimitStateModel { Id = 3, LimitState = "Poor" }
-                };
-            return conditionLimitStates;
-        }
-    }
-
-    public class InspectionEffectivenessModel
-    {
-        public int Id { get; set; }
-        public string? Effectiveness { get; set; }
-
-        public List<InspectionEffectivenessModel> GetInspectionEffectivenessStates()
-        {
-            List<InspectionEffectivenessModel> inspectionEffectiveness = new();
-            using (var context = new InspectionContext())
-            {
-                inspectionEffectiveness = context.InspectionEffectiveness.ToList();
-            }
-            return inspectionEffectiveness;
-        }
-    }
-
-    public class IsValveRepairedModel
-    {
-        public int Id { get; set; }
-        public string? IsValveRepaired { get; set; }
-
-        public List<IsValveRepairedModel> GetIsValveRepairedStates()
-        {
-            List<IsValveRepairedModel> isValveRepaired =
-                new()
-                {
-                    new IsValveRepairedModel { Id = 1, IsValveRepaired = "Yes" },
-                    new IsValveRepairedModel { Id = 2, IsValveRepaired = "No" }
-                };
-            return isValveRepaired;
-        }
+                new IsValveRepairedModel { Id = 1, IsValveRepaired = "Yes" },
+                new IsValveRepairedModel { Id = 2, IsValveRepaired = "No" }
+            };
+        return isValveRepaired;
     }
 }

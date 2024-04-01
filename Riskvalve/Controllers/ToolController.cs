@@ -20,16 +20,51 @@ public class ToolController : Controller
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
         }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
         return View();
     }
 
-    public IActionResult ImportAssesment()
+    public IActionResult ImportInspectionMaintenance()
     {
         UserModel login = new();
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
+        }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
+        return View();
+    }
+
+    public IActionResult ImportAssessment()
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
         }
         return View();
     }

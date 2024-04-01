@@ -21,6 +21,14 @@ namespace Riskvalve.Controllers
                 TempData["Message"] = "Please login first";
                 return Redirect("/Login/Index");
             }
+            else
+            {
+                Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+                foreach (var item in session)
+                {
+                    ViewData[item.Key] = item.Value;
+                }
+            }
             List<UserModel> userList = new UserModel().GetUserList();
             ViewData["UserList"] = userList;
             return View();

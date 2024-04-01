@@ -17,7 +17,10 @@
                 <tr>
                     <th>No</th>
                     <th>Username</th>
-                    <th>Role</th>
+                    <th>Role Name</th>
+                    <th>Admin</th>
+                    <th>Engineer</th>
+                    <th>Viewer</th>
                     <th></th>
                 </tr>
             </thead>
@@ -33,6 +36,24 @@
                                 <td>@ctr</td>
                                 <td>@user.Username</td>
                                 <td>@user.Role</td>
+                                <td>
+                                    @if (user.IsAdmin)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsEngineer)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                </td>
+                                <td>
+                                    @if (user.IsViewer)
+                                    {
+                                        <i class="fa fa-check"></i>
+                                    }
+                                </td>
                                 <td>
                                     <button class="btn btn-primary btn-user-action" attr-mode="view"
                                         attr-itemid="@user.Id">Detail</button>
@@ -61,15 +82,24 @@
                     </div>
                     <div class="form-group">
                         <label for="field-password">Password</label>
-                        <input type="password" id="field-password" name="password" class="form-control" placeholder="Password" required>
+                        <input type="password" id="field-password" name="password" class="form-control"
+                            placeholder="Password" required>
                     </div>
                     <div class="form-group">
-                        <label for="field-role">Role</label>
-                        <select id="field-role" name="role" class="form-control" required>
-                            <option value="Admin">Admin</option>
-                            <option value="Engineer">Engineer</option>
-                            <option value="Viewer">Viewer</option>
-                        </select>
+                        <label for="field-role">Role Name</label>
+                        <input id="field-role" name="role" class="form-control" placeholder="Role Name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="field-isadmin">Admin</label>
+                        <input type="checkbox" id="field-isadmin" name="isadmin" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="field-isengineer">Engineer</label>
+                        <input type="checkbox" id="field-isengineer" name="isengineer" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="field-isviewer">Viewer</label>
+                        <input type="checkbox" id="field-isviewer" name="isviewer" class="form-control">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -90,6 +120,9 @@
                 $('#field-username').val('');
                 $('#field-password').val('');
                 $('#field-role').val('');
+                $('#field-isadmin').prop('checked', false);
+                $('#field-isengineer').prop('checked', false);
+                $('#field-isviewer').prop('checked', false);
                 var mode = $(this).attr('attr-mode');
                 if (mode == 'create') {
                     $('#field-user-mode').val('create');
@@ -106,6 +139,9 @@
                             $('#field-username').val(data.username);
                             $('#field-password').attr('placeholder', 'Leave blank if you don\'t want to change the password');
                             $('#field-role').val(data.role);
+                            $('#field-isadmin').prop('checked', data.isAdmin);
+                            $('#field-isengineer').prop('checked', data.isEngineer);
+                            $('#field-isviewer').prop('checked', data.isViewer);
                             $('#field-user-mode').val('update');
                             $('#btn-user-modal-delete').show();
                             $('#addUserModal').modal('show');
@@ -119,11 +155,14 @@
                 var username = $('#field-username').val();
                 var password = $('#field-password').val();
                 var role = $('#field-role').val();
+                var isAdmin = $('#field-isadmin').prop('checked');
+                var isEngineer = $('#field-isengineer').prop('checked');
+                var isViewer = $('#field-isviewer').prop('checked');
                 if (mode == 'create') {
                     $.ajax({
                         url: '/User/AddUser',
                         type: 'POST',
-                        data: { username: username, password: password, role: role },
+                        data: { username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
                         success: function (data) {
                             location.reload();
                         }
@@ -132,7 +171,7 @@
                     $.ajax({
                         url: '/User/UpdateUser',
                         type: 'POST',
-                        data: { id: id, username: username, password: password, role: role },
+                        data: { id: id, username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
                         success: function (data) {
                             location.reload();
                         }

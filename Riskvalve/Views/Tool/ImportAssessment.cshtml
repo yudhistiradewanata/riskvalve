@@ -1,0 +1,53 @@
+@{
+    ViewData["Title"] = "Import Assessment";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <partial name="ToolSidebar" />
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
+            <div class="subheader">
+                <b>@ViewData["Title"]</b>
+            </div>
+            <div class="content-container">
+                <div class="row">
+                    <div class="col-md-6" style="padding-left:20px;">
+                        <form>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="fileUpload" class="col-form-label">File: </label>
+                                </div>
+                                <div class="col">
+                                    <input type="file" id="fileUpload" class="form-control">
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row g-3 align-items-center">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-outline-primary" style="width: 100%;">Import File</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+@* <div class="row">
+<div class="col-xs-2" style="padding-right:0;">
+<partial name="ToolSidebar" />
+</div>
+<div class="col-xs-10">
+<form class="form-inline" role="form" style="margin-left:20px; margin-bottom:20px">
+<div class="form-group">
+<label for="importFile">File:</label>
+<input type="file" class="form-control" id="importFile">
+</div>
+<button type="submit" class="btn btn-primary">Import File</button>
+</form>
+</div>
+</div> *@

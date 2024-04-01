@@ -4,49 +4,64 @@
     var areaList = ViewData["AreaList"] as List<AreaModel>;
 }
 
-<div class="row">
-    <div class="col-xs-2" style="padding-right:0;">
-        <partial name="Sidebar" />
-    </div>
-    <div class="col-xs-10" style="padding-right: 50px">
-        <h3>Platform</h3>
-        <button type="button" class="btn btn-primary btn-platform-action" attr-mode="create">
-            Add New
-        </button>
-        <br /><br />
-        <table class="table table-bordered datatable" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Business Area</th>
-                    <th>Platform</th>
-                    <th>Code</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int ctr = 0;
-                    if (platformList != null)
-                    {
-                        foreach (var item in platformList)
-                        {
-                            ctr++;
-                            <tr style="margin: 0;padding;0;">
-                                <td>@ctr</td>
-                                <td>@item.BusinessArea</td>
-                                <td>@item.Platform</td>
-                                <td>@item.Code</td>
-                                <td>
-                                    <button class="btn btn-primary btn-platform-action" attr-mode="view"
-                                        attr-itemid="@item.Id">Detail</button>
-                                </td>
-                            </tr>
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <partial name="Sidebar" />
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
+            <div class="subheader">
+                <b>Platform</b>
+            </div>
+            <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn btn-primary custom btn-platform-action btn-with-icon" attr-mode="create">
+                        <i class="fa-solid fa-plus"></i> Add New
+                    </button>
+                    <div class="">
+                        <div class="input-group input-group-sm input-search">
+                            <span class="input-group-text" id="basic-addon1">
+                            <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control form-control-sm" placeholder="Search" oninput="dataTableSearch(this.value)">
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered datatable" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Business Area</th>
+                            <th>Platform</th>
+                            <th>Code</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int ctr = 0;
+                            if (platformList != null)
+                            {
+                                foreach (var item in platformList)
+                                {
+                                    ctr++;
+                                    <tr style="margin: 0;padding;0;">
+                                        <td>@ctr</td>
+                                        <td>@item.BusinessArea</td>
+                                        <td>@item.Platform</td>
+                                        <td>@item.Code</td>
+                                        <td>
+                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-platform-action" attr-mode="view"
+                                                attr-itemid="@item.Id"><i class="fa-solid fa-magnifying-glass"></i> Detail</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
                         }
-                    }
-                }
-            </tbody>
-        </table>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -85,7 +100,7 @@
                     <button type="button" id="btn-platform-modal-delete"
                         class="pull-left btn btn-danger">Delete</button>
                     <button type="button" id="btn-platform-modal-save" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary "data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -165,6 +180,8 @@
                     }
                 });
             });
+
+            initDatatable()
         });
     </script>
 }

@@ -1,82 +1,187 @@
 @{
     ViewData["Title"] = "Detail";
     var assetList = ViewData["assetList"] as List<AssetModel>;
+    var areaList = ViewData["areaList"] as List<AreaModel>;
 }
 
-<div class="row">
-    <div class="col-xs-2" style="padding-right:0;">
-        <partial name="HomeSidebar" />
-    </div>
-    <div class="col-xs-10" style="padding-right: 50px">
-        <h3>Asset</h3>
-        <form class="form-inline">
-            <select class="form-control" id="ddlBusinessArea">
-                <option value="">All Area</option>
-                <option value="1">Business Area 1</option>
-                <option value="2">Business Area 2</option>
-                <option value="3">Business Area 3</option>
-            </select>
-            <select class="form-control" id="ddlPlatform">
-                <option value="">All Platform</option>
-                <option value="1">Business Area 1</option>
-                <option value="2">Business Area 2</option>
-                <option value="3">Business Area 3</option>
-            </select>
-            <button class="btn btn-primary" id="btnSearch">Filter</button>
-        </form>
-        <br /><br />
-        <table class="table table-bordered datatable" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Tag No</th>
-                    <th>Business Area</th>
-                    <th>Platform</th>
-                    <th>Valve Type</th>
-                    <th>Size (inch)</th>
-                    <th>Rating</th>
-                    <th>PID Number</th>
-                    <th>Parent Equipment No</th>
-                    <th>Last Inspection Date</th>
-                    <th>Risk Status</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int ctr = 0;
-                    if (assetList != null)
-                    {
-                        foreach (var item in assetList)
-                        {
-                            ctr++;
-                            <tr style="margin: 0;padding;0;">
-                                <td>@ctr</td>
-                                <td>@item.TagNo</td>
-                                <td>@item.BusinessArea</td>
-                                <td>@item.Platform</td>
-                                <td>@item.ValveType</td>
-                                <td>@item.Size</td>
-                                <td>@item.ClassRating</td>
-                                <td>@item.PIDNo</td>
-                                <td>@item.ParentEquipmentNo</td>
-                                <td>@item.ParentEquipmentDescription</td>
-                                <td class='row'>
-                                    <div class="col-xs-2" style="padding: 0;margin:0">
-                                        <div style="background-color:yellow; height:20px; width:20px"></div>
-                                    </div>
-                                    <div class="col-xs-10">1D</div>
-                                </td>
-                                <td>
-                                    <button class="btn btn-primary btn-asset-action" attr-mode="view"
-                                        attr-itemid="@item.Id">Detail</button>
-                                </td>
-                            </tr>
-                        }
-                    }
-                }
-        </table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <partial name="HomeSidebar" />
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
+            <div class="subheader">
+                <b>Assets</b>
+            </div>
+            <div class="content-container">
+                <div class="row ">
+                    <div class="col-md-12">
+                        <form class="filter-area">
+                            <select id="ddlBusinessArea" class="form-select form-select-sm filter-select" aria-label="Small select example">
+                               <option value="">All Area</option>
+                                @if (areaList != null)
+                                {
+                                    foreach (var item in areaList)
+                                    {
+                                        <option value="@item.Id">@item.BusinessArea</option>
+                                    }
+                                }
+                            </select>
+                            <select id="ddlPlatform" class="form-select form-select-sm filter-select" aria-label="Small select example">
+                                <option selected>All Platform</option>
+                            </select>
+                            <a class="btn btn-outline-dark btn-sm" id="btnFilter" style="margin-right: 32px;"><i class="bi bi-search"></i> Filter</a>
+                            <a class="btn btn-outline-dark btn-sm" id="btnExcel"><i class="bi bi-file-earmark-excel"></i> Export to Excel</a>
+                            <div style="flex:1;"></div>
+                            <div class="input-group input-group-sm input-search">
+                                <span class="input-group-text" id="basic-addon1">
+                                <i class="bi bi-search"></i>
+                                </span>
+                                <input type="text" class="form-control form-control-sm" placeholder="Search" oninput="dataTableSearch(this.value)">
+                            </div>
+                        </form>
+
+                        <table class="table table-bordered datatable datatable-custom datatable-invert" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Tag No</th>
+                                    <th>Business Area</th>
+                                    <th>Platform</th>
+                                    <th>Value Type</th>
+                                    <th>Size (inch)</th>
+                                    <th>Rating</th>
+                                    <th>PnID Number</th>
+                                    <th>Parent Equipment No</th>
+                                    <th>Last Inspection Date</th>
+                                    <th>Risk Status</th>
+                                    <th>Time To Action</th>
+                                    <th style="width:300px">Detail</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-detail">
+                                @{
+                                    int ctr = 0;
+                                    if (assetList != null)
+                                    {
+                                        foreach (var item in assetList)
+                                        {
+                                            ctr++;
+                                            <tr>
+                                                <td>@ctr</td>
+                                                <td>@item.TagNo</td>
+                                                <td>@item.BusinessArea</td>
+                                                <td>@item.Platform</td>
+                                                <td>@item.ValveType</td>
+                                                <td>@item.Size</td>
+                                                <td>@item.ClassRating</td>
+                                                <td>@item.PIDNo</td>
+                                                <td>@item.ParentEquipmentNo</td>
+                                                <td>1-Jan-2030</td>
+                                                <td>
+                                                    <div class="risk-status-item">
+                                                        <div class="box"></div>
+                                                        <div>1D</div>
+                                                    </div>
+                                                </td>
+                                                <td>1-Jan-2030</td>
+                                                <td class="nowrap">
+                                                    <a class="btn btn-light btn-sm">Assessment</a>
+                                                    <a class="btn btn-light btn-sm">Inspection</a>
+                                                    <a class="btn btn-light btn-sm">Maintenance</a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                }
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
     </div>
 </div>
 
 <partial name="ModalAsset" />
+
+@section Scripts {
+    <script>
+        const dataTableOptions = {
+            layout: {
+                topStart: {
+                    buttons: ['excel']
+                },
+                topEnd: 'search',
+                bottomStart: null,
+                bottomEnd: null
+            }
+        }
+
+        initDatatable(dataTableOptions)
+
+        $(document).ready(function () {
+            $('#ddlBusinessArea').on('change', function () {
+                var areaId = $(this).val();
+                $.ajax({
+                    url: '/AssetRegister/GetPlatformList',
+                    type: 'GET',
+                    data: { areaId: areaId },
+                    success: function (data) {
+                        $('#ddlPlatform').empty();
+                        $('#ddlPlatform').append('<option value="">All Platform</option>');
+                        $.each(data, function (i, item) {
+                            $('#ddlPlatform').append('<option value="' + item.id + '">' + item.platform + '</option>');
+                        });
+                    }
+                });
+            });
+
+            $('#btnFilter').on('click', function (e) {
+                var areaId = $('#ddlBusinessArea').val();
+                var platformId = $('#ddlPlatform').val();
+                $.ajax({
+                    url: '/AssetRegister/GetAssetList',
+                    type: 'GET',
+                    data: { areaId: areaId, platformId: platformId },
+                    success: function (data) {
+                        $(".datatable").DataTable().destroy();
+                        $('#table-detail').html('');
+                        $.each(data, function (i, item) {
+                            var html = `
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td>${item.tagNo}</td>
+                                    <td>${item.businessArea}</td>
+                                    <td>${item.platform}</td>
+                                    <td>${item.valveType}</td>
+                                    <td>${item.size}</td>
+                                    <td>${item.classRating}</td>
+                                    <td>${item.pidNo}</td>
+                                    <td>${item.parentEquipmentNo}</td>
+                                    <td>1-Jan-2030</td>
+                                    <td>
+                                        <div class="risk-status-item">
+                                            <div class="box"></div>
+                                            <div>1D</div>
+                                        </div>
+                                    </td>
+                                    <td>1-Jan-2030</td>
+                                    <td class="nowrap">
+                                        <a class="btn btn-light btn-sm">Assessment</a>
+                                        <a class="btn btn-light btn-sm">Inspection</a>
+                                        <a class="btn btn-light btn-sm">Maintenance</a>
+                                    </td>
+                                </tr>`
+                            $('#table-detail').append(html);
+                        });
+                        initDatatable(dataTableOptions)
+                    }
+                });
+            });
+        });
+
+            $('#btnExcel').on('click', () => {
+                $('.dt-button.buttons-excel').trigger('click')
+            })
+    </script>
+}

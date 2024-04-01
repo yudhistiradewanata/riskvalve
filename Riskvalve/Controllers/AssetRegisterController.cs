@@ -21,8 +21,16 @@ public class AssetRegisterController : Controller
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
         }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
         AreaModel areaModel = new AreaModel();
-        List<AreaModel> areaList = areaModel.GetAreaList();
+        List<AreaModel> areaList = areaModel.GetAreaList(false);
         ViewData["AreaList"] = areaList;
         return View();
     }
@@ -39,21 +47,29 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult UpdateArea()
     {
-        AreaModel areaModel =
+        AreaDB areaModel =
             new()
             {
                 Id = Convert.ToInt32(Request.Form["Id"]),
                 BusinessArea = Request.Form["BusinessArea"]
             };
-        areaModel.UpdateArea(areaModel);
+        AreaModel area = new();
+        area.UpdateArea(areaModel);
         return RedirectToAction("Area");
     }
 
     [HttpPost]
     public IActionResult AddArea()
     {
-        AreaModel areaModel = new() { BusinessArea = Request.Form["BusinessArea"] };
-        areaModel.AddArea(areaModel);
+        AreaDB areaModel =
+            new()
+            {
+                BusinessArea = Request.Form["BusinessArea"],
+                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
+            };
+        AreaModel area = new();
+        area.AddArea(areaModel);
         return RedirectToAction("Area");
     }
 
@@ -62,7 +78,15 @@ public class AssetRegisterController : Controller
     {
         AreaModel areaModel = new();
         int id = Convert.ToInt32(Request.Form["Id"]);
-        areaModel.DeleteArea(id);
+        AreaDB areaToDelete =
+            new()
+            {
+                Id = id,
+                IsDeleted = true,
+                DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
+            };
+        areaModel.DeleteArea(areaToDelete);
         return RedirectToAction("Area");
     }
 
@@ -74,12 +98,28 @@ public class AssetRegisterController : Controller
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
         }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
         PlatformModel platformModel = new();
         List<PlatformModel> platformList = platformModel.GetPlatformList();
         ViewData["PlatformList"] = platformList;
         List<AreaModel> areaList = new AreaModel().GetAreaList();
         ViewData["AreaList"] = areaList;
         return View();
+    }
+
+    [HttpGet]
+    public IActionResult GetPlatformList(int AreaID)
+    {
+        PlatformModel platformModel = new();
+        List<PlatformModel> platformList = platformModel.GetPlatformList(AreaID);
+        return Json(platformList);
     }
 
     [HttpGet]
@@ -116,7 +156,9 @@ public class AssetRegisterController : Controller
             {
                 AreaID = Convert.ToInt32(Request.Form["AreaID"]),
                 Platform = Request.Form["Platform"],
-                Code = Request.Form["Code"]
+                Code = Request.Form["Code"],
+                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
         platformModel.AddPlatform(platformDb);
         return RedirectToAction("Platform");
@@ -125,9 +167,13 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult DeletePlatform()
     {
-        PlatformModel platformModel = new();
-        int id = Convert.ToInt32(Request.Form["Id"]);
-        platformModel.DeletePlatform(id);
+        PlatformModel platformModel = new(){
+            Id = Convert.ToInt32(Request.Form["Id"]),
+            IsDeleted = true,
+            DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+            DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
+        };
+        platformModel.DeletePlatform(platformModel);
         return RedirectToAction("Platform");
     }
 
@@ -138,6 +184,14 @@ public class AssetRegisterController : Controller
         {
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
+        }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
         }
         AssetModel assetModel = new();
         List<AssetModel> assetList = assetModel.GetAssetList();
@@ -163,10 +217,10 @@ public class AssetRegisterController : Controller
     }
 
     [HttpGet]
-    public IActionResult GetAssetList()
+    public IActionResult GetAssetList(int AreaID = 0, int PlatformID = 0)
     {
         AssetModel assetModel = new();
-        List<AssetModel> assetList = assetModel.GetAssetList();
+        List<AssetModel> assetList = assetModel.GetAssetList(AreaID, PlatformID);
         return Json(assetList);
     }
 
@@ -248,7 +302,9 @@ public class AssetRegisterController : Controller
                 FlowRate = Request.Form["FlowRate"],
                 ServiceFluid = Request.Form["ServiceFluid"],
                 FluidPhaseID = Convert.ToInt32(Request.Form["FluidPhaseID"]),
-                ToxicOrFlamableFluidID = Convert.ToInt32(Request.Form["ToxicOrFlamableFluidID"])
+                ToxicOrFlamableFluidID = Convert.ToInt32(Request.Form["ToxicOrFlamableFluidID"]),
+                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
         assetModel.AddAsset(assetDb);
         return RedirectToAction("Asset");
@@ -257,9 +313,13 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult DeleteAsset()
     {
-        AssetModel assetModel = new();
-        int id = Convert.ToInt32(Request.Form["Id"]);
-        assetModel.DeleteAsset(id);
+        AssetModel assetModel = new(){
+            Id = Convert.ToInt32(Request.Form["Id"]),
+            IsDeleted = true,
+            DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+            DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
+        };
+        assetModel.DeleteAsset(assetModel);
         return RedirectToAction("Asset");
     }
 

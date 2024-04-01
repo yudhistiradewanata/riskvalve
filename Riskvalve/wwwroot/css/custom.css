@@ -1,0 +1,538 @@
+body
+{
+  font-size: 15px;
+}
+
+.bi {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+/*
+ * Sidebar
+ */
+
+@media (min-width: 768px) {
+  .sidebar .offcanvas-lg {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+  }
+  .navbar-search {
+    display: block;
+  }
+}
+
+.sidebar .nav-link {
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+.sidebar .nav-link.active {
+  color: #2470dc;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+}
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  border: 1px solid rgba(121, 121, 121, 1);
+  height: 100%;
+  background-color: white;
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+}
+
+.navbar
+{
+  height: 80px;
+  background-color: rgba(60, 109, 178, 1);
+}
+
+.navbar-main .nav-item
+{
+  font-weight: 500;
+}
+
+.navbar-main .dropdown-menu{
+  position: absolute;
+  border-radius: 0;
+  background-color: rgba(60, 109, 178, 1);
+  color: #fff;
+  border: 0;
+}
+
+.navbar-main .dropdown-menu .dropdown-item {
+  color: white;
+}
+
+.navbar-main .dropdown-menu .dropdown-item:hover{
+  background-color: inherit;
+}
+
+.sidebar
+{
+  min-height: calc(100vh - 80px);
+}
+
+.sidebar .nav .nav-item
+{
+  border-bottom: 1px solid rgba(121, 121, 121, 0.3);
+}
+
+.sidebar .nav .nav-item .nav-link
+{
+  color: black;
+}
+
+.sidebar .nav .nav-item.level-2
+{
+  padding-left: 16px;
+}
+
+
+.sidebar .nav .nav-item.level-2 .nav-link
+{
+  font-weight: normal;
+}
+
+.profile-nav-item
+{
+  display:flex;
+  align-items: center;
+}
+
+.profile-nav-item div
+{
+  margin-right: 16px;
+  text-align: right;
+}
+
+.content-container
+{
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.card
+{
+  border-radius: 0px;
+}
+
+.card .card-header
+{
+  border-radius: 0px;
+  background-color: rgb(214, 231, 243);
+}
+
+.custom-table
+{
+  margin-bottom: 0;
+  font-size: 13px;
+}
+
+.custom-table th
+{
+  text-align: center;
+  font-weight: normal;
+  background-color: #027db4;
+  color: white;
+}
+
+.custom-table td,
+.custom-table th
+{
+  border: 1px solid rgb(168, 168, 168);
+}
+
+.pagination-area
+{
+  padding: 8px;
+  background-color: rgba(248, 249, 250, 1);
+  border: 1px solid rgb(168, 168, 168);
+  border-top: none;
+  display: flex;
+  align-items: center;
+}
+
+.pagination-area .pagination
+{
+  margin-bottom: 0;
+}
+
+.pagination-area .pagination .page-item .page-link
+{
+  background-color: transparent;
+  border: none;
+  font-size: 13px;
+}
+
+.pagination-area .pagination .page-item .page-link:hover
+{
+  background-color: #cdddfc;
+}
+
+.items-perpage-select
+{
+  width: auto;
+  background-color: #e4e7eb;
+  margin-right: 8px;
+}
+
+.subheader
+{
+  background-color: rgba(248, 249, 250, 1);
+  border: 1px solid rgb(168, 168, 168);
+  padding: 8px;
+}
+
+main.no-padding
+{
+  padding:0 !important;
+}
+
+main.no-padding .content-container
+{
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.subheader-negative-margin .subheader
+{
+  margin-left: -24px;
+  margin-right: -24px;
+}
+
+.subheader-negative-margin .content-container
+{
+  margin-left: -16px;
+}
+
+.subheader + .content-container
+{
+  padding-top: 8px;
+}
+
+.filter-area
+{
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.filter-select
+{
+  width: auto;
+  margin-right: 8px;
+}
+
+.input-search
+{
+  width: auto;
+}
+
+.input-search .input-group-text
+{
+  background-color: transparent;
+  border-right:none;
+}
+
+.input-search input
+{
+  border-left:none;
+}
+
+.risk-status-item
+{
+  display: flex;
+  align-items: center;
+}
+
+.risk-status-item .box
+{
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(121, 121, 121, 1); 
+  background-color: rgba(255, 255, 0, 1);
+  margin-right: 8px;
+}
+
+/* Datatable */
+table.dataTable {
+  border: 1px solid rgb(168, 168, 168);
+}
+
+.dataTable thead th{
+  background-color: #027db4;
+  color: white;
+  font-weight: normal;
+}
+
+.dataTable.datatable-invert thead th {
+  background-color: white;
+  color: #000;
+}
+
+table.dataTable thead th, table.dataTable tfoot th{
+  font-weight: normal;
+  text-align: center;
+  vertical-align: bottom;
+}
+
+.table-bordered>tbody>tr>td, .table-bordered>tfoot>tr>td, .table-bordered>tfoot>tr>th, .table-bordered>thead>tr>td, .table-bordered>thead>tr>th {
+  font-size: 13px;
+}
+
+.table-bordered>tbody>tr>td {
+  vertical-align: top;
+}
+
+.dataTables_scrollHeadInner {
+ background-color: #027db4;
+ color: #fff;
+}
+
+.dataTables_scrollHead .datatable th {
+ /* padding: 8px 0px !important; */
+ padding-top: 8px;
+ padding-bottom: 8px;
+}
+
+table.dataTable>thead>tr>th, table.dataTable>thead>tr>td{
+  padding: .5rem .5rem;
+}
+
+.dt-container .dt-layout-cell.dt-end {
+  padding: 0;
+}
+
+.dt-container .dt-search {
+  display: none;
+}
+
+.datatable-custom tbody tr:hover td{
+  background-color: #eee;
+}
+div.dt-container div.dt-layout-row {
+  display: flex;
+  align-items: center;
+}
+
+div.dt-container div.dt-layout-row .dt-start{
+  margin-right: auto;
+  margin-left: 0;
+}
+
+div.dt-container div.dt-layout-row .dt-end{
+  margin-right: 0;
+  margin-left: auto;
+}
+
+div.dt-container div.dt-layout-cell{
+  display: flex;
+}
+
+div.dt-container div.dt-layout-cell {
+  padding: 0;
+}
+
+.dt-container .dt-info{
+  font-size: 12px;
+  padding-right: 10px;
+}
+
+.dt-button.buttons-excel {
+  display: none !important;
+}
+
+.dt-layout-table + .dt-layout-row{
+  padding: 8px 0;
+  border: 1px solid rgb(168, 168, 168);
+  border-top: 0;
+}
+
+div.dt-container .dt-paging .dt-paging-button.disabled, div.dt-container .dt-paging .dt-paging-button.disabled:hover, div.dt-container .dt-paging .dt-paging-button.disabled:active{
+  color: #0a58ca !important;
+}
+
+div.dt-container .dt-paging .dt-paging-button {
+  padding: 5px 10px;
+  font-size: 13px;
+}
+
+div.dt-container .dt-paging .dt-paging-button.current, div.dt-container .dt-paging .dt-paging-button.current:hover{
+  background-color: #cdddfc;
+  border: 0;
+  box-shadow: none !important;
+  border-radius: 0;
+  color: #0a58ca !important;
+}
+
+div.dt-container .dt-length select{
+  background: #e4e7eb;
+  padding: 5px;
+  margin-right: 10px;
+}
+
+.datatable .btn-custom-size{
+  padding: 3px 8px;
+}
+
+/* ASSESSMENT */
+
+.tree-sidemenu-container
+{
+  padding: 8px;
+}
+
+.tree-container
+{
+  border: 1px solid rgba(121, 121, 121, 1); 
+}
+
+.tab-header-container
+{
+  display: flex;
+}
+
+.tab-header-container .tab-item
+{
+  width: 262px;
+  padding:4px 10px;
+  font-size: 13px;
+  display: flex;
+  border: 1px solid rgba(121, 121, 121, 1);
+  border-top-right-radius: 8px;
+  background-color: white;
+  cursor: pointer;
+}
+
+.tab-header-container .tab-item.active
+{
+  font-weight: 600;
+  background-color: rgb(242, 242, 242);
+}
+
+.tab-content
+{
+  /* border: 1px solid rgba(121, 121, 121, 1); */
+  /* padding: 8px; */
+  /* display: none; */
+  /* min-height: 50vh; */
+}
+
+.tab-content.active
+{
+  display: block;
+}
+
+.assessment-tab-content-submenu
+{
+  display: flex;
+  flex-direction: column;
+}
+
+.assessment-tab-content-submenu .submenu-item
+{
+  border: 1px solid rgba(121, 121, 121, 1);
+  padding: 2px 6px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.assessment-tab-content-submenu .submenu-item.active{
+  background-color: #beebff;
+  /* border-color: #beebff; */
+  /* color: white; */
+}
+
+.submenu-action
+{
+  margin-top: 150px;
+}
+
+.assessment-content-card
+{
+  border: 1px solid rgba(121, 121, 121, 1);
+  display: none;
+}
+
+.assessment-content-card.active
+{
+  display: block;
+}
+
+.assessment-content-card .card-header
+{
+  border-bottom: 1px solid rgba(121, 121, 121, 1);
+  background-color: rgb(242, 242, 242);
+  font-weight: 700;
+  padding: 4px;
+}
+
+.assessment-content-card .card-content
+{
+  padding: 8px;
+  padding-bottom: 24px;
+  min-height: 250px;
+}
+
+.btn-maincolor
+{
+  background-color: rgb(22, 155, 213);
+  border-color: rgb(22, 155, 213);
+}
+
+.fw-500
+{
+  font-weight: 500;
+}
+
+.input-group-text.disabled
+{
+  background-color: rgb(233, 236, 239);
+}
+
+
+
+.status-box
+{
+  width: 20px;
+  height: 20px;
+  border: 1px solid rgba(121, 121, 121, 1); 
+  margin-right: 8px;
+}
+
+.status-box.red
+{
+  background-color: red;
+}
+
+.status-box.orange
+{
+  background-color: orange;
+}
+
+.status-box.yellow
+{
+  background-color: yellow;
+}
+
+
+.status-box.green
+{
+  background-color: green;
+}
+
+.status-box.olive
+{
+  background-color: olive;
+}

@@ -1,0 +1,383 @@
+@{
+    ViewData["Title"] = "Maintenance";
+    var CurrentConditionLimitStateModel = new CurrentConditionLimitStateModel();
+    var limitState = CurrentConditionLimitStateModel.GetConditionLimitStates();
+
+    var InspectionEffectivenessModel = new InspectionEffectivenessModel();
+    var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
+
+    var InspectionMethodModel = new InspectionMethodModel();
+    var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
+
+    var IsValveRepairedModel = new IsValveRepairedModel();
+    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedStates();
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+            <partial name="InspectionAssessmentSidebar" />
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin">
+            <div>
+                <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#welcome" data-bs-toggle="tab" data-bs-target="#welcome" type="button" role="tab">
+                            Welcome
+                        </a>
+                    </li>
+                    <li class="nav-item" id="template_inspection_header">
+                        <a
+                            class="nav-link"
+                            href="#inspection1"
+                            data-bs-toggle="tab" data-bs-target="#inspection-form" type="button" role="tab"
+                        >
+                            New Maintenance
+                            <button 
+                                type="button"
+                                class="btn-close-inspection"
+                            ><i class="fa-solid fa-xmark"></i></button>
+                        </a>
+                    </li>
+                </ul>
+                <div class="tab-content inspection-tab" id="tabcontentcontainer">
+                    <div class="tab-pane show active" role="tabpanel" id="welcome">
+                        <div class="sub-container">
+                            <h1>Welcome to Maintenance</h1>
+                            <p>To start Inspection please choose assessment in tree view</p>
+                            <p>
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
+                                aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
+                                tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
+                            </p>
+                        </div>
+                    </div>
+                    <div class="tab-pane show active" role="tabpanel" id="template_inspection">
+                        <form class="inspection-form">
+                            <div class="box">
+                                <div class="subheader m-0">
+                                    <b>Asset Information</b>
+                                </div>
+                                <div class="sub-container">
+                                    <div class="form-container">
+                                        <div class="form-grid">
+                                            <div class="form-group-inline">
+                                                <label for="field-inspection-assetid">Asset ID</label>
+                                                <input type="text" class="form-control" id="field-inspection-assetid" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="field-inspection-valvetype">Valve Type</label>
+                                                <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="field-inspection-tagno">Tag No</label>
+                                                <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="field-inspection-manufacturer">Manufacturer</label>
+                                                <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                            </div>
+                                            <div class="form-group-inline" style="display: none;">
+                                                <label for="field-inspection-equipmentname">Equipment Name</label>
+                                                <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="field-inspection-bodymaterial">Body Material</label>
+                                                <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="businessarea">Business Area</label>
+                                                <input type="text" class="form-control" id="businessarea" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="bodymodel">Body Model</label>
+                                                <input type="text" class="form-control" id="bodymodel" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="platform">Platform</label>
+                                                <input type="text" class="form-control" id="platform" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="endconnection">End Connection</label>
+                                                <input type="text" class="form-control" id="endconnection" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="parentequipmentno">Parent Equipment No.</label>
+                                                <input type="text" class="form-control" id="parentequipmentno" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="serialno">Serial No.</label>
+                                                <input type="text" class="form-control" id="serialno" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="parentequipmentdescription">Parent Equipment Description</label>
+                                                <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                            </div>
+                                            <div class="form-group-inline" style="display: none;">
+                                                <label for="usagetype">Usage Type</label>
+                                                <input type="text" class="form-control" id="usagetype" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="installationdate">Installation Date</label>
+                                                <input type="text" class="form-control" id="installationdate" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="size">Size (inch)</label>
+                                                <input type="text" class="form-control" id="size" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="pidno">PID No</label>
+                                                <input type="text" class="form-control" id="pidno" readonly>
+                                            </div>
+                                            <div class="form-group-inline">
+                                                <label for="classrating">Class Rating</label>
+                                                <input type="text" class="form-control" id="classrating" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="box">
+                                <div class="subheader m-0">
+                                    <b>Maintenance Information</b>
+                                </div>
+                                <div class="sub-container">
+                                    <div class="form-container">
+                                        <div class="form-grid">
+                                            <div class="form-group ">
+                                                <label for="field-maintenance-date">Maintenance Date</label>
+                                                <input id="field-maintenance-date" type="text"
+                                                    class="form-control datepicker" />
+                                            </div>
+                                            <div class="form-group ">
+                                                <label for="field-maintenance-repaired">Is Valve Repaired</label>
+                                                <select class="form-control"
+                                                    id="field-maintenance-repaired">
+                                                    <option value="1">Yes</option>
+                                                    <option value="2">No</option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="field-maintenance-description">Maintenance Description</label>
+                                                <textarea class="form-control" id="field-maintenance-description"
+                                                    rows="8"></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="field-maintenance-image">Maintenance Image</label>
+                                                <div class="gallery-input">
+                                                    <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" multiple>
+                                                    <div class="preview-image-gallery">
+                                                        <label class="add-image" for="field-maintenance-image"><i class="fa-solid fa-file-circle-plus"></i></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="box-footer">
+                                            <button type="button" class="btn submit-button form-submit"
+                                                id="btn-submit">Save</button>
+                                            <button type="button" class="btn print-button form-submit"
+                                                id="btn-submit">Print</button>
+                                            <button type="button" class="btn delete-button form-submit"
+                                            id="btn-submit">Delete</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).on('click', '.btn-close-inspection', function () {
+            const ctr = $(this).closest('a').attr('tab-num')
+            close_inspection(ctr);
+        })
+
+        function fetchAssetData ({id, counter}) {
+            $.ajax({
+                url: '/AssetRegister/GetAssetDetail',
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    fillAssetInfo ({counter, data})
+                },
+                error: function (error) {
+                    alert('Valve Tag not found');
+                    $('#inspectionheader' + counter).remove();
+                    $('#inspection' + counter).remove();
+                    moveToLastTab()
+                }
+            });
+        }
+
+        function fetchHistoryData ({id, counter}) {
+            $.ajax({
+                url: '/Inspection/GetInspectionDetail',
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
+                    fillAssetInfo({
+                        counter, data: data.asset
+                    })
+
+                    // fill history data
+                    $('#field-inspection-date'+counter).val(data.inspectionDate)
+                    $('#field-inspection-inspection-method'+counter).val(data.inspectionMethodID)
+                    $('#field-inspection-current-condition-limit-state-a'+counter).val(data.currentConditionLeakeageToAtmosphereID)
+                    $('#field-inspection-current-condition-limit-state-b'+counter).val(data.currentConditionFailureOfFunctionID)
+                    $('#field-inspection-current-condition-limit-state-c'+counter).val(data.currentConditionPassingAcrossValveID)
+                    $('#field-inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
+                    $('#field-inspection-function-condition'+counter).val(data.functionCondition)
+                    $('#field-inspection-description'+counter).val(data.inspectionDescription)
+                    $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
+
+                    let galleryHtml = ''
+                    data.inspectionFiles.forEach(i => {
+                        galleryHtml += `<input type="hidden" identifier="gallery-${i.id}" name="inspection_image['${i.id}']" value="${i.fileName}">
+                        <div class="single-image" data-identifier="gallery-${i.id}">
+                            <img src="/${i.filePath}"">
+                            <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
+                        </div>
+                        `
+                    })
+
+                    //fill image
+                    $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
+                },
+                error: function (error) {
+                    alert('History not found');
+                    $('#inspectionheader' + counter).remove();
+                    $('#inspection' + counter).remove();
+                    moveToLastTab()
+                }
+            });
+        }
+
+        function fillAssetInfo ({counter, data}) {
+            $('#field-inspection-assetid' + counter).val(data.id)
+            $('#field-inspection-valvetype' + counter).val(data.valveType)
+            $('#field-inspection-tagno' + counter).val(data.tagNo)
+            $('#field-inspection-valvetagno' + counter).val(data.tagNo)
+            $('#field-inspection-manufacturer' + counter).val(data.manufacturer)
+            $('#field-inspection-equipmentname' + counter).val('')
+            $('#field-inspection-bodymaterial' + counter).val(data.bodyMaterial)
+            $('#businessarea' + counter).val(data.businessArea)
+            $('#bodymodel' + counter).val(data.bodyModel)
+            $('#platform' + counter).val(data.platform)
+            $('#endconnection' + counter).val(data.endConnection)
+            $('#parentequipmentno' + counter).val(data.parentEquipmentNo)
+            $('#serialno' + counter).val(data.serialNo)
+            $('#parentequipmentdescription' + counter).val(data.parentEquipmentDescription)
+            $('#usagetype' + counter).val('')
+            $('#installationdate' + counter).val(data.installationDate)
+            $('#size' + counter).val(data.size)
+            $('#pidno' + counter).val(data.pidNo)
+            $('#classrating' + counter).val(data.classRating)
+        }
+
+        $(document).ready(function () {
+            let template_inspection = $('#template_inspection');
+            let template_inspection_html = template_inspection.html();
+            template_inspection.remove();
+            let template_inspection_header = $('#template_inspection_header');
+            let template_inspection_header_html = template_inspection_header.html();
+            template_inspection_header.remove();
+
+            let idx = 0;
+            $('.btn-add-new-inspection').click(function () {
+                let ctr = idx;
+
+                let id = $(this).attr('attr-id');
+                let isHistory = false
+                let name = $(this).attr('attr-name');
+                if($(this).attr('attr-inspection-id')) {
+                    isHistory = true
+                    id = $(this).attr('attr-inspection-id')
+                } else {
+                    name = `New Maintenance ${name}`
+                }
+                
+                let tabheadercontainer = $('#inspectiontabheader');
+                let tabcontentcontainer = $('#tabcontentcontainer');
+                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
+                tabcontentcontainer.append('<div class="tab-pane" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
+                let tabcontent = tabcontentcontainer.find('.form-control');
+                tabcontent.each(function () {
+                    let name = $(this).attr('id') + ctr;
+                    $(this).attr('id', name);
+                });
+                //find button submit then add ctr on id
+                let submitbtn = tabcontentcontainer.find('.form-submit');
+                submitbtn.each(function () {
+                    let name = $(this).attr('id') + ctr;
+                    $(this).attr('id', name);
+                })
+
+                //update the label also
+                let tabcontentlabel = tabcontentcontainer.find('label');
+                tabcontentlabel.each(function () {
+                    let label = $(this).attr('for') + ctr;
+                    $(this).attr('for', label);
+                });
+
+                $('#inspectionheader' + ctr).find('a').click();
+
+                $('#field-inspection-valvetagno' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-a' + ctr).val('');
+                $('#field-inspection-date' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-b' + ctr).val('');
+                $('#field-inspection-inspection-method' + ctr).val('');
+                $('#field-inspection-current-condition-limit-state-c' + ctr).val('');
+                $('#field-inspection-effectiveness' + ctr).val('');
+                $('#field-inspection-function-condition' + ctr).val('');
+                $('#field-inspection-description' + ctr).val('');
+                $('#field-inspection-test-pressure-if-any' + ctr).val('');
+                $('#field-inspection-image-1' + ctr).val('');
+                $('#field-inspection-image-2' + ctr).val('');
+                $('#field-inspection-image-3' + ctr).val('');
+                $('#field-inspection-image-4' + ctr).val('');
+                $('#field-inspection-maintenancedate' + ctr).val('');
+                $('#field-inspection-isvalverepaired' + ctr).val('');
+                $('#field-inspection-maintenancedescription' + ctr).val('');
+                $('#field-inspection-image1' + ctr).val('');
+                $('#field-inspection-image2' + ctr).val('');
+                $('#field-inspection-image3' + ctr).val('');
+                $('#field-inspection-image4' + ctr).val('');
+
+                isHistory ? fetchHistoryData({
+                    id,
+                    counter: ctr
+                }) : fetchAssetData({
+                    id,
+                    counter: ctr
+                })
+
+                initDatepicker()
+                
+                moveToLastTab()
+                idx++;
+
+                $('.image-gallery-upload').on('change', function() {
+                    imagesPreview(this);
+                });
+            });
+
+            // $('.btn-add-new-inspection').first().trigger('click')
+
+            // $('.btn-close-inspection').click(function () {
+            //     var currctr = $(this).parent().parent().attr('id').replace('inspectionheader', '');
+            //     close_inspection(currctr);
+            // });
+        });
+    </script>
+}

@@ -1,20 +1,24 @@
+@{
+}
+
 <aside class="main-sidebar">
+    @*
     <section class="sidebar" id="tree-menu">
         <ul class="sidebar-menu" style="list-style-type:none; padding:0">
             <li class="treeview">
-                <div style="border-style: solid;border-width: 1px; padding:7px">
-                    <b><a>Home</a></b>
+                <div class="menu-item selected">
+                    <a>Home</a>
                 </div>
                 <ul class="treeview-menu" style="list-style-type:none; padding:0">
                     <li class="treeview">
-                        <div style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                        <div class="menu-item">
                             <a asp-area="" asp-controller="Home" asp-action="Index">
                                 Summary
                             </a>
                         </div>
                     </li>
                     <li class="treeview">
-                        <div style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
+                        <div class="menu-item">
                             <a asp-area="" asp-controller="Home" asp-action="Detail">
                                 Detail
                             </a>
@@ -24,4 +28,32 @@
             </li>
         </ul>
     </section>
+    *@
+    <div class="offcanvas-md offcanvas-end bg-body-tertiary" tabindex="-1" id="sidebarMenu"
+        aria-labelledby="sidebarMenuLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="sidebarMenuLabel">Pertamina</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarMenu"
+                aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body d-md-flex flex-column p-0 overflow-y-auto">
+            <ul class="nav flex-column">
+                <li class="nav-item">
+                    <a class="nav-link d-flex align-items-center gap-2" aria-current="page" href="#">
+                    Home
+                    </a>
+                </li>
+                <li class="nav-item level-2">
+                    <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link d-flex align-items-center gap-2" aria-current="page">
+                    Dashboard
+                    </a>
+                </li>
+                <li class="nav-item level-2">
+                    <a asp-area="" asp-controller="Home" asp-action="Detail" class="nav-link d-flex align-items-center gap-2" aria-current="page">
+                    Assessment Summary
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </aside>

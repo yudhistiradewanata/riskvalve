@@ -21,9 +21,18 @@ public class HomeController : Controller
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
         }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
         return View();
     }
 
+    [HttpGet]
     public IActionResult Detail()
     {
         UserModel login = new();
@@ -32,6 +41,15 @@ public class HomeController : Controller
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
         }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
+
         AssetModel assetModel = new();
         List<AssetModel> assetList = assetModel.GetAssetList();
         ViewData["AssetList"] = assetList;
@@ -52,6 +70,9 @@ public class HomeController : Controller
         List<ToxicOrFlamableFluidModel> toxicOrFlamableFluidList =
             new ToxicOrFlamableFluidModel().GetToxicOrFlamableFluidList();
         ViewData["ToxicOrFlamableFluidList"] = toxicOrFlamableFluidList;
+
+        List<AreaModel> areaList = new AreaModel().GetAreaList();
+        ViewData["AreaList"] = areaList;
         return View();
     }
 
@@ -62,6 +83,14 @@ public class HomeController : Controller
         {
             TempData["Message"] = "Please login first";
             return Redirect("/Login/Index");
+        }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
         }
         return View();
     }

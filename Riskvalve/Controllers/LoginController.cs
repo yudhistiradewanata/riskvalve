@@ -23,7 +23,7 @@ namespace Riskvalve.Controllers
             }
             string message = TempData["Message"] as string ?? "";
             ViewData["message"] = message;
-            ViewData["IsLogin"] = isLogin;
+            ViewData["IsLogin"] = isLogin.ToString();
             return View();
         }
 

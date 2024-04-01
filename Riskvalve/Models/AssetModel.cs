@@ -11,12 +11,10 @@ public class AssetContext : DbContext
     public DbSet<ManualOverrideModel> ManualOverride { get; set; }
     public DbSet<FluidPhaseModel> FluidPhase { get; set; }
     public DbSet<ToxicOrFlamableFluidModel> ToxicOrFlamableFluid { get; set; }
-
+    public DbSet<UserModel> User { get; set; }
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
-            .UseSqlServer(
-                "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;Connection Timeout=30;"
-            )
+            .UseSqlServer(Environment.GetConnectionStringDB())
             .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
 }
 
@@ -48,6 +46,11 @@ public class AssetDB
     public string? ServiceFluid { get; set; }
     public int FluidPhaseID { get; set; } // FK
     public int ToxicOrFlamableFluidID { get; set; } // FK
+    public bool? IsDeleted { get; set; }
+    public int? CreatedBy { get; set; }
+    public string? CreatedAt { get; set; }
+    public int? DeletedBy { get; set; }
+    public string? DeletedAt { get; set; }
 }
 
 public class AssetModel : AssetDB
@@ -58,6 +61,8 @@ public class AssetModel : AssetDB
     public string? ManualOverride { get; set; }
     public string? FluidPhase { get; set; }
     public string? ToxicOrFlamableFluid { get; set; }
+    public string? CreatedByUser { get; set; }
+    public string? DeletedByUser { get; set; }
 
     public AssetModel GetAssetModel(int id)
     {
@@ -106,7 +111,14 @@ public class AssetModel : AssetDB
                     ValveType = v!.ValveType,
                     ManualOverride = m!.ManualOverride,
                     FluidPhase = f!.FluidPhase,
-                    ToxicOrFlamableFluid = t!.ToxicOrFlamableFluid
+                    ToxicOrFlamableFluid = t!.ToxicOrFlamableFluid,
+                    IsDeleted = a.IsDeleted,
+                    CreatedBy = a.CreatedBy,
+                    CreatedAt = a.CreatedAt,
+                    DeletedBy = a.DeletedBy,
+                    DeletedAt = a.DeletedAt,
+                    CreatedByUser = context.User.Where(u => u.Id == a.CreatedBy).FirstOrDefault().Username,
+                    DeletedByUser = context.User.Where(u => u.Id == a.DeletedBy).FirstOrDefault().Username
                 }
             ).ToList();
             asset = assetList[0];
@@ -114,7 +126,7 @@ public class AssetModel : AssetDB
         return asset;
     }
 
-    public List<AssetModel> GetAssetList()
+    public List<AssetModel> GetAssetList(int AreaID = 0, int PlatformID = 0)
     {
         List<AssetModel> assetList = new();
         using (var context = new AssetContext())
@@ -127,6 +139,7 @@ public class AssetModel : AssetDB
                 join m in context.ManualOverride on a.ManualOverrideID equals m.Id
                 join f in context.FluidPhase on a.FluidPhaseID equals f.Id
                 join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
+                where (AreaID == 0 || p.AreaID == AreaID) && (PlatformID == 0 || p.Id == PlatformID)
                 select new AssetModel
                 {
                     Id = a.Id,
@@ -160,7 +173,14 @@ public class AssetModel : AssetDB
                     ValveType = v!.ValveType,
                     ManualOverride = m!.ManualOverride,
                     FluidPhase = f!.FluidPhase,
-                    ToxicOrFlamableFluid = t!.ToxicOrFlamableFluid
+                    ToxicOrFlamableFluid = t!.ToxicOrFlamableFluid,
+                    IsDeleted = a.IsDeleted,
+                    CreatedBy = a.CreatedBy,
+                    CreatedAt = a.CreatedAt,
+                    DeletedBy = a.DeletedBy,
+                    DeletedAt = a.DeletedAt,
+                    CreatedByUser = context.User.Where(u => u.Id == a.CreatedBy).FirstOrDefault().Username,
+                    DeletedByUser = context.User.Where(u => u.Id == a.DeletedBy).FirstOrDefault().Username
                 }
             ).ToList();
         }
@@ -171,6 +191,7 @@ public class AssetModel : AssetDB
     {
         using (var context = new AssetContext())
         {
+            asset.IsDeleted = false;
             context.Asset.Add(asset);
             context.SaveChanges();
         }
@@ -180,17 +201,49 @@ public class AssetModel : AssetDB
     {
         using (var context = new AssetContext())
         {
-            context.Asset.Update(asset);
+            AssetDB oldAsset = context.Asset.Find(asset.Id);
+            oldAsset.IsDeleted = false;
+            oldAsset.TagNo = asset.TagNo;
+            oldAsset.PlatformID = asset.PlatformID;
+            oldAsset.ValveTypeID = asset.ValveTypeID;
+            oldAsset.Size = asset.Size;
+            oldAsset.ClassRating = asset.ClassRating;
+            oldAsset.ParentEquipmentNo = asset.ParentEquipmentNo;
+            oldAsset.ParentEquipmentDescription = asset.ParentEquipmentDescription;
+            oldAsset.InstallationDate = asset.InstallationDate;
+            oldAsset.PIDNo = asset.PIDNo;
+            oldAsset.Manufacturer = asset.Manufacturer;
+            oldAsset.BodyModel = asset.BodyModel;
+            oldAsset.BodyMaterial = asset.BodyMaterial;
+            oldAsset.EndConnection = asset.EndConnection;
+            oldAsset.SerialNo = asset.SerialNo;
+            oldAsset.ManualOverrideID = asset.ManualOverrideID;
+            oldAsset.ActuatorMfg = asset.ActuatorMfg;
+            oldAsset.ActuatorSerialNo = asset.ActuatorSerialNo;
+            oldAsset.ActuatorTypeModel = asset.ActuatorTypeModel;
+            oldAsset.ActuatorPower = asset.ActuatorPower;
+            oldAsset.OperatingTemperature = asset.OperatingTemperature;
+            oldAsset.OperatingPressure = asset.OperatingPressure;
+            oldAsset.FlowRate = asset.FlowRate;
+            oldAsset.ServiceFluid = asset.ServiceFluid;
+            oldAsset.FluidPhaseID = asset.FluidPhaseID;
+            oldAsset.ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID;
+            oldAsset.CreatedBy = asset.CreatedBy;
+            oldAsset.CreatedAt = asset.CreatedAt;
+            context.Asset.Update(oldAsset);
             context.SaveChanges();
         }
     }
 
-    public void DeleteAsset(int id)
+    public void DeleteAsset(AssetDB asset)
     {
         using (var context = new AssetContext())
         {
-            AssetDB asset = context.Asset.Find(id);
-            context.Asset.Remove(asset);
+            AssetDB oldAsset = context.Asset.Find(asset.Id);
+            oldAsset.IsDeleted = true;
+            oldAsset.DeletedBy = asset.DeletedBy;
+            oldAsset.DeletedAt = asset.DeletedAt;
+            context.Asset.Update(oldAsset);
             context.SaveChanges();
         }
     }
