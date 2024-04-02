@@ -17,7 +17,7 @@ public class MaintenanceContext : DbContext
 public class MaintenanceDB
 {
     public int Id { get; set; }
-    public int? AssetID { get; set; }
+    public int AssetID { get; set; }
     public int? IsValveRepairedID { get; set; }
     public string? MaintenanceDate { get; set; }
     public string? MaintenanceDescription { get; set; }
@@ -57,17 +57,18 @@ public class MaintenanceModel : MaintenanceDB
                     CreatedAt = m.CreatedAt,
                     DeletedBy = m.DeletedBy,
                     DeletedAt = m.DeletedAt,
+                    Asset = new AssetModel().GetAssetModel(m.AssetID),
                     IsValveRepaired = ivr.IsValveRepaired,
                     CreatedByUser = context.User.Where(u => u.Id == m.CreatedBy).FirstOrDefault().Username,
                     DeletedByUser = context.User.Where(u => u.Id == m.DeletedBy).FirstOrDefault().Username,
-                    MaintenanceFiles = new InspectionFileModel().GetMaintenanceFiles(id)
+                    MaintenanceFiles = new InspectionFileModel().GetMaintenanceFiles(m.Id)
                 }
             ).ToList().FirstOrDefault();
         }
         return maintenance;
     }
 
-    public List<MaintenanceModel> GetMaintenanceList(bool IncludeDeleted = false)
+    public List<MaintenanceModel> GetMaintenanceList(bool IncludeDeleted = false, int AssetID = 0)
     {
         List<MaintenanceModel> maintenanceList = new();
         using (var context = new MaintenanceContext())
@@ -75,7 +76,7 @@ public class MaintenanceModel : MaintenanceDB
             maintenanceList = (
                 from m in context.Maintenance
                 join ivr in context.IsValveRepaired on m.IsValveRepairedID equals ivr.Id
-                where IncludeDeleted == true || m.IsDeleted == false
+                where (IncludeDeleted == true || m.IsDeleted == false) && (AssetID == 0 || m.AssetID == AssetID)
                 select new MaintenanceModel
                 {
                     Id = m.Id,
@@ -88,6 +89,7 @@ public class MaintenanceModel : MaintenanceDB
                     CreatedAt = m.CreatedAt,
                     DeletedBy = m.DeletedBy,
                     DeletedAt = m.DeletedAt,
+                    Asset = new AssetModel().GetAssetModel(m.AssetID),
                     IsValveRepaired = ivr.IsValveRepaired,
                     CreatedByUser = context.User.Where(u => u.Id == m.CreatedBy).FirstOrDefault().Username,
                     DeletedByUser = context.User.Where(u => u.Id == m.DeletedBy).FirstOrDefault().Username,
@@ -121,8 +123,6 @@ public class MaintenanceModel : MaintenanceDB
             oldMaintenance.IsValveRepairedID = maintenanceDB.IsValveRepairedID;
             oldMaintenance.MaintenanceDate = maintenanceDB.MaintenanceDate;
             oldMaintenance.MaintenanceDescription = maintenanceDB.MaintenanceDescription;
-            oldMaintenance.CreatedBy = maintenanceDB.CreatedBy;
-            oldMaintenance.CreatedAt = maintenanceDB.CreatedAt;
             context.Maintenance.Update(oldMaintenance);
             context.SaveChanges();
         }

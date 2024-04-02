@@ -34,7 +34,7 @@
                                                     <a class="sidebartreea" attr-sidebar-level="3" attr-find-inspection="@item.Name"
                                                         attr-find-platform="@platform.Name"
                                                         attr-find-equipment="@equipment.Name">@equipment.Name</a>
-                                                    <ul class="treeview-menu">
+                                                    <ul class="treeview-menu" equipment-id="@equipment.Id">
                                                         <li class="treeview">
                                                             <a class="btn-add-new-inspection" attr-id="@equipment.Id"
                                                                 attr-name="@equipment.Name" attr-sidebar-level="4"
@@ -70,8 +70,8 @@
 
 @Html.PartialSectionScripts(
 @<script>
-    function close_inspection(ctr) {
-        if(confirm('Are you sure you want to close this assessment?')) {
+    function close_inspection(ctr, force) {
+        if(force || confirm('Are you sure you want to close this assessment?')) {
             $('#inspectionheader' + ctr).remove();
             $('#inspection' + ctr).remove();
             moveToLastTab()

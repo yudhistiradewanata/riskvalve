@@ -272,6 +272,14 @@ body {
   background-color: rgb(242, 242, 242);
 }
 
+.inspection-form .print-button, .inspection-form .delete-button{
+  display: none;
+}
+
+.inspection-form.history-form .print-button, .inspection-form.history-form .delete-button{
+  display: block;
+}
+
 .risk-table-container{
   border: solid 1px rgba(121, 121, 121, 1);
   width: 100%;

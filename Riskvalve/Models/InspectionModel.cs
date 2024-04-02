@@ -107,7 +107,7 @@ public class InspectionModel : InspectionDB
         return inspectionData;
     }
 
-    public List<InspectionModel> GetInspectionModels()
+    public List<InspectionModel> GetInspectionList(bool IncludeDeleted = false, int AssetID = 0)
     {
         List<InspectionModel> inspectionData = new();
         using (var context = new InspectionContext())
@@ -125,6 +125,7 @@ public class InspectionModel : InspectionDB
                     on inspection.CurrentConditionFailureOfFunctionID equals currentConditionLimitStateB.Id
                 join currentConditionLimitStateC in context.CurrentConditionLimitState
                     on inspection.CurrentConditionPassingAcrossValveID equals currentConditionLimitStateC.Id
+                where (IncludeDeleted == true || inspection.IsDeleted == false) && (AssetID == 0 || inspection.AssetID == AssetID)
                 select new InspectionModel
                 {
                     Id = inspection.Id,
@@ -168,6 +169,7 @@ public class InspectionModel : InspectionDB
     {
         using (var context = new InspectionContext())
         {
+            inspection.IsDeleted = false;
             context.Inspection.Add(inspection);
             context.SaveChanges();
             return inspection.Id;
@@ -178,7 +180,21 @@ public class InspectionModel : InspectionDB
     {
         using (var context = new InspectionContext())
         {
-            context.Inspection.Update(inspection);
+            InspectionDB oldInspection = context.Inspection.Find(inspection.Id);
+            oldInspection.AssetID = inspection.AssetID;
+            oldInspection.InspectionDate = inspection.InspectionDate;
+            oldInspection.InspectionMethodID = inspection.InspectionMethodID;
+            oldInspection.InspectionEffectivenessID = inspection.InspectionEffectivenessID;
+            oldInspection.InspectionDescription = inspection.InspectionDescription;
+            oldInspection.CurrentConditionLeakeageToAtmosphereID =
+                inspection.CurrentConditionLeakeageToAtmosphereID;
+            oldInspection.CurrentConditionFailureOfFunctionID =
+                inspection.CurrentConditionFailureOfFunctionID;
+            oldInspection.CurrentConditionPassingAcrossValveID =
+                inspection.CurrentConditionPassingAcrossValveID;
+            oldInspection.FunctionCondition = inspection.FunctionCondition;
+            oldInspection.TestPressureIfAny = inspection.TestPressureIfAny;
+            context.Inspection.Update(oldInspection);
             context.SaveChanges();
         }
         return true;

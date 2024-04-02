@@ -105,5 +105,6 @@ function deleteGalleryImage(key) {
   if(confirm('are you sure you want to delete this image?')) {
     $(`.gallery-input div[data-identifier=${key}]`).remove()
     $(`input[identifier=${key}]`).remove()
+    $(`input[identifier=delete-${key}]`).val('true')
   }
 }

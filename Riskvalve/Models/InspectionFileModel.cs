@@ -22,7 +22,7 @@ public class InspectionFileDB
     public long FileSize { get; set; }
     public string? FileType { get; set; }
     public string? FilePath { get; set; }
-    public bool IsDeleted { get; set; }
+    public bool? IsDeleted { get; set; }
     public string? CreatedAt { get; set; }
     public int? CreatedBy { get; set; }
     public string? DeletedAt { get; set; }
@@ -97,6 +97,7 @@ public class InspectionFileModel : InspectionFileDB
     {
         using (var context = new InspectionFileModelContext())
         {
+            inspectionFile.IsDeleted = false;
             context.InspectionFile.Add(inspectionFile);
             context.SaveChanges();
         }
