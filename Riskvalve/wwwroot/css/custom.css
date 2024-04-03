@@ -438,20 +438,23 @@ div.dt-container .dt-length select{
 {
   display: flex;
   flex-direction: column;
+  border-radius: 0.5rem;
+  overflow: hidden;
 }
 
 .assessment-tab-content-submenu .submenu-item
 {
-  border: 1px solid rgba(121, 121, 121, 1);
-  padding: 2px 6px;
-  font-weight: 700;
+  border: 1px solid #f1f1f2;
+  /* background-color: rgba(121, 121, 121, 0.05); */
+  padding: 6px 12px;
   cursor: pointer;
 }
 
-.assessment-tab-content-submenu .submenu-item.active{
-  background-color: #beebff;
-  /* border-color: #beebff; */
-  /* color: white; */
+.assessment-tab-content-submenu .submenu-item.active
+{
+  border-left: 3px solid rgba(60, 109, 178, 1);
+  font-weight: 700;
+  color: rgba(60, 109, 178, 1);
 }
 
 .submenu-action
@@ -465,6 +468,20 @@ div.dt-container .dt-length select{
   display: none;
 }
 
+.assessment-content-card.first-in-group
+{
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.assessment-content-card.last-in-group
+{
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+  overflow: hidden;
+}
+
 .assessment-content-card.active
 {
   display: block;
@@ -473,14 +490,15 @@ div.dt-container .dt-length select{
 .assessment-content-card .card-header
 {
   border-bottom: 1px solid rgba(121, 121, 121, 1);
-  background-color: rgb(242, 242, 242);
+  background-color: rgba(60, 109, 178, 1);
+  color: white;
   font-weight: 700;
-  padding: 4px;
+  padding: 4px 8px;
 }
 
 .assessment-content-card .card-content
 {
-  padding: 8px;
+  padding: 8px 16px;
   padding-bottom: 24px;
   min-height: 250px;
 }
