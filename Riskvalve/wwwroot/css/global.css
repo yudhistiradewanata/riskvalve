@@ -472,3 +472,90 @@ svg * {
   width: 100%;
   border-radius: 5px;
 }
+
+.login-page {
+  display: flex;
+}
+
+.login-page .login-box {
+  width: auto;
+  flex: 0 0 50%;
+  margin: 0;
+  padding: 50px;
+  position: relative;
+}
+
+.login-page .login-logo img{
+  width: 100%;
+  max-width: 300px;
+}
+
+.login-page .login-box-msg {
+  font-size: 36px;
+  color: #333;
+  font-weight: 500;
+}
+
+.login-page .copyright{
+  background-color: #ba313b;
+  color: white;
+  width: calc(100% - 20px);
+  border-radius: 0 75px 0 0;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  padding: 20px 15px;
+}
+
+.login-form {
+  display: flex;
+  flex-wrap: wrap;
+  row-gap: 20px;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.login-form .label {
+  flex: 0 0 35%;
+  text-align: right;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding-right: 15px;
+  font-weight: 500;
+  font-size: 22px;
+  color: #333;
+}
+
+.login-form .btn-login {
+  width: 100%;
+  background-color: rgba(60, 109, 178, 1);
+  border-radius: 4px;
+  padding: 12px 15px;
+  border: 0;
+}
+
+.login-form .form-group{
+  flex: 0 0 65%;
+}
+
+.login-image{
+  flex: 0 0 50%;
+  background-image: url('/lib/images/u9.jpg');
+  background-size: cover;
+  background-position: center;
+}
+
+.col-form-label{
+  font-size: 11px;
+  padding: 0;
+}
+
+.form-control.form-control-sm[readonly] {
+  background-color: #f0f0f0;
+}
+
+.assessment-content-card .single-field{
+  margin-bottom: 5px;
+}

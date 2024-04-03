@@ -83,9 +83,9 @@ public class UserModel
                 httpcontext.Session.SetString("Username", login.Username);
                 httpcontext.Session.SetString("Role", login.Role);
                 httpcontext.Session.SetString("Id", login.Id.ToString());
-                httpcontext.Session.SetString("isAdmin", login.IsAdmin.ToString());
-                httpcontext.Session.SetString("isEngineer", login.IsEngineer.ToString());
-                httpcontext.Session.SetString("isViewer", login.IsViewer.ToString());
+                httpcontext.Session.SetString("IsAdmin", login.IsAdmin.ToString());
+                httpcontext.Session.SetString("IsEngineer", login.IsEngineer.ToString());
+                httpcontext.Session.SetString("IsViewer", login.IsViewer.ToString());
                 return true;
             }
         }
@@ -118,13 +118,19 @@ public class UserModel
         return userList;
     }
 
-    public void AddUser(UserModel user)
+    public bool AddUser(UserModel user)
     {
         using (var context = new UserContext())
         {
+            UserModel searchuser = context.User.Where(u => u.Username == user.Username).FirstOrDefault();
+            if (searchuser != null)
+            {
+                return false;
+            }
             user.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
             context.User.Add(user);
             context.SaveChanges();
+            return true;
         }
     }
 

@@ -228,8 +228,6 @@ public class AssetModel : AssetDB
             oldAsset.ServiceFluid = asset.ServiceFluid;
             oldAsset.FluidPhaseID = asset.FluidPhaseID;
             oldAsset.ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID;
-            oldAsset.CreatedBy = asset.CreatedBy;
-            oldAsset.CreatedAt = asset.CreatedAt;
             context.Asset.Update(oldAsset);
             context.SaveChanges();
         }

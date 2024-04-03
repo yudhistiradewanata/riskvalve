@@ -27,12 +27,17 @@ public class MaintenanceController : Controller
             {
                 ViewData[item.Key] = item.Value;
             }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
         }
         InspectionSidebarHistory inspectionSidebarHistory = new();
         List<InspectionSidebarModel> inspectionSidebar =
             inspectionSidebarHistory.GetInspectionSidebarHistory("Maintenance");
         ViewData["InspectionSidebar"] = inspectionSidebar;
-        ViewData["pageType"] = "Inspection";
+        ViewData["pageType"] = "Maintenance";
         return View();
     }
 
@@ -201,5 +206,14 @@ public class MaintenanceController : Controller
             };
         maintenance.DeleteMaintenance(maintenanceDB);
         return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public List<MaintenanceModel> GetMaintenanceList()
+    {
+        int AssetID = Convert.ToInt32(Request.Query["AssetID"]);
+        MaintenanceModel maintenance = new();
+        List<MaintenanceModel> maintenanceList = maintenance.GetMaintenanceList(false, AssetID);
+        return maintenanceList;
     }
 }

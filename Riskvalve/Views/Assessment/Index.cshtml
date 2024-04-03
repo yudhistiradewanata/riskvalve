@@ -2,11 +2,16 @@
     ViewData["Title"] = "Assessment";
     var CurrentConditionLimitStateModel = new CurrentConditionLimitStateModel();
     var limitState = CurrentConditionLimitStateModel.GetConditionLimitStates();
+
     var InspectionEffectivenessModel = new InspectionEffectivenessModel();
     var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
+
     var IsValveRepairedModel = new IsValveRepairedModel();
     var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedStates();
-    }
+
+    var InspectionMethodModel = new InspectionMethodModel();
+    var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
+}
     <div class="container-fluid">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -312,134 +317,262 @@
                                             <div class="card-content">
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-assetid">Asset ID</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-assetid" name="AssetID" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-tagno">Tag No</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-tagno" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-equipmentname">Equipment Name</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-equipmentname" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-businessarea">Business Area</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-businessarea" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-platform">Platform</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-platform" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-parentequipmentno">Parent Equipment No.</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-parentequipmentno" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-parentequipmentdesc">Parent Equipment Description</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-parentequipmentdesc" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-installationdate">Installation Date</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-installationdate" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-pidno">PID No</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-pidno" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-valvetype">Valve Type</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-valvetype" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-manufacturer">Manufacturer</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-manufacturer" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-bodymaterial">Body Material</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-bodymaterial" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-bodymodel">Body Model</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-bodymodel" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-endconnection">End Connection</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-endconnection" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-serialno">Serial No</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-serialno" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-usagetype">Usage Type</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-usagetype" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-size">Size (inch)</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-size" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-classrating">Class Rating</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-classrating" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-servicefluid">Service Fluid</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
-                                                            </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-servicefluid" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-fluidphase">Fluid Phase</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-fluidphase" readonly>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Asset ID</label>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-flowrate">Flow Rate (m3/hr)</label>
                                                             </div>
-                                                            <div class="col-9">
-                                                                <input class="form-control form-control-sm" value="1" disabled>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-flowrate" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-operatingtemperature">Operating Temperature (F)</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-operatingtemperature" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-operatingpressure">Operating Pressure (Psig)</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-operatingpressure" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-toxicorflamableliquid">Toxic or Flamable Liquid</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-toxicorflamableliquid" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-costofreplacement">Cost of replacement and repair (USD)</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-costofreplacement" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-actuatormfg">Actuator Mfg</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-actuatormfg" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-actuatorserialno">Actuator Serial No.</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-actuatorserialno" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-actuatortypemodel">Actuator Type/Model</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-actuatortypemodel" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-actuatorpower">Actuator Power</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-actuatorpower" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-manualoverride">Manual Override</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-manualoverride" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-status">Status</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-status" readonly>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-4">
+                                                                <label class="col-form-label" for="field-assessment-Actuation">Actuation</label>
+                                                            </div>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-Actuation" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -453,7 +586,7 @@
                                             <div class="card-content">
                                                 <div class="row">
                                                     <div class="col-lg-6">
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-4">
                                                                 <label class="col-form-label">Assessment No</label>
                                                             </div>
@@ -461,7 +594,7 @@
                                                                 <input class="form-control form-control-sm" value="Assessment1">
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-4">
                                                                 <label class="col-form-label">Assessment Date</label>
                                                             </div>
@@ -469,7 +602,7 @@
                                                                 <input class="form-control datepicker form-control-sm" value="01-Jan-1971">
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-4">
                                                                 <label class="col-form-label">Time Period (Month)</label>
                                                             </div>
@@ -479,7 +612,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-8">
                                                                 <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
@@ -487,7 +620,7 @@
                                                                 <input class="form-control form-control-sm" value="60">
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-8">
                                                                 <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
@@ -495,7 +628,7 @@
                                                                 <input class="form-control form-control-sm" value="60">
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-8">
                                                                 <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
@@ -512,8 +645,8 @@
                                                 Inspection History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
-                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4">Add Inspection Data</a>
-                                                <table class="datatable table custom-table" style="width: 100%;">
+                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4" onclick="addInspection(this)">Add Inspection Data</a>
+                                                <table class="datatable table custom-table inspection-table" style="width: 100%;">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
@@ -526,42 +659,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>11-Jun-2015</td>
-                                                            <td>Visual Inspection</td>
-                                                            <td>Good condition</td>
-                                                            <td>Packing Leak</td>
-                                                            <td>No</td>
-                                                            <td>
-                                                                <a class="btn btn-light btn-sm">Detail</a>
-                                                                <a class="btn btn-light btn-sm">Delete</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>11-Jun-2015</td>
-                                                            <td>Visual Inspection</td>
-                                                            <td>Good condition</td>
-                                                            <td>Packing Leak</td>
-                                                            <td>No</td>
-                                                            <td>
-                                                                <a class="btn btn-light btn-sm">Detail</a>
-                                                                <a class="btn btn-light btn-sm">Delete</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>11-Jun-2015</td>
-                                                            <td>Visual Inspection</td>
-                                                            <td>Good condition</td>
-                                                            <td>Packing Leak</td>
-                                                            <td>No</td>
-                                                            <td>
-                                                                <a class="btn btn-light btn-sm">Detail</a>
-                                                                <a class="btn btn-light btn-sm">Delete</a>
-                                                            </td>
-                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -571,8 +668,8 @@
                                                 Maintenance  History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
-                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4">Add Maintenance Data</a>
-                                                <table class="datatable table table-bordered" style="width:100%">
+                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4" onclick="addMaintenance(this)">Add Maintenance Data</a>
+                                                <table class="datatable table table-bordered maintenance-table" style="width:100%">
                                                     <thead>
                                                         <tr>
                                                             <th>No</th>
@@ -583,36 +680,6 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>11-Jun-2015</td>
-                                                            <td>Yes</td>
-                                                            <td>replace packing ...</td>
-                                                            <td>
-                                                                <a class="btn btn-light btn-sm">Detail</a>
-                                                                <a class="btn btn-light btn-sm">Delete</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>11-Jun-2015</td>
-                                                            <td>Yes</td>
-                                                            <td>replace packing ...</td>
-                                                            <td>
-                                                                <a class="btn btn-light btn-sm">Detail</a>
-                                                                <a class="btn btn-light btn-sm">Delete</a>
-                                                            </td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>1</td>
-                                                            <td>11-Jun-2015</td>
-                                                            <td>Yes</td>
-                                                            <td>replace packing ...</td>
-                                                            <td>
-                                                                <a class="btn btn-light btn-sm">Detail</a>
-                                                                <a class="btn btn-light btn-sm">Delete</a>
-                                                            </td>
-                                                        </tr>
                                                     </tbody>
                                                 </table>
                                             </div>
@@ -624,12 +691,12 @@
                                             <div class="card-content">
                                                 <div class="row">
                                                     <div class="col-lg-8">
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-12">
                                                                 LF1 - Current Condition
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-5">
@@ -643,7 +710,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-5">
@@ -657,7 +724,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-5">
@@ -671,12 +738,12 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center mt-2">
+                                                        <div class="row g-3 align-items-center single-field mt-2">
                                                             <div class="col-12">
                                                                 LF2 - Time To Limit State
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-4">
@@ -695,7 +762,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-4">
@@ -727,7 +794,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-4">
@@ -759,7 +826,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-4">
@@ -791,7 +858,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center mt-2">
+                                                        <div class="row g-3 align-items-center single-field mt-2">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">LF3 - Inspection Effectiveness</label>
                                                             </div>
@@ -804,7 +871,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">LF4 - Impact of Internal Fluid Impurities</label>
                                                             </div>
@@ -816,7 +883,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">LF5 - Impact of Operating Envelopes</label>
                                                             </div>
@@ -828,7 +895,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">LF6 - Used within OEM Specification</label>
                                                             </div>
@@ -840,7 +907,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">LF7 - Repaired</label>
                                                             </div>
@@ -862,7 +929,7 @@
                                             <div class="card-content">
                                                 <div class="row">
                                                     <div class="col-lg-8">
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">Product loss definition (bbls)</label>
                                                             </div>
@@ -870,7 +937,7 @@
                                                                 <input class="form-control form-control-sm" value="1"/>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label">HSSE Definision</label>
                                                             </div>
@@ -1027,7 +1094,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="row g-3 align-items-center">
+                                                        <div class="row g-3 align-items-center single-field">
                                                             <div class="col-3">
                                                                 <label class="col-form-label">Limit Sale</label>
                                                             </div>
@@ -1219,6 +1286,362 @@
             </main>
         </div>
     </div>
+
+    <div class="modal fade modal-xl" id="addInspectionModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="inspection-form inspection-tab">
+                    <div class="box">
+                        <div class="subheader m-0">
+                            <b>Asset Information</b>
+                        </div>
+                        <div class="sub-container">
+                            <div class="form-container">
+                                <div class="form-grid">
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-assetid">Asset ID</label>
+                                        <input type="text" class="form-control" id="field-inspection-assetid" readonly name="AssetID">
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-valvetype">Valve Type</label>
+                                        <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-tagno">Tag No</label>
+                                        <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-manufacturer">Manufacturer</label>
+                                        <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                    </div>
+                                    <div class="form-group-inline" style="display: none;">
+                                        <label for="field-inspection-equipmentname">Equipment Name</label>
+                                        <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-bodymaterial">Body Material</label>
+                                        <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="businessarea">Business Area</label>
+                                        <input type="text" class="form-control" id="businessarea" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="bodymodel">Body Model</label>
+                                        <input type="text" class="form-control" id="bodymodel" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="platform">Platform</label>
+                                        <input type="text" class="form-control" id="platform" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="endconnection">End Connection</label>
+                                        <input type="text" class="form-control" id="endconnection" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="parentequipmentno">Parent Equipment No.</label>
+                                        <input type="text" class="form-control" id="parentequipmentno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="serialno">Serial No.</label>
+                                        <input type="text" class="form-control" id="serialno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="parentequipmentdescription">Parent Equipment Description</label>
+                                        <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                    </div>
+                                    <div class="form-group-inline" style="display: none;">
+                                        <label for="usagetype">Usage Type</label>
+                                        <input type="text" class="form-control" id="usagetype" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="installationdate">Installation Date</label>
+                                        <input type="text" class="form-control" id="installationdate" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="size">Size (inch)</label>
+                                        <input type="text" class="form-control" id="size" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="pidno">PID No</label>
+                                        <input type="text" class="form-control" id="pidno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="classrating">Class Rating</label>
+                                        <input type="text" class="form-control" id="classrating" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="subheader m-0">
+                            <b>Inspection Information</b>
+                        </div>
+                        <div class="sub-container">
+                            <div class="form-container">
+                                <div class="form-grid">
+                                    <input type="hidden" name="Id" id="data-id">
+                                    <div class="form-group ">
+                                        <label for="field-inspection-valvetagno">Valve Tag No</label>
+                                        <input type="text" class="form-control" id="field-inspection-valvetagno" readonly>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-current-condition-limit-state-a">Current Condition Leakage to Atmosphere</label>
+                                        <select class="form-control"
+                                            id="field-inspection-current-condition-limit-state-a"
+                                            name="CurrentConditionLeakeageToAtmosphereID"
+                                        >
+                                            @foreach (var item in limitState)
+                                            {
+                                                <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-date">Inspection Date</label>
+                                        <input id="field-inspection-date" type="text"
+                                            class="form-control datepicker" name="InspectionDate"/>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-current-condition-limit-state-b">Current Condition Failure of Function</label>
+                                        <select class="form-control"
+                                            id="field-inspection-current-condition-limit-state-b"
+                                            name="CurrentConditionFailureOfFunctionID"
+                                        >
+                                            @foreach (var item in limitState)
+                                            {
+                                                <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-inspection-method">Inspection
+                                            Method</label>
+                                        <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID">
+                                            @foreach (var item in inspectionMethods)
+                                            {
+                                                <option value="@item.Id">@item.InspectionMethod</option>
+                                            }
+                                        </select>
+                                        @* <input type="text" class="form-control"
+                                        id="field-inspection-inspection-method" value="Visual Inspection"> *@
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-current-condition-limit-state-c">Current
+                                            Condition Passing Across Valve</label>
+                                        <select class="form-control"
+                                            id="field-inspection-current-condition-limit-state-c"
+                                            name="CurrentConditionPassingAcrossValveID"
+                                        >
+                                            @foreach (var item in limitState)
+                                            {
+                                                <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-effectiveness">Inspection
+                                            Effectiveness</label>
+                                        <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID">
+                                            @foreach (var item in inspectionEffectivenessStates)
+                                            {
+                                                <option value="@item.Id">@item.Effectiveness</option>
+                                            }
+                                        </select>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-inspection-function-condition">Function
+                                            Condition</label>
+                                        <input type="text" class="form-control"
+                                            id="field-inspection-function-condition"
+                                            name="FunctionCondition"
+                                        >
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="field-inspection-description">Inspection Description</label>
+                                        <textarea class="form-control" id="field-inspection-description"
+                                            rows="12" name="InspectionDescription"></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="form-group col-md-12 mb-2">
+                                                <label for="field-inspection-test-pressure-if-any">Test Pressure
+                                                    if Any</label>
+                                                <input type="text" 
+                                                    name="TestPressureIfAny"
+                                                    class="form-control"
+                                                    id="field-inspection-test-pressure-if-any">
+                                            </div>
+                                            <div class="col-md-12">
+                                                <label for="field-inspection-image">Inspection Image</label>
+                                                <div class="gallery-input">
+                                                    <input type="file" class="form-control image-gallery-upload" id="field-inspection-image" onchange="imagesPreview(this)" multiple>
+                                                    <div class="preview-image-gallery">
+                                                        <label class="add-image" for="field-inspection-image"><i class="fa-solid fa-file-circle-plus"></i></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="box-footer">
+                                    <button type="button" class="btn submit-button"
+                                        id="btn-submit" onclick="submitInspectionForm(this)">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-xl" id="addMaintenanceModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="inspection-form inspection-tab">
+                    <div class="box">
+                        <div class="subheader m-0">
+                            <b>Asset Information</b>
+                        </div>
+                        <div class="sub-container">
+                            <div class="form-container">
+                                <div class="form-grid">
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-assetid">Asset ID</label>
+                                        <input type="text" class="form-control" id="field-inspection-assetid" name="AssetID" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-valvetype">Valve Type</label>
+                                        <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-tagno">Tag No</label>
+                                        <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-manufacturer">Manufacturer</label>
+                                        <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                    </div>
+                                    <div class="form-group-inline" style="display: none;">
+                                        <label for="field-inspection-equipmentname">Equipment Name</label>
+                                        <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="field-inspection-bodymaterial">Body Material</label>
+                                        <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="businessarea">Business Area</label>
+                                        <input type="text" class="form-control" id="businessarea" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="bodymodel">Body Model</label>
+                                        <input type="text" class="form-control" id="bodymodel" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="platform">Platform</label>
+                                        <input type="text" class="form-control" id="platform" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="endconnection">End Connection</label>
+                                        <input type="text" class="form-control" id="endconnection" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="parentequipmentno">Parent Equipment No.</label>
+                                        <input type="text" class="form-control" id="parentequipmentno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="serialno">Serial No.</label>
+                                        <input type="text" class="form-control" id="serialno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="parentequipmentdescription">Parent Equipment Description</label>
+                                        <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                    </div>
+                                    <div class="form-group-inline" style="display: none;">
+                                        <label for="usagetype">Usage Type</label>
+                                        <input type="text" class="form-control" id="usagetype" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="installationdate">Installation Date</label>
+                                        <input type="text" class="form-control" id="installationdate" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="size">Size (inch)</label>
+                                        <input type="text" class="form-control" id="size" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="pidno">PID No</label>
+                                        <input type="text" class="form-control" id="pidno" readonly>
+                                    </div>
+                                    <div class="form-group-inline">
+                                        <label for="classrating">Class Rating</label>
+                                        <input type="text" class="form-control" id="classrating" readonly>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <div class="subheader m-0">
+                            <b>Maintenance Information</b>
+                        </div>
+                        <div class="sub-container">
+                            <div class="form-container">
+                                <div class="form-grid">
+                                    <input type="hidden" name="Id" id="data-id">
+                                    <div class="form-group ">
+                                        <label for="field-maintenance-date">Maintenance Date</label>
+                                        <input id="field-maintenance-date" type="text"
+                                            class="form-control datepicker" name="MaintenanceDate"/>
+                                    </div>
+                                    <div class="form-group ">
+                                        <label for="field-maintenance-repaired">Is Valve Repaired</label>
+                                        <select class="form-control"
+                                            id="field-maintenance-repaired"
+                                            name="IsValveRepairedID"
+                                        >
+                                            <option value="1">Yes</option>
+                                            <option value="2">No</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="field-maintenance-description">Maintenance Description</label>
+                                        <textarea class="form-control" id="field-maintenance-description"
+                                            rows="8"
+                                            name="MaintenanceDescription"
+                                            ></textarea>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="field-maintenance-image">Maintenance Image</label>
+                                        <div class="gallery-input">
+                                            <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" onchange="imagesPreview(this)" multiple>
+                                            <div class="preview-image-gallery">
+                                                <label class="add-image" for="field-maintenance-image"><i class="fa-solid fa-file-circle-plus"></i></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="box-footer">
+                                    <button type="button" class="btn submit-button"
+                                        id="btn-submit" onclick="submitMaintenanceForm(this)">Save</button>
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     @section Scripts {
     <script>
         $(document).on('click', '.btn-close-inspection', function () {
@@ -1226,101 +1649,465 @@
             close_inspection(ctr);
         })
 
-
-        $(document).ready(function () {
-            var template_inspection = $('#template_inspection');
-            var template_inspection_html = template_inspection.html();
-            template_inspection.remove();
-            var template_inspection_header = $('#template_inspection_header');
-            var template_inspection_header_html = template_inspection_header.html();
-            template_inspection_header.remove();
-        
-            $('.datepicker').datepicker({
-                format: 'dd/mm/yyyy',
-                autoclose: true,
-                todayHighlight: true
-            });
-        
-            var idx = 0;
-            $('.btn-add-new-inspection').click(function () {
-                var ctr = idx;
-                var id = $(this).attr('attr-id');
-                var name = $(this).attr('attr-name');
-                var tabheadercontainer = $('#inspectiontabheader');
-                var tabcontentcontainer = $('#tabcontentcontainer');
-                // tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" >New Assessment ' + name + ' <button type="button" class="btn-close-inspection" style="margin: 0;padding: 5;border:none;background-color: inherit; color: black;">X</button></a></li>');
-                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">New Inspection ' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
-                tabcontentcontainer.append('<div class="tab-pane" id="inspection' + ctr + '">' + template_inspection_html + '</div>');
-                var tabcontent = tabcontentcontainer.find('.form-control');
-                tabcontent.each(function () {
-                    var name = $(this).attr('id') + ctr;
-                    $(this).attr('id', name);
-                });
-                //find button submit then add ctr on id
-                var submitbtn = tabcontentcontainer.find('.form-submit');
-                submitbtn.each(function () {
-                    var name = $(this).attr('id') + ctr;
-                    $(this).attr('id', name);
-                })
-        
-                $('#inspectionheader' + ctr).find('a').click();
-        
-                $('#field-inspection-valvetagno' + ctr).val('');
-                $('#field-inspection-current-condition-limit-state-a' + ctr).val('');
-                $('#field-inspection-date' + ctr).val('');
-                $('#field-inspection-current-condition-limit-state-b' + ctr).val('');
-                $('#field-inspection-inspection-method' + ctr).val('');
-                $('#field-inspection-current-condition-limit-state-c' + ctr).val('');
-                $('#field-inspection-effectiveness' + ctr).val('');
-                $('#field-inspection-function-condition' + ctr).val('');
-                $('#field-inspection-description' + ctr).val('');
-                $('#field-inspection-test-pressure-if-any' + ctr).val('');
-                $('#field-inspection-image-1' + ctr).val('');
-                $('#field-inspection-image-2' + ctr).val('');
-                $('#field-inspection-image-3' + ctr).val('');
-                $('#field-inspection-image-4' + ctr).val('');
-                $('#field-inspection-maintenancedate' + ctr).val('');
-                $('#field-inspection-isvalverepaired' + ctr).val('');
-                $('#field-inspection-maintenancedescription' + ctr).val('');
-                $('#field-inspection-image1' + ctr).val('');
-                $('#field-inspection-image2' + ctr).val('');
-                $('#field-inspection-image3' + ctr).val('');
-                $('#field-inspection-image4' + ctr).val('');
+        function submitForm(el) {
+            const form = $(el).closest('form.inspection-form')
+            const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
+            const ctr = $(el).closest('.tab-pane').attr('tab-num')
+            const nativeForm = form[0]
+            const formData = new FormData(nativeForm);
+            if(form.hasClass('history-form')) {
+                // update
                 $.ajax({
-                    url: '/AssetRegister/GetAssetDetail',
-                    type: 'GET',
-                    data: { id: id },
-                    success: function (data) {
-                        $('#field-inspection-valvetagno' + ctr).val(data.tagNo);
+                    url: '/Inspection/UpdateInspection',
+                    type: 'POST', // or 'GET' depending on your form method
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(response) {
+                        form.addClass('history-form')
+                        // Handle success response
+                        alert('Data successfully updated')
                     },
-                    error: function (error) {
-                        alert('Valve Tag not found');
-                        $('#inspectionheader' + ctr).remove();
-                        $('#inspection' + ctr).remove();
-                        var lasttab = $('#inspectiontabheader li:last-child');
-                        lasttab.find('a').click();
+                    error: function(xhr, status, error) {
+                        alert('Error submitting the form')
                     }
                 });
-        
-                $('.datepicker').datepicker({
-                    format: 'dd/mm/yyyy',
-                    autoclose: true,
-                    todayHighlight: true
+            } else {
+                // add new
+                $.ajax({
+                    url: '/Inspection/AddInspection',
+                    type: 'POST', // or 'GET' depending on your form method
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function(res) {
+                        form.addClass('history-form')
+                        // add menu to tree
+                        $('ul[equipment-id="'+equipmentId+'"]').append(`
+                            <li class="treeview">
+                                <a class="btn-add-new-inspection" history-button="" 
+                                attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
+                                attr-name="${res.asset.tagNo} ${res.inspectionDate}" 
+                                attr-sidebar-level="4" 
+                                attr-find-inspection="${res.asset.businessArea}" 
+                                attr-find-platform="${res.asset.platform}" 
+                                attr-find-equipment="${res.asset.tagNo}" 
+                                attr-find-imr="NEW"
+                                onclick="addTab.apply(this)"
+                                >
+                                    ${res.inspectionDate}
+                                </a>
+                            </li>
+                        `)
+
+                        form.find('.preview-image-gallery .single-image').remove()
+                        form.find('.preview-image-gallery input[type=file]').remove()
+                        fetchHistoryData({
+                            id: res.id,
+                            counter: ctr
+                        })
+                        alert('Data successfully inserted')
+
+                        
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error
+                        alert('error submitting the form')
+                    }
                 });
-                moveToLastTab()
-                initDatatable({
-                    scrollable: false,
-                    selector: `#inspection${idx} .datatable`
-                })
-                idx++;
+            }
+        }
+
+        function deleteForm(el) {
+            const form = $(el).closest('form.inspection-form')
+            
+            const id = form.find('#data-id').val()
+            const tabId = $(el).closest('.tab-pane').attr('id')
+            const ctr = $(el).closest('.tab-pane').attr('tab-num')
+
+            if(confirm('Are you sure you want to delete this data?')) {
+                $.ajax({
+                    url: '/Inspection/DeleteInspection',
+                    type: 'POST', // or 'GET' depending on your form method
+                    data: {
+                        Id: id
+                    },
+                    success: function(response) {
+                        close_inspection(ctr, true)
+                        alert('Data successfully deleted')
+                        $('.btn-add-new-inspection[attr-inspection-id='+id+']').closest('li').remove()
+                        // Handle success response
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error deleting data')
+                    }
+                });
+            }
+        }
+
+        function fetchAssetData ({id, counter}) {
+            $.ajax({
+                url: '/AssetRegister/GetAssetDetail',
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    fillAssetInfo ({counter, data})
+                },
+                error: function (error) {
+                    alert('Valve Tag not found');
+                    $('#inspectionheader' + counter).remove();
+                    $('#inspection' + counter).remove();
+                    moveToLastTab()
+                }
             });
+        }
+
+        function fetchHistoryData ({id, counter}) {
+            $.ajax({
+                url: '/Inspection/GetInspectionDetail',
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
+                    fillAssetInfo({
+                        counter, data: data.asset
+                    })
+
+                    // fill history data
+                    $('#field-inspection-date'+counter).val(data.inspectionDate)
+                    $('#field-inspection-inspection-method'+counter).val(data.inspectionMethodID)
+                    $('#field-inspection-current-condition-limit-state-a'+counter).val(data.currentConditionLeakeageToAtmosphereID)
+                    $('#field-inspection-current-condition-limit-state-b'+counter).val(data.currentConditionFailureOfFunctionID)
+                    $('#field-inspection-current-condition-limit-state-c'+counter).val(data.currentConditionPassingAcrossValveID)
+                    $('#field-inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
+                    $('#field-inspection-function-condition'+counter).val(data.functionCondition)
+                    $('#field-inspection-description'+counter).val(data.inspectionDescription)
+                    $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
+
+                    let galleryHtml = ''
+                    data.inspectionFiles.forEach(i => {
+                        galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                        <div class="single-image" data-identifier="gallery-${i.id}">
+                            <img src="/${i.filePath}"">
+                            <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
+                        </div>
+                        `
+                    })
+
+                    //fill image
+                    $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
+                    $('#inspection' + counter).find('form').addClass('history-form')
+
+                    //fill ID
+                    $('#inspection'+counter).find('#data-id').val(id)
+                },
+                error: function (error) {
+                    alert('History not found');
+                    $('#inspectionheader' + counter).remove();
+                    $('#inspection' + counter).remove();
+                    moveToLastTab()
+                }
+            });
+        }
+
+        function fillAssetInfo ({counter, data}) {
+            $('#field-assessment-assetid' + counter).val(data.id)
+            $('#field-assessment-valvetype' + counter).val(data.valveType)
+            $('#field-assessment-tagno' + counter).val(data.tagNo)
+            $('#field-assessment-manufacturer' + counter).val(data.manufacturer)
+            $('#field-assessment-equipmentname' + counter).val('')
+            $('#field-assessment-bodymaterial' + counter).val(data.bodyMaterial)
+            $('#field-assessment-businessarea' + counter).val(data.businessArea)
+            $('#field-assessment-bodymodel' + counter).val(data.bodyModel)
+            $('#field-assessment-platform' + counter).val(data.platform)
+            $('#field-assessment-endconnection' + counter).val(data.endConnection)
+            $('#field-assessment-parentequipmentno' + counter).val(data.parentEquipmentNo)
+            $('#field-assessment-serialno' + counter).val(data.serialNo)
+            $('#field-assessment-parentequipmentdesc' + counter).val(data.parentEquipmentDescription)
+            $('#field-assessment-usagetype' + counter).val('')
+            $('#field-assessment-installationdate' + counter).val(data.installationDate)
+            $('#field-assessment-size' + counter).val(data.size)
+            $('#field-assessment-pidno' + counter).val(data.pidNo)
+            $('#field-assessment-classrating' + counter).val(data.classRating)
+            $('#field-assessment-servicefluid' + counter).val(data.serviceFluid)
+            $('#field-assessment-fluidphase' + counter).val(data.fluidPhase)
+            $('#field-assessment-flowrate' + counter).val(data.flowRate)
+            $('#field-assessment-operatingtemperature' + counter).val(data.operatingTemperature)
+            $('#field-assessment-operatingpressure' + counter).val(data.operatingPressure)
+            $('#field-assessment-toxicorflamableliquid' + counter).val(data.toxicOrFlamableFluid)
+            $('#field-assessment-costofreplacement' + counter).val('')
+            $('#field-assessment-actuatormfg' + counter).val(data.actuatorMfg)
+            $('#field-assessment-actuatorserialno' + counter).val(data.actuatorSerialNo)
+            $('#field-assessment-actuatortypemodel' + counter).val(data.actuatorTypeModel)
+            $('#field-assessment-actuatorpower' + counter).val(data.actuatorPower)
+            $('#field-assessment-manualoverride' + counter).val(data.manualOverride)
+            $('#field-assessment-status' + counter).val('')
+            $('#field-assessment-actuation' + counter).val('')
+        }
+
+        $(document).ready(function () {
+            $('.btn-add-new-inspection').click(addTab);
+            $('.btn-add-new-inspection').first().trigger('click')
         });
 
+        let template_inspection = $('#template_inspection');
+        let template_inspection_html = template_inspection.html();
+        template_inspection.remove();
+        let template_inspection_header = $('#template_inspection_header');
+        let template_inspection_header_html = template_inspection_header.html();
+        template_inspection_header.remove();
+
+        let idx = 0;
+        function addTab () {
+            let ctr = idx;
+
+            let id = $(this).attr('attr-id');
+            const equipmentId = id
+            let isHistory = false
+            let name = $(this).attr('attr-name');
+            if($(this).attr('attr-inspection-id')) {
+                isHistory = true
+                id = $(this).attr('attr-inspection-id')
+
+            } else {
+                name = `New Inspection ${name}`
+            }
+            
+            let tabheadercontainer = $('#inspectiontabheader');
+            let tabcontentcontainer = $('#tabcontentcontainer');
+            tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
+            tabcontentcontainer.append('<div class="tab-pane" equipment-id="'+equipmentId+'" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
+            let tabcontent = tabcontentcontainer.find('.form-control');
+            tabcontent.each(function () {
+                let name = $(this).attr('id') + ctr;
+                $(this).attr('id', name);
+            });
+            //find button submit then add ctr on id
+            let submitbtn = tabcontentcontainer.find('.form-submit');
+            submitbtn.each(function () {
+                let name = $(this).attr('id') + ctr;
+                $(this).attr('id', name);
+            })
+
+            //update the label also
+            let tabcontentlabel = tabcontentcontainer.find('label');
+            tabcontentlabel.each(function () {
+                let label = $(this).attr('for') + ctr;
+                $(this).attr('for', label);
+            });
+
+            $('#inspectionheader' + ctr).find('a').click();
+
+            isHistory ? fetchHistoryData({
+                id,
+                counter: ctr
+            }) : fetchAssetData({
+                id,
+                counter: ctr
+            })
+
+            // fetchInspectionHistory(ctr)
+            Promise.all([fetchInspectionHistory(ctr), fetchMaintenanceHistory(ctr)]).then(() => {
+                initDatatable({
+                    scrollable: false,
+                    selector: `#inspection${ctr} .datatable`
+                })
+            })
+            initDatepicker()
+            moveToLastTab()
+            idx++;
+        }
+
+        function fetchInspectionHistory(tabCounter) {
+            return new Promise((res, rej) => {
+                const applyAll = tabCounter === undefined
+                const table = applyAll? $('.inspection-table tbody') : $('.tab-pane[tab-num='+tabCounter+'] .inspection-table tbody')
+                table.html('')
+                $.ajax({
+                    url: '/Inspection/GetInspectionList',
+                    type: 'GET',
+                    success: function (data) {
+                        let html = ''
+                        data.forEach((item, idx) => {
+                            html += `
+                            <tr>
+                                <td>${idx+1}</td>
+                                <td>${item.inspectionDate}</td>
+                                <td>${item.inspectionMethod}</td>
+                                <td>${item.inspectionDescription}</td>
+                                <td>${item.functionCondition}</td>
+                                <td>${item.testPressureIfAny}</td>
+                                <td>
+                                    <a class="btn btn-light btn-sm">Detail</a>
+                                    <a class="btn btn-light btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            `
+                        })
+                        table.append(html)
+                        res(true)
+                    },
+                    error: function (error) {
+                        rej()
+                    }
+                });
+            })
+        }
+
+        function fetchMaintenanceHistory(tabCounter) {
+            return new Promise((resolve, reject) => {
+                const applyAll = tabCounter === undefined
+                const table = applyAll? $('.maintenance-table tbody') : $('.tab-pane[tab-num='+tabCounter+'] .maintenance-table tbody')
+                table.html('')
+                $.ajax({
+                    url: '/Maintenance/GetMaintenanceList',
+                    type: 'GET',
+                    success: function (data) {
+                        let html = ''
+                        data.forEach((item, idx) => {
+                            html += `
+                            <tr>
+                                <td>${idx+1}</td>
+                                <td>${item.maintenanceDate}</td>
+                                <td>${item.isValveRepaired}</td>
+                                <td>${item.maintenanceDescription}</td>
+                                <td>
+                                    <a class="btn btn-light btn-sm">Detail</a>
+                                    <a class="btn btn-light btn-sm">Delete</a>
+                                </td>
+                            </tr>
+                            `
+                        })
+                        table.append(html)
+
+                        resolve(true)
+                    },
+                    error: function (error) {
+                        reject()
+                    }
+                })
+            });
+        }
+
+        
         const changeContentCard = (key, el) => {
             $('.assessment-content-card').removeClass('active');
             $('.assessment-content-card.card-group-'+key).addClass('active')
             $(el).closest('.assessment-tab-content-submenu').find('.submenu-item').removeClass('active')
             $(el).addClass('active')
+        }
+
+
+        /* MODAL CODE */
+        function submitInspectionForm(el) {
+            const form = $(el).closest('form')
+            // const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
+            const ctr = $(el).closest('.tab-pane').attr('tab-num')
+            const nativeForm = form[0]
+            const formData = new FormData(nativeForm);
+            $.ajax({
+                url: '/Inspection/AddInspection',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    $('.inspection-table').DataTable().destroy();
+                    alert('input data success')
+                    fetchInspectionHistory().then(() => {
+                        initDatatable({
+                            scrollable: false,
+                            selector: '.inspection-table'
+                        })
+                    })
+                    $('#addInspectionModal').modal('hide')
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    alert('error submitting the form')
+                }
+            });
+        }
+
+        function submitMaintenanceForm(el) {
+            const form = $(el).closest('form')
+            // const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
+            const ctr = $(el).closest('.tab-pane').attr('tab-num')
+            const nativeForm = form[0]
+            const formData = new FormData(nativeForm);
+            $.ajax({
+                url: '/Maintenance/AddMaintenance',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(res) {
+                    $('.maintenance-table').DataTable().destroy();
+                    alert('input data success')
+                    fetchMaintenanceHistory().then(() => {
+                        initDatatable({
+                            scrollable: false,
+                            selector: '.maintenance-table'
+                        })
+                    })
+                    $('#addMaintenanceModal').modal('hide')
+                },
+                error: function(xhr, status, error) {
+                    // Handle error
+                    alert('error submitting the form')
+                }
+            });
+        }
+
+        function addInspection(el) {
+            const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
+            $('#addInspectionModal').find('input,textarea,select').val('')
+            $('#addInspectionModal .preview-image-gallery').find('input[type=file], .single-image').remove()
+            fetchModalAssetData(equipmentId, '#addInspectionModal')
+            $('#addInspectionModal').modal('show')
+        }
+
+        function addMaintenance(el) {
+            const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
+            fetchModalAssetData(equipmentId, '#addMaintenanceModal')
+            $('#addMaintenanceModal').modal('show')
+        }
+
+        function fetchModalAssetData (id, modalSelector) {
+            $.ajax({
+                url: '/AssetRegister/GetAssetDetail',
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    $(modalSelector+' #field-inspection-assetid').val(data.id)
+                    $(modalSelector+' #field-inspection-valvetype').val(data.valveType)
+                    $(modalSelector+' #field-inspection-tagno').val(data.tagNo)
+                    $(modalSelector+' #field-inspection-valvetagno').val(data.tagNo)
+                    $(modalSelector+' #field-inspection-manufacturer').val(data.manufacturer)
+                    $(modalSelector+' #field-inspection-equipmentname').val('')
+                    $(modalSelector+' #field-inspection-bodymaterial').val(data.bodyMaterial)
+                    $(modalSelector+' #businessarea').val(data.businessArea)
+                    $(modalSelector+' #bodymodel').val(data.bodyModel)
+                    $(modalSelector+' #platform').val(data.platform)
+                    $(modalSelector+' #endconnection').val(data.endConnection)
+                    $(modalSelector+' #parentequipmentno').val(data.parentEquipmentNo)
+                    $(modalSelector+' #serialno').val(data.serialNo)
+                    $(modalSelector+' #parentequipmentdescription').val(data.parentEquipmentDescription)
+                    $(modalSelector+' #usagetype').val('')
+                    $(modalSelector+' #installationdate').val(data.installationDate)
+                    $(modalSelector+' #size').val(data.size)
+                    $(modalSelector+' #pidno').val(data.pidNo)
+                    $(modalSelector+' #classrating').val(data.classRating)
+                },
+                error: function (error) {
+                    alert('Valve Tag not found');
+                    $('#inspectionheader' + counter).remove();
+                    $('#inspection' + counter).remove();
+                    moveToLastTab()
+                }
+            });
         }
     </script>
 }

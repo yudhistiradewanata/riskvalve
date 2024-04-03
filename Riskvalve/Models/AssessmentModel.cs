@@ -171,6 +171,145 @@ public class AssessmentModel : AssessmentDB {
         }
         return assessmentList;
     }
+
+    public AssessmentModel GetAssessmentModel(int id) {
+        AssessmentModel assessmentModel = new();
+        using (var context = new AssessmentContext()) {
+            assessmentModel = (
+                from assessment in context.Assessment
+                join asset in context.Asset on assessment.AssetID equals asset.Id
+                join lat in context.LeakageToAtmosphere on assessment.LeakageToAtmosphereID equals lat.Id
+                join fof in context.FailureOfFunction on assessment.FailureOfFunctionID equals fof.Id
+                join pav in context.PassingAccrosValve on assessment.PassingAccrosValveID equals pav.Id
+                join ief in context.InspectionEffectiveness on assessment.InspectionEffectivenessID equals ief.Id
+                join iif in context.ImpactOfInternalFluidImpurities on assessment.ImpactOfInternalFluidImpuritiesID equals iif.Id
+                join ioe in context.ImpactOfOperatingEnvelopes on assessment.ImpactOfOperatingEnvelopesID equals ioe.Id
+                join uos in context.UsedWithinOEMSpecification on assessment.UsedWithinOEMSpecificationID equals uos.Id
+                join rep in context.Repaired on assessment.RepairedID equals rep.Id
+                join hsse in context.HSSEDefinision on assessment.HSSEDefinisionID equals hsse.Id
+                join ra in context.RecommendationAction on assessment.RecommendationActionID equals ra.Id
+                where assessment.Id == id
+                select new AssessmentModel
+                {
+                    Id = assessment.Id,
+                    AssetID = assessment.AssetID,
+                    AssessmentNo = assessment.AssessmentNo,
+                    TimePeriode = assessment.TimePeriode,
+                    TimeToLimitStateLeakageToAtmosphere = assessment.TimeToLimitStateLeakageToAtmosphere,
+                    TimeToLimitStateFailureOfFunction = assessment.TimeToLimitStateFailureOfFunction,
+                    TimeToLimitStatePassingAccrosValve = assessment.TimeToLimitStatePassingAccrosValve,
+                    LeakageToAtmosphereID = assessment.LeakageToAtmosphereID,
+                    FailureOfFunctionID = assessment.FailureOfFunctionID,
+                    PassingAccrosValveID = assessment.PassingAccrosValveID,
+                    LeakageToAtmosphereTP1ID = assessment.LeakageToAtmosphereTP1ID,
+                    LeakageToAtmosphereTP2ID = assessment.LeakageToAtmosphereTP2ID,
+                    LeakageToAtmosphereTP3ID = assessment.LeakageToAtmosphereTP3ID,
+                    FailureOfFunctionTP1ID = assessment.FailureOfFunctionTP1ID,
+                    FailureOfFunctionTP2ID = assessment.FailureOfFunctionTP2ID,
+                    FailureOfFunctionTP3ID = assessment.FailureOfFunctionTP3ID,
+                    PassingAccrosValveTP1ID = assessment.PassingAccrosValveTP1ID,
+                    PassingAccrosValveTP2ID = assessment.PassingAccrosValveTP2ID,
+                    PassingAccrosValveTP3ID = assessment.PassingAccrosValveTP3ID,
+                    InspectionEffectivenessID = assessment.InspectionEffectivenessID,
+                    ImpactOfInternalFluidImpuritiesID = assessment.ImpactOfInternalFluidImpuritiesID,
+                    ImpactOfOperatingEnvelopesID = assessment.ImpactOfOperatingEnvelopesID,
+                    UsedWithinOEMSpecificationID = assessment.UsedWithinOEMSpecificationID,
+                    RepairedID = assessment.RepairedID,
+                    ProductLossDefinition = assessment.ProductLossDefinition,
+                    HSSEDefinisionID = assessment.HSSEDefinisionID,
+                    Summary = assessment.Summary,
+                    RecommendationActionID = assessment.RecommendationActionID,
+                    DetailedRecommendation = assessment.DetailedRecommendation,
+                    IsDeleted = assessment.IsDeleted,
+                    CreatedAt = assessment.CreatedAt,
+                    CreatedBy = assessment.CreatedBy,
+                    DeletedAt = assessment.DeletedAt,
+                    DeletedBy = assessment.DeletedBy,
+                    Asset = new AssetModel().GetAssetModel(assessment.AssetID),
+                    LeakageToAtmosphere = lat.LeakageToAtmosphere,
+                    FailureOfFunction = fof.FailureOfFunction,
+                    PassingAccrosValve = pav.PassingAccrosValve,
+                    LeakageToAtmosphereTP1 = context.TimePeriod.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP1ID).FirstOrDefault().TimePeriod,
+                    LeakageToAtmosphereTP2 = context.TimePeriod.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP2ID).FirstOrDefault().TimePeriod,
+                    LeakageToAtmosphereTP3 = context.TimePeriod.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP3ID).FirstOrDefault().TimePeriod,
+                    FailureOfFunctionTP1 = context.TimePeriod.Where(tp => tp.Id == assessment.FailureOfFunctionTP1ID).FirstOrDefault().TimePeriod,
+                    FailureOfFunctionTP2 = context.TimePeriod.Where(tp => tp.Id == assessment.FailureOfFunctionTP2ID).FirstOrDefault().TimePeriod,
+                    FailureOfFunctionTP3 = context.TimePeriod.Where(tp => tp.Id == assessment.FailureOfFunctionTP3ID).FirstOrDefault().TimePeriod,
+                    PassingAccrosValveTP1 = context.TimePeriod.Where(tp => tp.Id == assessment.PassingAccrosValveTP1ID).FirstOrDefault().TimePeriod,
+                    PassingAccrosValveTP2 = context.TimePeriod.Where(tp => tp.Id == assessment.PassingAccrosValveTP2ID).FirstOrDefault().TimePeriod,
+                    PassingAccrosValveTP3 = context.TimePeriod.Where(tp => tp.Id == assessment.PassingAccrosValveTP3ID).FirstOrDefault().TimePeriod,
+                    InspectionEffectiveness = ief.Effectiveness,
+                    ImpactOfInternalFluidImpurities = iif.ImpactOfInternalFluidImpurities,
+                    ImpactOfOperatingEnvelopes = ioe.ImpactOfOperatingEnvelopes,
+                    UsedWithinOEMSpecification = uos.UsedWithinOEMSpecification,
+                    Repaired = rep.Repaired,
+                    HSSEDefinision = hsse.HSSEDefinision,
+                    RecommendationAction = ra.RecommendationAction,
+                    CreatedByUser = context.User.Where(u => u.Id == assessment.CreatedBy).FirstOrDefault().Username,
+                    DeletedByUser = context.User.Where(u => u.Id == assessment.DeletedBy).FirstOrDefault().Username,
+                    InspectionHistory = new InspectionModel().GetInspectionList(false, assessment.AssetID),
+                    MaintenanceHistory = new MaintenanceModel().GetMaintenanceList(false,assessment.AssetID)
+                }
+            ).FirstOrDefault();
+        }
+        return assessmentModel;
+    }
+
+    public int AddAssessment(AssessmentDB assessment) {
+        using (var context = new AssessmentContext()) {
+            assessment.IsDeleted = false;
+            context.Add(assessment);
+            context.SaveChanges();
+            return assessment.Id;
+        }
+    }
+
+    public void UpdateAssessment(AssessmentDB assessment) {
+        using (var context = new AssessmentContext()) {
+            AssessmentDB oldAssessment = context.Assessment.Find(assessment.Id);
+            oldAssessment.AssetID = assessment.AssetID;
+            oldAssessment.AssessmentNo = assessment.AssessmentNo;
+            oldAssessment.TimePeriode = assessment.TimePeriode;
+            oldAssessment.TimeToLimitStateLeakageToAtmosphere = assessment.TimeToLimitStateLeakageToAtmosphere;
+            oldAssessment.TimeToLimitStateFailureOfFunction = assessment.TimeToLimitStateFailureOfFunction;
+            oldAssessment.TimeToLimitStatePassingAccrosValve = assessment.TimeToLimitStatePassingAccrosValve;
+            oldAssessment.LeakageToAtmosphereID = assessment.LeakageToAtmosphereID;
+            oldAssessment.FailureOfFunctionID = assessment.FailureOfFunctionID;
+            oldAssessment.PassingAccrosValveID = assessment.PassingAccrosValveID;
+            oldAssessment.LeakageToAtmosphereTP1ID = assessment.LeakageToAtmosphereTP1ID;
+            oldAssessment.LeakageToAtmosphereTP2ID = assessment.LeakageToAtmosphereTP2ID;
+            oldAssessment.LeakageToAtmosphereTP3ID = assessment.LeakageToAtmosphereTP3ID;
+            oldAssessment.FailureOfFunctionTP1ID = assessment.FailureOfFunctionTP1ID;
+            oldAssessment.FailureOfFunctionTP2ID = assessment.FailureOfFunctionTP2ID;
+            oldAssessment.FailureOfFunctionTP3ID = assessment.FailureOfFunctionTP3ID;
+            oldAssessment.PassingAccrosValveTP1ID = assessment.PassingAccrosValveTP1ID;
+            oldAssessment.PassingAccrosValveTP2ID = assessment.PassingAccrosValveTP2ID;
+            oldAssessment.PassingAccrosValveTP3ID = assessment.PassingAccrosValveTP3ID;
+            oldAssessment.InspectionEffectivenessID = assessment.InspectionEffectivenessID;
+            oldAssessment.ImpactOfInternalFluidImpuritiesID = assessment.ImpactOfInternalFluidImpuritiesID;
+            oldAssessment.ImpactOfOperatingEnvelopesID = assessment.ImpactOfOperatingEnvelopesID;
+            oldAssessment.UsedWithinOEMSpecificationID = assessment.UsedWithinOEMSpecificationID;
+            oldAssessment.RepairedID = assessment.RepairedID;
+            oldAssessment.ProductLossDefinition = assessment.ProductLossDefinition;
+            oldAssessment.HSSEDefinisionID = assessment.HSSEDefinisionID;
+            oldAssessment.Summary = assessment.Summary;
+            oldAssessment.RecommendationActionID = assessment.RecommendationActionID;
+            oldAssessment.DetailedRecommendation = assessment.DetailedRecommendation;
+            context.Update(oldAssessment);
+            context.SaveChanges();
+        }
+    }
+
+    public void DeleteAssessment(AssessmentDB assessment) {
+        using (var context = new AssessmentContext()) {
+            AssessmentDB oldAssessment = context.Assessment.Find(assessment.Id);
+            oldAssessment.IsDeleted = true;
+            oldAssessment.DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+            oldAssessment.DeletedBy = assessment.DeletedBy;
+            context.Update(oldAssessment);
+            context.SaveChanges();
+        }
+    }
 }
 
 public class LeakageToAtmosphereModel {

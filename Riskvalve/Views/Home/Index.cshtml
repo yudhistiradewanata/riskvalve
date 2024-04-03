@@ -1,5 +1,6 @@
 ﻿@{
     ViewData["Title"] = "Summary";
+    var message = TempData["Message"];
 }
 
 <style>
@@ -147,10 +148,15 @@
     <div class="row">
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <partial name="HomeSidebar" />
-            
         </div>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
             <div class="content-container">
+                @if (message != null)
+                {
+                    <div class="alert alert-warning alert-dismissible">
+                        @message
+                    </div>
+                }
                 <div class="row">
                     <div class="col-md-4">
                         <div class="card">

@@ -28,6 +28,11 @@ public class AssetRegisterController : Controller
             {
                 ViewData[item.Key] = item.Value;
             }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
         }
         AreaModel areaModel = new AreaModel();
         List<AreaModel> areaList = areaModel.GetAreaList(false);
@@ -105,6 +110,11 @@ public class AssetRegisterController : Controller
             {
                 ViewData[item.Key] = item.Value;
             }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
         }
         PlatformModel platformModel = new();
         List<PlatformModel> platformList = platformModel.GetPlatformList();
@@ -167,12 +177,14 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult DeletePlatform()
     {
-        PlatformModel platformModel = new(){
-            Id = Convert.ToInt32(Request.Form["Id"]),
-            IsDeleted = true,
-            DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-            DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
-        };
+        PlatformModel platformModel =
+            new()
+            {
+                Id = Convert.ToInt32(Request.Form["Id"]),
+                IsDeleted = true,
+                DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
+            };
         platformModel.DeletePlatform(platformModel);
         return RedirectToAction("Platform");
     }
@@ -191,6 +203,11 @@ public class AssetRegisterController : Controller
             foreach (var item in session)
             {
                 ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
             }
         }
         AssetModel assetModel = new();
@@ -313,12 +330,14 @@ public class AssetRegisterController : Controller
     [HttpPost]
     public IActionResult DeleteAsset()
     {
-        AssetModel assetModel = new(){
-            Id = Convert.ToInt32(Request.Form["Id"]),
-            IsDeleted = true,
-            DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-            DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
-        };
+        AssetModel assetModel =
+            new()
+            {
+                Id = Convert.ToInt32(Request.Form["Id"]),
+                IsDeleted = true,
+                DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
+            };
         assetModel.DeleteAsset(assetModel);
         return RedirectToAction("Asset");
     }

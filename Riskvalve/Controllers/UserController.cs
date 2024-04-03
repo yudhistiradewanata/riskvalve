@@ -28,6 +28,11 @@ namespace Riskvalve.Controllers
                 {
                     ViewData[item.Key] = item.Value;
                 }
+                if (ViewData["IsAdmin"].ToString().ToLower().Equals("false"))
+                {
+                    TempData["Message"] = "You are not authorized to access that page";
+                    return Redirect("/Home/Index");
+                }
             }
             List<UserModel> userList = new UserModel().GetUserList();
             ViewData["UserList"] = userList;
@@ -43,10 +48,10 @@ namespace Riskvalve.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddUser(UserModel user)
+        public bool AddUser(UserModel user)
         {
-            new UserModel().AddUser(user);
-            return Redirect("/User/Index");
+            bool result = new UserModel().AddUser(user);
+            return result;
         }
 
         [HttpPost]

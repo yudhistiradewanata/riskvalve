@@ -3,66 +3,84 @@
     var userList = ViewData["UserList"] as List<UserModel>;
 }
 
-<div class="row">
-    <div class="col-xs-3" style="padding-right:0;">
-    </div>
-    <div class="col-xs-7">
-        <h3>User</h3>
-        <button type="button" class="btn btn-primary btn-user-action" attr-mode="create">
-            Add New
-        </button>
-        <br /><br />
-        <table class="table table-bordered datatable" style="width: 100%;">
-            <thead>
-                <tr>
-                    <th>No</th>
-                    <th>Username</th>
-                    <th>Role Name</th>
-                    <th>Admin</th>
-                    <th>Engineer</th>
-                    <th>Viewer</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody>
-                @{
-                    int ctr = 0;
-                    if (userList != null)
-                    {
-                        foreach (var user in userList)
-                        {
-                            ctr++;
-                            <tr style="margin: 0;padding;0;">
-                                <td>@ctr</td>
-                                <td>@user.Username</td>
-                                <td>@user.Role</td>
-                                <td>
-                                    @if (user.IsAdmin)
-                                    {
-                                        <i class="fa fa-check"></i>
-                                    }
-                                </td>
-                                <td>
-                                    @if (user.IsEngineer)
-                                    {
-                                        <i class="fa fa-check"></i>
-                                    }
-                                </td>
-                                <td>
-                                    @if (user.IsViewer)
-                                    {
-                                        <i class="fa fa-check"></i>
-                                    }
-                                </td>
-                                <td>
-                                    <button class="btn btn-primary btn-user-action" attr-mode="view"
-                                        attr-itemid="@user.Id">Detail</button>
-                                </td>
-                            </tr>
+<div class="container-fluid">
+    <div class="row">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        </div>
+        <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
+            <div class="subheader">
+                <b>User</b>
+            </div>
+            <div class="table-container">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn btn-primary custom btn-user-action btn-with-icon"
+                        attr-mode="create">
+                        <i class="fa-solid fa-plus"></i> Add New
+                    </button>
+                    <div class="">
+                        <div class="input-group input-group-sm input-search">
+                            <span class="input-group-text" id="basic-addon1">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" class="form-control form-control-sm" placeholder="Search"
+                                oninput="dataTableSearch(this.value)">
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered datatable" style="width: 100%;">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Username</th>
+                            <th>Role Name</th>
+                            <th>Admin</th>
+                            <th>Engineer</th>
+                            <th>Viewer</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            int ctr = 0;
+                            if (userList != null)
+                            {
+                                foreach (var user in userList)
+                                {
+                                    ctr++;
+                                    <tr style="margin: 0;padding;0;">
+                                        <td>@ctr</td>
+                                        <td>@user.Username</td>
+                                        <td>@user.Role</td>
+                                        <td>
+                                            @if (user.IsAdmin)
+                                            {
+                                                <i class="fa fa-check"></i>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (user.IsEngineer)
+                                            {
+                                                <i class="fa fa-check"></i>
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (user.IsViewer)
+                                            {
+                                                <i class="fa fa-check"></i>
+                                            }
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-user-action"
+                                                attr-mode="view" attr-itemid="@user.Id"><i
+                                                    class="fa-solid fa-magnifying-glass"></i>Detail</button>
+                                        </td>
+                                    </tr>
+                                }
+                            }
                         }
-                    }
-                }
-        </table>
+                </table>
+            </div>
+        </main>
     </div>
 </div>
 
@@ -83,7 +101,7 @@
                     <div class="form-group">
                         <label for="field-password">Password</label>
                         <input type="password" id="field-password" name="password" class="form-control"
-                            placeholder="Password" required>
+                            placeholder="Leave blank if you don\'t want to change the password" required>
                     </div>
                     <div class="form-group">
                         <label for="field-role">Role Name</label>
@@ -105,7 +123,8 @@
                 <div class="modal-footer">
                     <button type="button" id="btn-user-modal-delete" class="pull-left btn btn-danger">Delete</button>
                     <button type="button" id="btn-user-modal-save" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Cancel</button>
+                    <button type="button" id="btn-user-modal-cancel" class="btn btn-primary"
+                        data-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>
@@ -115,6 +134,15 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
+            $("input#field-username").on({
+                keydown: function (e) {
+                    if (e.which === 32)
+                        return false;
+                },
+                change: function () {
+                    this.value = this.value.replace(/\s/g, "");
+                }
+            });
             $('.btn-user-action').click(function () {
                 $('#field-user-id').val('');
                 $('#field-username').val('');
@@ -164,7 +192,11 @@
                         type: 'POST',
                         data: { username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
                         success: function (data) {
-                            location.reload();
+                            if (data) {
+                                location.reload();
+                            } else {
+                                alert('Username already exists');
+                            }
                         }
                     });
                 } else if (mode == 'update') {
@@ -189,6 +221,10 @@
                     }
                 });
             });
+            $('#btn-user-modal-cancel').click(function () {
+                $('#addUserModal').modal('hide');
+            });
+            initDatatable();
         })
     </script>
 }

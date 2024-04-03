@@ -27,6 +27,11 @@ public class ToolController : Controller
             {
                 ViewData[item.Key] = item.Value;
             }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
         }
         return View();
     }
@@ -46,6 +51,11 @@ public class ToolController : Controller
             {
                 ViewData[item.Key] = item.Value;
             }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
         }
         return View();
     }
@@ -64,6 +74,11 @@ public class ToolController : Controller
             foreach (var item in session)
             {
                 ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
             }
         }
         return View();

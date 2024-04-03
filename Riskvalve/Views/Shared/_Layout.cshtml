@@ -1,7 +1,10 @@
 ﻿@{
-    string isLogin = ViewData["isLogin"] as string ?? "true";
+    string IsLogin = ViewData["IsLogin"] as string;
     string Username = ViewData["Username"] as string;
     string Role = ViewData["Role"] as string;
+    string IsAdmin = ViewData["IsAdmin"] as string;
+    string IsEngineer = ViewData["IsEngineer"] as string;
+    string IsViewer = ViewData["IsViewer"] as string;
 }
 
 <!DOCTYPE html>
@@ -12,7 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Riskvalve</title>
     <link rel="stylesheet" href="~/lib/css/bootstrap.min.css" />
-    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-html5-3.0.1/datatables.min.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-html5-3.0.1/datatables.min.css"
+        rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
@@ -33,165 +37,189 @@
     </style>
 </head>
 
-@if (isLogin.Equals("true"))
+@if (IsLogin.ToLower().Equals("true"))
 {
+
     <body>
     <header class="navbar flex-md-nowrap p-0">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">
-        <img src="~/lib/images/u45.png" style="height:62px" />
+            <img src="~/lib/images/u45.png" style="height:62px" />
         </a>
         <ul class="navbar-nav navbar-main flex-row" style="flex:1">
             <li class="nav-item text-nowrap">
                 <a asp-area="" asp-controller="Home" asp-action="Index" class="nav-link px-3 text-white">
-                Home
+                    Home
                 </a>
             </li>
-            <li class="nav-item dropdown text-nowrap">
-                <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownAsset" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Asset Register
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownAsset">
-                    <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a></li>
-                    <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Platform">Platform</a></li>
-                    <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a></li>
-                </ul>
-            </li>
-            <li class="nav-item dropdown text-nowrap">
-                <a class="nav-link dropdown-toggle px-3 text-white" id="navbarDropdownIMR" role="button" data-bs-toggle="dropdown" aria-expanded="false" asp-area="" asp-controller="Inspection" asp-action="Index">
-                IMR
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownIMR">
-                    <li><a class="dropdown-item" asp-area="" asp-controller="Inspection" asp-action="Index">Inspection</a></li>
-                    <li><a class="dropdown-item" asp-area="" asp-controller="Maintenance" asp-action="Index">Maintenance</a></li>
-                </ul>
-            </li>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link px-3 text-white" asp-area="" asp-controller="Assessment" asp-action="Index">
-                Assessment
-                </a>
-            </li>
-            <li class="nav-item text-nowrap dropdown">
-                <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownTool" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                Tool
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownTool">
-                    <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssetRegister">Import
-                        Asset Register</a></li>
-                    <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportInspectionMaintenance">Import
-                        Inspection / Maintenance</a></li>
-                    <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
-                            Assessment</a></li>
-                </ul>
-            </li>
-            <li class="nav-item text-nowrap">
-                <a class="nav-link px-3 text-white" href="#">
-                Help
-                </a>
-            </li>
-        </ul>
-        <ul class="navbar-nav flex-row mx-3">
-            <li class="nav-item text-nowrap">
-                <a id="btn-signout" class="nav-link px-3 text-white profile-nav-item" href="#">
-                    <div>
-                        <b>@Username</b><br />
-                        <small>@Role</small>
-                    </div>
-                    <img src="~/lib/images/u48.svg" style="height:50px" />
-                </a>
-            </li>
-            <li class="nav-item text-nowrap" style="display: flex; align-items: center;">
-                <button class="nav-link px-3 text-white" type="button">
-                <img src="~/lib/images/u50.svg" style="height:20px" />
-                </button>
-            </li>
-        </ul>
-        <ul class="navbar-nav flex-row d-md-none">
-            <li class="nav-item text-nowrap">
-                <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
-                    aria-controls="sxidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                    <svg class="bi">
-                        <use xlink:href="#list" />
-                    </svg>
-                </button>
-            </li>
-        </ul>
-    </header>
-    @*
-    <header>
-        <nav class="navbar navbar-default">
-            <div class="container-fluid">
-                <div class="row nav-row-custom header">
-                    <div class="col-xs-2" style="background-color: white;">
-                        <img src="~/lib/images/logo.jpg" class="img-responsive header-logo" alt="Riskvalve" />
-                    </div>
-                    <div class="col-xs-10">
-                        <div class="collapse navbar-collapse" id="myNavbar">
-                            <ul class="nav navbar-nav">
-                                <li>
-                                    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                                </li>
-                                <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Asset Register
-                                        <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
-                                        </li>
-                                        <li><a asp-area="" asp-controller="AssetRegister"
-                                                asp-action="Platform">Platform</a>
-                                        </li>
-                                        <li><a asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a asp-area="" asp-controller="Inspection" asp-action="Index">IMR</a>
-                                </li>
-                                <li>
-                                    <a asp-area="" asp-controller="Assessment" asp-action="Index">Assessment</a>
-                                </li>
-                                <li class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tool
-                                        <span class="caret"></span></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a asp-area="" asp-controller="Tool" asp-action="ImportAssetRegister">Import
-                                                Asset Register</a></li>
-                                        <li><a asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
-                                                Assessment</a></li>
-                                    </ul>
-                                </li>
-                                <li>
-                                    <a asp-area="" asp-controller="User" asp-action="Index">User</a>
-                                </li>
-                            </ul>
-                            <p id="btn-signout" class="navbar-text navbar-user" style="text-align: right;">
-                                <a class="navbar-link">
-                                    @Username
-                                    <br />
-                                    @Role
-                                </a>
-                                <a class="navbar-link logout-icon">
-                                    <i class="fa-solid fa-right-from-bracket"></i>
-                                </a>
-                            </p>
+            @if (IsEngineer.ToLower().Equals("true"))
+                {
+                    <li class="nav-item dropdown text-nowrap">
+                        <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownAsset" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Asset Register
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownAsset">
+                            <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
+                            </li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister"
+                                    asp-action="Platform">Platform</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item dropdown text-nowrap">
+                        <a class="nav-link dropdown-toggle px-3 text-white" id="navbarDropdownIMR" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false" asp-area="" asp-controller="Inspection"
+                            asp-action="Index">
+                            IMR
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownIMR">
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Inspection"
+                                    asp-action="Index">Inspection</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Maintenance"
+                                    asp-action="Index">Maintenance</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item text-nowrap">
+                        <a class="nav-link px-3 text-white" asp-area="" asp-controller="Assessment" asp-action="Index">
+                            Assessment
+                        </a>
+                    </li>
+                    <li class="nav-item text-nowrap dropdown">
+                        <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownTool" role="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
+                            Tool
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownTool">
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool"
+                                    asp-action="ImportAssetRegister">Import
+                                    Asset Register</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool"
+                                    asp-action="ImportInspectionMaintenance">Import
+                                    Inspection / Maintenance</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
+                                    Assessment</a></li>
+                        </ul>
+                    </li>
+                }
+                @if (IsAdmin.ToLower().Equals("true"))
+                {
+                    <li class="nav-item text-nowrap">
+                        <a asp-area="" asp-controller="User" asp-action="Index" class="nav-link px-3 text-white">
+                            User
+                        </a>
+                    </li>
+                }
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link px-3 text-white" href="#">
+                        Help
+                    </a>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-row mx-3">
+                <li class="nav-item text-nowrap">
+                    <a id="btn-signout" class="nav-link px-3 text-white profile-nav-item" href="#">
+                        <div>
+                            <b>@Username</b><br />
+                            <small>@Role</small>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </nav>
+                        <img src="~/lib/images/u48.svg" style="height:50px" />
+                    </a>
+                </li>
+                <li class="nav-item text-nowrap" style="display: flex; align-items: center;">
+                    <button class="nav-link px-3 text-white" type="button">
+                        <img src="~/lib/images/u50.svg" style="height:20px" />
+                    </button>
+                </li>
+            </ul>
+            <ul class="navbar-nav flex-row d-md-none">
+                <li class="nav-item text-nowrap">
+                    <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas"
+                        data-bs-target="#sidebarMenu" aria-controls="sxidebarMenu" aria-expanded="false"
+                        aria-label="Toggle navigation">
+                        <svg class="bi">
+                            <use xlink:href="#list" />
+                        </svg>
+                    </button>
+                </li>
+            </ul>
+        </header>
+        @*
+    <header>
+    <nav class="navbar navbar-default">
+    <div class="container-fluid">
+    <div class="row nav-row-custom header">
+    <div class="col-xs-2" style="background-color: white;">
+    <img src="~/lib/images/logo.jpg" class="img-responsive header-logo" alt="Riskvalve" />
+    </div>
+    <div class="col-xs-10">
+    <div class="collapse navbar-collapse" id="myNavbar">
+    <ul class="nav navbar-nav">
+    <li>
+    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+    </li>
+    <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Asset Register
+    <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+    <li><a asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
+    </li>
+    <li><a asp-area="" asp-controller="AssetRegister"
+    asp-action="Platform">Platform</a>
+    </li>
+    <li><a asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
+    </li>
+    </ul>
+    </li>
+    <li>
+    <a asp-area="" asp-controller="Inspection" asp-action="Index">IMR</a>
+    </li>
+    <li>
+    <a asp-area="" asp-controller="Assessment" asp-action="Index">Assessment</a>
+    </li>
+    <li class="dropdown">
+    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tool
+    <span class="caret"></span></a>
+    <ul class="dropdown-menu">
+    <li><a asp-area="" asp-controller="Tool" asp-action="ImportAssetRegister">Import
+    Asset Register</a></li>
+    <li><a asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
+    Assessment</a></li>
+    </ul>
+    </li>
+    <li>
+    <a asp-area="" asp-controller="User" asp-action="Index">User</a>
+    </li>
+    </ul>
+    <p id="btn-signout" class="navbar-text navbar-user" style="text-align: right;">
+    <a class="navbar-link">
+    @Username
+    <br />
+    @Role
+    </a>
+    <a class="navbar-link logout-icon">
+    <i class="fa-solid fa-right-from-bracket"></i>
+    </a>
+    </p>
+    </div>
+    </div>
+    </div>
+    </div>
+    </nav>
     </header>
     *@
-    <div>
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-</body>
+        <div>
+            <main role="main" class="pb-3">
+                @RenderBody()
+            </main>
+        </div>
+    </body>
 
-@*
+    @*
 <footer class="border-top footer text-muted">
-    <div class="container">
-        &copy; 2024 - Riskvalve - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-    </div>
+<div class="container">
+&copy; 2024 - Riskvalve - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+</div>
 </footer>
 *@
 }
@@ -219,7 +247,7 @@ else
 <script>
     $(document).ready(function () {
         $("#btn-signout").click(function () {
-            if(confirm('Are you sure you want to sign out?')) {
+            if (confirm('Are you sure you want to sign out?')) {
                 window.location.href = "/Login/Logout";
             }
         });
