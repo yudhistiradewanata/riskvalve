@@ -220,7 +220,8 @@ public class CurrentConditionLimitStateModel
 {
     public int Id { get; set; }
     public string? CurrentConditionLimitState { get; set; }
-
+    public double? LimitStateValue { get; set; }
+    public double? Weighting { get; set; }
     public List<CurrentConditionLimitStateModel> GetConditionLimitStates()
     {
         List<CurrentConditionLimitStateModel> currentConditionLimitStates = new();
@@ -236,6 +237,8 @@ public class InspectionEffectivenessModel
 {
     public int Id { get; set; }
     public string? Effectiveness { get; set; }
+    public double? EffectivenessValue { get; set; }
+    public double? Weighting { get; set; }
 
     public List<InspectionEffectivenessModel> GetInspectionEffectivenessStates()
     {

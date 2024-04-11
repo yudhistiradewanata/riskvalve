@@ -126,7 +126,7 @@
                         <img src="~/lib/images/u48.svg" style="height:50px" />
                     </a>
                 </li>
-                <li class="nav-item text-nowrap" style="display: flex; align-items: center;">
+                <li id="btn-signout-icon" class="nav-item text-nowrap" style="display: flex; align-items: center;">
                     <button class="nav-link px-3 text-white" type="button">
                         <img src="~/lib/images/u50.svg" style="height:20px" />
                     </button>
@@ -246,7 +246,7 @@ else
 @Html.RenderPartialSectionScripts()
 <script>
     $(document).ready(function () {
-        $("#btn-signout").click(function () {
+        $("#btn-signout, #btn-signout-icon").click(function () {
             if (confirm('Are you sure you want to sign out?')) {
                 window.location.href = "/Login/Logout";
             }

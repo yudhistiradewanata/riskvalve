@@ -11,6 +11,21 @@
 
     var InspectionMethodModel = new InspectionMethodModel();
     var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
+
+    var TimeToLimitStateModel = new TimeToLimitStateModel();
+    var timeToLimitStates = TimeToLimitStateModel.GetTimeToLimitStates();
+
+    var ImpactEffectModel = new ImpactEffectModel();
+    var impactEffectStates = ImpactEffectModel.GetImpactEffectStates();
+
+    var UsedWithinOEMSpecificationModel = new UsedWithinOEMSpecificationModel();
+    var usedWithinOEMSpecifications = UsedWithinOEMSpecificationModel.GetUsedWithinOEMSpecifications();
+
+    var RepairedModel = new RepairedModel();
+    var repairedStates = RepairedModel.GetRepairedStates();
+
+    var HSSEDefinisionModel = new HSSEDefinisionModel();
+    var hsseDefinisions = HSSEDefinisionModel.GetHSSEDefinisions();
 }
     <div class="container-fluid">
         <div class="row">
@@ -53,242 +68,6 @@
                         </div>
                         <div class="tab-pane" id="template_inspection">
                             <form class="assessment-form">
-                                @*
-                                <div class="row">
-                                    <div class="col-xs-2">
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <aside class="main-sidebar">
-                                                    <section class="sidebar" id="tree-menu">
-                                                        <ul class="sidebar-menu" style="list-style-type:none; padding:0">
-                                                            <li class="treeview">
-                                                                <ul class="treeview-menu"
-                                                                    style="list-style-type:none; padding:0">
-                                                                    <li class="treeview">
-                                                                        <div
-                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
-                                                                            <a>Valve Properties</a>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="treeview">
-                                                                        <div
-                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
-                                                                            <a>Inspection History</a>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="treeview">
-                                                                        <div
-                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
-                                                                            <a>Risk Assessment</a>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="treeview">
-                                                                        <div
-                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
-                                                                            <a>Risk Matrix</a>
-                                                                        </div>
-                                                                    </li>
-                                                                    <li class="treeview">
-                                                                        <div
-                                                                            style="border-style: solid;border-width: 1px; padding:7px; padding-left:21px">
-                                                                            <a>Integrity Plan</a>
-                                                                        </div>
-                                                                    </li>
-                                                                </ul>
-                                                            </li>
-                                                        </ul>
-                                                    </section>
-                                                </aside>
-                                            </div>
-                                            <div class="col-md-12">
-                                                <div class="row">
-                                                    <div class="col-xs-6">
-                                                        <button type="button" class="btn btn-primary" style="width: 100%;"
-                                                            id="btn-submit">Save</button>
-                                                    </div>
-                                                    <div class="col-xs-6">
-                                                        <button type="button" class="btn btn-warning" style="width: 100%;"
-                                                            id="btn-print">Print</button>
-                                                    </div>
-                                                    <div class="col-xs-12">
-                                                        <button type="button" class="btn btn-danger" style="width: 100%;"
-                                                            id="btn-delete">Delete</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xs-10">
-                                        <div class="box">
-                                            <div class="box-header">
-                                                <h3 class="box-title">Assessment Information</h3>
-                                            </div>
-                                            <div class="box-body">
-                                                <div class="row">
-                                                    <div class="col-xs-8">
-                                                        <div class="row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-valvetagno">Valve Tag No</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="field-inspection-valvetagno" value="WIB-PSV-V05A-4"
-                                                                    readonly>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label
-                                                                    for="field-inspection-current-condition-limit-state-a">Current
-                                                                Condition Limit State
-                                                                A</label>
-                                                                <select class="form-control"
-                                                                    id="field-inspection-current-condition-limit-state-a">
-                                                                    @foreach (var item in limitState)
-                                                                    {
-                                                                    <option value="@item.Id">@item.CurrentConditionLimitState</option>
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-date">Inspection Date</label>
-                                                                <input id="field-inspection-date" type="text"
-                                                                    class="form-control datepicker" />
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label
-                                                                    for="field-inspection-current-condition-limit-state-b">Current
-                                                                Condition Limit State B</label>
-                                                                <select class="form-control"
-                                                                    id="field-inspection-current-condition-limit-state-b">
-                                                                    @foreach (var item in limitState)
-                                                                    {
-                                                                    <option value="@item.Id">@item.CurrentConditionLimitState</option>
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-inspection-method">Inspection
-                                                                Method</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="field-inspection-inspection-method"
-                                                                    value="Visual Inspection">
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label
-                                                                    for="field-inspection-current-condition-limit-state-c">Current
-                                                                Condition Limit State C</label>
-                                                                <select class="form-control"
-                                                                    id="field-inspection-current-condition-limit-state-c">
-                                                                    @foreach (var item in limitState)
-                                                                    {
-                                                                    <option value="@item.Id">@item.CurrentConditionLimitState</option>
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-effectiveness">Inspection
-                                                                Effectiveness</label>
-                                                                <select class="form-control"
-                                                                    id="field-inspection-effectiveness">
-                                                                    @foreach (var item in inspectionEffectivenessStates)
-                                                                    {
-                                                                    <option value="@item.Id">@item.Effectiveness</option>
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-function-condition">Function
-                                                                Condition</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="field-inspection-function-condition"
-                                                                    value="Packing Leak">
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="field-inspection-description">Inspection
-                                                                Description</label>
-                                                                <textarea class="form-control" id="field-inspection-description"
-                                                                    rows="10">N/A</textarea>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <div class="row">
-                                                                    <div class="form-group col-md-12">
-                                                                        <label for="field-inspection-test-pressure-if-any">Test
-                                                                        Pressure
-                                                                        if Any</label>
-                                                                        <input type="text" class="form-control"
-                                                                            id="field-inspection-test-pressure-if-any"
-                                                                            value="N/A">
-                                                                    </div>
-                                                                    <div class="col-md-12">
-                                                                        <label for="field-inspection-image">Inspection
-                                                                        Image</label>
-                                                                        <input type="file" class="form-control"
-                                                                            id="field-inspection-image-1">
-                                                                        <input type="file" class="form-control"
-                                                                            id="field-inspection-image-2">
-                                                                        <input type="file" class="form-control"
-                                                                            id="field-inspection-image-3">
-                                                                        <input type="file" class="form-control"
-                                                                            id="field-inspection-image-4">
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr />
-                                        <div class="box">
-                                            <div class="box-header">
-                                                <h3 class="box-title">Maintenance Information</h3>
-                                            </div>
-                                            <div class="box-body">
-                                                <div class="row">
-                                                    <div class="col-xs-8">
-                                                        <div class="row">
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-maintenancecate">Maintenance
-                                                                Date</label>
-                                                                <input type="text" class="form-control datepicker"
-                                                                    id="field-inspection-maintenancedate">
-                                                            </div>
-                                                            <div class="form-group col-md-6">
-                                                                <label for="field-inspection-isvalverepaired">Is Valve
-                                                                Repaired</label>
-                                                                <select class="form-control"
-                                                                    id="field-inspection-isvalverepaired">
-                                                                    @foreach (var item in isValveRepairedStates)
-                                                                    {
-                                                                    <option value="@item.Id">@item.IsValveRepaired</option>
-                                                                    }
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="field-inspection-maintenancedescription">Maintenance
-                                                                Description</label>
-                                                                <textarea class="form-control"
-                                                                    id="field-inspection-maintenancedescription"
-                                                                    rows="5"></textarea>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <label for="field-inspection-image">Maintenance Image</label>
-                                                                <input type="file" class="form-control"
-                                                                    id="field-inspection-image1">
-                                                                <input type="file" class="form-control"
-                                                                    id="field-inspection-image2">
-                                                                <input type="file" class="form-control"
-                                                                    id="field-inspection-image3">
-                                                                <input type="file" class="form-control"
-                                                                    id="field-inspection-image4">
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <hr />
-                                    </div>
-                                </div>
-                                *@
-
                                 <div class="row">
                                     <div class="col-lg-2">
                                         <div class="assessment-tab-content-submenu">
@@ -301,11 +80,11 @@
                                         </div>
                                         <div class="submenu-action">
                                             <div class="top-row">
-                                                <button class="btn btn-block btn-primary btn-maincolor"><i class="bi bi-save"></i> Save</button>
-                                                <button class="btn btn-block btn-warning"><i class="bi bi-printer"></i> Print</button>
+                                                <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="submitForm(this)"><i class="bi bi-save"></i> Save</button>
+                                                <button type="button" class="btn btn-block btn-warning print-button" id="btn-print"><i class="bi bi-printer"></i> Print</button>
                                             </div>
                                             <div class="bottom-row">
-                                                <button class="btn btn-block btn-danger"><i class="bi bi-trash"></i> Delete</button>
+                                                <button type="button" class="btn btn-block btn-danger delete-button" id="btn-delete" onclick="deleteForm(this)"><i class="bi bi-trash"></i> Delete</button>
                                             </div>
                                         </div>
                                     </div>
@@ -315,6 +94,7 @@
                                                 Asset Information
                                             </div>
                                             <div class="card-content">
+                                                <input type="hidden" name="Id" id="data-id">
                                                 <div class="row">
                                                     <div class="col-lg-6">
                                                         <div class="row g-3 align-items-center single-field">
@@ -588,52 +368,52 @@
                                                     <div class="col-lg-6">
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-4">
-                                                                <label class="col-form-label">Assessment No</label>
+                                                                <label class="col-form-label" for="assessment-no">Assessment No</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm" value="Assessment1">
+                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-4">
-                                                                <label class="col-form-label">Assessment Date</label>
+                                                                <label class="col-form-label" for="assessment-date">Assessment Date</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control datepicker form-control-sm" value="01-Jan-1971">
+                                                                <input class="form-control datepicker form-control-sm" id="assessment-date" name="AssessmentDate">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-4">
-                                                                <label class="col-form-label">Time Period (Month)</label>
+                                                                <label class="col-form-label" for="time-period">Time Period (Month)</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm" value="18">
+                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1">
                                                             </div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6">
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-8">
-                                                                <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
+                                                                <label class="col-form-label" for="time-to-limit-a">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" value="60">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-8">
-                                                                <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
+                                                                <label class="col-form-label" for="time-to-limit-b">Time to Limit State Failure of function (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" value="60">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-8">
-                                                                <label class="col-form-label">Time to Limit State Leakage to atmosphere (Month)</label>
+                                                                <label class="col-form-label" for="time-to-limit-c">Time to Limit State Passing accros valve (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" value="60">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -645,6 +425,7 @@
                                                 Inspection History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
+                                                <input type="hidden" id="inspectionDataTemp" name="inspectionDataTemp" />
                                                 <a class="btn btn-primary btn-maincolor mb-2 mt-4" onclick="addInspection(this)">Add Inspection Data</a>
                                                 <table class="datatable table custom-table inspection-table" style="width: 100%;">
                                                     <thead>
@@ -668,6 +449,7 @@
                                                 Maintenance History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
+                                                <input type="hidden" id="maintenanceDataTemp" name="maintenanceDataTemp" />
                                                 <a class="btn btn-primary btn-maincolor mb-2 mt-4" onclick="addMaintenance(this)">Add Maintenance Data</a>
                                                 <table class="datatable table table-bordered maintenance-table" style="width:100%">
                                                     <thead>
@@ -700,13 +482,14 @@
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-5">
-                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                                <label class="col-form-label" for="leakage-to-atmosphere">Leakage to atmophere</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Good</option>
-                                                                    <option>Fair</option>
-                                                                    <option>Poor</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="leakage-to-atmosphere" name="LeakageToAtmosphereID">
+                                                                    @foreach (var item in limitState)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -714,13 +497,14 @@
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-5">
-                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                                <label class="col-form-label" for="failure-of-function">Failure of Function</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Good</option>
-                                                                    <option>Fair</option>
-                                                                    <option>Poor</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="failure-of-function" name="FailureOfFunctionID">
+                                                                    @foreach (var item in limitState)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -728,13 +512,14 @@
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-5">
-                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                                <label class="col-form-label" for="passing-accross-valve">Passing accross valve</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Good</option>
-                                                                    <option>Fair</option>
-                                                                    <option>Poor</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="passing-accross-valve" name="PassingAccrosValveID">
+                                                                    @foreach (var item in limitState)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -771,56 +556,27 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp1" name="LeakageToAtmosphereTP1ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp2" name="LeakageToAtmosphereTP2ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row g-3 align-items-center single-field">
-                                                            <div class="col-1">
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <label class="col-form-label">Leakage to atmophere</label>
-                                                            </div>
-                                                            <div class="col-7">
-                                                                <div class="row">
-                                                                    <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
-                                                                        </select>
-                                                                    </div>
-                                                                    <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp3" name="LeakageToAtmosphereTP3ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -830,29 +586,67 @@
                                                             <div class="col-1">
                                                             </div>
                                                             <div class="col-4">
-                                                                <label class="col-form-label">Leakage to atmophere</label>
+                                                                <label class="col-form-label">Failure of Function</label>
                                                             </div>
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp1" name="FailureOfFunctionTP1ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp2" name="FailureOfFunctionTP2ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm">
-                                                                            <option>Improbable</option>
-                                                                            <option>Doubtful</option>
-                                                                            <option>Expected</option>
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp3" name="FailureOfFunctionTP3ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
+                                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row g-3 align-items-center single-field">
+                                                            <div class="col-1">
+                                                            </div>
+                                                            <div class="col-4">
+                                                                <label class="col-form-label">Passing accross valve</label>
+                                                            </div>
+                                                            <div class="col-7">
+                                                                <div class="row">
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp1" name="PassingAccrosValveTP1ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp2" name="PassingAccrosValveTP2ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
+                                                                        </select>
+                                                                    </div>
+                                                                    <div class="col-4">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp3" name="PassingAccrosValveTP3ID">
+                                                                            @foreach (var item in timeToLimitStates)
+                                                                            {
+                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                            }
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -860,61 +654,66 @@
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field mt-2">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">LF3 - Inspection Effectiveness</label>
+                                                                <label class="col-form-label" for="inspection-effectiveness">LF3 - Inspection Effectiveness</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Highly Effective</option>
-                                                                    <option>Usually Effective</option>
-                                                                    <option>Faily Effective</option>
-                                                                    <option>Ineffective</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="inspection-effectiveness" name="InspectionEffectivenessID">
+                                                                    @foreach (var item in inspectionEffectivenessStates)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.EffectivenessValue" attr-weighting="@item.Weighting">@item.Effectiveness</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">LF4 - Impact of Internal Fluid Impurities</label>
+                                                                <label class="col-form-label" for="impact-of-internal-fluid">LF4 - Impact of Internal Fluid Impurities</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>No Expected Effect</option>
-                                                                    <option>Moderate Effect</option>
-                                                                    <option>Signigicant Effect</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-internal-fluid" name="ImpactOfInternalFluidImpuritiesID">
+                                                                    @foreach (var item in impactEffectStates)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting">@item.ImpactEffect</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">LF5 - Impact of Operating Envelopes</label>
+                                                                <label class="col-form-label" for="impact-of-operating-envelopes">LF5 - Impact of Operating Envelopes</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>No Expected Effect</option>
-                                                                    <option>Moderate Effect</option>
-                                                                    <option>Signigicant Effect</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-operating-envelopes" name="ImpactOfOperatingEnvelopesID">
+                                                                    @foreach (var item in impactEffectStates)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting2">@item.ImpactEffect</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">LF6 - Used within OEM Specification</label>
+                                                                <label class="col-form-label" for="used-within-oem-specification">LF6 - Used within OEM Specification</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Significantly Below Expectation</option>
-                                                                    <option>Moderate Effect</option>
-                                                                    <option>Signigicant Effect</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="used-within-oem-specification" name="UsedWithinOEMSpecificationID">
+                                                                    @foreach (var item in usedWithinOEMSpecifications)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.UsedWithinOEMSpecificationValue" attr-weighting="@item.Weighting">@item.UsedWithinOEMSpecification</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">LF7 - Repaired</label>
+                                                                <label class="col-form-label" for="repaired">LF7 - Repaired</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Yes</option>
-                                                                    <option>No</option>
+                                                                <select class="form-select form-select-sm calculate-assessment" id="repaired" name="RepairedID">
+                                                                    @foreach (var item in repairedStates)
+                                                                    {
+                                                                        <option value="@item.Id" attr-value="@item.RepairedValue" attr-weighting="@item.Weighting">@item.Repaired</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -931,19 +730,22 @@
                                                     <div class="col-lg-8">
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">Product loss definition (bbls)</label>
+                                                                <label class="col-form-label" for="product-loss-definition">Product loss definition (bbls)</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <input class="form-control form-control-sm" value="1"/>
+                                                                <input class="form-control form-control-sm bbls-assessment calculate-assessment" id="product-loss-definition" name="ProductLossDefinition" type="number" step="1" value="0"/>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
-                                                                <label class="col-form-label">HSSE Definision</label>
+                                                                <label class="col-form-label" for="hsse-definition">HSSE Definition</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>Multiple Fatalities</option>
+                                                                <select class="form-select form-select-sm no-arrow" id="hsse-definition" name="HSSEDefinisionID" disabled>
+                                                                    @foreach (var item in hsseDefinisions)
+                                                                    {
+                                                                        <option value="@item.Id" attr-minvalue="@item.MinBBSValue" attr-cofcategory="@item.CoFCategory" attr-score="@item.Score">@item.HSSEDefinision</option>
+                                                                    }
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -973,11 +775,11 @@
                                                                         </defs>
                                                                         <g transform="matrix(1 0 0 1 -174 -55 )">
                                                                             <g transform="matrix(0.902272727272727 0 0 0.902272727272727 200.875 55 )" clip-path="url(#clip34)" filter="url(#filter35)">
-                                                                                <text x="125" y="275" font-size="12">A</text>
-                                                                                <text x="125" y="225" font-size="12">B</text>
+                                                                                <text x="125" y="275" font-size="12">E</text>
+                                                                                <text x="125" y="225" font-size="12">D</text>
                                                                                 <text x="125" y="175" font-size="12">C</text>
-                                                                                <text x="125" y="125" font-size="12">D</text>
-                                                                                <text x="125" y="75" font-size="12">E</text>
+                                                                                <text x="125" y="125" font-size="12">B</text>
+                                                                                <text x="125" y="75" font-size="12">A</text>
                                                                                 <text x="175" y="322" font-size="12">1</text>
                                                                                 <text x="225" y="322" font-size="12">2</text>
                                                                                 <text x="275" y="322" font-size="12">3</text>
@@ -1252,8 +1054,8 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label fw-500">Summary</label>
-                                                                    <textarea class="form-control form-control-sm" style="height: 200px;">Valve in good condition</textarea>
+                                                                    <label class="form-label fw-500" for="assessment-summary">Summary</label>
+                                                                    <textarea class="form-control form-control-sm" id="assessment-summary" style="height: 200px;" name="Summary"></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="col-6">
@@ -1262,14 +1064,16 @@
                                                                     <input class="form-control form-control-sm" value="14-Feb-2028" disabled/>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label fw-500">Recommendation Action</label>
-                                                                    <select class="form-select form-select-sm">
-                                                                        <option>Inspection</option>
+                                                                    <label class="form-label fw-500" for="recommended-action">Recommendation Action</label>
+                                                                    <select class="form-select form-select-sm" id="recommended-action" name="RecommendationActionID">
+                                                                        <option value="1">Inspection</option>
+                                                                        <option value="2">Repair</option>
+                                                                        <option value="3">Replace</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="mb-3">
-                                                                    <label class="form-label fw-500">Detailed Recommendation</label>
-                                                                    <textarea class="form-control form-control-sm" style="height: 124px;">Conduct Visual Inspection</textarea>
+                                                                    <label class="form-label fw-500" for="detailed-recommendation">Detailed Recommendation</label>
+                                                                    <textarea class="form-control form-control-sm" style="height: 124px;" id="detailed-recommendation" name="DetailedRecommendation"></textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1287,7 +1091,7 @@
         </div>
     </div>
 
-    <div class="modal fade modal-xl" id="addInspectionModal" role="dialog">
+    <div class="modal fade modal-xl assessment-form-modal" id="detailInspectionModal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form class="inspection-form inspection-tab">
@@ -1476,10 +1280,10 @@
                                             <div class="col-md-12">
                                                 <label for="field-inspection-image">Inspection Image</label>
                                                 <div class="gallery-input">
-                                                    <input type="file" class="form-control image-gallery-upload" id="field-inspection-image" onchange="imagesPreview(this)" multiple>
+                                                    <!-- <input type="file" class="form-control image-gallery-upload" id="field-inspection-image" onchange="imagesPreview(this)" multiple>
                                                     <div class="preview-image-gallery">
                                                         <label class="add-image" for="field-inspection-image"><i class="fa-solid fa-file-circle-plus"></i></label>
-                                                    </div>
+                                                    </div> -->
                                                 </div>
                                             </div>
                                         </div>
@@ -1488,8 +1292,6 @@
                             </div>
                             <div>
                                 <div class="box-footer">
-                                    <button type="button" class="btn submit-button"
-                                        id="btn-submit" onclick="submitInspectionForm(this)">Save</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
                             </div>
@@ -1500,7 +1302,7 @@
         </div>
     </div>
 
-    <div class="modal fade modal-xl" id="addMaintenanceModal" role="dialog">
+    <div class="modal fade modal-xl assessment-form-modal" id="detailMaintenanceModal" role="dialog">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form class="inspection-form inspection-tab">
@@ -1620,20 +1422,84 @@
                                     <div class="form-group">
                                         <label for="field-maintenance-image">Maintenance Image</label>
                                         <div class="gallery-input">
-                                            <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" onchange="imagesPreview(this)" multiple>
+                                            <!-- <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" onchange="imagesPreview(this)" multiple>
                                             <div class="preview-image-gallery">
                                                 <label class="add-image" for="field-maintenance-image"><i class="fa-solid fa-file-circle-plus"></i></label>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div>
                                 <div class="box-footer">
-                                    <button type="button" class="btn submit-button"
-                                        id="btn-submit" onclick="submitMaintenanceForm(this)">Save</button>
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-xl assessment-form-modal" id="addInspectionModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="inspection-form inspection-tab">
+                    <input type="hidden" name="tempData" />
+                    <input type="hidden" name="tabNum" />
+                    <div class="sub-container">
+                        <table class="datatable table custom-table inspection-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Inspection Date</th>
+                                    <th>Inspection Method</th>
+                                    <th>Inspection Description</th>
+                                    <th>Function Condition</th>
+                                    <th>Test Pressure  (if any)</th>
+                                    <th style="width:200px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="box">
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-secondary" onclick="confirmInspection(this)">Confirm</button>
+                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade modal-xl assessment-form-modal" id="addMaintenanceModal" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form class="inspection-form inspection-tab">
+                    <input type="hidden" name="tempData" />
+                    <input type="hidden" name="tabNum" />
+                    <div class="sub-container">
+                        <table class="datatable table custom-table maintenance-table" style="width: 100%;">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Maintenance Date</th>
+                                    <th>Is Valve Repaired?</th>
+                                    <th>Maintenance Description</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                        <div class="box">
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-secondary" onclick="confirmMaintenance(this)">Confirm</button>
+                                <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
                             </div>
                         </div>
                     </div>
@@ -1650,7 +1516,7 @@
             })
 
             function submitForm(el) {
-                const form = $(el).closest('form.inspection-form')
+                const form = $(el).closest('form.assessment-form')
                 const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
                 const ctr = $(el).closest('.tab-pane').attr('tab-num')
                 const nativeForm = form[0]
@@ -1658,13 +1524,12 @@
                 if(form.hasClass('history-form')) {
                     // update
                     $.ajax({
-                        url: '/Inspection/UpdateInspection',
+                        url: '/Assessment/UpdateAssessment',
                         type: 'POST', // or 'GET' depending on your form method
                         data: formData,
                         contentType: false,
                         processData: false,
                         success: function(response) {
-                            form.addClass('history-form')
                             // Handle success response
                             alert('Data successfully updated')
                         },
@@ -1675,7 +1540,7 @@
                 } else {
                     // add new
                     $.ajax({
-                        url: '/Inspection/AddInspection',
+                        url: '/Assessment/AddAssessment',
                         type: 'POST', // or 'GET' depending on your form method
                         data: formData,
                         contentType: false,
@@ -1687,7 +1552,7 @@
                                 <li class="treeview">
                                     <a class="btn-add-new-inspection" history-button="" 
                                     attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
-                                    attr-name="${res.asset.tagNo} ${res.inspectionDate}" 
+                                    attr-name="${res.assessmentNo}" 
                                     attr-sidebar-level="4" 
                                     attr-find-inspection="${res.asset.businessArea}" 
                                     attr-find-platform="${res.asset.platform}" 
@@ -1695,20 +1560,16 @@
                                     attr-find-imr="NEW"
                                     onclick="addTab.apply(this)"
                                     >
-                                        ${res.inspectionDate}
+                                        ${res.assessmentNo}
                                     </a>
                                 </li>
                             `)
 
-                            form.find('.preview-image-gallery .single-image').remove()
-                            form.find('.preview-image-gallery input[type=file]').remove()
                             fetchHistoryData({
                                 id: res.id,
                                 counter: ctr
                             })
                             alert('Data successfully inserted')
-
-
                         },
                         error: function(xhr, status, error) {
                             // Handle error
@@ -1727,7 +1588,7 @@
 
                 if(confirm('Are you sure you want to delete this data?')) {
                     $.ajax({
-                        url: '/Inspection/DeleteInspection',
+                        url: '/Assessment/DeleteAssessment',
                         type: 'POST', // or 'GET' depending on your form method
                         data: {
                             Id: id
@@ -1764,7 +1625,7 @@
 
             function fetchHistoryData ({id, counter}) {
                 $.ajax({
-                    url: '/Inspection/GetInspectionDetail',
+                    url: '/Assessment/GetAssessmentDetail',
                     type: 'GET',
                     data: { id },
                     success: function (data) {
@@ -1784,24 +1645,45 @@
                         $('#field-inspection-description'+counter).val(data.inspectionDescription)
                         $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
 
-                        let galleryHtml = ''
-                        data.inspectionFiles.forEach(i => {
-                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                            <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}"">
-                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </div>
-                            </div>
-                            `
-                        })
+                        //fill assessment data
+                        $('#assessment-no'+counter).val(data.assessmentNo)
+                        $('#assessment-date'+counter).val(data.assessmentDate)
+                        $('#time-period'+counter).val(data.timePeriode)
+                        $('#time-to-limit-a'+counter).val(data.timeToLimitStateLeakageToAtmosphere)
+                        $('#time-to-limit-b'+counter).val(data.timeToLimitStateFailureOfFunction)
+                        $('#time-to-limit-c'+counter).val(data.timeToLimitStatePassingAccrosValve)
+                        $('#inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
+                        $('#impact-of-internal-fluid'+counter).val(data.impactOfInternalFluidImpuritiesID)
+                        $('#impact-of-operating-envelopes'+counter).val(data.impactOfOperatingEnvelopesID)
+                        $('#used-within-oem-specification'+counter).val(data.usedWithinOEMSpecificationID)
+                        $('#repaired'+counter).val(data.repairedID)
+                        $('#product-loss-definition'+counter).val(data.productLossDefinition)
+                        $('#hsse-definition'+counter).val(data.hsseDefinisionID)
+                        $('#assessment-summary'+counter).val(data.summary)
+                        $('#recommended-action'+counter).val(data.recommendationActionID)
+                        $('#detailed-recommendation'+counter).val(data.detailedRecommendation)
 
-                        //fill image
-                        $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
-                        $('#inspection' + counter).find('form').addClass('history-form')
+                        //LF1 & LF2
+                        $('#leakage-to-atmosphere'+counter).val(data.leakageToAtmosphereID)
+                        $('#failure-of-function'+counter).val(data.failureOfFunctionID)
+                        $('#passing-accross-valve'+counter).val(data.passingAccrosValveID)
+
+                        $('#leakage-tp1'+counter).val(data.leakageToAtmosphereTP1ID)
+                        $('#leakage-tp2'+counter).val(data.leakageToAtmosphereTP2ID)
+                        $('#leakage-tp3'+counter).val(data.leakageToAtmosphereTP3ID)
+
+                        $('#failure-tp1'+counter).val(data.failureOfFunctionTP1ID)
+                        $('#failure-tp2'+counter).val(data.failureOfFunctionTP2ID)
+                        $('#failure-tp3'+counter).val(data.failureOfFunctionTP3ID)
+
+                        $('#passing-tp1'+counter).val(data.passingAccrosValveTP1ID)
+                        $('#passing-tp2'+counter).val(data.passingAccrosValveTP2ID)
+                        $('#passing-tp3'+counter).val(data.passingAccrosValveTP3ID)
+
 
                         //fill ID
                         $('#inspection'+counter).find('#data-id').val(id)
+                        $('#inspection' + counter).find('form').addClass('history-form')
                     },
                     error: function (error) {
                         alert('History not found');
@@ -1850,6 +1732,215 @@
             $(document).ready(function () {
                 $('.btn-add-new-inspection').click(addTab);
                 $('.btn-add-new-inspection').first().trigger('click')
+
+                $('.calculate-assessment').on('change', function () {
+                    var ctr = $(this).closest('.tab-pane').attr('tab-num');
+                    var timePeriod = $('#time-period' + ctr).val();
+                    //LF1
+                    var lf1LeakageToAtmosphere = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-value');
+                    var lf1LeakageToAtmosphereWeighting = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf1FailureOfFunction = $('#failure-of-function' + ctr).find('option:selected').attr('attr-value');
+                    var lf1FailureOfFunctionWeighting = $('#failure-of-function' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf1PassingAccrossValve = $('#passing-accross-valve' + ctr).find('option:selected').attr('attr-value');
+                    var lf1PassingAccrossValveWeighting = $('#passing-accross-valve' + ctr).find('option:selected').attr('attr-weighting');
+                    //LF2
+                    var lf2LeakageToAtmosphereTP1 = $('#leakage-tp1' + ctr).find('option:selected').attr('attr-value');
+                    var lf2LeakageToAtmosphereTP1Weighting = $('#leakage-tp1' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2LeakageToAtmosphereTP2 = $('#leakage-tp2' + ctr).find('option:selected').attr('attr-value');
+                    var lf2LeakageToAtmosphereTP2Weighting = $('#leakage-tp2' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2LeakageToAtmosphereTP3 = $('#leakage-tp3' + ctr).find('option:selected').attr('attr-value');
+                    var lf2LeakageToAtmosphereTP3Weighting = $('#leakage-tp3' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2FailureOfFunctionTP1 = $('#failure-tp1' + ctr).find('option:selected').attr('attr-value');
+                    var lf2FailureOfFunctionTP1Weighting = $('#failure-tp1' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2FailureOfFunctionTP2 = $('#failure-tp2' + ctr).find('option:selected').attr('attr-value');
+                    var lf2FailureOfFunctionTP2Weighting = $('#failure-tp2' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2FailureOfFunctionTP3 = $('#failure-tp3' + ctr).find('option:selected').attr('attr-value');
+                    var lf2FailureOfFunctionTP3Weighting = $('#failure-tp3' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2PassingAccrossValveTP1 = $('#passing-tp1' + ctr).find('option:selected').attr('attr-value');
+                    var lf2PassingAccrossValveTP1Weighting = $('#passing-tp1' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2PassingAccrossValveTP2 = $('#passing-tp2' + ctr).find('option:selected').attr('attr-value');
+                    var lf2PassingAccrossValveTP2Weighting = $('#passing-tp2' + ctr).find('option:selected').attr('attr-weighting');
+                    var lf2PassingAccrossValveTP3 = $('#passing-tp3' + ctr).find('option:selected').attr('attr-value');
+                    var lf2PassingAccrossValveTP3Weighting = $('#passing-tp3' + ctr).find('option:selected').attr('attr-weighting');
+                    //LF3
+                    var lf3InspectionEffectiveness = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-value');
+                    var lf3InspectionEffectivenessWeighting = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-weighting');
+                    //LF4
+                    var lf4ImpactOfInternalFluid = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-value');
+                    var lf4ImpactOfInternalFluidWeighting = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-weighting');
+                    //LF5
+                    var lf5ImpactOfOperatingEnvelopes = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-value');
+                    var lf5ImpactOfOperatingEnvelopesWeighting = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-weighting');
+                    //LF6
+                    var lf6UsedWithinOEMSpecification = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-value');
+                    var lf6UsedWithinOEMSpecificationWeighting = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-weighting');
+                    //LF7
+                    var lf7Repaired = $('#repaired' + ctr).find('option:selected').attr('attr-value');
+                    var lf7RepairedWeighting = $('#repaired' + ctr).find('option:selected').attr('attr-weighting');
+                    //CALCULATE
+                    // TP1A
+                    var lofLeakageToAtmosphereA = (lf2LeakageToAtmosphereTP1 * lf2LeakageToAtmosphereTP1Weighting) *
+                        (
+                            (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP1B
+                    var lofLeakageToAtmosphereB = (lf2LeakageToAtmosphereTP2 * lf2LeakageToAtmosphereTP2Weighting) *
+                        (
+                            (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP1C
+                    var lofLeakageToAtmosphereC = (lf2LeakageToAtmosphereTP3 * lf2LeakageToAtmosphereTP3Weighting) *
+                        (
+                            (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP2A
+                    var lofFailureOfFunctionA = (lf2FailureOfFunctionTP1 * lf2FailureOfFunctionTP1Weighting) *
+                        (
+                            (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP2B
+                    var lofFailureOfFunctionB = (lf2FailureOfFunctionTP2 * lf2FailureOfFunctionTP2Weighting) *
+                        (
+                            (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP2C
+                    var lofFailureOfFunctionC = (lf2FailureOfFunctionTP3 * lf2FailureOfFunctionTP3Weighting) *
+                        (
+                            (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP3A
+                    var lofPassingAccrossValveA = (lf2PassingAccrossValveTP1 * lf2PassingAccrossValveTP1Weighting) *
+                        (
+                            (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP3B
+                    var lofPassingAccrossValveB = (lf2PassingAccrossValveTP2 * lf2PassingAccrossValveTP2Weighting) *
+                        (
+                            (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TP3C
+                    var lofPassingAccrossValveC = (lf2PassingAccrossValveTP3 * lf2PassingAccrossValveTP3Weighting) *
+                        (
+                            (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                            (lf7Repaired * lf7RepairedWeighting)
+                        );
+                    // TOTAL
+                    var map_result = {
+                        'TP1A': {
+                            'lof': lofLeakageToAtmosphereA,
+                            'cof': ''
+                        },
+                        'TP1B': {
+                            'lof': lofLeakageToAtmosphereB,
+                            'cof': ''
+                        },
+                        'TP1C': {
+                            'lof': lofLeakageToAtmosphereC,
+                            'cof': ''
+                        },
+                        'TP2A': {
+                            'lof': lofFailureOfFunctionA,
+                            'cof': ''
+                        },
+                        'TP2B': {
+                            'lof': lofFailureOfFunctionB,
+                            'cof': ''
+                        },
+                        'TP2C': {
+                            'lof': lofFailureOfFunctionC,
+                            'cof': ''
+                        },
+                        'TP3A': {
+                            'lof': lofPassingAccrossValveA,
+                            'cof': ''
+                        },
+                        'TP3B': {
+                            'lof': lofPassingAccrossValveB,
+                            'cof': ''
+                        },
+                        'TP3C': {
+                            'lof': lofPassingAccrossValveC,
+                            'cof': ''
+                        }
+                    }
+                    //HSSE Value
+                    var bbls = $('#product-loss-definition' + ctr);
+                    bbls.trigger('change');
+                    var hsseSelect = $('#hsse-definition' + ctr);
+                    var cof = hsseSelect.find('option:selected').attr('attr-cofcategory');
+                    map_result.TP1A.cof = cof;
+                    map_result.TP1B.cof = cof;
+                    map_result.TP1C.cof = cof;
+                    map_result.TP2A.cof = cof;
+                    map_result.TP2B.cof = cof;
+                    map_result.TP2C.cof = cof;
+                    map_result.TP3A.cof = cof;
+                    map_result.TP3B.cof = cof;
+                    map_result.TP3C.cof = cof;
+                    console.log(map_result);
+                });
+
+                $('.bbls-assessment').on('change', function () {
+                    if($(this).val() < 0 || $(this).val() == ''){
+                        $(this).val(0);
+                    }
+                    var ctr = $(this).closest('.tab-pane').attr('tab-num');
+                    var bbls = $(this).val()*1;
+                    var hsseSelect = $('#hsse-definition' + ctr);
+                    var hsseOptions = hsseSelect.find('option');
+                    var selectedHsse = '';
+                    hsseOptions.each(function(){
+                        var hsseValue = $(this).attr('attr-minvalue')*1;
+                        if(bbls >= hsseValue){
+                            selectedHsse = $(this).val();
+                        }
+                    });
+                    hsseSelect.val(selectedHsse);
+                })
             });
 
             let template_inspection = $('#template_inspection');
@@ -1879,7 +1970,7 @@
                 let tabcontentcontainer = $('#tabcontentcontainer');
                 tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
                 tabcontentcontainer.append('<div class="tab-pane" equipment-id="'+equipmentId+'" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
-                let tabcontent = tabcontentcontainer.find('.form-control');
+                let tabcontent = tabcontentcontainer.find('.form-control,.form-select');
                 tabcontent.each(function () {
                     let name = $(this).attr('id') + ctr;
                     $(this).attr('id', name);
@@ -1908,25 +1999,28 @@
                     counter: ctr
                 })
 
-                // fetchInspectionHistory(ctr)
-                Promise.all([fetchInspectionHistory(ctr), fetchMaintenanceHistory(ctr)]).then(() => {
-                    initDatatable({
-                        scrollable: false,
-                        selector: `#inspection${ctr} .datatable`
-                    })
+                initDatatable({
+                    scrollable: false,
+                    selector: `#inspection${ctr} .datatable`
                 })
+
                 initDatepicker()
                 moveToLastTab()
                 idx++;
             }
 
-            function fetchInspectionHistory(tabCounter) {
+            function fetchInspectionHistory(assetId, tabNum, selectedId = []) {
                 return new Promise((res, rej) => {
-                    const applyAll = tabCounter === undefined
-                    const table = applyAll? $('.inspection-table tbody') : $('.tab-pane[tab-num='+tabCounter+'] .inspection-table tbody')
+                    const modalId = '#addInspectionModal'
+                    const tableSelector = modalId+' .datatable'
+                    $(tableSelector).DataTable().destroy()
+                    const table = $(tableSelector+ ' tbody')
                     table.html('')
                     $.ajax({
                         url: '/Inspection/GetInspectionList',
+                        data: {
+                            AssetID: assetId
+                        },
                         type: 'GET',
                         success: function (data) {
                             let html = ''
@@ -1940,12 +2034,16 @@
                                     <td>${item.functionCondition}</td>
                                     <td>${item.testPressureIfAny}</td>
                                     <td>
-                                        <a class="btn btn-light btn-sm">Detail</a>
-                                        <a class="btn btn-light btn-sm">Delete</a>
+                                        <div class="inspection-maintenance-select">
+                                            <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
+                                            <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label>
+                                        </div>
                                     </td>
                                 </tr>
                                 `
                             })
+                            $(modalId+' input[name=tempData]').val(JSON.stringify(data))
+                            $(modalId+' input[name=tabNum]').val(tabNum)
                             table.append(html)
                             res(true)
                         },
@@ -1956,13 +2054,18 @@
                 })
             }
 
-            function fetchMaintenanceHistory(tabCounter) {
-                return new Promise((resolve, reject) => {
-                    const applyAll = tabCounter === undefined
-                    const table = applyAll? $('.maintenance-table tbody') : $('.tab-pane[tab-num='+tabCounter+'] .maintenance-table tbody')
+            function fetchMaintenanceHistory(assetId, tabNum, selectedId = []) {
+                return new Promise((res, ref) => {
+                    const modalId = '#addMaintenanceModal'
+                    const tableSelector = modalId+' .datatable'
+                    $(tableSelector).DataTable().destroy()
+                    const table = $(tableSelector+ ' tbody')
                     table.html('')
                     $.ajax({
                         url: '/Maintenance/GetMaintenanceList',
+                        data: {
+                            AssetID: assetId
+                        },
                         type: 'GET',
                         success: function (data) {
                             let html = ''
@@ -1974,30 +2077,34 @@
                                     <td>${item.isValveRepaired}</td>
                                     <td>${item.maintenanceDescription}</td>
                                     <td>
-                                        <a class="btn btn-light btn-sm">Detail</a>
-                                        <a class="btn btn-light btn-sm">Delete</a>
+                                        <div class="inspection-maintenance-select">
+                                            <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
+                                            <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label>
+                                        </div>
                                     </td>
                                 </tr>
                                 `
                             })
+                            $(modalId+' input[name=tempData]').val(JSON.stringify(data))
+                            $(modalId+' input[name=tabNum]').val(tabNum)
                             table.append(html)
-
-                            resolve(true)
+                            res(true)
                         },
                         error: function (error) {
-                            reject()
+                            rej()
                         }
                     })
                 });
             }
 
-
-            const changeContentCard = (key, el) => {
-                $('.assessment-content-card').removeClass('active');
-                $('.assessment-content-card.card-group-'+key).addClass('active')
-                $(el).closest('.assessment-tab-content-submenu').find('.submenu-item').removeClass('active')
-                $(el).addClass('active')
-            }
+        
+        const changeContentCard = (key, el) => {
+            const form = $(el).closest('form')
+            form.find('.assessment-content-card').removeClass('active');
+            form.find('.assessment-content-card.card-group-'+key).addClass('active')
+            $(el).closest('.assessment-tab-content-submenu').find('.submenu-item').removeClass('active')
+            $(el).addClass('active')
+        }
 
 
             /* MODAL CODE */
@@ -2005,109 +2112,234 @@
                 const form = $(el).closest('form')
                 // const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
                 const ctr = $(el).closest('.tab-pane').attr('tab-num')
-                const nativeForm = form[0]
-                const formData = new FormData(nativeForm);
-                $.ajax({
-                    url: '/Inspection/AddInspection',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(res) {
-                        $('.inspection-table').DataTable().destroy();
-                        alert('input data success')
-                        fetchInspectionHistory().then(() => {
-                            initDatatable({
-                                scrollable: false,
-                                selector: '.inspection-table'
-                            })
-                        })
-                        $('#addInspectionModal').modal('hide')
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error
-                        alert('error submitting the form')
-                    }
-                });
+                const equipmentId = form.find('#field-inspection-assetid').val()
+                
             }
 
             function submitMaintenanceForm(el) {
                 const form = $(el).closest('form')
                 // const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
                 const ctr = $(el).closest('.tab-pane').attr('tab-num')
-                const nativeForm = form[0]
-                const formData = new FormData(nativeForm);
-                $.ajax({
-                    url: '/Maintenance/AddMaintenance',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function(res) {
-                        $('.maintenance-table').DataTable().destroy();
-                        alert('input data success')
-                        fetchMaintenanceHistory().then(() => {
-                            initDatatable({
-                                scrollable: false,
-                                selector: '.maintenance-table'
-                            })
-                        })
-                        $('#addMaintenanceModal').modal('hide')
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle error
-                        alert('error submitting the form')
-                    }
-                });
+                const equipmentId = form.find('#field-inspection-assetid').val()
+                
             }
 
             function addInspection(el) {
+                const form = $(el).closest('form')
+                const nativeForm = form[0]
+                const formData = new FormData(nativeForm)
+                const selectedId = formData.getAll('selectedInspectionId')
+                console.log(selectedId)
                 const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
-                $('#addInspectionModal').find('input,textarea,select').val('')
-                $('#addInspectionModal .preview-image-gallery').find('input[type=file], .single-image').remove()
-                fetchModalAssetData(equipmentId, '#addInspectionModal')
-                $('#addInspectionModal').modal('show')
+                const ctr = $(el).closest('.tab-pane').attr('tab-num')
+
+                fetchInspectionHistory(equipmentId,ctr,selectedId).then(() => {
+                    initDatatable({
+                        scrollable: false,
+                        selector: `#addInspectionModal .datatable`
+                    })
+                    $('#addInspectionModal').modal('show')
+                })
+            }
+
+            function confirmInspection(el) {
+                const form = $(el).closest('form')
+                const nativeForm = form[0]
+                const formData = new FormData(nativeForm)
+                const selectedId = formData.getAll('selectedId')
+                const tempData = JSON.parse(formData.get('tempData'))
+                const tabNum = formData.get('tabNum')
+                const selectedRows = tempData.filter ( ({id}) => {
+                    return selectedId.includes(String(id))
+                })
+                $('.tab-pane[tab-num='+tabNum+'] #inspectionDataTemp').val(JSON.stringify(selectedRows))
+                fillInspectionTable(tabNum, selectedRows)
+                $('#addInspectionModal').modal('hide')
+            }
+
+            function fillInspectionTable(tabNum, data) {
+                const tableSelector = '.tab-pane[tab-num='+tabNum+'] .inspection-table'
+                $(tableSelector).DataTable().destroy()
+                const table = $(tableSelector+ ' tbody')
+                table.html('')
+
+                let html = ''
+                data.forEach((item, idx) => {
+                    html += `
+                    <tr>
+                        <td>${idx+1}</td>
+                        <td>${item.inspectionDate}</td>
+                        <td>${item.inspectionMethod}</td>
+                        <td>${item.inspectionDescription}</td>
+                        <td>${item.functionCondition}</td>
+                        <td>${item.testPressureIfAny}</td>
+                        <td>
+                            <input type="hidden" name="selectedInspectionId" value="${item.id}" />
+                            <a class="btn btn-light btn-sm" onclick="detailInspection(${item.id})">Detail</a>
+                            <a class="btn btn-light btn-sm" onclick="deleteInspection(this, ${item.id})">Delete</a>
+                        </td>
+                    </tr>
+                    `
+                })
+                table.append(html)
+                initDatatable({
+                    scrollable: false,
+                    selector: tableSelector
+                })
             }
 
             function addMaintenance(el) {
+                const form = $(el).closest('form')
+                const nativeForm = form[0]
+                const formData = new FormData(nativeForm)
+                const selectedId = formData.getAll('selectedMaintenanceId')
+                console.log(selectedId)
                 const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
-                fetchModalAssetData(equipmentId, '#addMaintenanceModal')
-                $('#addMaintenanceModal').modal('show')
+                const ctr = $(el).closest('.tab-pane').attr('tab-num')
+
+                fetchMaintenanceHistory(equipmentId,ctr,selectedId).then(() => {
+                    initDatatable({
+                        scrollable: false,
+                        selector: `#addMaintenanceModal .datatable`
+                    })
+                    $('#addMaintenanceModal').modal('show')
+                })
             }
 
-            function fetchModalAssetData (id, modalSelector) {
-                $.ajax({
-                    url: '/AssetRegister/GetAssetDetail',
-                    type: 'GET',
-                    data: { id },
-                    success: function (data) {
-                        $(modalSelector+' #field-inspection-assetid').val(data.id)
-                        $(modalSelector+' #field-inspection-valvetype').val(data.valveType)
-                        $(modalSelector+' #field-inspection-tagno').val(data.tagNo)
-                        $(modalSelector+' #field-inspection-valvetagno').val(data.tagNo)
-                        $(modalSelector+' #field-inspection-manufacturer').val(data.manufacturer)
-                        $(modalSelector+' #field-inspection-equipmentname').val('')
-                        $(modalSelector+' #field-inspection-bodymaterial').val(data.bodyMaterial)
-                        $(modalSelector+' #businessarea').val(data.businessArea)
-                        $(modalSelector+' #bodymodel').val(data.bodyModel)
-                        $(modalSelector+' #platform').val(data.platform)
-                        $(modalSelector+' #endconnection').val(data.endConnection)
-                        $(modalSelector+' #parentequipmentno').val(data.parentEquipmentNo)
-                        $(modalSelector+' #serialno').val(data.serialNo)
-                        $(modalSelector+' #parentequipmentdescription').val(data.parentEquipmentDescription)
-                        $(modalSelector+' #usagetype').val('')
-                        $(modalSelector+' #installationdate').val(data.installationDate)
-                        $(modalSelector+' #size').val(data.size)
-                        $(modalSelector+' #pidno').val(data.pidNo)
-                        $(modalSelector+' #classrating').val(data.classRating)
-                    },
-                    error: function (error) {
-                        alert('Valve Tag not found');
-                        $('#inspectionheader' + counter).remove();
-                        $('#inspection' + counter).remove();
-                        moveToLastTab()
-                    }
-                });
+            function confirmMaintenance(el) {
+                const form = $(el).closest('form')
+                const nativeForm = form[0]
+                const formData = new FormData(nativeForm)
+                const selectedId = formData.getAll('selectedId')
+                const tempData = JSON.parse(formData.get('tempData'))
+                const tabNum = formData.get('tabNum')
+                const selectedRows = tempData.filter ( ({id}) => {
+                    return selectedId.includes(String(id))
+                })
+                $('.tab-pane[tab-num='+tabNum+'] #maintenanceDataTemp').val(JSON.stringify(selectedRows))
+                fillMaintenanceTable(tabNum, selectedRows)
+                $('#addMaintenanceModal').modal('hide')
             }
+
+            function fillMaintenanceTable(tabNum, data) {
+                const tableSelector = '.tab-pane[tab-num='+tabNum+'] .maintenance-table'
+                $(tableSelector).DataTable().destroy()
+                const table = $(tableSelector+ ' tbody')
+                table.html('')
+
+                let html = ''
+                data.forEach((item, idx) => {
+                    html += `
+                    <tr>
+                        <td>${idx+1}</td>
+                        <td>${item.maintenanceDate}</td>
+                        <td>${item.isValveRepaired}</td>
+                        <td>${item.maintenanceDescription}</td>
+                        <td>
+                            <input type="hidden" name="selectedMaintenanceId" value="${item.id}" />
+                            <a class="btn btn-light btn-sm" onclick="detailMaintenance(${item.id})">Detail</a>
+                            <a class="btn btn-light btn-sm" onclick="deleteMaintenance(this, ${item.id})">Delete</a>
+                        </td>
+                    </tr>
+                    `
+                })
+                table.append(html)
+                initDatatable({
+                    scrollable: false,
+                    selector: tableSelector
+                })
+            }
+
+            function detailInspection(id) {
+                $('#detailInspectionModal').find('input,textarea,select').val('')
+                $('#detailInspectionModal .preview-image-gallery').find('input[type=file], .single-image').remove()
+                fetchModalDetailData(id, 'inspection')
+
+                $('#detailInspectionModal').attr('data-type', 'view')
+                $('#detailInspectionModal').modal('show')
+            }
+
+            function detailMaintenance(id) {
+                $('#detailMaintenanceModal').find('input,textarea,select').val('')
+                $('#detailMaintenanceModal .preview-image-gallery').find('input[type=file], .single-image').remove()
+                fetchModalDetailData(id, 'maintenance')
+
+                $('#detailMaintenanceModal').attr('data-type', 'view')
+                $('#detailMaintenanceModal').modal('show')
+            }
+
+            function fetchModalDetailData (id, type) {
+            // type = maintenance or inspection
+            let endPoint = '/Inspection/GetInspectionDetail'
+            let modalSelector = '#detailInspectionModal'
+            if (type === 'maintenance') {
+                modalSelector = '#detailMaintenanceModal'
+                endPoint = '/Maintenance/GetMaintenanceDetail'
+            }
+            $.ajax({
+                url: endPoint,
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
+                    const dataAsset = data.asset
+                    $(modalSelector+' #field-inspection-assetid').val(dataAsset.id)
+                    $(modalSelector+' #field-inspection-valvetype').val(dataAsset.valveType)
+                    $(modalSelector+' #field-inspection-tagno').val(dataAsset.tagNo)
+                    $(modalSelector+' #field-inspection-valvetagno').val(dataAsset.tagNo)
+                    $(modalSelector+' #field-inspection-manufacturer').val(dataAsset.manufacturer)
+                    $(modalSelector+' #field-inspection-equipmentname').val('')
+                    $(modalSelector+' #field-inspection-bodymaterial').val(dataAsset.bodyMaterial)
+                    $(modalSelector+' #businessarea').val(dataAsset.businessArea)
+                    $(modalSelector+' #bodymodel').val(dataAsset.bodyModel)
+                    $(modalSelector+' #platform').val(dataAsset.platform)
+                    $(modalSelector+' #endconnection').val(dataAsset.endConnection)
+                    $(modalSelector+' #parentequipmentno').val(dataAsset.parentEquipmentNo)
+                    $(modalSelector+' #serialno').val(dataAsset.serialNo)
+                    $(modalSelector+' #parentequipmentdescription').val(dataAsset.parentEquipmentDescription)
+                    $(modalSelector+' #usagetype').val('')
+                    $(modalSelector+' #installationdate').val(dataAsset.installationDate)
+                    $(modalSelector+' #size').val(dataAsset.size)
+                    $(modalSelector+' #pidno').val(dataAsset.pidNo)
+                    $(modalSelector+' #classrating').val(dataAsset.classRating)
+
+                    // fill history data
+                    if(type === 'maintenance') {
+                        $(modalSelector + ' #field-maintenance-date').val(data.maintenanceDate)
+                        $(modalSelector + ' #field-maintenance-repaired').val(data.isValveRepairedID)
+                        $(modalSelector + ' #field-maintenance-description').val(data.maintenanceDescription)
+                    } else {
+                        $(modalSelector + ' #field-inspection-date').val(data.inspectionDate)
+                        $(modalSelector + ' #field-inspection-inspection-method').val(data.inspectionMethodID)
+                        $(modalSelector + ' #field-inspection-current-condition-limit-state-a').val(data.currentConditionLeakeageToAtmosphereID)
+                        $(modalSelector + ' #field-inspection-current-condition-limit-state-b').val(data.currentConditionFailureOfFunctionID)
+                        $(modalSelector + ' #field-inspection-current-condition-limit-state-c').val(data.currentConditionPassingAcrossValveID)
+                        $(modalSelector + ' #field-inspection-effectiveness').val(data.inspectionEffectivenessID)
+                        $(modalSelector + ' #field-inspection-function-condition').val(data.functionCondition)
+                        $(modalSelector + ' #field-inspection-description').val(data.inspectionDescription)
+                        $(modalSelector + ' #field-inspection-test-pressure-if-any').val(data.testPressureIfAny)
+                    }
+
+                    let galleryHtml = ''
+                    data.inspectionFiles.forEach(i => {
+                        galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                        <div class="single-image" data-identifier="gallery-${i.id}">
+                            <img src="/${i.filePath}"">
+                            <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                <i class="fa-solid fa-xmark"></i>
+                            </div>
+                        </div>
+                        `
+                    })
+
+                    //fill image
+                    $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
+                },
+                error: function (error) {
+                    alert('History not found');
+                }
+            });
+        }
+
         </script>
 }

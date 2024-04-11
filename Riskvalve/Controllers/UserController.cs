@@ -2,70 +2,69 @@ using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Riskvalve.Models;
 
-namespace Riskvalve.Controllers
+namespace Riskvalve.Controllers;
+
+public class UserController : Controller
 {
-    public class UserController : Controller
+    private readonly ILogger<UserController> _logger;
+
+    public UserController(ILogger<UserController> logger)
     {
-        private readonly ILogger<UserController> _logger;
+        _logger = logger;
+    }
 
-        public UserController(ILogger<UserController> logger)
+    public IActionResult Index()
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
         {
-            _logger = logger;
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
         }
-
-        public IActionResult Index()
+        else
         {
-            UserModel login = new();
-            if (!login.isLogin(HttpContext))
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
             {
-                TempData["Message"] = "Please login first";
-                return Redirect("/Login/Index");
+                ViewData[item.Key] = item.Value;
             }
-            else
+            if (ViewData["IsAdmin"].ToString().ToLower().Equals("false"))
             {
-                Dictionary<string, string> session = login.GetLoginSession(HttpContext);
-                foreach (var item in session)
-                {
-                    ViewData[item.Key] = item.Value;
-                }
-                if (ViewData["IsAdmin"].ToString().ToLower().Equals("false"))
-                {
-                    TempData["Message"] = "You are not authorized to access that page";
-                    return Redirect("/Home/Index");
-                }
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
             }
-            List<UserModel> userList = new UserModel().GetUserList();
-            ViewData["UserList"] = userList;
-            return View();
         }
+        List<UserModel> userList = new UserModel().GetUserList();
+        ViewData["UserList"] = userList;
+        return View();
+    }
 
-        [HttpGet]
-        public IActionResult GetUser(int id)
-        {
-            UserModel user = new();
-            user = new UserModel().GetUserModel(id);
-            return Json(user);
-        }
+    [HttpGet]
+    public IActionResult GetUser(int id)
+    {
+        UserModel user = new();
+        user = new UserModel().GetUserModel(id);
+        return Json(user);
+    }
 
-        [HttpPost]
-        public bool AddUser(UserModel user)
-        {
-            bool result = new UserModel().AddUser(user);
-            return result;
-        }
+    [HttpPost]
+    public bool AddUser(UserModel user)
+    {
+        bool result = new UserModel().AddUser(user);
+        return result;
+    }
 
-        [HttpPost]
-        public IActionResult UpdateUser(UserModel user)
-        {
-            new UserModel().UpdateUser(user);
-            return Redirect("/User/Index");
-        }
+    [HttpPost]
+    public IActionResult UpdateUser(UserModel user)
+    {
+        new UserModel().UpdateUser(user);
+        return Redirect("/User/Index");
+    }
 
-        [HttpPost]
-        public IActionResult DeleteUser(int id)
-        {
-            new UserModel().DeleteUser(id);
-            return Redirect("/User/Index");
-        }
+    [HttpPost]
+    public IActionResult DeleteUser(int id)
+    {
+        new UserModel().DeleteUser(id);
+        return Redirect("/User/Index");
     }
 }

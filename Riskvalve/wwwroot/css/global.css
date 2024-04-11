@@ -464,7 +464,7 @@ svg * {
 }
 
 .submenu-action .top-row button{
-  flex: 0 1 50%;
+  flex: 1 1 50%;
   border-radius: 5px;
 }
 
@@ -558,4 +558,34 @@ svg * {
 
 .assessment-content-card .single-field{
   margin-bottom: 5px;
+}
+
+.assessment-form-modal .add-only{
+  display: none;
+}
+
+.assessment-form-modal[data-type=add] .add-only{
+  display: unset;
+}
+
+.assessment-form .print-button, .assessment-form .delete-button{
+  display: none;
+}
+
+.assessment-form.history-form .print-button, .assessment-form.history-form .delete-button{
+  display: block;
+}
+
+.form-select.no-arrow{
+  background-image: none;
+  padding-right: .5rem;
+}
+
+.inspection-maintenance-select input{
+  display: none;
+}
+
+
+.inspection-maintenance-select input:checked + label.btn-light {
+  background-color: #beebff;
 }

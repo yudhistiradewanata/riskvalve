@@ -51,9 +51,8 @@ public class AssessmentController : Controller
     }
 
     [HttpPost]
-    public int AddAssessment()
+    public IActionResult AddAssessment()
     {
-        List<IFormFile> files = Request.Form.Files.ToList();
         AssessmentModel assessment = new();
         AssessmentDB assessmentDB =
             new()
@@ -111,7 +110,73 @@ public class AssessmentController : Controller
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
         int assessmentID = assessment.AddAssessment(assessmentDB);
-        return assessmentID;
+        assessment = assessment.GetAssessmentModel(assessmentID);
+        return Json(assessment);
+    }
+
+    [HttpPost]
+    public IActionResult UpdateAssessment()
+    {
+        AssessmentModel assessment = new();
+        AssessmentDB assessmentDB =
+            new()
+            {
+                Id = Convert.ToInt32(Request.Form["AssessmentID"]),
+                AssetID = Convert.ToInt32(Request.Form["AssetID"]),
+                AssessmentNo = Request.Form["AssessmentNo"],
+                TimePeriode = Request.Form["TimePeriode"],
+                TimeToLimitStateLeakageToAtmosphere = Request.Form[
+                    "TimeToLimitStateLeakageToAtmosphere"
+                ],
+                TimeToLimitStateFailureOfFunction = Request.Form[
+                    "TimeToLimitStateFailureOfFunction"
+                ],
+                TimeToLimitStatePassingAccrosValve = Request.Form[
+                    "TimeToLimitStatePassingAccrosValve"
+                ],
+                LeakageToAtmosphereID = Convert.ToInt32(Request.Form["LeakageToAtmosphereID"]),
+                FailureOfFunctionID = Convert.ToInt32(Request.Form["FailureOfFunctionID"]),
+                PassingAccrosValveID = Convert.ToInt32(Request.Form["PassingAccrosValveID"]),
+                LeakageToAtmosphereTP1ID = Convert.ToInt32(
+                    Request.Form["LeakageToAtmosphereTP1ID"]
+                ),
+                LeakageToAtmosphereTP2ID = Convert.ToInt32(
+                    Request.Form["LeakageToAtmosphereTP2ID"]
+                ),
+                LeakageToAtmosphereTP3ID = Convert.ToInt32(
+                    Request.Form["LeakageToAtmosphereTP3ID"]
+                ),
+                FailureOfFunctionTP1ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP1ID"]),
+                FailureOfFunctionTP2ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP2ID"]),
+                FailureOfFunctionTP3ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP3ID"]),
+                PassingAccrosValveTP1ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP1ID"]),
+                PassingAccrosValveTP2ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP2ID"]),
+                PassingAccrosValveTP3ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP3ID"]),
+                InspectionEffectivenessID = Convert.ToInt32(
+                    Request.Form["InspectionEffectivenessID"]
+                ),
+                ImpactOfInternalFluidImpuritiesID = Convert.ToInt32(
+                    Request.Form["ImpactOfInternalFluidImpuritiesID"]
+                ),
+                ImpactOfOperatingEnvelopesID = Convert.ToInt32(
+                    Request.Form["ImpactOfOperatingEnvelopesID"]
+                ),
+                UsedWithinOEMSpecificationID = Convert.ToInt32(
+                    Request.Form["UsedWithinOEMSpecificationID"]
+                ),
+                RepairedID = Convert.ToInt32(Request.Form["RepairedID"]),
+                ProductLossDefinition = Request.Form["ProductLossDefinition"],
+                HSSEDefinisionID = Convert.ToInt32(Request.Form["HSSEDefinisionID"]),
+                Summary = Request.Form["Summary"],
+                RecommendationActionID = Convert.ToInt32(Request.Form["RecommendationActionID"]),
+                DetailedRecommendation = Request.Form["DetailedRecommendation"],
+                IsDeleted = false,
+                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            };
+        assessment.UpdateAssessment(assessmentDB);
+        assessment = assessment.GetAssessmentModel(assessmentDB.Id);
+        return Json(assessment);
     }
 
     [HttpPost]
