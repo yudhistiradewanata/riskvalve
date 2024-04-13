@@ -291,11 +291,96 @@ body {
   width: 100%;
 }
 
-.risk-table-container .risk-table{
+.risk-table-container .risk-matrix{
   position: absolute;
   top: 12%;
   left: calc(52%);
   transform: translateX(-50%);
+}
+
+.risk-matrix-dots{
+  /* margin: -5px -5px; */
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.risk-matrix-dots .type-a{
+  background-color: white;
+}
+
+.risk-matrix-dots .type-b{
+  background-color: black;
+}
+
+.risk-matrix-dots .type-c{
+  background-color: #fdbfca;
+}
+
+.risk-matrix-dots .dot{
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  height: 12px;
+  width: 12px;
+  transform: translate(-50%, -50%);
+}
+
+.risk-matrix-dots .dot-tp1{
+  background-color: transparent;
+}
+
+.risk-matrix-dots .dot-tp1:after {
+  content: "";
+  width: 0; 
+  height: 0; 
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  background-color: transparent;
+  z-index: 2;
+  position: absolute;
+  left: 3px;
+  top: 3px;
+}
+
+.risk-matrix-dots .dot-tp1:before {
+  content: "";
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-bottom: 14px solid grey;
+  background-color: transparent;
+  z-index: 1;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.risk-matrix-dots .dot-tp1.type-a:after{
+  border-bottom: 10px solid white;
+}
+
+.risk-matrix-dots .dot-tp1.type-b:after{
+  border-bottom: 10px solid black;
+}
+
+.risk-matrix-dots .dot-tp1.type-c:after{
+  border-bottom: 10px solid #fdbfca;
+}
+
+.risk-matrix-dots .dot-tp2 {
+  width: 12px; 
+  height: 12px; 
+  border-radius: 50%;
+  border: solid 2px grey;
+}
+
+.risk-matrix-dots .dot-tp3 {
+  width: 12px; 
+  height: 12px; 
+  border: solid 2px grey;
 }
 
 svg * { 

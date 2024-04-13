@@ -12,6 +12,7 @@ public class AssetContext : DbContext
     public DbSet<FluidPhaseModel> FluidPhase { get; set; }
     public DbSet<ToxicOrFlamableFluidModel> ToxicOrFlamableFluid { get; set; }
     public DbSet<UserModel> User { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
             .UseSqlServer(Environment.GetConnectionStringDB())
@@ -22,6 +23,7 @@ public class AssetDB
 {
     public int Id { get; set; }
     public string? TagNo { get; set; }
+    public string? AssetName { get; set; }
     public int? PlatformID { get; set; } // FK
     public int ValveTypeID { get; set; } // FK
     public string? Size { get; set; }
@@ -46,6 +48,10 @@ public class AssetDB
     public string? ServiceFluid { get; set; }
     public int FluidPhaseID { get; set; } // FK
     public int ToxicOrFlamableFluidID { get; set; } // FK
+    public string? UsageType { get; set; }
+    public string? CostOfReplacementAndRepair { get; set; }
+    public string? Actuation { get; set; }
+    public string? Status { get; set; }
     public bool? IsDeleted { get; set; }
     public int? CreatedBy { get; set; }
     public string? CreatedAt { get; set; }
@@ -117,8 +123,14 @@ public class AssetModel : AssetDB
                     CreatedAt = a.CreatedAt,
                     DeletedBy = a.DeletedBy,
                     DeletedAt = a.DeletedAt,
-                    CreatedByUser = context.User.Where(u => u.Id == a.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == a.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == a.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == a.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
             asset = assetList[0];
@@ -126,7 +138,7 @@ public class AssetModel : AssetDB
         return asset;
     }
 
-    public List<AssetModel> GetAssetList(int AreaID = 0, int PlatformID = 0)
+    public List<AssetModel> GetAssetList(int AreaID = 0, int PlatformID = 0, bool IncludeDeleted = false)
     {
         List<AssetModel> assetList = new();
         using (var context = new AssetContext())
@@ -139,7 +151,7 @@ public class AssetModel : AssetDB
                 join m in context.ManualOverride on a.ManualOverrideID equals m.Id
                 join f in context.FluidPhase on a.FluidPhaseID equals f.Id
                 join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
-                where (AreaID == 0 || p.AreaID == AreaID) && (PlatformID == 0 || p.Id == PlatformID)
+                where (AreaID == 0 || p.AreaID == AreaID) && (PlatformID == 0 || p.Id == PlatformID) && (IncludeDeleted == true || a.IsDeleted == false)
                 select new AssetModel
                 {
                     Id = a.Id,
@@ -179,8 +191,14 @@ public class AssetModel : AssetDB
                     CreatedAt = a.CreatedAt,
                     DeletedBy = a.DeletedBy,
                     DeletedAt = a.DeletedAt,
-                    CreatedByUser = context.User.Where(u => u.Id == a.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == a.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == a.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == a.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
         }
@@ -244,6 +262,219 @@ public class AssetModel : AssetDB
             context.Asset.Update(oldAsset);
             context.SaveChanges();
         }
+    }
+
+    public List<Dictionary<string, string>> MapAssetRegister(List<Dictionary<string, string>> datas)
+    {
+        List<PlatformModel> platformList = new PlatformModel().GetPlatformList(0, true);
+        List<ValveTypeModel> valveTypeList = new ValveTypeModel().GetValveTypeList();
+        List<ManualOverrideModel> manualOverrideModel =
+            new ManualOverrideModel().GetManualOverrideList();
+        List<FluidPhaseModel> fluidPhaseList = new FluidPhaseModel().GetFluidPhaseList();
+        List<ToxicOrFlamableFluidModel> toxicOrFlamableFluidList =
+            new ToxicOrFlamableFluidModel().GetToxicOrFlamableFluidList();
+        List<Dictionary<string, string>> finalresult = new();
+        foreach (var records in datas)
+        {
+            Dictionary<string, string> result = new();
+            foreach (var record in records)
+            {
+                string key = record.Key;
+                string value = record.Value;
+                string mappedKey = MapHeader(key);
+                string mappedValue = "";
+                if (mappedKey == "")
+                {
+                    continue;
+                }
+                if (
+                    mappedKey.Equals("PlatformID")
+                    || mappedKey.Equals("ValveTypeID")
+                    || mappedKey.Equals("ManualOverrideID")
+                    || mappedKey.Equals("FluidPhaseID")
+                    || mappedKey.Equals("ToxicOrFlamableFluidID")
+                )
+                {
+                    if (mappedKey.Equals("PlatformID"))
+                    {
+                        foreach (var platform in platformList)
+                        {
+                            if (platform.Platform.Equals(value))
+                            {
+                                mappedValue = platform.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("ValveTypeID"))
+                    {
+                        foreach (var valveType in valveTypeList)
+                        {
+                            if (valveType.ValveType.Equals(value))
+                            {
+                                mappedValue = valveType.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("ManualOverrideID"))
+                    {
+                        foreach (var manualOverride in manualOverrideModel)
+                        {
+                            if (manualOverride.ManualOverride.Equals(value))
+                            {
+                                mappedValue = manualOverride.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("FluidPhaseID"))
+                    {
+                        foreach (var fluidPhase in fluidPhaseList)
+                        {
+                            if (fluidPhase.FluidPhase.Equals(value))
+                            {
+                                mappedValue = fluidPhase.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("ToxicOrFlamableFluidID"))
+                    {
+                        foreach (var toxicOrFlamableFluid in toxicOrFlamableFluidList)
+                        {
+                            if (toxicOrFlamableFluid.ToxicOrFlamableFluid.Equals(value))
+                            {
+                                mappedValue = toxicOrFlamableFluid.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("InstallationDate"))
+                    {
+                        mappedValue = DateTime
+                            .Parse(value)
+                            .ToString(Environment.GetDateFormatString());
+                    }
+                    if (mappedValue == "")
+                    {
+                        Exception e =
+                            new(
+                                "Value '"
+                                    + record.Value
+                                    + "' on field '"
+                                    + key
+                                    + "' is not match with the database value"
+                            );
+                        throw e;
+                    } else {
+                        value = mappedValue;
+                    }
+                }
+                result.Add(mappedKey, value);
+            }
+            finalresult.Add(result);
+        }
+        return finalresult;
+    }
+
+    private string MapHeader(string name)
+    {
+        string result = "";
+        switch (name)
+        {
+            case "Valve Tag No.":
+                result = "TagNo";
+                break;
+            case "Equipment Name":
+                result = "AssetName";
+                break;
+            case "Platform":
+                result = "PlatformID";
+                break;
+            case "Parent Equipment No.":
+                result = "ParentEquipmentNo";
+                break;
+            case "Parent Equipment \nDescription":
+                result = "ParentEquipmentDescription";
+                break;
+            case "Installation Date\n(dd/mm/yyyy)":
+                result = "InstallationDate";
+                break;
+            case "PID. No.":
+                result = "PIDNo";
+                break;
+            case "Valve Type":
+                result = "ValveTypeID";
+                break;
+            case "Manufacturer":
+                result = "Manufacturer";
+                break;
+            case "Body Material":
+                result = "BodyMaterial";
+                break;
+            case "Body Model":
+                result = "BodyModel";
+                break;
+            case "End Connection":
+                result = "EndConnection";
+                break;
+            case "Serial Number":
+                result = "SerialNo";
+                break;
+            case "Usage Type":
+                result = "UsageType";
+                break;
+            case "Size":
+                result = "Size";
+                break;
+            case "Class/Rating":
+                result = "ClassRating";
+                break;
+            case "Service Fluid":
+                result = "ServiceFluid";
+                break;
+            case "Fluid Phase":
+                result = "FluidPhaseID";
+                break;
+            case "Flow Rate\n(m3/hr)":
+                result = "FlowRate";
+                break;
+            case "Operating Temperature\n( °F)":
+                result = "OperatingTemperature";
+                break;
+            case "Operating Pressure\n(psig)":
+                result = "OperatingPressure";
+                break;
+            case "Toxic or Flamable Fluid?\n(Y/N)":
+                result = "ToxicOrFlamableFluidID";
+                break;
+            case "Cost of Replacement and repair (USD)":
+                result = "CostOfReplacementAndRepair";
+                break;
+            case "Actuation":
+                result = "Actuation";
+                break;
+            case "Actuator Mfg.":
+                result = "ActuatorMfg";
+                break;
+            case "Actuator Serial No.":
+                result = "ActuatorSerialNo";
+                break;
+            case "Actuator Type/Model":
+                result = "ActuatorTypeModel";
+                break;
+            case "Actuator Power":
+                result = "ActuatorPower";
+                break;
+            case "Manual Override":
+                result = "ManualOverrideID";
+                break;
+            case "Status":
+                result = "Status";
+                break;
+        }
+        return result;
     }
 }
 

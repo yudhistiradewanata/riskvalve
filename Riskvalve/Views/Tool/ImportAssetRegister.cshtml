@@ -17,10 +17,17 @@
                         <form>
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
+                                    Download the template file <a href="/Uploads/Downloads/AssetTemplate.xlsx" target="_blank">here</a>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
                                     <label for="fileUpload" class="col-form-label">File: </label>
                                 </div>
                                 <div class="col">
-                                    <input type="file" id="fileUpload" class="form-control">
+                                    <input type="hidden" id="mode" name="mode" value="asset" />
+                                    <input type="file" id="fileUpload" name="file" class="form-control" accept=".xlsx, .xls">
                                 </div>
                             </div>
                             <br />
@@ -37,17 +44,36 @@
     </div>
 </div>
 
-@* <div class="row">
-    <div class="col-xs-2" style="padding-right:0;">
-        <partial name="ToolSidebar" />
-    </div>
-    <div class="col-xs-10">
-        <form class="form-inline" role="form" style="margin-left:20px; margin-bottom:20px">
-            <div class="form-group">
-                <label for="importFile">File:</label>
-                <input type="file" class="form-control" id="importFile">
-            </div>
-            <button type="submit" class="btn btn-primary">Import File</button>
-        </form>
-    </div>
-</div> *@
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("form").submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData();
+                formData.append("file", $("#fileUpload")[0].files[0]);
+                formData.append("mode", $("#mode").val());
+                $.ajax({
+                    url: "/Tool/ImportExcelFile",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if(data.error){
+                            alert(data.error);
+                            $("#fileUpload").val('');
+                        }
+                        else{
+                            alert('File uploaded successfully');
+                            $("#fileUpload").val('');
+                            location.reload();
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error submitting the form')
+                    }
+                });
+            });
+        });
+    </script>
+}

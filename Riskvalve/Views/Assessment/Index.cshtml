@@ -7,7 +7,7 @@
     var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
 
     var IsValveRepairedModel = new IsValveRepairedModel();
-    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedStates();
+    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
 
     var InspectionMethodModel = new InspectionMethodModel();
     var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
@@ -387,7 +387,7 @@
                                                                 <label class="col-form-label" for="time-period">Time Period (Month)</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1">
+                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1" onchange="calculateAssessment.apply(this)">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -485,7 +485,7 @@
                                                                 <label class="col-form-label" for="leakage-to-atmosphere">Leakage to atmophere</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="leakage-to-atmosphere" name="LeakageToAtmosphereID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="leakage-to-atmosphere" name="LeakageToAtmosphereID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in limitState)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
@@ -500,7 +500,7 @@
                                                                 <label class="col-form-label" for="failure-of-function">Failure of Function</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="failure-of-function" name="FailureOfFunctionID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="failure-of-function" name="FailureOfFunctionID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in limitState)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
@@ -515,7 +515,7 @@
                                                                 <label class="col-form-label" for="passing-accross-valve">Passing accross valve</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="passing-accross-valve" name="PassingAccrosValveID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="passing-accross-valve" name="PassingAccrosValveID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in limitState)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
@@ -556,7 +556,7 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp1" name="LeakageToAtmosphereTP1ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp1" name="LeakageToAtmosphereTP1ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -564,7 +564,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp2" name="LeakageToAtmosphereTP2ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp2" name="LeakageToAtmosphereTP2ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -572,7 +572,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp3" name="LeakageToAtmosphereTP3ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp3" name="LeakageToAtmosphereTP3ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -591,7 +591,7 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp1" name="FailureOfFunctionTP1ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp1" name="FailureOfFunctionTP1ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -599,7 +599,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp2" name="FailureOfFunctionTP2ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp2" name="FailureOfFunctionTP2ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -607,7 +607,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp3" name="FailureOfFunctionTP3ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp3" name="FailureOfFunctionTP3ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -626,7 +626,7 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp1" name="PassingAccrosValveTP1ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp1" name="PassingAccrosValveTP1ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -634,7 +634,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp2" name="PassingAccrosValveTP2ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp2" name="PassingAccrosValveTP2ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -642,7 +642,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp3" name="PassingAccrosValveTP3ID">
+                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp3" name="PassingAccrosValveTP3ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -657,7 +657,7 @@
                                                                 <label class="col-form-label" for="inspection-effectiveness">LF3 - Inspection Effectiveness</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="inspection-effectiveness" name="InspectionEffectivenessID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="inspection-effectiveness" name="InspectionEffectivenessID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in inspectionEffectivenessStates)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.EffectivenessValue" attr-weighting="@item.Weighting">@item.Effectiveness</option>
@@ -670,7 +670,7 @@
                                                                 <label class="col-form-label" for="impact-of-internal-fluid">LF4 - Impact of Internal Fluid Impurities</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-internal-fluid" name="ImpactOfInternalFluidImpuritiesID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-internal-fluid" name="ImpactOfInternalFluidImpuritiesID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in impactEffectStates)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting">@item.ImpactEffect</option>
@@ -683,7 +683,7 @@
                                                                 <label class="col-form-label" for="impact-of-operating-envelopes">LF5 - Impact of Operating Envelopes</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-operating-envelopes" name="ImpactOfOperatingEnvelopesID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-operating-envelopes" name="ImpactOfOperatingEnvelopesID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in impactEffectStates)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting2">@item.ImpactEffect</option>
@@ -696,7 +696,7 @@
                                                                 <label class="col-form-label" for="used-within-oem-specification">LF6 - Used within OEM Specification</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="used-within-oem-specification" name="UsedWithinOEMSpecificationID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="used-within-oem-specification" name="UsedWithinOEMSpecificationID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in usedWithinOEMSpecifications)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.UsedWithinOEMSpecificationValue" attr-weighting="@item.Weighting">@item.UsedWithinOEMSpecification</option>
@@ -709,7 +709,7 @@
                                                                 <label class="col-form-label" for="repaired">LF7 - Repaired</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="repaired" name="RepairedID">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="repaired" name="RepairedID" onchange="calculateAssessment.apply(this)">
                                                                     @foreach (var item in repairedStates)
                                                                     {
                                                                         <option value="@item.Id" attr-value="@item.RepairedValue" attr-weighting="@item.Weighting">@item.Repaired</option>
@@ -733,7 +733,7 @@
                                                                 <label class="col-form-label" for="product-loss-definition">Product loss definition (bbls)</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <input class="form-control form-control-sm bbls-assessment calculate-assessment" id="product-loss-definition" name="ProductLossDefinition" type="number" step="1" value="0"/>
+                                                                <input class="form-control form-control-sm bbls-assessment calculate-assessment" id="product-loss-definition" name="ProductLossDefinition" type="number" step="1" value="0" onchange="calculateAssessment.apply(this)">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -814,85 +814,101 @@
                                                                             </g>
                                                                         </g>
                                                                     </svg>
-                                                                    <svg class="risk-table" id="risk-table" width="250" height="250">
-                                                                        <g>
+                                                                    <div class="risk-matrix">
+                                                                        <div class="risk-matrix-dots">
+                                                                            <!-- A Leakage to Atmosphere -->
+                                                                            <div class="dot dot-tp1 type-a" id="TP1A"></div>
+                                                                            <div class="dot dot-tp2 type-a" id="TP2A"></div>
+                                                                            <div class="dot dot-tp3 type-a" id="TP3A"></div>
+                                                                            <!-- B Failure -->
+                                                                            <div class="dot dot-tp1 type-b" id="TP1B"></div>
+                                                                            <div class="dot dot-tp2 type-b" id="TP2B"></div>
+                                                                            <div class="dot dot-tp3 type-b" id="TP3B"></div>
+                                                                            <!-- C Passing Accross Valve -->
+                                                                            <div class="dot dot-tp1 type-c" id="TP1C"></div>
+                                                                            <div class="dot dot-tp2 type-c" id="TP2C"></div>
+                                                                            <div class="dot dot-tp3 type-c" id="TP3C"></div>
+                                                                        </div>
+                                                                        <svg id="risk-table" width="250" height="250">
                                                                             <g>
-                                                                                <rect x="0" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                <g>
+                                                                                    <rect x="0" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="50" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="100" y="200" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="150" y="200" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="200" y="200" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="0" y="150" width="50" height="50" fill="#6FA529" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="50" y="150" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="100" y="150" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="150" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="200" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="0" y="100" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="50" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="100" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="150" y="100" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="200" y="100" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="0" y="50" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="50" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="100" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="150" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="200" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="0" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="50" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="100" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="150" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
+                                                                                <g>
+                                                                                    <rect x="200" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                </g>
                                                                             </g>
-                                                                            <g>
-                                                                                <rect x="50" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="100" y="200" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="150" y="200" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="200" y="200" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="0" y="150" width="50" height="50" fill="#6FA529" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="50" y="150" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="100" y="150" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="150" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="200" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="0" y="100" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="50" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="100" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="150" y="100" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="200" y="100" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="0" y="50" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="50" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="100" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="150" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="200" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="0" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="50" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="100" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="150" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                            <g>
-                                                                                <rect x="200" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
-                                                                            </g>
-                                                                        </g>
-                                                                    </svg>
+                                                                        </svg>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -1684,6 +1700,7 @@
                         //fill ID
                         $('#inspection'+counter).find('#data-id').val(id)
                         $('#inspection' + counter).find('form').addClass('history-form')
+                        $('#inspection'+counter).find('.calculate-assessment').first().trigger('change')
                     },
                     error: function (error) {
                         alert('History not found');
@@ -1729,202 +1746,283 @@
                 $('#field-assessment-actuation' + counter).val('')
             }
 
+            function calculateXPos(value) {
+                value = value*1;
+                xpos = 0;
+                if(value <= 13){
+                    xpos = 0;
+                } else if(value<=40) {
+                    xpos = ((value-13)/(40-13) * 20);
+                } else if(value<=175) {
+                    xpos = ((value-40)/(175-40) * 20) + 20;
+                } else if(value<=758) {
+                    xpos = ((value-175)/(758-175) * 20) + 40;
+                } else if(value<=3275) {
+                    xpos = ((value-758)/(3275-758) * 20) + 60;
+                } else if(value<=14250) {
+                    xpos = ((value-3275)/(14250-3275) * 20) + 80;
+                } else {
+                    xpos = 100;
+                }
+                return xpos;
+            }
+
+            function calculateAssessment(ctr = -1) {
+                if(ctr == -1){
+                    var ctr = $(this).closest('.tab-pane').attr('tab-num');
+                }
+                var timePeriod = $('#time-period' + ctr).val();
+                //LF1
+                var lf1LeakageToAtmosphere = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-value');
+                var lf1LeakageToAtmosphereWeighting = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-weighting');
+                var lf1FailureOfFunction = $('#failure-of-function' + ctr).find('option:selected').attr('attr-value');
+                var lf1FailureOfFunctionWeighting = $('#failure-of-function' + ctr).find('option:selected').attr('attr-weighting');
+                var lf1PassingAccrossValve = $('#passing-accross-valve' + ctr).find('option:selected').attr('attr-value');
+                var lf1PassingAccrossValveWeighting = $('#passing-accross-valve' + ctr).find('option:selected').attr('attr-weighting');
+                //LF2
+                var lf2LeakageToAtmosphereTP1 = $('#leakage-tp1' + ctr).find('option:selected').attr('attr-value');
+                var lf2LeakageToAtmosphereTP1Weighting = $('#leakage-tp1' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2LeakageToAtmosphereTP2 = $('#leakage-tp2' + ctr).find('option:selected').attr('attr-value');
+                var lf2LeakageToAtmosphereTP2Weighting = $('#leakage-tp2' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2LeakageToAtmosphereTP3 = $('#leakage-tp3' + ctr).find('option:selected').attr('attr-value');
+                var lf2LeakageToAtmosphereTP3Weighting = $('#leakage-tp3' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2FailureOfFunctionTP1 = $('#failure-tp1' + ctr).find('option:selected').attr('attr-value');
+                var lf2FailureOfFunctionTP1Weighting = $('#failure-tp1' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2FailureOfFunctionTP2 = $('#failure-tp2' + ctr).find('option:selected').attr('attr-value');
+                var lf2FailureOfFunctionTP2Weighting = $('#failure-tp2' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2FailureOfFunctionTP3 = $('#failure-tp3' + ctr).find('option:selected').attr('attr-value');
+                var lf2FailureOfFunctionTP3Weighting = $('#failure-tp3' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2PassingAccrossValveTP1 = $('#passing-tp1' + ctr).find('option:selected').attr('attr-value');
+                var lf2PassingAccrossValveTP1Weighting = $('#passing-tp1' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2PassingAccrossValveTP2 = $('#passing-tp2' + ctr).find('option:selected').attr('attr-value');
+                var lf2PassingAccrossValveTP2Weighting = $('#passing-tp2' + ctr).find('option:selected').attr('attr-weighting');
+                var lf2PassingAccrossValveTP3 = $('#passing-tp3' + ctr).find('option:selected').attr('attr-value');
+                var lf2PassingAccrossValveTP3Weighting = $('#passing-tp3' + ctr).find('option:selected').attr('attr-weighting');
+                //LF3
+                var lf3InspectionEffectiveness = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-value');
+                var lf3InspectionEffectivenessWeighting = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-weighting');
+                //LF4
+                var lf4ImpactOfInternalFluid = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-value');
+                var lf4ImpactOfInternalFluidWeighting = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-weighting');
+                //LF5
+                var lf5ImpactOfOperatingEnvelopes = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-value');
+                var lf5ImpactOfOperatingEnvelopesWeighting = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-weighting');
+                //LF6
+                var lf6UsedWithinOEMSpecification = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-value');
+                var lf6UsedWithinOEMSpecificationWeighting = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-weighting');
+                //LF7
+                var lf7Repaired = $('#repaired' + ctr).find('option:selected').attr('attr-value');
+                var lf7RepairedWeighting = $('#repaired' + ctr).find('option:selected').attr('attr-weighting');
+                //CALCULATE
+                // TP1A
+                var lofLeakageToAtmosphereA = (lf2LeakageToAtmosphereTP1 * lf2LeakageToAtmosphereTP1Weighting) *
+                    (
+                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofLeakageToAtmosphereAPos = calculateXPos(lofLeakageToAtmosphereA);
+                // TP1B
+                var lofLeakageToAtmosphereB = (lf2LeakageToAtmosphereTP2 * lf2LeakageToAtmosphereTP2Weighting) *
+                    (
+                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofLeakageToAtmosphereBPos = calculateXPos(lofLeakageToAtmosphereB);
+                // TP1C
+                var lofLeakageToAtmosphereC = (lf2LeakageToAtmosphereTP3 * lf2LeakageToAtmosphereTP3Weighting) *
+                    (
+                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofLeakageToAtmosphereCPos = calculateXPos(lofLeakageToAtmosphereC);
+                // TP2A
+                var lofFailureOfFunctionA = (lf2FailureOfFunctionTP1 * lf2FailureOfFunctionTP1Weighting) *
+                    (
+                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofFailureOfFunctionAPos = calculateXPos(lofFailureOfFunctionA);
+                // TP2B
+                var lofFailureOfFunctionB = (lf2FailureOfFunctionTP2 * lf2FailureOfFunctionTP2Weighting) *
+                    (
+                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofFailureOfFunctionBPos = calculateXPos(lofFailureOfFunctionB);
+                // TP2C
+                var lofFailureOfFunctionC = (lf2FailureOfFunctionTP3 * lf2FailureOfFunctionTP3Weighting) *
+                    (
+                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofFailureOfFunctionCPos = calculateXPos(lofFailureOfFunctionC);
+                // TP3A
+                var lofPassingAccrossValveA = (lf2PassingAccrossValveTP1 * lf2PassingAccrossValveTP1Weighting) *
+                    (
+                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofPassingAccrossValveAPos = calculateXPos(lofPassingAccrossValveA);
+                // TP3B
+                var lofPassingAccrossValveB = (lf2PassingAccrossValveTP2 * lf2PassingAccrossValveTP2Weighting) *
+                    (
+                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofPassingAccrossValveBPos = calculateXPos(lofPassingAccrossValveB);
+                // TP3C
+                var lofPassingAccrossValveC = (lf2PassingAccrossValveTP3 * lf2PassingAccrossValveTP3Weighting) *
+                    (
+                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                        (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
+                        (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
+                        (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
+                        (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
+                        (lf7Repaired * lf7RepairedWeighting)
+                    );
+                var lofPassingAccrossValveCPos = calculateXPos(lofPassingAccrossValveC);
+                //HSSE Value
+                var pld = $('#product-loss-definition' + ctr);
+                if(pld.val() < 0 || pld.val() == ''){
+                    pld.val(0);
+                }
+                var bbls = Number(pld.val());
+                var hsseSelect = $('#hsse-definition' + ctr);
+                var hsseOptions = hsseSelect.find('option');
+                var selectedHsse = '';
+                hsseOptions.each(function(){
+                    var hsseValue = $(this).attr('attr-minvalue')*1;
+                    if(bbls >= hsseValue){
+                        selectedHsse = $(this).val();
+                    }
+                });
+                hsseSelect.val(selectedHsse);
+                var hsseSelect = $('#hsse-definition' + ctr);
+                var cof = hsseSelect.find('option:selected').attr('attr-cofcategory');
+                var ypos = 0;
+                switch(cof){
+                    case 'A':
+                        ypos = 10;
+                        break;
+                    case 'B':
+                        ypos = 30;
+                        break;
+                    case 'C':
+                        ypos = 50;
+                        break;
+                    case 'D':
+                        ypos = 70;
+                        break;
+                    case 'E':
+                        ypos = 90;
+                        break;
+                }
+                // TOTAL
+                var map_result = {
+                    'TP1A': {
+                        'lof': Number(lofLeakageToAtmosphereA),
+                        'cof': Number(cof),
+                        'xpos': Number(lofLeakageToAtmosphereAPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP1B': {
+                        'lof': Number(lofLeakageToAtmosphereB),
+                        'cof': Number(cof),
+                        'xpos': Number(lofLeakageToAtmosphereBPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP1C': {
+                        'lof': Number(lofLeakageToAtmosphereC),
+                        'cof': Number(cof),
+                        'xpos': Number(lofLeakageToAtmosphereCPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP2A': {
+                        'lof': Number(lofFailureOfFunctionA),
+                        'cof': Number(cof),
+                        'xpos': Number(lofFailureOfFunctionAPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP2B': {
+                        'lof': Number(lofFailureOfFunctionB),
+                        'cof': Number(cof),
+                        'xpos': Number(lofFailureOfFunctionBPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP2C': {
+                        'lof': Number(lofFailureOfFunctionC),
+                        'cof': Number(cof),
+                        'xpos': Number(lofFailureOfFunctionCPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP3A': {
+                        'lof': Number(lofPassingAccrossValveA),
+                        'cof': Number(cof),
+                        'xpos': Number(lofPassingAccrossValveAPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP3B': {
+                        'lof': Number(lofPassingAccrossValveB),
+                        'cof': Number(cof),
+                        'xpos': Number(lofPassingAccrossValveBPos),
+                        'ypos': Number(ypos)
+                    },
+                    'TP3C': {
+                        'lof': Number(lofPassingAccrossValveC),
+                        'cof': Number(cof),
+                        'xpos': Number(lofPassingAccrossValveCPos),
+                        'ypos': Number(ypos)
+                    }
+                }
+                @* console.log(map_result); *@
+
+                //apply to matrix
+                for (const [key, item] of Object.entries(map_result)) {
+                    const dot = $('.tab-pane[tab-num='+ctr+']').find('#'+key)
+                    dot.css({
+                        top: item.ypos+'%',
+                        left: item.xpos+'%'
+                    })
+                }
+            }
+
             $(document).ready(function () {
                 $('.btn-add-new-inspection').click(addTab);
                 $('.btn-add-new-inspection').first().trigger('click')
 
-                $('.calculate-assessment').on('change', function () {
-                    var ctr = $(this).closest('.tab-pane').attr('tab-num');
-                    var timePeriod = $('#time-period' + ctr).val();
-                    //LF1
-                    var lf1LeakageToAtmosphere = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-value');
-                    var lf1LeakageToAtmosphereWeighting = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf1FailureOfFunction = $('#failure-of-function' + ctr).find('option:selected').attr('attr-value');
-                    var lf1FailureOfFunctionWeighting = $('#failure-of-function' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf1PassingAccrossValve = $('#passing-accross-valve' + ctr).find('option:selected').attr('attr-value');
-                    var lf1PassingAccrossValveWeighting = $('#passing-accross-valve' + ctr).find('option:selected').attr('attr-weighting');
-                    //LF2
-                    var lf2LeakageToAtmosphereTP1 = $('#leakage-tp1' + ctr).find('option:selected').attr('attr-value');
-                    var lf2LeakageToAtmosphereTP1Weighting = $('#leakage-tp1' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2LeakageToAtmosphereTP2 = $('#leakage-tp2' + ctr).find('option:selected').attr('attr-value');
-                    var lf2LeakageToAtmosphereTP2Weighting = $('#leakage-tp2' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2LeakageToAtmosphereTP3 = $('#leakage-tp3' + ctr).find('option:selected').attr('attr-value');
-                    var lf2LeakageToAtmosphereTP3Weighting = $('#leakage-tp3' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2FailureOfFunctionTP1 = $('#failure-tp1' + ctr).find('option:selected').attr('attr-value');
-                    var lf2FailureOfFunctionTP1Weighting = $('#failure-tp1' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2FailureOfFunctionTP2 = $('#failure-tp2' + ctr).find('option:selected').attr('attr-value');
-                    var lf2FailureOfFunctionTP2Weighting = $('#failure-tp2' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2FailureOfFunctionTP3 = $('#failure-tp3' + ctr).find('option:selected').attr('attr-value');
-                    var lf2FailureOfFunctionTP3Weighting = $('#failure-tp3' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2PassingAccrossValveTP1 = $('#passing-tp1' + ctr).find('option:selected').attr('attr-value');
-                    var lf2PassingAccrossValveTP1Weighting = $('#passing-tp1' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2PassingAccrossValveTP2 = $('#passing-tp2' + ctr).find('option:selected').attr('attr-value');
-                    var lf2PassingAccrossValveTP2Weighting = $('#passing-tp2' + ctr).find('option:selected').attr('attr-weighting');
-                    var lf2PassingAccrossValveTP3 = $('#passing-tp3' + ctr).find('option:selected').attr('attr-value');
-                    var lf2PassingAccrossValveTP3Weighting = $('#passing-tp3' + ctr).find('option:selected').attr('attr-weighting');
-                    //LF3
-                    var lf3InspectionEffectiveness = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-value');
-                    var lf3InspectionEffectivenessWeighting = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-weighting');
-                    //LF4
-                    var lf4ImpactOfInternalFluid = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-value');
-                    var lf4ImpactOfInternalFluidWeighting = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-weighting');
-                    //LF5
-                    var lf5ImpactOfOperatingEnvelopes = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-value');
-                    var lf5ImpactOfOperatingEnvelopesWeighting = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-weighting');
-                    //LF6
-                    var lf6UsedWithinOEMSpecification = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-value');
-                    var lf6UsedWithinOEMSpecificationWeighting = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-weighting');
-                    //LF7
-                    var lf7Repaired = $('#repaired' + ctr).find('option:selected').attr('attr-value');
-                    var lf7RepairedWeighting = $('#repaired' + ctr).find('option:selected').attr('attr-weighting');
-                    //CALCULATE
-                    // TP1A
-                    var lofLeakageToAtmosphereA = (lf2LeakageToAtmosphereTP1 * lf2LeakageToAtmosphereTP1Weighting) *
-                        (
-                            (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP1B
-                    var lofLeakageToAtmosphereB = (lf2LeakageToAtmosphereTP2 * lf2LeakageToAtmosphereTP2Weighting) *
-                        (
-                            (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP1C
-                    var lofLeakageToAtmosphereC = (lf2LeakageToAtmosphereTP3 * lf2LeakageToAtmosphereTP3Weighting) *
-                        (
-                            (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP2A
-                    var lofFailureOfFunctionA = (lf2FailureOfFunctionTP1 * lf2FailureOfFunctionTP1Weighting) *
-                        (
-                            (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP2B
-                    var lofFailureOfFunctionB = (lf2FailureOfFunctionTP2 * lf2FailureOfFunctionTP2Weighting) *
-                        (
-                            (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP2C
-                    var lofFailureOfFunctionC = (lf2FailureOfFunctionTP3 * lf2FailureOfFunctionTP3Weighting) *
-                        (
-                            (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP3A
-                    var lofPassingAccrossValveA = (lf2PassingAccrossValveTP1 * lf2PassingAccrossValveTP1Weighting) *
-                        (
-                            (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP3B
-                    var lofPassingAccrossValveB = (lf2PassingAccrossValveTP2 * lf2PassingAccrossValveTP2Weighting) *
-                        (
-                            (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TP3C
-                    var lofPassingAccrossValveC = (lf2PassingAccrossValveTP3 * lf2PassingAccrossValveTP3Weighting) *
-                        (
-                            (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
-                            (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
-                            (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
-                            (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
-                            (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
-                            (lf7Repaired * lf7RepairedWeighting)
-                        );
-                    // TOTAL
-                    var map_result = {
-                        'TP1A': {
-                            'lof': lofLeakageToAtmosphereA,
-                            'cof': ''
-                        },
-                        'TP1B': {
-                            'lof': lofLeakageToAtmosphereB,
-                            'cof': ''
-                        },
-                        'TP1C': {
-                            'lof': lofLeakageToAtmosphereC,
-                            'cof': ''
-                        },
-                        'TP2A': {
-                            'lof': lofFailureOfFunctionA,
-                            'cof': ''
-                        },
-                        'TP2B': {
-                            'lof': lofFailureOfFunctionB,
-                            'cof': ''
-                        },
-                        'TP2C': {
-                            'lof': lofFailureOfFunctionC,
-                            'cof': ''
-                        },
-                        'TP3A': {
-                            'lof': lofPassingAccrossValveA,
-                            'cof': ''
-                        },
-                        'TP3B': {
-                            'lof': lofPassingAccrossValveB,
-                            'cof': ''
-                        },
-                        'TP3C': {
-                            'lof': lofPassingAccrossValveC,
-                            'cof': ''
-                        }
-                    }
-                    //HSSE Value
-                    var bbls = $('#product-loss-definition' + ctr);
-                    bbls.trigger('change');
-                    var hsseSelect = $('#hsse-definition' + ctr);
-                    var cof = hsseSelect.find('option:selected').attr('attr-cofcategory');
-                    map_result.TP1A.cof = cof;
-                    map_result.TP1B.cof = cof;
-                    map_result.TP1C.cof = cof;
-                    map_result.TP2A.cof = cof;
-                    map_result.TP2B.cof = cof;
-                    map_result.TP2C.cof = cof;
-                    map_result.TP3A.cof = cof;
-                    map_result.TP3B.cof = cof;
-                    map_result.TP3C.cof = cof;
-                    console.log(map_result);
-                });
-
-                $('.bbls-assessment').on('change', function () {
+                @* $('.bbls-assessment').on('change', function () {
                     if($(this).val() < 0 || $(this).val() == ''){
                         $(this).val(0);
                     }
@@ -1940,7 +2038,7 @@
                         }
                     });
                     hsseSelect.val(selectedHsse);
-                })
+                }) *@
             });
 
             let template_inspection = $('#template_inspection');
@@ -2104,6 +2202,8 @@
             form.find('.assessment-content-card.card-group-'+key).addClass('active')
             $(el).closest('.assessment-tab-content-submenu').find('.submenu-item').removeClass('active')
             $(el).addClass('active')
+            var ctr = $(el).closest('.tab-pane').attr('tab-num');
+            calculateAssessment(ctr)
         }
 
 

@@ -9,18 +9,55 @@
         </div>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
             <div class="subheader">
-                <b>@ViewData["Title"]</b>
+                <b>Import Inspection</b>
             </div>
             <div class="content-container">
                 <div class="row">
                     <div class="col-md-6" style="padding-left:20px;">
-                        <form>
+                        <form id="inspetion-form">
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
                                     <label for="fileUpload" class="col-form-label">File: </label>
                                 </div>
                                 <div class="col">
-                                    <input type="file" id="fileUpload" class="form-control">
+                                    <input type="hidden" id="modeInspection" name="mode" value="inspection" />
+                                    <input type="file" id="fileUploadInspection" name="file" class="form-control" accept=".xlsx, .xls">
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row g-3 align-items-center">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-outline-primary" style="width: 100%;">Import
+                                        File</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+            <div class="subheader">
+                <b>Import Maintenance</b>
+            </div>
+            <div class="content-container">
+                <div class="row">
+                    <div class="col-md-6" style="padding-left:20px;">
+                        <form id="maintenance-form">
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    Download the template file <a href="/Uploads/Downloads/MaintenanceTemplate.xlsx" target="_blank">here</a>
+                                </div>
+                            </div>
+                            <br/>
+                            <div class="row g-3 align-items-center">
+                                <div class="col-auto">
+                                    <label for="fileUpload" class="col-form-label">File: </label>
+                                </div>
+                                <div class="col">
+                                    <input type="hidden" id="modeMaintenance" name="mode" value="maintenance" />
+                                    <input type="file" id="fileUploadMaintenance" name="file" class="form-control" accept=".xlsx, .xls">
                                 </div>
                             </div>
                             <br />
@@ -37,3 +74,62 @@
         </main>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $("#inspection-form").submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData();
+                formData.append("file", $("#fileUploadInspection")[0].files[0]);
+                formData.append("mode", $("#modeInspection").val());
+                $.ajax({
+                    url: "/Tool/ImportExcelFile",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.error) {
+                            alert(data.error);
+                            $("#fileUpload").val('');
+                        } else {
+                            alert('File uploaded successfully');
+                            $("#fileUpload").val('');
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error submitting the form')
+                    }
+                });
+            });
+            $("#maintenance-form").submit(function (e) {
+                e.preventDefault();
+                var formData = new FormData();
+                formData.append("file", $("#fileUploadMaintenance")[0].files[0]);
+                formData.append("mode", $("#modeMaintenance").val());
+                $.ajax({
+                    url: "/Tool/ImportExcelFile",
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (data) {
+                        if (data.error) {
+                            alert(data.error);
+                            $("#fileUpload").val('');
+                        } else {
+                            alert('File uploaded successfully');
+                            $("#fileUpload").val('');
+                            location.reload();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error submitting the form')
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -5,7 +5,7 @@ namespace Riskvalve.Models;
 public class MaintenanceContext : DbContext
 {
     public DbSet<MaintenanceDB> Maintenance { get; set; }
-    public DbSet<IsValveRepairedDB> IsValveRepaired { get; set; }
+    public DbSet<IsValveRepairedModel> IsValveRepaired { get; set; }
     public DbSet<UserModel> User { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
@@ -59,8 +59,14 @@ public class MaintenanceModel : MaintenanceDB
                     DeletedAt = m.DeletedAt,
                     Asset = new AssetModel().GetAssetModel(m.AssetID),
                     IsValveRepaired = ivr.IsValveRepaired,
-                    CreatedByUser = context.User.Where(u => u.Id == m.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == m.DeletedBy).FirstOrDefault().Username,
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == m.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == m.DeletedBy)
+                        .FirstOrDefault()
+                        .Username,
                     MaintenanceFiles = new InspectionFileModel().GetMaintenanceFiles(m.Id)
                 }
             ).ToList().FirstOrDefault();
@@ -76,7 +82,9 @@ public class MaintenanceModel : MaintenanceDB
             maintenanceList = (
                 from m in context.Maintenance
                 join ivr in context.IsValveRepaired on m.IsValveRepairedID equals ivr.Id
-                where (IncludeDeleted == true || m.IsDeleted == false) && (AssetID == 0 || m.AssetID == AssetID)
+                where
+                    (IncludeDeleted == true || m.IsDeleted == false)
+                    && (AssetID == 0 || m.AssetID == AssetID)
                 select new MaintenanceModel
                 {
                     Id = m.Id,
@@ -91,8 +99,14 @@ public class MaintenanceModel : MaintenanceDB
                     DeletedAt = m.DeletedAt,
                     Asset = new AssetModel().GetAssetModel(m.AssetID),
                     IsValveRepaired = ivr.IsValveRepaired,
-                    CreatedByUser = context.User.Where(u => u.Id == m.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == m.DeletedBy).FirstOrDefault().Username,
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == m.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == m.DeletedBy)
+                        .FirstOrDefault()
+                        .Username,
                     MaintenanceFiles = new InspectionFileModel().GetMaintenanceFiles(m.Id)
                 }
             ).ToList();
@@ -140,21 +154,121 @@ public class MaintenanceModel : MaintenanceDB
             context.SaveChanges();
         }
     }
+
+    public List<Dictionary<string, string>> MapMaintenanceRegister(
+        List<Dictionary<string, string>> data
+    )
+    {
+        List<AssetModel> assetList = new AssetModel().GetAssetList(0, 0, true);
+        List<IsValveRepairedModel> isValveRepairedList =
+            new IsValveRepairedModel().GetIsValveRepairedList();
+        List<Dictionary<string, string>> finalResult = new();
+        foreach (var records in data)
+        {
+            Dictionary<string, string> result = new();
+            foreach (var record in records)
+            {
+                string key = record.Key;
+                string value = record.Value;
+                string mappedKey = MapHeader(key);
+                string mappedValue = "";
+                if (mappedKey.Equals(""))
+                {
+                    continue;
+                }
+                if (
+                    mappedKey.Equals("AssetID")
+                    || mappedKey.Equals("MaintenanceDate")
+                    || mappedKey.Equals("IsValveRepairedID")
+                )
+                {
+                    if (mappedKey.Equals("AssetID"))
+                    {
+                        foreach (var asset in assetList)
+                        {
+                            if (asset.TagNo.Equals(value))
+                            {
+                                mappedValue = asset.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("MaintenanceDate"))
+                    {
+                        mappedValue = DateTime
+                            .FromOADate(Convert.ToDouble(value))
+                            .ToString(Environment.GetDateFormatString());
+                    }
+                    else if(mappedKey.Equals("IsValveRepairedID"))
+                    {
+                        foreach (var ivr in isValveRepairedList)
+                        {
+                            if (ivr.IsValveRepaired.Equals(value))
+                            {
+                                mappedValue = ivr.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    if (mappedValue == "")
+                    {
+                        Exception e =
+                            new(
+                                "Value '"
+                                    + record.Value
+                                    + "' on field '"
+                                    + key
+                                    + "' is not match with the database value"
+                            );
+                        throw e;
+                    }
+                    else
+                    {
+                        value = mappedValue;
+                    }
+                }
+                result.Add(mappedKey, value);
+            }
+            finalResult.Add(result);
+        }
+        return finalResult;
+    }
+
+    private string MapHeader(string header)
+    {
+        switch (header)
+        {
+            case "Valve Tag No.":
+                return "AssetID";
+            case "Is valve repaired?\n(Y/N)":
+                return "IsValveRepairedID";
+            case "Maintenance Date\n(dd/mm/yyyy)":
+                return "MaintenanceDate";
+            case "Maintenance Description":
+                return "MaintenanceDescription";
+            default:
+                return "";
+        }
+    }
 }
 
-public class IsValveRepairedDB
+public class IsValveRepairedModel
 {
     public int Id { get; set; }
     public string? IsValveRepaired { get; set; }
 
-    public List<IsValveRepairedDB> GetIsValveRepairedList()
+    public List<IsValveRepairedModel> GetIsValveRepairedList()
     {
-        List<IsValveRepairedDB> isValveRepairedList = new();
+        List<IsValveRepairedModel> isValveRepairedList = new();
         using (var context = new MaintenanceContext())
         {
             isValveRepairedList = (
                 from ivr in context.IsValveRepaired
-                select new IsValveRepairedDB { Id = ivr.Id, IsValveRepaired = ivr.IsValveRepaired }
+                select new IsValveRepairedModel
+                {
+                    Id = ivr.Id,
+                    IsValveRepaired = ivr.IsValveRepaired
+                }
             ).ToList();
         }
         return isValveRepairedList;

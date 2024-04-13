@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using OfficeOpenXml;
 using Riskvalve.Models;
 
 namespace Riskvalve.Controllers;
@@ -82,5 +84,109 @@ public class ToolController : Controller
             }
         }
         return View();
+    }
+
+    [HttpPost]
+    public IActionResult ImportExcelFile()
+    {
+        AssetModel assetModel = new();
+        InspectionModel inspectionModel = new();
+        MaintenanceModel maintenanceModel = new();
+        AssessmentModel assessmentModel = new();
+
+        IFormFile formFile = Request.Form.Files[0];
+        string mode = Request.Form["mode"].ToString().ToLower();
+        string currentYear = DateTime.Now.Year.ToString();
+        IWebHostEnvironment environment =
+            HttpContext.RequestServices.GetService<IWebHostEnvironment>();
+        string path = Path.Combine(environment.WebRootPath, "Uploads", "Temporary", currentYear);
+
+        if (!Directory.Exists(path))
+        {
+            Directory.CreateDirectory(path);
+        }
+        var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+        var filePath = Path.Combine(path, fileName);
+        using (var stream = System.IO.File.Create(filePath))
+        {
+            formFile.CopyTo(stream);
+        }
+        //read uploaded excel file
+        List<Dictionary<string, string>> data = new();
+        using (var package = new ExcelPackage(new FileInfo(filePath)))
+        {
+            ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
+            int rowCount = worksheet.Dimension.Rows;
+            int colCount = worksheet.Dimension.Columns;
+            for (int row = 3; row <= rowCount; row++)
+            {
+                Dictionary<string, string> rowValues = new();
+                for (int col = 1; col <= colCount; col++)
+                {
+                    rowValues.Add(
+                        worksheet.Cells[2, col].Value.ToString().Trim(),
+                        worksheet.Cells[row, col].Value.ToString().Trim()
+                    );
+                }
+                data.Add(rowValues);
+            }
+        }
+        List<Dictionary<string, string>> result = new();
+        if (mode.Equals("asset"))
+        {
+            try
+            {
+                List<AssetDB> pushData = new();
+                result = assetModel.MapAssetRegister(data);
+                foreach (var item in result)
+                {
+                    string json = JsonConvert.SerializeObject(item);
+                    AssetDB assetDB = JsonConvert.DeserializeObject<AssetDB>(json);
+                    assetDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    assetDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
+                    pushData.Add(assetDB);
+                }
+                foreach (var item in pushData)
+                {
+                    assetModel.AddAsset(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+            }
+        }
+        // else if(mode.Equals("inspection"))
+        // {
+        //     result = inspectionModel.ImportInspectionMaintenance(data, "inspection");
+        // }
+        else if (mode.Equals("maintenance"))
+        {
+            List<MaintenanceDB> pushData = new();
+            try{
+                result = maintenanceModel.MapMaintenanceRegister(data);
+                foreach (var item in result)
+                {
+                    string json = JsonConvert.SerializeObject(item);
+                    MaintenanceDB maintenanceDB = JsonConvert.DeserializeObject<MaintenanceDB>(json);
+                    maintenanceDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    maintenanceDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
+                    pushData.Add(maintenanceDB);
+                }
+                foreach (var item in pushData)
+                {
+                    maintenanceModel.AddMaintenance(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+            }
+        }
+        // else if(mode.Equals("assessment"))
+        // {
+        //     result = assessmentModel.ImportAssessment(data);
+        // }
+        return Json(result);
     }
 }

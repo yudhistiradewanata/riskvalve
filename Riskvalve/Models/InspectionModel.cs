@@ -213,6 +213,60 @@ public class InspectionModel : InspectionDB
         }
         return true;
     }
+
+    public List<Dictionary<string, string>> MapInspection(List<Dictionary<string, string>> data)
+    {
+        List<AssetModel> assetList = new AssetModel().GetAssetList(0,0,true);
+        List<InspectionMethodModel> inspectionMethodList = new InspectionMethodModel().GetInspectionMethods();
+        List<InspectionEffectivenessModel> inspectionEffectivenessList = new InspectionEffectivenessModel().GetInspectionEffectivenessStates();
+        List<CurrentConditionLimitStateModel> currentConditionLimitStateList = new CurrentConditionLimitStateModel().GetConditionLimitStates();
+        List<Dictionary<string, string>> finalResult = new();
+        foreach (var records in data)
+        {
+            Dictionary<string, string> result = new();
+            foreach(var record in records)
+            {
+                string key = record.Key;
+                string value = record.Value;
+                string mappedKey = MapHeader(key);
+                string mappedValue = "";
+                if (mappedKey.Equals(""))
+                {
+                    continue;
+                }
+            }
+        }
+        return finalResult;
+    }
+
+    private string MapHeader(string header)
+    {
+        switch(header)
+        {
+            case "Valve Tag No.":
+                return "AssetID";
+            case "Inspection Date\n(dd/mm/yyyy)":
+                return "InspectionDate";
+            case "Inspection Method":
+                return "InspectionMethodID";
+            case "Inspection Effectiveness":
+                return "InspectionEffectivenessID";
+            case "Inspection Description":
+                return "InspectionDescription";
+            case "Current Condition Leakeage to Atmosphere":
+                return "CurrentConditionLeakeageToAtmosphereID";
+            case "Current Condition Failure of Function":
+                return "CurrentConditionFailureOfFunctionID";
+            case "Current Condition Passing Across Valve":
+                return "CurrentConditionPassingAcrossValveID";
+            case "Function Condition":
+                return "FunctionCondition";
+            case "Test Pressure If Any":
+                return "TestPressureIfAny";
+            default:
+                return header;
+        }
+    }
 }
 
 // Helper class is below
@@ -264,22 +318,5 @@ public class InspectionMethodModel
             inspectionMethods = context.InspectionMethod.ToList();
         }
         return inspectionMethods;
-    }
-}
-
-public class IsValveRepairedModel
-{
-    public int Id { get; set; }
-    public string? IsValveRepaired { get; set; }
-
-    public List<IsValveRepairedModel> GetIsValveRepairedStates()
-    {
-        List<IsValveRepairedModel> isValveRepaired =
-            new()
-            {
-                new IsValveRepairedModel { Id = 1, IsValveRepaired = "Yes" },
-                new IsValveRepairedModel { Id = 2, IsValveRepaired = "No" }
-            };
-        return isValveRepaired;
     }
 }
