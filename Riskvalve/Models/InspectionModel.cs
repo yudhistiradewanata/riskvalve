@@ -10,6 +10,7 @@ public class InspectionContext : DbContext
     public DbSet<CurrentConditionLimitStateModel> CurrentConditionLimitState { get; set; }
     public DbSet<InspectionMethodModel> InspectionMethod { get; set; }
     public DbSet<UserModel> User { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
             .UseSqlServer(Environment.GetConnectionStringDB())
@@ -98,8 +99,14 @@ public class InspectionModel : InspectionDB
                     CreatedAt = inspection.CreatedAt,
                     DeletedBy = inspection.DeletedBy,
                     DeletedAt = inspection.DeletedAt,
-                    CreatedByUser = context.User.Where(u => u.Id == inspection.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == inspection.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == inspection.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == inspection.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
             inspectionData = inspecionList.FirstOrDefault();
@@ -125,7 +132,9 @@ public class InspectionModel : InspectionDB
                     on inspection.CurrentConditionFailureOfFunctionID equals currentConditionLimitStateB.Id
                 join currentConditionLimitStateC in context.CurrentConditionLimitState
                     on inspection.CurrentConditionPassingAcrossValveID equals currentConditionLimitStateC.Id
-                where (IncludeDeleted == true || inspection.IsDeleted == false) && (AssetID == 0 || inspection.AssetID == AssetID)
+                where
+                    (IncludeDeleted == true || inspection.IsDeleted == false)
+                    && (AssetID == 0 || inspection.AssetID == AssetID)
                 select new InspectionModel
                 {
                     Id = inspection.Id,
@@ -157,8 +166,14 @@ public class InspectionModel : InspectionDB
                     CreatedAt = inspection.CreatedAt,
                     DeletedBy = inspection.DeletedBy,
                     DeletedAt = inspection.DeletedAt,
-                    CreatedByUser = context.User.Where(u => u.Id == inspection.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == inspection.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == inspection.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == inspection.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
         }
@@ -216,15 +231,18 @@ public class InspectionModel : InspectionDB
 
     public List<Dictionary<string, string>> MapInspection(List<Dictionary<string, string>> data)
     {
-        List<AssetModel> assetList = new AssetModel().GetAssetList(0,0,true);
-        List<InspectionMethodModel> inspectionMethodList = new InspectionMethodModel().GetInspectionMethods();
-        List<InspectionEffectivenessModel> inspectionEffectivenessList = new InspectionEffectivenessModel().GetInspectionEffectivenessStates();
-        List<CurrentConditionLimitStateModel> currentConditionLimitStateList = new CurrentConditionLimitStateModel().GetConditionLimitStates();
+        List<AssetModel> assetList = new AssetModel().GetAssetList(0, 0, true);
+        List<InspectionMethodModel> inspectionMethodList =
+            new InspectionMethodModel().GetInspectionMethods();
+        List<InspectionEffectivenessModel> inspectionEffectivenessList =
+            new InspectionEffectivenessModel().GetInspectionEffectivenessStates();
+        List<CurrentConditionLimitStateModel> currentConditionLimitStateList =
+            new CurrentConditionLimitStateModel().GetConditionLimitStates();
         List<Dictionary<string, string>> finalResult = new();
         foreach (var records in data)
         {
             Dictionary<string, string> result = new();
-            foreach(var record in records)
+            foreach (var record in records)
             {
                 string key = record.Key;
                 string value = record.Value;
@@ -234,14 +252,97 @@ public class InspectionModel : InspectionDB
                 {
                     continue;
                 }
+                if (
+                    mappedKey.Equals("AssetID")
+                    || mappedKey.Equals("InspectionMethodID")
+                    || mappedKey.Equals("InspectionDate")
+                    || mappedKey.Equals("InspectionEffectivenessID")
+                    || mappedKey.Equals("CurrentConditionLeakeageToAtmosphereID")
+                    || mappedKey.Equals("CurrentConditionFailureOfFunctionID")
+                    || mappedKey.Equals("CurrentConditionPassingAcrossValveID")
+                )
+                {
+                    if (mappedKey.Equals("AssetID"))
+                    {
+                        foreach (var asset in assetList)
+                        {
+                            if (asset.TagNo.Equals(value))
+                            {
+                                mappedValue = asset.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("InspectionDate"))
+                    {
+                        mappedValue = DateTime
+                            .FromOADate(Convert.ToDouble(value))
+                            .ToString(Environment.GetDateFormatString());
+                    }
+                    else if (mappedKey.Equals("InspectionMethodID"))
+                    {
+                        foreach (var inspectionMethod in inspectionMethodList)
+                        {
+                            if (inspectionMethod.InspectionMethod.Equals(value))
+                            {
+                                mappedValue = inspectionMethod.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("InspectionEffectivenessID"))
+                    {
+                        foreach (var inspectionEffectiveness in inspectionEffectivenessList)
+                        {
+                            if (inspectionEffectiveness.Effectiveness.Equals(value))
+                            {
+                                mappedValue = inspectionEffectiveness.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (
+                        mappedKey.Equals("CurrentConditionLeakeageToAtmosphereID")
+                        || mappedKey.Equals("CurrentConditionFailureOfFunctionID")
+                        || mappedKey.Equals("CurrentConditionPassingAcrossValveID")
+                    )
+                    {
+                        foreach (var currentConditionLimitState in currentConditionLimitStateList)
+                        {
+                            if (currentConditionLimitState.CurrentConditionLimitState.Equals(value))
+                            {
+                                mappedValue = currentConditionLimitState.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    if (mappedValue == "")
+                    {
+                        Exception e =
+                            new(
+                                "Value '"
+                                    + record.Value
+                                    + "' on field '"
+                                    + key
+                                    + "' is not match with the database value"
+                            );
+                        throw e;
+                    }
+                    else
+                    {
+                        value = mappedValue;
+                    }
+                }
+                result.Add(mappedKey, value);
             }
+            finalResult.Add(result);
         }
         return finalResult;
     }
 
     private string MapHeader(string header)
     {
-        switch(header)
+        switch (header)
         {
             case "Valve Tag No.":
                 return "AssetID";
@@ -253,7 +354,7 @@ public class InspectionModel : InspectionDB
                 return "InspectionEffectivenessID";
             case "Inspection Description":
                 return "InspectionDescription";
-            case "Current Condition Leakeage to Atmosphere":
+            case "Current Condition Leakage to Atmosphere":
                 return "CurrentConditionLeakeageToAtmosphereID";
             case "Current Condition Failure of Function":
                 return "CurrentConditionFailureOfFunctionID";
@@ -264,7 +365,7 @@ public class InspectionModel : InspectionDB
             case "Test Pressure If Any":
                 return "TestPressureIfAny";
             default:
-                return header;
+                return "";
         }
     }
 }
@@ -276,6 +377,7 @@ public class CurrentConditionLimitStateModel
     public string? CurrentConditionLimitState { get; set; }
     public double? LimitStateValue { get; set; }
     public double? Weighting { get; set; }
+
     public List<CurrentConditionLimitStateModel> GetConditionLimitStates()
     {
         List<CurrentConditionLimitStateModel> currentConditionLimitStates = new();

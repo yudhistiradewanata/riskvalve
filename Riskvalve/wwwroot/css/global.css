@@ -283,6 +283,8 @@ body {
 .risk-table-container{
   border: solid 1px rgba(121, 121, 121, 1);
   width: 100%;
+  max-width: 635px;
+  margin: 0 auto;
   position: relative;
 }
 

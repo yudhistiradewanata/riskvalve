@@ -156,10 +156,29 @@ public class ToolController : Controller
                 return Json(new Dictionary<string, string> { { "error", ex.Message } });
             }
         }
-        // else if(mode.Equals("inspection"))
-        // {
-        //     result = inspectionModel.ImportInspectionMaintenance(data, "inspection");
-        // }
+        else if(mode.Equals("inspection"))
+        {
+            List<InspectionDB> pushData = new();
+            try{
+                result = inspectionModel.MapInspection(data);
+                foreach (var item in result)
+                {
+                    string json = JsonConvert.SerializeObject(item);
+                    InspectionDB inspectionDB = JsonConvert.DeserializeObject<InspectionDB>(json);
+                    inspectionDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    inspectionDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
+                    pushData.Add(inspectionDB);
+                }
+                foreach (var item in pushData)
+                {
+                    inspectionModel.AddInspection(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+            }
+        }
         else if (mode.Equals("maintenance"))
         {
             List<MaintenanceDB> pushData = new();
@@ -183,10 +202,29 @@ public class ToolController : Controller
                 return Json(new Dictionary<string, string> { { "error", ex.Message } });
             }
         }
-        // else if(mode.Equals("assessment"))
-        // {
-        //     result = assessmentModel.ImportAssessment(data);
-        // }
+        else if(mode.Equals("assessment"))
+        {
+            List<AssessmentDB> pushData = new();
+            try{
+                result = assessmentModel.MapAssessment(data);
+                foreach (var item in result)
+                {
+                    string json = JsonConvert.SerializeObject(item);
+                    AssessmentDB assessmentDB = JsonConvert.DeserializeObject<AssessmentDB>(json);
+                    assessmentDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    assessmentDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
+                    pushData.Add(assessmentDB);
+                }
+                foreach (var item in pushData)
+                {
+                    assessmentModel.AddAssessment(item);
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+            }
+        }
         return Json(result);
     }
 }

@@ -12,8 +12,8 @@ public static class Environment
         return configuration?.GetConnectionString("DefaultConnection") ?? "";
     }
 
-    public static string GetDateFormatString()
+    public static string GetDateFormatString(bool withTime = true)
     {
-        return "dd-MM-yyyy HH:mm:ss";
+        return withTime ? "dd-MM-yyyy HH:mm:ss" : "dd-MM-yyyy";
     }
 }

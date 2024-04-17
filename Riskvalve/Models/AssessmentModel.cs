@@ -632,7 +632,8 @@ public class AssessmentModel : AssessmentDB
             }
             if (assessment.ImpactOfOperatingEnvelopesID != 0)
             {
-                oldAssessment.ImpactOfOperatingEnvelopesID = assessment.ImpactOfOperatingEnvelopesID;
+                oldAssessment.ImpactOfOperatingEnvelopesID =
+                    assessment.ImpactOfOperatingEnvelopesID;
             }
             else
             {
@@ -640,7 +641,8 @@ public class AssessmentModel : AssessmentDB
             }
             if (assessment.UsedWithinOEMSpecificationID != 0)
             {
-                oldAssessment.UsedWithinOEMSpecificationID = assessment.UsedWithinOEMSpecificationID;
+                oldAssessment.UsedWithinOEMSpecificationID =
+                    assessment.UsedWithinOEMSpecificationID;
             }
             else
             {
@@ -690,6 +692,311 @@ public class AssessmentModel : AssessmentDB
             context.SaveChanges();
         }
     }
+
+    public List<Dictionary<string, string>> MapAssessment(List<Dictionary<string, string>> data)
+    {
+        List<AssetModel> assetList = new AssetModel().GetAssetList(0, 0, true);
+        List<CurrentConditionLimitStateModel> currentConditionLimitStateList =
+            new CurrentConditionLimitStateModel().GetConditionLimitStates();
+        List<TimeToLimitStateModel> timeToLimitStateList =
+            new TimeToLimitStateModel().GetTimeToLimitStates();
+        List<InspectionEffectivenessModel> inspectionEffectivenessList =
+            new InspectionEffectivenessModel().GetInspectionEffectivenessStates();
+        List<ImpactEffectModel> impactEffectList = new ImpactEffectModel().GetImpactEffectStates();
+        List<UsedWithinOEMSpecificationModel> usedWithinOEMSpecificationList =
+            new UsedWithinOEMSpecificationModel().GetUsedWithinOEMSpecifications();
+        List<RepairedModel> repairedList = new RepairedModel().GetRepairedStates();
+        List<HSSEDefinisionModel> hsseDefinisionList =
+            new HSSEDefinisionModel().GetHSSEDefinisions();
+        List<Dictionary<string, string>> finalResult = new();
+        foreach (var records in data)
+        {
+            Dictionary<string, string> result = new();
+            foreach (var record in records)
+            {
+                string key = record.Key;
+                string value = record.Value;
+                string mappedKey = MapHeader(key);
+                string mappedValue = "";
+                if (mappedKey.Equals(""))
+                {
+                    continue;
+                }
+                if (
+                    mappedKey.Equals("AssetID")
+                    || mappedKey.Equals("AssessmentDate")
+                    || mappedKey.Equals("ImpactOfInternalFluidImpuritiesID")
+                    || mappedKey.Equals("ImpactOfOperatingEnvelopesID")
+                    || mappedKey.Equals("UsedWithinOEMSpecificationID")
+                    || mappedKey.Equals("RepairedID")
+                )
+                {
+                    if (mappedKey.Equals("AssetID"))
+                    {
+                        foreach (var asset in assetList)
+                        {
+                            if (asset.TagNo.Equals(value))
+                            {
+                                mappedValue = asset.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("AssessmentDate"))
+                    {
+                        mappedValue = DateTime
+                            .FromOADate(Convert.ToDouble(value))
+                            .ToString(Environment.GetDateFormatString());
+                    }
+                    else if (
+                        mappedKey.Equals("ImpactOfInternalFluidImpuritiesID")
+                        || mappedKey.Equals("ImpactOfOperatingEnvelopesID")
+                    )
+                    {
+                        foreach (var impactEffect in impactEffectList)
+                        {
+                            if (impactEffect.ImpactEffect.Equals(value))
+                            {
+                                mappedValue = impactEffect.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("UsedWithinOEMSpecificationID"))
+                    {
+                        foreach (var usedWithinOEMSpecification in usedWithinOEMSpecificationList)
+                        {
+                            if (usedWithinOEMSpecification.UsedWithinOEMSpecification.Equals(value))
+                            {
+                                mappedValue = usedWithinOEMSpecification.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("RepairedID"))
+                    {
+                        foreach (var repaired in repairedList)
+                        {
+                            if (repaired.Repaired.Equals(value))
+                            {
+                                mappedValue = repaired.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    if (mappedValue == "")
+                    {
+                        Exception e =
+                            new(
+                                "Value '"
+                                    + record.Value
+                                    + "' on field '"
+                                    + key
+                                    + "' is not match with the database value"
+                            );
+                        throw e;
+                    }
+                    else
+                    {
+                        value = mappedValue;
+                    }
+                }
+                result.Add(mappedKey, value);
+            }
+            int idImprobable = 1;
+            int idDoubtful = 2;
+            int idExpected = 3;
+            double tp_limit_1 = 1.5 * 12;
+            double tp_limit_2 = 3 * 12;
+            double tp_limit_3 = 4.5 * 12;
+            int LeakageToAtmosphereTP1ID = 0;
+            int LeakageToAtmosphereTP2ID = 0;
+            int LeakageToAtmosphereTP3ID = 0;
+            int FailureOfFunctionTP1ID = 0;
+            int FailureOfFunctionTP2ID = 0;
+            int FailureOfFunctionTP3ID = 0;
+            int PassingAccrosValveTP1ID = 0;
+            int PassingAccrosValveTP2ID = 0;
+            int PassingAccrosValveTP3ID = 0;
+            if (
+                double.TryParse(
+                    result["TimeToLimitStateLeakageToAtmosphere"],
+                    out double timeToLimitStateLeakage
+                )
+            )
+            {
+                if (timeToLimitStateLeakage > tp_limit_1 * 2)
+                {
+                    LeakageToAtmosphereTP1ID = idImprobable;
+                }
+                else if (timeToLimitStateLeakage > tp_limit_1)
+                {
+                    LeakageToAtmosphereTP1ID = idDoubtful;
+                }
+                else if (timeToLimitStateLeakage <= tp_limit_1)
+                {
+                    LeakageToAtmosphereTP1ID = idExpected;
+                }
+                if (timeToLimitStateLeakage > tp_limit_2 * 2)
+                {
+                    LeakageToAtmosphereTP2ID = idImprobable;
+                }
+                else if (timeToLimitStateLeakage > tp_limit_2)
+                {
+                    LeakageToAtmosphereTP2ID = idDoubtful;
+                }
+                else if (timeToLimitStateLeakage <= tp_limit_2)
+                {
+                    LeakageToAtmosphereTP2ID = idExpected;
+                }
+                if (timeToLimitStateLeakage > tp_limit_3 * 2)
+                {
+                    LeakageToAtmosphereTP3ID = idImprobable;
+                }
+                else if (timeToLimitStateLeakage > tp_limit_3)
+                {
+                    LeakageToAtmosphereTP3ID = idDoubtful;
+                }
+                else if (timeToLimitStateLeakage <= tp_limit_3)
+                {
+                    LeakageToAtmosphereTP3ID = idExpected;
+                }
+            }
+            result.Remove("TimeToLimitStateLeakageToAtmosphere");
+            result.Add("LeakageToAtmosphereTP1ID", LeakageToAtmosphereTP1ID.ToString());
+            result.Add("LeakageToAtmosphereTP2ID", LeakageToAtmosphereTP2ID.ToString());
+            result.Add("LeakageToAtmosphereTP3ID", LeakageToAtmosphereTP3ID.ToString());
+            if (
+                double.TryParse(
+                    result["TimeToLimitStateFailureOfFunction"],
+                    out double timeToLimitStateFailure
+                )
+            )
+            {
+                if (timeToLimitStateFailure > tp_limit_1 * 2)
+                {
+                    FailureOfFunctionTP1ID = idImprobable;
+                }
+                else if (timeToLimitStateFailure > tp_limit_1)
+                {
+                    FailureOfFunctionTP1ID = idDoubtful;
+                }
+                else if (timeToLimitStateFailure <= tp_limit_1)
+                {
+                    FailureOfFunctionTP1ID = idExpected;
+                }
+                if (timeToLimitStateFailure > tp_limit_2 * 2)
+                {
+                    FailureOfFunctionTP2ID = idImprobable;
+                }
+                else if (timeToLimitStateFailure > tp_limit_2)
+                {
+                    FailureOfFunctionTP2ID = idDoubtful;
+                }
+                else if (timeToLimitStateFailure <= tp_limit_2)
+                {
+                    FailureOfFunctionTP2ID = idExpected;
+                }
+                if (timeToLimitStateFailure > tp_limit_3 * 2)
+                {
+                    FailureOfFunctionTP3ID = idImprobable;
+                }
+                else if (timeToLimitStateFailure > tp_limit_3)
+                {
+                    FailureOfFunctionTP3ID = idDoubtful;
+                }
+                else if (timeToLimitStateFailure <= tp_limit_3)
+                {
+                    FailureOfFunctionTP3ID = idExpected;
+                }
+            }
+            result.Remove("TimeToLimitStateFailureOfFunction");
+            result.Add("FailureOfFunctionTP1ID", FailureOfFunctionTP1ID.ToString());
+            result.Add("FailureOfFunctionTP2ID", FailureOfFunctionTP2ID.ToString());
+            result.Add("FailureOfFunctionTP3ID", FailureOfFunctionTP3ID.ToString());
+            if (
+                double.TryParse(
+                    result["TimeToLimitStatePassingAccrosValve"],
+                    out double timeToLimitStatePassing
+                )
+            )
+            {
+                if (timeToLimitStatePassing > tp_limit_1 * 2)
+                {
+                    PassingAccrosValveTP1ID = idImprobable;
+                }
+                else if (timeToLimitStatePassing > tp_limit_1)
+                {
+                    PassingAccrosValveTP1ID = idDoubtful;
+                }
+                else if (timeToLimitStatePassing <= tp_limit_1)
+                {
+                    PassingAccrosValveTP1ID = idExpected;
+                }
+                if (timeToLimitStatePassing > tp_limit_2 * 2)
+                {
+                    PassingAccrosValveTP2ID = idImprobable;
+                }
+                else if (timeToLimitStatePassing > tp_limit_2)
+                {
+                    PassingAccrosValveTP2ID = idDoubtful;
+                }
+                else if (timeToLimitStatePassing <= tp_limit_2)
+                {
+                    PassingAccrosValveTP2ID = idExpected;
+                }
+                if (timeToLimitStatePassing > tp_limit_3 * 2)
+                {
+                    PassingAccrosValveTP3ID = idImprobable;
+                }
+                else if (timeToLimitStatePassing > tp_limit_3)
+                {
+                    PassingAccrosValveTP3ID = idDoubtful;
+                }
+                else if (timeToLimitStatePassing <= tp_limit_3)
+                {
+                    PassingAccrosValveTP3ID = idExpected;
+                }
+            }
+            result.Remove("TimeToLimitStatePassingAccrosValve");
+            result.Add("PassingAccrosValveTP1ID", PassingAccrosValveTP1ID.ToString());
+            result.Add("PassingAccrosValveTP2ID", PassingAccrosValveTP2ID.ToString());
+            result.Add("PassingAccrosValveTP3ID", PassingAccrosValveTP3ID.ToString());
+            finalResult.Add(result);
+        }
+        return finalResult;
+    }
+
+    private string MapHeader(string header)
+    {
+        switch (header)
+        {
+            case "Valve Tag No.":
+                return "AssetID";
+            case "Assessment Date\n(dd/mm/yyyy)":
+                return "AssessmentDate";
+            case "Time Periode\n(Month)":
+                return "TimePeriode";
+            case "LF2 - Time to Limit State Leakage to atmosphere \n(Month)":
+                return "TimeToLimitStateLeakageToAtmosphere";
+            case "LF2 - Time to Limit State Failure of function (Month)":
+                return "TimeToLimitStateFailureOfFunction";
+            case "LF2 - Time to Limit State Passing accros valve (Month)":
+                return "TimeToLimitStatePassingAccrosValve";
+            case "LF4 - Impact of Internal Fluid Impurities":
+                return "ImpactOfInternalFluidImpuritiesID";
+            case "LF5 - Impact of Operating Envelopes":
+                return "ImpactOfOperatingEnvelopesID";
+            case "LF6 - Used within OEM Specification":
+                return "UsedWithinOEMSpecificationID";
+            case "LF7 - Repaired":
+                return "RepairedID";
+            case "CF1 - Product loss definition (bbls)":
+                return "ProductLossDefinition";
+            default:
+                return "";
+        }
+    }
 }
 
 public class ImpactEffectModel
@@ -699,6 +1006,7 @@ public class ImpactEffectModel
     public double? ImpactEffectValue { get; set; }
     public double? Weighting { get; set; }
     public double? Weighting2 { get; set; }
+
     public List<ImpactEffectModel> GetImpactEffectStates()
     {
         List<ImpactEffectModel> impactEffectList = new();
@@ -716,6 +1024,7 @@ public class UsedWithinOEMSpecificationModel
     public string? UsedWithinOEMSpecification { get; set; }
     public double? UsedWithinOEMSpecificationValue { get; set; }
     public double? Weighting { get; set; }
+
     public List<UsedWithinOEMSpecificationModel> GetUsedWithinOEMSpecifications()
     {
         List<UsedWithinOEMSpecificationModel> usedWithinOEMSpecificationList = new();
@@ -733,6 +1042,7 @@ public class RepairedModel
     public string? Repaired { get; set; }
     public double? RepairedValue { get; set; }
     public double? Weighting { get; set; }
+
     public List<RepairedModel> GetRepairedStates()
     {
         List<RepairedModel> repairedList = new();
@@ -751,6 +1061,7 @@ public class HSSEDefinisionModel
     public double? MinBBSValue { get; set; }
     public string? CoFCategory { get; set; }
     public double? Score { get; set; }
+
     public List<HSSEDefinisionModel> GetHSSEDefinisions()
     {
         List<HSSEDefinisionModel> hsseDefinisionList = new();

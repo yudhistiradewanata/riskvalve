@@ -544,7 +544,6 @@ div.dt-container .dt-length select{
   background-color: yellow;
 }
 
-
 .status-box.green
 {
   background-color: green;
@@ -552,5 +551,5 @@ div.dt-container .dt-length select{
 
 .status-box.olive
 {
-  background-color: olive;
+  background-color: #81B014;
 }

@@ -26,6 +26,8 @@
 
     var HSSEDefinisionModel = new HSSEDefinisionModel();
     var hsseDefinisions = HSSEDefinisionModel.GetHSSEDefinisions();
+
+    var defaultDate = ViewData["date"] as string;
 }
     <div class="container-fluid">
         <div class="row">
@@ -371,7 +373,7 @@
                                                                 <label class="col-form-label" for="assessment-no">Assessment No</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo">
+                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo" value="Assessment @defaultDate">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -379,7 +381,7 @@
                                                                 <label class="col-form-label" for="assessment-date">Assessment Date</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control datepicker form-control-sm" id="assessment-date" name="AssessmentDate">
+                                                                <input class="form-control datepicker form-control-sm" id="assessment-date" name="AssessmentDate" value="@defaultDate">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -948,20 +950,20 @@
                                                                             <td class="header-cell">Leakage Atmosphere</td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box green"></div>
-                                                                                    2B
+                                                                                    <div id="TP1A-colorlabel"></div>
+                                                                                    <span id="TP1A-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box yellow"></div>
-                                                                                    3B
+                                                                                    <div id="TP2A-colorlabel"></div>
+                                                                                    <span id="TP2A-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box yellow"></div>
-                                                                                    3B
+                                                                                    <div id="TP3A-colorlabel"></div>
+                                                                                    <span id="TP3A-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
@@ -972,20 +974,20 @@
                                                                             <td class="header-cell">Failure of function</td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box green"></div>
-                                                                                    2B
+                                                                                    <div id="TP1B-colorlabel"></div>
+                                                                                    <span id="TP1B-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box yellow"></div>
-                                                                                    3B
+                                                                                    <div id="TP2B-colorlabel"></div>
+                                                                                    <span id="TP2B-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box yellow"></div>
-                                                                                    3B
+                                                                                    <div id="TP3B-colorlabel"></div>
+                                                                                    <span id="TP3B-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
@@ -996,20 +998,20 @@
                                                                             <td class="header-cell">Passing across valve</td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box green"></div>
-                                                                                    2B
+                                                                                    <div id="TP1C-colorlabel"></div>
+                                                                                    <span id="TP1C-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box yellow"></div>
-                                                                                    3B
+                                                                                    <div id="TP2C-colorlabel"></div>
+                                                                                    <span id="TP2C-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="d-flex">
-                                                                                    <div class="status-box yellow"></div>
-                                                                                    3B
+                                                                                    <div id="TP3C-colorlabel"></div>
+                                                                                    <span id="TP3C-label"></span>
                                                                                 </div>
                                                                             </td>
                                                                             <td>
@@ -1767,6 +1769,20 @@
                 return xpos;
             }
 
+            function getHeatColor(pos) {
+                if(['1E', '2E', '1D'].includes(pos)){
+                    return 'olive';
+                } else if(['3E', '2D', '1C'].includes(pos)){
+                    return 'green';
+                } else if(['4E', '3D', '3C', '2C','1B'].includes(pos)){
+                    return 'yellow';
+                } else if(['5E', '5D', '4D', '4C', '3B', '2B', '2A', '1A'].includes(pos)){
+                    return 'orange';
+                } else {
+                    return 'red';
+                }
+            }
+
             function calculateAssessment(ctr = -1) {
                 if(ctr == -1){
                     var ctr = $(this).closest('.tab-pane').attr('tab-num');
@@ -1949,64 +1965,91 @@
                         ypos = 90;
                         break;
                 }
+                var tpos1a = Math.floor((lofLeakageToAtmosphereAPos/20)+ 1) + cof;
+                var tpos1b = Math.floor((lofLeakageToAtmosphereBPos/20)+ 1) + cof;
+                var tpos1c = Math.floor((lofLeakageToAtmosphereCPos/20)+ 1) + cof;
+                var tpos2a = Math.floor((lofFailureOfFunctionAPos/20)+ 1) + cof;
+                var tpos2b = Math.floor((lofFailureOfFunctionBPos/20)+ 1) + cof;
+                var tpos2c = Math.floor((lofFailureOfFunctionCPos/20)+ 1) + cof;
+                var tpos3a = Math.floor((lofPassingAccrossValveAPos/20)+ 1) + cof;
+                var tpos3b = Math.floor((lofPassingAccrossValveBPos/20)+ 1) + cof;
+                var tpos3c = Math.floor((lofPassingAccrossValveCPos/20)+ 1) + cof;
                 // TOTAL
                 var map_result = {
                     'TP1A': {
                         'lof': Number(lofLeakageToAtmosphereA),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofLeakageToAtmosphereAPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos1a,
+                        'color': getHeatColor(tpos1a)
                     },
                     'TP1B': {
                         'lof': Number(lofLeakageToAtmosphereB),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofLeakageToAtmosphereBPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos1b,
+                        'color': getHeatColor(tpos1b)
                     },
                     'TP1C': {
                         'lof': Number(lofLeakageToAtmosphereC),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofLeakageToAtmosphereCPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos1c,
+                        'color': getHeatColor(tpos1c)
                     },
                     'TP2A': {
                         'lof': Number(lofFailureOfFunctionA),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofFailureOfFunctionAPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos2a,
+                        'color': getHeatColor(tpos2a)
                     },
                     'TP2B': {
                         'lof': Number(lofFailureOfFunctionB),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofFailureOfFunctionBPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos2b,
+                        'color': getHeatColor(tpos2b)
                     },
                     'TP2C': {
                         'lof': Number(lofFailureOfFunctionC),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofFailureOfFunctionCPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos2c,
+                        'color': getHeatColor(tpos2c)
                     },
                     'TP3A': {
                         'lof': Number(lofPassingAccrossValveA),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofPassingAccrossValveAPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos3a,
+                        'color': getHeatColor(tpos3a)
                     },
                     'TP3B': {
                         'lof': Number(lofPassingAccrossValveB),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofPassingAccrossValveBPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos3b,
+                        'color': getHeatColor(tpos3b)
                     },
                     'TP3C': {
                         'lof': Number(lofPassingAccrossValveC),
-                        'cof': Number(cof),
+                        'cof': cof,
                         'xpos': Number(lofPassingAccrossValveCPos),
-                        'ypos': Number(ypos)
+                        'ypos': Number(ypos),
+                        'label': tpos3c,
+                        'color': getHeatColor(tpos3c)
                     }
                 }
-                @* console.log(map_result); *@
+                console.log(map_result);
 
                 //apply to matrix
                 for (const [key, item] of Object.entries(map_result)) {
@@ -2015,6 +2058,14 @@
                         top: item.ypos+'%',
                         left: item.xpos+'%'
                     })
+
+                    const dotLabel = $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-label')
+                    dotLabel.text(item.label)
+
+                    const dotColorLabel = $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-colorlabel')
+                    dotColorLabel.removeClass()
+                    dotColorLabel.addClass('status-box')
+                    dotColorLabel.addClass(item.color)
                 }
             }
 

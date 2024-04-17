@@ -39,6 +39,7 @@ public class AssessmentController : Controller
             inspectionSidebarHistory.GetInspectionSidebarHistory("Assessment");
         ViewData["InspectionSidebar"] = inspectionSidebar;
         ViewData["pageType"] = "Assessment";
+        ViewData["date"] = DateTime.Now.ToString(Environment.GetDateFormatString(false));
         return View();
     }
 
@@ -59,6 +60,7 @@ public class AssessmentController : Controller
             {
                 AssetID = Convert.ToInt32(Request.Form["AssetID"]),
                 AssessmentNo = Request.Form["AssessmentNo"],
+                AssessmentDate = Request.Form["AssessmentDate"],
                 TimePeriode = Request.Form["TimePeriode"],
                 TimeToLimitStateLeakageToAtmosphere = Request.Form[
                     "TimeToLimitStateLeakageToAtmosphere"
@@ -121,7 +123,7 @@ public class AssessmentController : Controller
         AssessmentDB assessmentDB =
             new()
             {
-                Id = Convert.ToInt32(Request.Form["AssessmentID"]),
+                Id = Convert.ToInt32(Request.Form["Id"]),
                 AssetID = Convert.ToInt32(Request.Form["AssetID"]),
                 AssessmentNo = Request.Form["AssessmentNo"],
                 TimePeriode = Request.Form["TimePeriode"],
@@ -182,7 +184,7 @@ public class AssessmentController : Controller
     [HttpPost]
     public void DeleteAssessment()
     {
-        int AssessmentID = Convert.ToInt32(Request.Form["AssessmentID"]);
+        int AssessmentID = Convert.ToInt32(Request.Form["Id"]);
         AssessmentModel assessmentModel = new();
         AssessmentDB assessment =
             new()
