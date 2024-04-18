@@ -259,8 +259,8 @@ public class AssetRegisterController : Controller
             {
                 Id = Convert.ToInt32(Request.Form["Id"]),
                 TagNo = Request.Form["TagNo"],
-                PlatformID = Convert.ToInt32(Request.Form["PlatformID"]),
-                ValveTypeID = Convert.ToInt32(Request.Form["ValveTypeID"]),
+                PlatformID = Environment.StringToInt(Request.Form["PlatformID"]),
+                ValveTypeID = Environment.StringToInt(Request.Form["ValveTypeID"]),
                 Size = Request.Form["Size"],
                 ClassRating = Request.Form["ClassRating"],
                 ParentEquipmentNo = Request.Form["ParentEquipmentNo"],
@@ -272,7 +272,7 @@ public class AssetRegisterController : Controller
                 BodyMaterial = Request.Form["BodyMaterial"],
                 EndConnection = Request.Form["EndConnection"],
                 SerialNo = Request.Form["SerialNo"],
-                ManualOverrideID = Convert.ToInt32(Request.Form["ManualOverrideID"]),
+                ManualOverrideID = Environment.StringToInt(Request.Form["ManualOverrideID"]),
                 ActuatorMfg = Request.Form["ActuatorMfg"],
                 ActuatorSerialNo = Request.Form["ActuatorSerialNo"],
                 ActuatorTypeModel = Request.Form["ActuatorTypeModel"],
@@ -281,8 +281,8 @@ public class AssetRegisterController : Controller
                 OperatingPressure = Request.Form["OperatingPressure"],
                 FlowRate = Request.Form["FlowRate"],
                 ServiceFluid = Request.Form["ServiceFluid"],
-                FluidPhaseID = Convert.ToInt32(Request.Form["FluidPhaseID"]),
-                ToxicOrFlamableFluidID = Convert.ToInt32(Request.Form["ToxicOrFlamableFluidID"])
+                FluidPhaseID = Environment.StringToInt(Request.Form["FluidPhaseID"]),
+                ToxicOrFlamableFluidID = Environment.StringToInt(Request.Form["ToxicOrFlamableFluidID"]),
             };
         assetModel.UpdateAsset(assetDb);
         return RedirectToAction("Asset");
@@ -296,8 +296,8 @@ public class AssetRegisterController : Controller
             new()
             {
                 TagNo = Request.Form["TagNo"],
-                PlatformID = Convert.ToInt32(Request.Form["PlatformID"]),
-                ValveTypeID = Convert.ToInt32(Request.Form["ValveTypeID"]),
+                PlatformID = Environment.StringToInt(Request.Form["PlatformID"]),
+                ValveTypeID = Environment.StringToInt(Request.Form["ValveTypeID"]),
                 Size = Request.Form["Size"],
                 ClassRating = Request.Form["ClassRating"],
                 ParentEquipmentNo = Request.Form["ParentEquipmentNo"],
@@ -309,7 +309,7 @@ public class AssetRegisterController : Controller
                 BodyMaterial = Request.Form["BodyMaterial"],
                 EndConnection = Request.Form["EndConnection"],
                 SerialNo = Request.Form["SerialNo"],
-                ManualOverrideID = Convert.ToInt32(Request.Form["ManualOverrideID"]),
+                ManualOverrideID = Environment.StringToInt(Request.Form["ManualOverrideID"]),
                 ActuatorMfg = Request.Form["ActuatorMfg"],
                 ActuatorSerialNo = Request.Form["ActuatorSerialNo"],
                 ActuatorTypeModel = Request.Form["ActuatorTypeModel"],
@@ -318,13 +318,14 @@ public class AssetRegisterController : Controller
                 OperatingPressure = Request.Form["OperatingPressure"],
                 FlowRate = Request.Form["FlowRate"],
                 ServiceFluid = Request.Form["ServiceFluid"],
-                FluidPhaseID = Convert.ToInt32(Request.Form["FluidPhaseID"]),
-                ToxicOrFlamableFluidID = Convert.ToInt32(Request.Form["ToxicOrFlamableFluidID"]),
-                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                FluidPhaseID = Environment.StringToInt(Request.Form["FluidPhaseID"]),
+                ToxicOrFlamableFluidID = Environment.StringToInt(Request.Form["ToxicOrFlamableFluidID"]),
+                CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        assetModel.AddAsset(assetDb);
-        return RedirectToAction("Asset");
+        int assetId = assetModel.AddAsset(assetDb);
+        return Json(assetId);
+        // return RedirectToAction("Asset");
     }
 
     [HttpPost]

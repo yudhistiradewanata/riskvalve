@@ -25,7 +25,7 @@ public class AssetDB
     public string? TagNo { get; set; }
     public string? AssetName { get; set; }
     public int? PlatformID { get; set; } // FK
-    public int ValveTypeID { get; set; } // FK
+    public int? ValveTypeID { get; set; } // FK
     public string? Size { get; set; }
     public string? ClassRating { get; set; }
     public string? ParentEquipmentNo { get; set; }
@@ -37,7 +37,7 @@ public class AssetDB
     public string? BodyMaterial { get; set; }
     public string? EndConnection { get; set; }
     public string? SerialNo { get; set; }
-    public int ManualOverrideID { get; set; } // FK
+    public int? ManualOverrideID { get; set; } // FK
     public string? ActuatorMfg { get; set; }
     public string? ActuatorSerialNo { get; set; }
     public string? ActuatorTypeModel { get; set; }
@@ -46,8 +46,8 @@ public class AssetDB
     public string? OperatingPressure { get; set; }
     public string? FlowRate { get; set; }
     public string? ServiceFluid { get; set; }
-    public int FluidPhaseID { get; set; } // FK
-    public int ToxicOrFlamableFluidID { get; set; } // FK
+    public int? FluidPhaseID { get; set; } // FK
+    public int? ToxicOrFlamableFluidID { get; set; } // FK
     public string? UsageType { get; set; }
     public string? CostOfReplacementAndRepair { get; set; }
     public string? Actuation { get; set; }
@@ -77,12 +77,12 @@ public class AssetModel : AssetDB
         {
             List<AssetModel> assetList = (
                 from a in context.Asset
-                join p in context.Platform on a.PlatformID equals p.Id
-                join ar in context.Area on p.AreaID equals ar.Id
-                join v in context.ValveType on a.ValveTypeID equals v.Id
-                join m in context.ManualOverride on a.ManualOverrideID equals m.Id
-                join f in context.FluidPhase on a.FluidPhaseID equals f.Id
-                join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
+                // join p in context.Platform on a.PlatformID equals p.Id
+                // join ar in context.Area on p.AreaID equals ar.Id
+                // join v in context.ValveType on a.ValveTypeID equals v.Id
+                // join m in context.ManualOverride on a.ManualOverrideID equals m.Id
+                // join f in context.FluidPhase on a.FluidPhaseID equals f.Id
+                // join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
                 where a.Id == id
                 select new AssetModel
                 {
@@ -112,12 +112,36 @@ public class AssetModel : AssetDB
                     ServiceFluid = a.ServiceFluid,
                     FluidPhaseID = a.FluidPhaseID,
                     ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
-                    Platform = p!.Platform,
-                    BusinessArea = ar!.BusinessArea,
-                    ValveType = v!.ValveType,
-                    ManualOverride = m!.ManualOverride,
-                    FluidPhase = f!.FluidPhase,
-                    ToxicOrFlamableFluid = t!.ToxicOrFlamableFluid,
+                    Platform = context
+                        .Platform.Where(p => p.Id == a.PlatformID)
+                        .FirstOrDefault()
+                        .Platform,
+                    BusinessArea = context
+                        .Area.Where(ar =>
+                            ar.Id
+                            == context
+                                .Platform.Where(p => p.Id == a.PlatformID)
+                                .FirstOrDefault()
+                                .AreaID
+                        )
+                        .FirstOrDefault()
+                        .BusinessArea,
+                    ValveType = context
+                        .ValveType.Where(v => v.Id == a.ValveTypeID)
+                        .FirstOrDefault()
+                        .ValveType,
+                    ManualOverride = context
+                        .ManualOverride.Where(m => m.Id == a.ManualOverrideID)
+                        .FirstOrDefault()
+                        .ManualOverride,
+                    FluidPhase = context
+                        .FluidPhase.Where(f => f.Id == a.FluidPhaseID)
+                        .FirstOrDefault()
+                        .FluidPhase,
+                    ToxicOrFlamableFluid = context
+                        .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
+                        .FirstOrDefault()
+                        .ToxicOrFlamableFluid,
                     IsDeleted = a.IsDeleted,
                     CreatedBy = a.CreatedBy,
                     CreatedAt = a.CreatedAt,
@@ -138,7 +162,11 @@ public class AssetModel : AssetDB
         return asset;
     }
 
-    public List<AssetModel> GetAssetList(int AreaID = 0, int PlatformID = 0, bool IncludeDeleted = false)
+    public List<AssetModel> GetAssetList(
+        int AreaID = 0,
+        int PlatformID = 0,
+        bool IncludeDeleted = false
+    )
     {
         List<AssetModel> assetList = new();
         using (var context = new AssetContext())
@@ -146,12 +174,15 @@ public class AssetModel : AssetDB
             assetList = (
                 from a in context.Asset
                 join p in context.Platform on a.PlatformID equals p.Id
-                join ar in context.Area on p.AreaID equals ar.Id
-                join v in context.ValveType on a.ValveTypeID equals v.Id
-                join m in context.ManualOverride on a.ManualOverrideID equals m.Id
-                join f in context.FluidPhase on a.FluidPhaseID equals f.Id
-                join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
-                where (AreaID == 0 || p.AreaID == AreaID) && (PlatformID == 0 || p.Id == PlatformID) && (IncludeDeleted == true || a.IsDeleted == false)
+                // join ar in context.Area on p.AreaID equals ar.Id
+                // join v in context.ValveType on a.ValveTypeID equals v.Id
+                // join m in context.ManualOverride on a.ManualOverrideID equals m.Id
+                // join f in context.FluidPhase on a.FluidPhaseID equals f.Id
+                // join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
+                where
+                    (AreaID == 0 || p.AreaID == AreaID)
+                    && (PlatformID == 0 || a.PlatformID == PlatformID)
+                    && (IncludeDeleted == true || a.IsDeleted == false)
                 select new AssetModel
                 {
                     Id = a.Id,
@@ -180,12 +211,36 @@ public class AssetModel : AssetDB
                     ServiceFluid = a.ServiceFluid,
                     FluidPhaseID = a.FluidPhaseID,
                     ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
-                    Platform = p!.Platform,
-                    BusinessArea = ar!.BusinessArea,
-                    ValveType = v!.ValveType,
-                    ManualOverride = m!.ManualOverride,
-                    FluidPhase = f!.FluidPhase,
-                    ToxicOrFlamableFluid = t!.ToxicOrFlamableFluid,
+                    Platform = context
+                        .Platform.Where(p => p.Id == a.PlatformID)
+                        .FirstOrDefault()
+                        .Platform,
+                    BusinessArea = context
+                        .Area.Where(ar =>
+                            ar.Id
+                            == context
+                                .Platform.Where(p => p.Id == a.PlatformID)
+                                .FirstOrDefault()
+                                .AreaID
+                        )
+                        .FirstOrDefault()
+                        .BusinessArea,
+                    ValveType = context
+                        .ValveType.Where(v => v.Id == a.ValveTypeID)
+                        .FirstOrDefault()
+                        .ValveType,
+                    ManualOverride = context
+                        .ManualOverride.Where(m => m.Id == a.ManualOverrideID)
+                        .FirstOrDefault()
+                        .ManualOverride,
+                    FluidPhase = context
+                        .FluidPhase.Where(f => f.Id == a.FluidPhaseID)
+                        .FirstOrDefault()
+                        .FluidPhase,
+                    ToxicOrFlamableFluid = context
+                        .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
+                        .FirstOrDefault()
+                        .ToxicOrFlamableFluid,
                     IsDeleted = a.IsDeleted,
                     CreatedBy = a.CreatedBy,
                     CreatedAt = a.CreatedAt,
@@ -205,13 +260,34 @@ public class AssetModel : AssetDB
         return assetList;
     }
 
-    public void AddAsset(AssetDB asset)
+    public int AddAsset(AssetDB asset)
     {
         using (var context = new AssetContext())
         {
             asset.IsDeleted = false;
+            if (asset.PlatformID == 0)
+            {
+                asset.PlatformID = null;
+            }
+            if (asset.ValveTypeID == 0)
+            {
+                asset.ValveTypeID = null;
+            }
+            if (asset.ManualOverrideID == 0)
+            {
+                asset.ManualOverrideID = null;
+            }
+            if (asset.FluidPhaseID == 0)
+            {
+                asset.FluidPhaseID = null;
+            }
+            if (asset.ToxicOrFlamableFluidID == 0)
+            {
+                asset.ToxicOrFlamableFluidID = null;
+            }
             context.Asset.Add(asset);
             context.SaveChanges();
+            return asset.Id;
         }
     }
 
@@ -367,7 +443,9 @@ public class AssetModel : AssetDB
                                     + "' is not match with the database value"
                             );
                         throw e;
-                    } else {
+                    }
+                    else
+                    {
                         value = mappedValue;
                     }
                 }

@@ -16,4 +16,9 @@ public static class Environment
     {
         return withTime ? "dd-MM-yyyy HH:mm:ss" : "dd-MM-yyyy";
     }
+
+    public static int StringToInt(string value)
+    {
+        return int.TryParse(value, out int result) ? result : 0;
+    }
 }
