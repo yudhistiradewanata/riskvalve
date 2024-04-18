@@ -1,6 +1,7 @@
 @{
     ViewData["Title"] = "Login";
     var message = TempData["Message"];
+    var version = ViewData["AppVersion"];
 }
 
 <body class="hold-transition login-page">
@@ -42,7 +43,7 @@
             </form>
             <div class="copyright">
                 Copyright © 2023 Pertamina Hulu Energi. All rights reserved.
-                <small>Version 0.1.9</small>
+                <small>Version @version</small>
             </div>
         </div>
     </div>

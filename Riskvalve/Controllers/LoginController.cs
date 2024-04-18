@@ -24,6 +24,7 @@ namespace Riskvalve.Controllers
             string message = TempData["Message"] as string ?? "";
             ViewData["message"] = message;
             ViewData["IsLogin"] = isLogin.ToString();
+            ViewData["AppVersion"] = Environment.GetAppVersion();
             return View();
         }
 
