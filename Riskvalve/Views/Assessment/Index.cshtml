@@ -427,7 +427,7 @@
                                                 Inspection History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
-                                                <input type="hidden" id="inspectionDataTemp" name="inspectionDataTemp" />
+                                                <input type="hidden" class="inspection-data-temp" id="inspectionDataTemp" name="inspectionDataTemp" />
                                                 <a class="btn btn-primary btn-maincolor mb-2 mt-4" onclick="addInspection(this)">Add Inspection Data</a>
                                                 <table class="datatable table custom-table inspection-table" style="width: 100%;">
                                                     <thead>
@@ -451,7 +451,7 @@
                                                 Maintenance History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
-                                                <input type="hidden" id="maintenanceDataTemp" name="maintenanceDataTemp" />
+                                                <input type="hidden" class="maintenance-data-temp" id="maintenanceDataTemp" name="maintenanceDataTemp" />
                                                 <a class="btn btn-primary btn-maincolor mb-2 mt-4" onclick="addMaintenance(this)">Add Maintenance Data</a>
                                                 <table class="datatable table table-bordered maintenance-table" style="width:100%">
                                                     <thead>
@@ -1598,7 +1598,7 @@
             }
 
             function deleteForm(el) {
-                const form = $(el).closest('form.inspection-form')
+                const form = $(el).closest('form.assessment-form')
 
                 const id = form.find('#data-id').val()
                 const tabId = $(el).closest('.tab-pane').attr('id')
@@ -2071,7 +2071,7 @@
 
             $(document).ready(function () {
                 $('.btn-add-new-inspection').click(addTab);
-                $('.btn-add-new-inspection').first().trigger('click')
+                // $('.btn-add-new-inspection').first().trigger('click')
 
                 @* $('.bbls-assessment').on('change', function () {
                     if($(this).val() < 0 || $(this).val() == ''){
@@ -2280,13 +2280,13 @@
                 const nativeForm = form[0]
                 const formData = new FormData(nativeForm)
                 const selectedId = formData.getAll('selectedInspectionId')
-                console.log(selectedId)
                 const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
                 const ctr = $(el).closest('.tab-pane').attr('tab-num')
 
                 fetchInspectionHistory(equipmentId,ctr,selectedId).then(() => {
                     initDatatable({
                         scrollable: false,
+                        paging: false,
                         selector: `#addInspectionModal .datatable`
                     })
                     $('#addInspectionModal').modal('show')
@@ -2303,9 +2303,20 @@
                 const selectedRows = tempData.filter ( ({id}) => {
                     return selectedId.includes(String(id))
                 })
-                $('.tab-pane[tab-num='+tabNum+'] #inspectionDataTemp').val(JSON.stringify(selectedRows))
+                $('.tab-pane[tab-num='+tabNum+'] .inspection-data-temp').val(JSON.stringify(selectedRows))
                 fillInspectionTable(tabNum, selectedRows)
                 $('#addInspectionModal').modal('hide')
+            }
+
+            function deleteInspection(el, id) {
+                if(confirm('remove inspection?')) {
+                    const tabNum = $(el).closest('.tab-pane').attr('tab-num')
+                    const tempDataEl = $(el).closest('.card-content').find('.inspection-data-temp')
+                    const tempData = JSON.parse(tempDataEl.val()) || []
+                    const newData = tempData.filter(item => Number(item.id) !== id)
+                    tempDataEl.val(JSON.stringify(newData))
+                    fillInspectionTable(tabNum, newData)
+                }
             }
 
             function fillInspectionTable(tabNum, data) {
@@ -2344,17 +2355,28 @@
                 const nativeForm = form[0]
                 const formData = new FormData(nativeForm)
                 const selectedId = formData.getAll('selectedMaintenanceId')
-                console.log(selectedId)
                 const equipmentId = $(el).closest('.tab-pane').attr('equipment-id')
                 const ctr = $(el).closest('.tab-pane').attr('tab-num')
 
                 fetchMaintenanceHistory(equipmentId,ctr,selectedId).then(() => {
                     initDatatable({
                         scrollable: false,
+                        paging: false,
                         selector: `#addMaintenanceModal .datatable`
                     })
                     $('#addMaintenanceModal').modal('show')
                 })
+            }
+
+            function deleteMaintenance(el, id) {
+                if(confirm('remove maintenance?')) {
+                    const tabNum = $(el).closest('.tab-pane').attr('tab-num')
+                    const tempDataEl = $(el).closest('.card-content').find('.maintenance-data-temp')
+                    const tempData = JSON.parse(tempDataEl.val()) || []
+                    const newData = tempData.filter(item => Number(item.id) !== id)
+                    tempDataEl.val(JSON.stringify(newData))
+                    fillMaintenanceTable(tabNum, newData)
+                }
             }
 
             function confirmMaintenance(el) {
@@ -2367,7 +2389,7 @@
                 const selectedRows = tempData.filter ( ({id}) => {
                     return selectedId.includes(String(id))
                 })
-                $('.tab-pane[tab-num='+tabNum+'] #maintenanceDataTemp').val(JSON.stringify(selectedRows))
+                $('.tab-pane[tab-num='+tabNum+'] .maintenance-data-temp').val(JSON.stringify(selectedRows))
                 fillMaintenanceTable(tabNum, selectedRows)
                 $('#addMaintenanceModal').modal('hide')
             }

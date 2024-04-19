@@ -15,6 +15,12 @@ public class AssessmentContext : DbContext
     public DbSet<RecommendationActionModel> RecommendationAction { get; set; }
     public DbSet<TimeToLimitStateModel> TimeToLimitState { get; set; }
     public DbSet<UserModel> User { get; set; }
+    public DbSet<AssessmentMaintenanceModel> AssessmentMaintenance { get; set; }
+    public DbSet<AssessmentInspectionModel> AssessmentInspection { get; set; }
+    public DbSet<InspectionDB> Inspection { get; set; }
+    public DbSet<InspectionMethodModel> InspectionMethod { get; set; }
+    public DbSet<MaintenanceDB> Maintenance { get; set; }
+    public DbSet<IsValveRepairedModel> IsValveRepaired { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
@@ -401,9 +407,8 @@ public class AssessmentModel : AssessmentDB
                         .User.Where(u => u.Id == assessment.DeletedBy)
                         .FirstOrDefault()
                         .Username,
-                    InspectionHistory = new InspectionModel().GetInspectionList(
-                        false,
-                        assessment.AssetID
+                    InspectionHistory = new AssessmentInspectionModel().GetInspectionList(
+                        assessment.Id
                     ),
                     MaintenanceHistory = new MaintenanceModel().GetMaintenanceList(
                         false,
@@ -499,6 +504,34 @@ public class AssessmentModel : AssessmentDB
             context.Add(assessment);
             context.SaveChanges();
             return assessment.Id;
+        }
+    }
+
+    public void AddMaintenanceToAssessment(int assessmentID, List<int> maintenanceIDs)
+    {
+        using (var context = new AssessmentContext())
+        {
+            foreach (var maintenanceID in maintenanceIDs)
+            {
+                AssessmentMaintenanceModel assessmentMaintenance =
+                    new() { AssessmentID = assessmentID, MaintenanceID = maintenanceID };
+                context.Add(assessmentMaintenance);
+            }
+            context.SaveChanges();
+        }
+    }
+
+    public void AddInspectionToAssessment(int assessmentID, List<int> inspectionIDs)
+    {
+        using (var context = new AssessmentContext())
+        {
+            foreach (var inspectionID in inspectionIDs)
+            {
+                AssessmentInspectionModel assessmentInspection =
+                    new() { AssessmentID = assessmentID, InspectionID = inspectionID };
+                context.Add(assessmentInspection);
+            }
+            context.SaveChanges();
         }
     }
 
@@ -1094,5 +1127,175 @@ public class TimeToLimitStateModel
             timeToLimitStateList = context.TimeToLimitState.ToList();
         }
         return timeToLimitStateList;
+    }
+}
+
+public class AssessmentMaintenanceModel
+{
+    public int Id { get; set; }
+    public int? AssessmentID { get; set; }
+    public int? MaintenanceID { get; set; }
+    public MaintenanceModel? Maintenance { get; set; }
+
+    public List<AssessmentMaintenanceModel> GetAssessmentMaintenanceList(int assessmentID)
+    {
+        List<AssessmentMaintenanceModel> assessmentMaintenanceList = new();
+        using (var context = new AssessmentContext())
+        {
+            assessmentMaintenanceList = (
+                from assessmentMaintenance in context.AssessmentMaintenance
+                where assessmentMaintenance.AssessmentID == assessmentID
+                select new AssessmentMaintenanceModel
+                {
+                    Id = assessmentMaintenance.Id,
+                    AssessmentID = assessmentMaintenance.AssessmentID,
+                    MaintenanceID = assessmentMaintenance.MaintenanceID,
+                    Maintenance = assessmentMaintenance.MaintenanceID.HasValue
+                        ? new MaintenanceModel().GetMaintenanceModel(
+                            assessmentMaintenance.MaintenanceID.Value
+                        )
+                        : null
+                }
+            ).ToList();
+        }
+        return assessmentMaintenanceList;
+    }
+
+    public List<MaintenanceModel> GetMaintenanceList(int AssessmentID)
+    {
+        List<MaintenanceModel> maintenanceList = new();
+        using (var context = new AssessmentContext())
+        {
+            maintenanceList = (
+                from m in context.Maintenance
+                join ivr in context.IsValveRepaired on m.IsValveRepairedID equals ivr.Id
+                join assessmentMaintenance in context.AssessmentMaintenance
+                    on m.Id equals assessmentMaintenance.MaintenanceID
+                where assessmentMaintenance.AssessmentID == AssessmentID
+                select new MaintenanceModel
+                {
+                    Id = m.Id,
+                    AssetID = m.AssetID,
+                    IsValveRepairedID = m.IsValveRepairedID,
+                    MaintenanceDate = m.MaintenanceDate,
+                    MaintenanceDescription = m.MaintenanceDescription,
+                    IsDeleted = m.IsDeleted,
+                    CreatedBy = m.CreatedBy,
+                    CreatedAt = m.CreatedAt,
+                    DeletedBy = m.DeletedBy,
+                    DeletedAt = m.DeletedAt,
+                    Asset = new AssetModel().GetAssetModel(m.AssetID),
+                    IsValveRepaired = ivr.IsValveRepaired,
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == m.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == m.DeletedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    MaintenanceFiles = new InspectionFileModel().GetMaintenanceFiles(m.Id)
+                }
+            ).ToList();
+        }
+        return maintenanceList;
+    }
+}
+
+public class AssessmentInspectionModel
+{
+    public int Id { get; set; }
+    public int? AssessmentID { get; set; }
+    public int? InspectionID { get; set; }
+    public InspectionModel? Inspection { get; set; }
+
+    public List<AssessmentInspectionModel> GetAssessmentInspectionList(int assessmentID)
+    {
+        List<AssessmentInspectionModel> assessmentInspectionList = new();
+        using (var context = new AssessmentContext())
+        {
+            assessmentInspectionList = (
+                from assessmentInspection in context.AssessmentInspection
+                where assessmentInspection.AssessmentID == assessmentID
+                select new AssessmentInspectionModel
+                {
+                    Id = assessmentInspection.Id,
+                    AssessmentID = assessmentInspection.AssessmentID,
+                    InspectionID = assessmentInspection.InspectionID,
+                    Inspection = assessmentInspection.InspectionID.HasValue
+                        ? new InspectionModel().GetInspectionModel(
+                            assessmentInspection.InspectionID.Value
+                        )
+                        : null
+                }
+            ).ToList();
+        }
+        return assessmentInspectionList;
+    }
+
+    public List<InspectionModel> GetInspectionList(int AssessmentID)
+    {
+        List<InspectionModel> inspectionList = new();
+        using (var context = new AssessmentContext())
+        {
+            inspectionList = (
+                from inspection in context.Inspection
+                join asset in context.Asset on inspection.AssetID equals asset.Id
+                join inspectionMethod in context.InspectionMethod
+                    on inspection.InspectionMethodID equals inspectionMethod.Id
+                join inspectionEffectiveness in context.InspectionEffectiveness
+                    on inspection.InspectionEffectivenessID equals inspectionEffectiveness.Id
+                join currentConditionLimitStateA in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionLeakeageToAtmosphereID equals currentConditionLimitStateA.Id
+                join currentConditionLimitStateB in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionFailureOfFunctionID equals currentConditionLimitStateB.Id
+                join currentConditionLimitStateC in context.CurrentConditionLimitState
+                    on inspection.CurrentConditionPassingAcrossValveID equals currentConditionLimitStateC.Id
+                join assessmentInspection in context.AssessmentInspection
+                    on inspection.Id equals assessmentInspection.InspectionID
+                where assessmentInspection.AssessmentID == AssessmentID
+                select new InspectionModel
+                {
+                    Id = inspection.Id,
+                    AssetID = inspection.AssetID,
+                    InspectionDate = inspection.InspectionDate,
+                    InspectionMethodID = inspection.InspectionMethodID,
+                    InspectionEffectivenessID = inspection.InspectionEffectivenessID,
+                    InspectionDescription = inspection.InspectionDescription,
+                    CurrentConditionLeakeageToAtmosphereID =
+                        inspection.CurrentConditionLeakeageToAtmosphereID,
+                    CurrentConditionFailureOfFunctionID =
+                        inspection.CurrentConditionFailureOfFunctionID,
+                    CurrentConditionPassingAcrossValveID =
+                        inspection.CurrentConditionPassingAcrossValveID,
+                    FunctionCondition = inspection.FunctionCondition,
+                    TestPressureIfAny = inspection.TestPressureIfAny,
+                    Asset = new AssetModel().GetAssetModel(inspection.AssetID),
+                    InspectionMethod = inspectionMethod.InspectionMethod,
+                    InspectionEffectiveness = inspectionEffectiveness.Effectiveness,
+                    CurrentConditionLeakeageToAtmosphere =
+                        currentConditionLimitStateA.CurrentConditionLimitState,
+                    CurrentConditionFailureOfFunction =
+                        currentConditionLimitStateB.CurrentConditionLimitState,
+                    CurrentConditionPassingAcrossValve =
+                        currentConditionLimitStateC.CurrentConditionLimitState,
+                    InspectionFiles = new InspectionFileModel().GetInspectionFiles(inspection.Id),
+                    IsDeleted = inspection.IsDeleted,
+                    CreatedBy = inspection.CreatedBy,
+                    CreatedAt = inspection.CreatedAt,
+                    DeletedBy = inspection.DeletedBy,
+                    DeletedAt = inspection.DeletedAt,
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == inspection.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == inspection.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
+                }
+            ).ToList();
+        }
+        return inspectionList;
     }
 }

@@ -246,55 +246,57 @@
 
 @Html.PartialSectionScripts(
 @<script>
+    function editAction () {
+        $('.form-control').val('');
+        var mode = $(this).attr('attr-mode');
+        if (mode == 'create') {
+            $('#field-asset-mode').val('create');
+            $('#btn-asset-modal-delete').hide();
+            $('#addAssetModal').modal('show');
+        } else if (mode == 'view') {
+            var id = $(this).attr('attr-itemid');
+            $.ajax({
+                url: '/AssetRegister/GetAssetDetail',
+                type: 'GET',
+                data: { id: id },
+                success: function (data) {
+                    $('#field-asset-mode').val('update');
+                    $('#field-asset-id').val(data.id);
+                    $('#field-asset-id-show').val(data.id);
+                    $('#field-asset-classrating').val(data.classRating);
+                    $('#field-asset-tagno').val(data.tagNo);
+                    $('#field-asset-parentequipmentno').val(data.parentEquipmentNo);
+                    $('#field-asset-platform').val(data.platformID);
+                    $('#field-asset-parentequipmentdescription').val(data.parentEquipmentDescription);
+                    $('#field-asset-valvetype').val(data.valveTypeID);
+                    $('#field-asset-installationdate').val(data.installationDate);
+                    $('#field-asset-size').val(data.size);
+                    $('#field-asset-pidno').val(data.pidNo);
+                    $('#field-asset-manufacturer').val(data.manufacturer);
+                    $('#field-asset-manualoverride').val(data.manualOverrideID);
+                    $('#field-asset-bodymodel').val(data.bodyModel);
+                    $('#field-asset-actuatormfg').val(data.actuatorMfg);
+                    $('#field-asset-bodymaterial').val(data.bodyMaterial);
+                    $('#field-asset-serialno').val(data.serialNo);
+                    $('#field-asset-endconnection').val(data.endConnection);
+                    $('#field-asset-actuatortypemodel').val(data.actuatorTypeModel);
+                    $('#field-asset-actuatorserialno').val(data.actuatorSerialNo);
+                    $('#field-asset-actuatorpower').val(data.actuatorPower);
+                    $('#field-asset-operatingtemperature').val(data.operatingTemperature);
+                    $('#field-asset-servicefluid').val(data.serviceFluid);
+                    $('#field-asset-operatingpressure').val(data.operatingPressure);
+                    $('#field-asset-fluidphase').val(data.fluidPhaseID);
+                    $('#field-asset-flowrate').val(data.flowRate);
+                    $('#field-asset-toxicorflamablefluid').val(data.toxicOrFlamableFluidID);
+                    $('#btn-asset-modal-delete').show();
+                    $('#addAssetModal').modal('show');
+                }
+            });
+        }
+    }
+
+
     $(document).ready(function () {
-        $('.btn-asset-action').click(function () {
-            $('.form-control').val('');
-            var mode = $(this).attr('attr-mode');
-            if (mode == 'create') {
-                $('#field-asset-mode').val('create');
-                $('#btn-asset-modal-delete').hide();
-                $('#addAssetModal').modal('show');
-            } else if (mode == 'view') {
-                var id = $(this).attr('attr-itemid');
-                $.ajax({
-                    url: '/AssetRegister/GetAssetDetail',
-                    type: 'GET',
-                    data: { id: id },
-                    success: function (data) {
-                        $('#field-asset-mode').val('update');
-                        $('#field-asset-id').val(data.id);
-                        $('#field-asset-id-show').val(data.id);
-                        $('#field-asset-classrating').val(data.classRating);
-                        $('#field-asset-tagno').val(data.tagNo);
-                        $('#field-asset-parentequipmentno').val(data.parentEquipmentNo);
-                        $('#field-asset-platform').val(data.platformID);
-                        $('#field-asset-parentequipmentdescription').val(data.parentEquipmentDescription);
-                        $('#field-asset-valvetype').val(data.valveTypeID);
-                        $('#field-asset-installationdate').val(data.installationDate);
-                        $('#field-asset-size').val(data.size);
-                        $('#field-asset-pidno').val(data.pidNo);
-                        $('#field-asset-manufacturer').val(data.manufacturer);
-                        $('#field-asset-manualoverride').val(data.manualOverrideID);
-                        $('#field-asset-bodymodel').val(data.bodyModel);
-                        $('#field-asset-actuatormfg').val(data.actuatorMfg);
-                        $('#field-asset-bodymaterial').val(data.bodyMaterial);
-                        $('#field-asset-serialno').val(data.serialNo);
-                        $('#field-asset-endconnection').val(data.endConnection);
-                        $('#field-asset-actuatortypemodel').val(data.actuatorTypeModel);
-                        $('#field-asset-actuatorserialno').val(data.actuatorSerialNo);
-                        $('#field-asset-actuatorpower').val(data.actuatorPower);
-                        $('#field-asset-operatingtemperature').val(data.operatingTemperature);
-                        $('#field-asset-servicefluid').val(data.serviceFluid);
-                        $('#field-asset-operatingpressure').val(data.operatingPressure);
-                        $('#field-asset-fluidphase').val(data.fluidPhaseID);
-                        $('#field-asset-flowrate').val(data.flowRate);
-                        $('#field-asset-toxicorflamablefluid').val(data.toxicOrFlamableFluidID);
-                        $('#btn-asset-modal-delete').show();
-                        $('#addAssetModal').modal('show');
-                    }
-                });
-            }
-        });
         $('#btn-asset-modal-save').click(function () {
             var mode = $('#field-asset-mode').val();
             var classrating = $('#field-asset-classrating').val();

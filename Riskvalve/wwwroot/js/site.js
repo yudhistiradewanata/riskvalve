@@ -43,13 +43,15 @@ function initDatatable (options) {
   const {
     selector = '.datatable',
     scrollable = true,
-    layout = defaultLayout
+    layout = defaultLayout,
+    paging = true
   } = options || {}
   const table = $(selector).DataTable({
       scrollX: scrollable,
       scrollCollapse: scrollable,
       ordering: false,
-      layout
+      layout,
+      paging
   });
 
   return table

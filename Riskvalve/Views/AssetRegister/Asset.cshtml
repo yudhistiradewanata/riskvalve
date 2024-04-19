@@ -69,7 +69,7 @@
                                         <td>@item.ParentEquipmentDescription</td>
                                         <td>@item.ServiceFluid</td>
                                         <td>
-                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-asset-action" attr-mode="view"
+                                            <button onclick="editAction.apply(this)" class="btn btn-custom-size btn-primary invert btn-with-icon btn-asset-action" attr-mode="view"
                                                 attr-itemid="@item.Id"><i class="fa-solid fa-pencil"></i>Edit</button>
                                         </td>
                                     </tr>
@@ -84,52 +84,9 @@
 
 
 <partial name="ModalAsset" />
-@*
-<div class="modal fade" id="addAssetModal" role="dialog">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form>
-                <input id="field-platform-mode" type="hidden">
-                <input id="field-platform-id" name="platformid" type="hidden">
-                <div class="modal-header">
-                    <h4 class="modal-title">Add/Edit New Platform</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="field-plarfoem-area">Business Area</label>
-                        <select id="field-platform-area" name="businessarea" class="form-control" required>
-                            <option value="">Select Business Area</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label for="field-platform-name">Platform Name</label>
-                        <input id="field-platform-name" name="platformname" class="form-control"
-                            placeholder="Platform Name" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="field-platform-code">Platform Code</label>
-                        <input id="field-platform-code" name="platformcode" class="form-control"
-                            placeholder="Platform Code" required>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btn-platform-modal-save" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
-                </div>
-            </form>
-        </div>
-    </div>
-</div>
-*@
-
-@* <partial name="ModalAsset" /> *@
 
 @section Scripts {
     <script>
         initDatatable()
-
-        $('.btn-asset-action').click(function () {
-            $('#addAssetModal').modal('show');
-        })
     </script>
 }

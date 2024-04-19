@@ -51,7 +51,7 @@
                                         <td>@item.Platform</td>
                                         <td>@item.Code</td>
                                         <td>
-                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-platform-action" attr-mode="view"
+                                            <button onclick="editAction.apply(this)" class="btn btn-custom-size btn-primary invert btn-with-icon btn-platform-action" attr-mode="view"
                                                 attr-itemid="@item.Id"><i class="fa-solid fa-pencil"></i> Edit</button>
                                         </td>
                                     </tr>
@@ -109,34 +109,35 @@
 
 @section Scripts {
     <script>
+        function editAction () {
+            $('#field-platform-area').val('');
+            $('#field-platform-name').val('');
+            $('#field-platform-code').val('');
+            var mode = $(this).attr('attr-mode');
+            if (mode == 'create') {
+                $('#field-platform-mode').val('create');
+                $('#btn-platform-modal-delete').hide();
+                $('#addPlatformModal').modal('show');
+            } else if (mode == 'view') {
+                var id = $(this).attr('attr-itemid');
+                $.ajax({
+                    url: '/AssetRegister/GetPlatformDetail',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (data) {
+                        $('#field-platform-mode').val('update');
+                        $('#field-platform-id').val(data.id);
+                        $('#field-platform-area').val(data.areaID);
+                        $('#field-platform-name').val(data.platform);
+                        $('#field-platform-code').val(data.code);
+                        $('#btn-platform-modal-delete').show();
+                        $('#addPlatformModal').modal('show');
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
-            $('.btn-platform-action').click(function () {
-                $('#field-platform-area').val('');
-                $('#field-platform-name').val('');
-                $('#field-platform-code').val('');
-                var mode = $(this).attr('attr-mode');
-                if (mode == 'create') {
-                    $('#field-platform-mode').val('create');
-                    $('#btn-platform-modal-delete').hide();
-                    $('#addPlatformModal').modal('show');
-                } else if (mode == 'view') {
-                    var id = $(this).attr('attr-itemid');
-                    $.ajax({
-                        url: '/AssetRegister/GetPlatformDetail',
-                        type: 'GET',
-                        data: { id: id },
-                        success: function (data) {
-                            $('#field-platform-mode').val('update');
-                            $('#field-platform-id').val(data.id);
-                            $('#field-platform-area').val(data.areaID);
-                            $('#field-platform-name').val(data.platform);
-                            $('#field-platform-code').val(data.code);
-                            $('#btn-platform-modal-delete').show();
-                            $('#addPlatformModal').modal('show');
-                        }
-                    });
-                }
-            });
             $('#btn-platform-modal-save').click(function () {
                 var mode = $('#field-platform-mode').val();
                 if (mode == 'create') {

@@ -112,6 +112,14 @@ public class AssessmentController : Controller
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
         int assessmentID = assessment.AddAssessment(assessmentDB);
+        List<int> inspectionIDs = Request.Form["selectedInspectionId"].ToString().Split(',').Select(
+            int.Parse
+        ).ToList();
+        assessment.AddInspectionToAssessment(assessmentID, inspectionIDs);
+        List<int> maintenanceIDs = Request.Form["selectedMaintenanceId"].ToString().Split(',').Select(
+            int.Parse
+        ).ToList();
+        assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs);
         assessment = assessment.GetAssessmentModel(assessmentID);
         return Json(assessment);
     }

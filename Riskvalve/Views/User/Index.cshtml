@@ -70,7 +70,7 @@
                                             }
                                         </td>
                                         <td>
-                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-user-action"
+                                            <button onclick="editAction.apply(this)" class="btn btn-custom-size btn-primary invert btn-with-icon btn-user-action"
                                                 attr-mode="view" attr-itemid="@user.Id"><i
                                                     class="fa-solid fa-pencil"></i>Edit</button>
                                         </td>
@@ -133,6 +133,41 @@
 
 @section Scripts {
     <script>
+        function editAction () {
+            $('#field-user-id').val('');
+            $('#field-username').val('');
+            $('#field-password').val('');
+            $('#field-role').val('');
+            $('#field-isadmin').prop('checked', false);
+            $('#field-isengineer').prop('checked', false);
+            $('#field-isviewer').prop('checked', false);
+            var mode = $(this).attr('attr-mode');
+            if (mode == 'create') {
+                $('#field-user-mode').val('create');
+                $('#btn-user-modal-delete').hide();
+                $('#addUserModal').modal('show');
+            } else if (mode == 'view') {
+                var id = $(this).attr('attr-itemid');
+                $.ajax({
+                    url: '/User/GetUser',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (data) {
+                        $('#field-user-id').val(data.id);
+                        $('#field-username').val(data.username);
+                        $('#field-password').attr('placeholder', 'Leave blank if you don\'t want to change the password');
+                        $('#field-role').val(data.role);
+                        $('#field-isadmin').prop('checked', data.isAdmin);
+                        $('#field-isengineer').prop('checked', data.isEngineer);
+                        $('#field-isviewer').prop('checked', data.isViewer);
+                        $('#field-user-mode').val('update');
+                        $('#btn-user-modal-delete').show();
+                        $('#addUserModal').modal('show');
+                    }
+                });
+            }
+        }
+
         $(document).ready(function () {
             $("input#field-username").on({
                 keydown: function (e) {
@@ -141,40 +176,6 @@
                 },
                 change: function () {
                     this.value = this.value.replace(/\s/g, "");
-                }
-            });
-            $('.btn-user-action').click(function () {
-                $('#field-user-id').val('');
-                $('#field-username').val('');
-                $('#field-password').val('');
-                $('#field-role').val('');
-                $('#field-isadmin').prop('checked', false);
-                $('#field-isengineer').prop('checked', false);
-                $('#field-isviewer').prop('checked', false);
-                var mode = $(this).attr('attr-mode');
-                if (mode == 'create') {
-                    $('#field-user-mode').val('create');
-                    $('#btn-user-modal-delete').hide();
-                    $('#addUserModal').modal('show');
-                } else if (mode == 'view') {
-                    var id = $(this).attr('attr-itemid');
-                    $.ajax({
-                        url: '/User/GetUser',
-                        type: 'GET',
-                        data: { id: id },
-                        success: function (data) {
-                            $('#field-user-id').val(data.id);
-                            $('#field-username').val(data.username);
-                            $('#field-password').attr('placeholder', 'Leave blank if you don\'t want to change the password');
-                            $('#field-role').val(data.role);
-                            $('#field-isadmin').prop('checked', data.isAdmin);
-                            $('#field-isengineer').prop('checked', data.isEngineer);
-                            $('#field-isviewer').prop('checked', data.isViewer);
-                            $('#field-user-mode').val('update');
-                            $('#btn-user-modal-delete').show();
-                            $('#addUserModal').modal('show');
-                        }
-                    });
                 }
             });
             $('#btn-user-modal-save').click(function () {

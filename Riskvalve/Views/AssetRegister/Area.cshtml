@@ -50,7 +50,7 @@
                                         <td>@item.CreatedByUser</td>
                                         <td>@item.CreatedAt</td>
                                         <td>
-                                            <button class="btn btn-custom-size btn-primary invert btn-with-icon btn-area-action" attr-mode="view"
+                                            <button onclick="editAction.apply(this)" class="btn btn-custom-size btn-primary invert btn-with-icon btn-area-action" attr-mode="view"
                                                 attr-itemid="@item.Id"><i class="fa-solid fa-pencil"></i>Edit</button>
                                         </td>
                                     </tr>
@@ -91,30 +91,31 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function () {
-            $('.btn-area-action').click(function () {
-                $('#field-business-area-name').val('');
-                var mode = $(this).attr('attr-mode');
-                if (mode == 'create') {
-                    $('#field-business-area-mode').val('create');
-                    $('#btn-area-modal-delete').hide();
-                    $('#addAreaModal').modal('show');
-                } else if (mode == 'view') {
-                    var id = $(this).attr('attr-itemid');
-                    $.ajax({
-                        url: '/AssetRegister/GetAreaDetail',
-                        type: 'GET',
-                        data: { id: id },
-                        success: function (data) {
-                            $('#field-business-area-mode').val('update');
-                            $('#field-business-area-id').val(data.id);
-                            $('#field-business-area-name').val(data.businessArea);
-                            $('#btn-area-modal-delete').show();
-                            $('#addAreaModal').modal('show');
-                        }
-                    });
-                }
-            });
+        function editAction () {
+            $('#field-business-area-name').val('');
+            var mode = $(this).attr('attr-mode');
+            if (mode == 'create') {
+                $('#field-business-area-mode').val('create');
+                $('#btn-area-modal-delete').hide();
+                $('#addAreaModal').modal('show');
+            } else if (mode == 'view') {
+                var id = $(this).attr('attr-itemid');
+                $.ajax({
+                    url: '/AssetRegister/GetAreaDetail',
+                    type: 'GET',
+                    data: { id: id },
+                    success: function (data) {
+                        $('#field-business-area-mode').val('update');
+                        $('#field-business-area-id').val(data.id);
+                        $('#field-business-area-name').val(data.businessArea);
+                        $('#btn-area-modal-delete').show();
+                        $('#addAreaModal').modal('show');
+                    }
+                });
+            }
+        }
+
+        $(document).ready(function () {            
             $('#btn-area-modal-save').click(function () {
                 var mode = $('#field-business-area-mode').val();
                 var name = $('#field-business-area-name').val();
