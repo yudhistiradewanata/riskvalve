@@ -98,9 +98,13 @@ public class AssessmentController : Controller
                 TimeToLimitStatePassingAccrosValve = Request.Form[
                     "TimeToLimitStatePassingAccrosValve"
                 ],
-                LeakageToAtmosphereID = Environment.StringToInt(Request.Form["LeakageToAtmosphereID"]),
+                LeakageToAtmosphereID = Environment.StringToInt(
+                    Request.Form["LeakageToAtmosphereID"]
+                ),
                 FailureOfFunctionID = Environment.StringToInt(Request.Form["FailureOfFunctionID"]),
-                PassingAccrosValveID = Environment.StringToInt(Request.Form["PassingAccrosValveID"]),
+                PassingAccrosValveID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveID"]
+                ),
                 LeakageToAtmosphereTP1ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP1ID"]
                 ),
@@ -110,12 +114,24 @@ public class AssessmentController : Controller
                 LeakageToAtmosphereTP3ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP3ID"]
                 ),
-                FailureOfFunctionTP1ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP1ID"]),
-                FailureOfFunctionTP2ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP2ID"]),
-                FailureOfFunctionTP3ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP3ID"]),
-                PassingAccrosValveTP1ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP1ID"]),
-                PassingAccrosValveTP2ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP2ID"]),
-                PassingAccrosValveTP3ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP3ID"]),
+                FailureOfFunctionTP1ID = Environment.StringToInt(
+                    Request.Form["FailureOfFunctionTP1ID"]
+                ),
+                FailureOfFunctionTP2ID = Environment.StringToInt(
+                    Request.Form["FailureOfFunctionTP2ID"]
+                ),
+                FailureOfFunctionTP3ID = Environment.StringToInt(
+                    Request.Form["FailureOfFunctionTP3ID"]
+                ),
+                PassingAccrosValveTP1ID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveTP1ID"]
+                ),
+                PassingAccrosValveTP2ID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveTP2ID"]
+                ),
+                PassingAccrosValveTP3ID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveTP3ID"]
+                ),
                 InspectionEffectivenessID = Environment.StringToInt(
                     Request.Form["InspectionEffectivenessID"]
                 ),
@@ -132,7 +148,9 @@ public class AssessmentController : Controller
                 ProductLossDefinition = Request.Form["ProductLossDefinition"],
                 HSSEDefinisionID = Environment.StringToInt(Request.Form["HSSEDefinisionID"]),
                 Summary = Request.Form["Summary"],
-                RecommendationActionID = Environment.StringToInt(Request.Form["RecommendationActionID"]),
+                RecommendationActionID = Environment.StringToInt(
+                    Request.Form["RecommendationActionID"]
+                ),
                 DetailedRecommendation = Request.Form["DetailedRecommendation"],
                 ConsequenceOfFailure = Request.Form["consequenceOfFailure"],
                 TP1A = Request.Form["tP1A"],
@@ -144,13 +162,13 @@ public class AssessmentController : Controller
                 TP3A = Request.Form["tP3A"],
                 TP3B = Request.Form["tP3B"],
                 TP3C = Request.Form["tP3C"],
-                TPTimeToActionA = Request.Form["tPTimeToActionA"],
-                TPTimeToActionB = Request.Form["tPTimeToActionB"],
-                TPTimeToActionC = Request.Form["tPTimeToActionC"],
-                TP1Risk = Request.Form["TP1Risk"],
-                TP2Risk = Request.Form["TP2Risk"],
-                TP3Risk = Request.Form["TP3Risk"],
-                TPTimeToActionRisk = Request.Form["TPTimeToActionRisk"],
+                TPTimeToActionA = Request.Form["tpTimeToActionA"],
+                TPTimeToActionB = Request.Form["tpTimeToActionB"],
+                TPTimeToActionC = Request.Form["tpTimeToActionC"],
+                TP1Risk = Request.Form["tP1Risk"],
+                TP2Risk = Request.Form["tP2Risk"],
+                TP3Risk = Request.Form["tP3Risk"],
+                TPTimeToActionRisk = Request.Form["tpTimeToActionRisk"],
                 IsDeleted = false,
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -196,9 +214,13 @@ public class AssessmentController : Controller
                 TimeToLimitStatePassingAccrosValve = Request.Form[
                     "TimeToLimitStatePassingAccrosValve"
                 ],
-                LeakageToAtmosphereID = Environment.StringToInt(Request.Form["LeakageToAtmosphereID"]),
+                LeakageToAtmosphereID = Environment.StringToInt(
+                    Request.Form["LeakageToAtmosphereID"]
+                ),
                 FailureOfFunctionID = Environment.StringToInt(Request.Form["FailureOfFunctionID"]),
-                PassingAccrosValveID = Environment.StringToInt(Request.Form["PassingAccrosValveID"]),
+                PassingAccrosValveID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveID"]
+                ),
                 LeakageToAtmosphereTP1ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP1ID"]
                 ),
@@ -208,12 +230,24 @@ public class AssessmentController : Controller
                 LeakageToAtmosphereTP3ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP3ID"]
                 ),
-                FailureOfFunctionTP1ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP1ID"]),
-                FailureOfFunctionTP2ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP2ID"]),
-                FailureOfFunctionTP3ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP3ID"]),
-                PassingAccrosValveTP1ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP1ID"]),
-                PassingAccrosValveTP2ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP2ID"]),
-                PassingAccrosValveTP3ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP3ID"]),
+                FailureOfFunctionTP1ID = Environment.StringToInt(
+                    Request.Form["FailureOfFunctionTP1ID"]
+                ),
+                FailureOfFunctionTP2ID = Environment.StringToInt(
+                    Request.Form["FailureOfFunctionTP2ID"]
+                ),
+                FailureOfFunctionTP3ID = Environment.StringToInt(
+                    Request.Form["FailureOfFunctionTP3ID"]
+                ),
+                PassingAccrosValveTP1ID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveTP1ID"]
+                ),
+                PassingAccrosValveTP2ID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveTP2ID"]
+                ),
+                PassingAccrosValveTP3ID = Environment.StringToInt(
+                    Request.Form["PassingAccrosValveTP3ID"]
+                ),
                 InspectionEffectivenessID = Environment.StringToInt(
                     Request.Form["InspectionEffectivenessID"]
                 ),
@@ -230,46 +264,49 @@ public class AssessmentController : Controller
                 ProductLossDefinition = Request.Form["ProductLossDefinition"],
                 HSSEDefinisionID = Environment.StringToInt(Request.Form["HSSEDefinisionID"]),
                 Summary = Request.Form["Summary"],
-                RecommendationActionID = Environment.StringToInt(Request.Form["RecommendationActionID"]),
+                RecommendationActionID = Environment.StringToInt(
+                    Request.Form["RecommendationActionID"]
+                ),
                 DetailedRecommendation = Request.Form["DetailedRecommendation"],
-                ConsequenceOfFailure = "1",
-                TP1A = "1",
-                TP1B = "1",
-                TP1C = "1",
-                TP2A = "1",
-                TP2B = "1",
-                TP2C = "1",
-                TP3A = "1",
-                TP3B = "1",
-                TP3C = "1",
-                TPTimeToActionA = "1",
-                TPTimeToActionB = "1",
-                TPTimeToActionC = "1",
-                TP1Risk = "1",
-                TP2Risk = "1",
-                TP3Risk = "1",
-                TPTimeToActionRisk = "1",
-                // ConsequenceOfFailure = Request.Form["ConsequenceOfFailure"],
-                // TP1A = Request.Form["TP1A"],
-                // TP1B = Request.Form["TP1B"],
-                // TP1C = Request.Form["TP1C"],
-                // TP2A = Request.Form["TP2A"],
-                // TP2B = Request.Form["TP2B"],
-                // TP2C = Request.Form["TP2C"],
-                // TP3A = Request.Form["TP3A"],
-                // TP3B = Request.Form["TP3B"],
-                // TP3C = Request.Form["TP3C"],
-                // TPTimeToActionA = Request.Form["TPTimeToActionA"],
-                // TPTimeToActionB = Request.Form["TPTimeToActionB"],
-                // TPTimeToActionC = Request.Form["TPTimeToActionC"],
-                // TP1Risk = Request.Form["TP1Risk"],
-                // TP2Risk = Request.Form["TP2Risk"],
-                // TP3Risk = Request.Form["TP3Risk"],
-                // TPTimeToActionRisk = Request.Form["TPTimeToActionRisk"],
+                // ConsequenceOfFailure = "1",
+                // TP1A = "1",
+                // TP1B = "1",
+                // TP1C = "1",
+                // TP2A = "1",
+                // TP2B = "1",
+                // TP2C = "1",
+                // TP3A = "1",
+                // TP3B = "1",
+                // TP3C = "1",
+                // TPTimeToActionA = "1",
+                // TPTimeToActionB = "1",
+                // TPTimeToActionC = "1",
+                // TP1Risk = "1",
+                // TP2Risk = "1",
+                // TP3Risk = "1",
+                // TPTimeToActionRisk = "1",
+                ConsequenceOfFailure = Request.Form["consequenceOfFailure"],
+                TP1A = Request.Form["tP1A"],
+                TP1B = Request.Form["tP1B"],
+                TP1C = Request.Form["tP1C"],
+                TP2A = Request.Form["tP2A"],
+                TP2B = Request.Form["tP2B"],
+                TP2C = Request.Form["tP2C"],
+                TP3A = Request.Form["tP3A"],
+                TP3B = Request.Form["tP3B"],
+                TP3C = Request.Form["tP3C"],
+                TPTimeToActionA = Request.Form["tpTimeToActionA"],
+                TPTimeToActionB = Request.Form["tpTimeToActionB"],
+                TPTimeToActionC = Request.Form["tpTimeToActionC"],
+                TP1Risk = Request.Form["tP1Risk"],
+                TP2Risk = Request.Form["tP2Risk"],
+                TP3Risk = Request.Form["tP3Risk"],
+                TPTimeToActionRisk = Request.Form["tpTimeToActionRisk"],
                 IsDeleted = false,
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
+        // return Json(assessmentDB);
         assessment.UpdateAssessment(assessmentDB);
         List<int> inspectionIDs = Request
             .Form["selectedInspectionId"]

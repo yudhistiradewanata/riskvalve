@@ -812,6 +812,23 @@ public class AssessmentModel : AssessmentDB
                 oldAssessment.RecommendationActionID = null;
             }
             oldAssessment.DetailedRecommendation = assessment.DetailedRecommendation;
+            oldAssessment.ConsequenceOfFailure = assessment.ConsequenceOfFailure;
+            oldAssessment.TP1A = assessment.TP1A;
+            oldAssessment.TP2A = assessment.TP2A;
+            oldAssessment.TP3A = assessment.TP3A;
+            oldAssessment.TP1B = assessment.TP1B;
+            oldAssessment.TP2B = assessment.TP2B;
+            oldAssessment.TP3B = assessment.TP3B;
+            oldAssessment.TP1C = assessment.TP1C;
+            oldAssessment.TP2C = assessment.TP2C;
+            oldAssessment.TP3C = assessment.TP3C;
+            oldAssessment.TPTimeToActionA = assessment.TPTimeToActionA;
+            oldAssessment.TPTimeToActionB = assessment.TPTimeToActionB;
+            oldAssessment.TPTimeToActionC = assessment.TPTimeToActionC;
+            oldAssessment.TP1Risk = assessment.TP1Risk;
+            oldAssessment.TP2Risk = assessment.TP2Risk;
+            oldAssessment.TP3Risk = assessment.TP3Risk;
+            oldAssessment.TPTimeToActionRisk = assessment.TPTimeToActionRisk;
             context.Update(oldAssessment);
             context.SaveChanges();
         }
