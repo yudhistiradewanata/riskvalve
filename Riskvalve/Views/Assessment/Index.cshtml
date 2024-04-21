@@ -389,7 +389,7 @@
                                                                 <label class="col-form-label" for="time-period">Time Period (Month)</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1" onchange="calculateAssessment.apply(this)">
+                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1" onchange="calculateAssessment.apply(this)" value="12">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -399,7 +399,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-a">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere" value="0">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -407,7 +407,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-b">Time to Limit State Failure of function (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction" value="0">
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -415,7 +415,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-c">Time to Limit State Passing accros valve (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve" value="0">
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1635,7 +1635,7 @@
                         },
                         error: function(xhr, status, error) {
                             // Handle error
-                            alert('error submitting the form')
+                            alert('An assessment with the same asset and date already exists')
                         }
                     });
                 }
