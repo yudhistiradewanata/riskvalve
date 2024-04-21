@@ -22,21 +22,17 @@
             <div>
                 <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#welcome" data-bs-toggle="tab" data-bs-target="#welcome" type="button" role="tab">
+                        <a class="nav-link active" href="#welcome" data-bs-toggle="tab" data-bs-target="#welcome"
+                            type="button" role="tab">
                             Welcome
                         </a>
                     </li>
                     <li class="nav-item" id="template_inspection_header">
-                        <a
-                            class="nav-link"
-                            href="#inspection1"
-                            data-bs-toggle="tab" data-bs-target="#inspection-form" type="button" role="tab"
-                        >
-                            New Inspection WIB-PSV-V05A-4 
-                            <button 
-                                type="button"
-                                class="btn-close-inspection"
-                            ><i class="fa-solid fa-xmark"></i></button>
+                        <a class="nav-link" href="#inspection1" data-bs-toggle="tab" data-bs-target="#inspection-form"
+                            type="button" role="tab">
+                            New Inspection WIB-PSV-V05A-4
+                            <button type="button" class="btn-close-inspection"><i
+                                    class="fa-solid fa-xmark"></i></button>
                         </a>
                     </li>
                 </ul>
@@ -63,27 +59,33 @@
                                         <div class="form-grid">
                                             <div class="form-group-inline">
                                                 <label for="field-inspection-assetid">Asset ID</label>
-                                                <input type="text" class="form-control" id="field-inspection-assetid" readonly name="AssetID">
+                                                <input type="text" class="form-control" id="field-inspection-assetid"
+                                                    readonly name="AssetID">
                                             </div>
                                             <div class="form-group-inline">
                                                 <label for="field-inspection-valvetype">Valve Type</label>
-                                                <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                                <input type="text" class="form-control" id="field-inspection-valvetype"
+                                                    readonly>
                                             </div>
                                             <div class="form-group-inline">
                                                 <label for="field-inspection-tagno">Tag No</label>
-                                                <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                                <input type="text" class="form-control" id="field-inspection-tagno"
+                                                    readonly>
                                             </div>
                                             <div class="form-group-inline">
                                                 <label for="field-inspection-manufacturer">Manufacturer</label>
-                                                <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                                <input type="text" class="form-control"
+                                                    id="field-inspection-manufacturer" readonly>
                                             </div>
                                             <div class="form-group-inline" style="display: none;">
                                                 <label for="field-inspection-equipmentname">Equipment Name</label>
-                                                <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                                <input type="text" class="form-control"
+                                                    id="field-inspection-equipmentname" readonly>
                                             </div>
                                             <div class="form-group-inline">
                                                 <label for="field-inspection-bodymaterial">Body Material</label>
-                                                <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                                <input type="text" class="form-control"
+                                                    id="field-inspection-bodymaterial" readonly>
                                             </div>
                                             <div class="form-group-inline">
                                                 <label for="businessarea">Business Area</label>
@@ -110,8 +112,10 @@
                                                 <input type="text" class="form-control" id="serialno" readonly>
                                             </div>
                                             <div class="form-group-inline">
-                                                <label for="parentequipmentdescription">Parent Equipment Description</label>
-                                                <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                                <label for="parentequipmentdescription">Parent Equipment
+                                                    Description</label>
+                                                <input type="text" class="form-control" id="parentequipmentdescription"
+                                                    readonly>
                                             </div>
                                             <div class="form-group-inline" style="display: none;">
                                                 <label for="usagetype">Usage Type</label>
@@ -147,14 +151,15 @@
                                             <input type="hidden" name="Id" id="data-id">
                                             <div class="form-group ">
                                                 <label for="field-inspection-valvetagno">Valve Tag No</label>
-                                                <input type="text" class="form-control" id="field-inspection-valvetagno" readonly>
+                                                <input type="text" class="form-control" id="field-inspection-valvetagno"
+                                                    readonly>
                                             </div>
                                             <div class="form-group ">
-                                                <label for="field-inspection-current-condition-limit-state-a">Current Condition Leakage to Atmosphere</label>
+                                                <label for="field-inspection-current-condition-limit-state-a">Current
+                                                    Condition Leakage to Atmosphere</label>
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-a"
-                                                    name="CurrentConditionLeakeageToAtmosphereID"
-                                                >
+                                                    name="CurrentConditionLeakeageToAtmosphereID">
                                                     @foreach (var item in limitState)
                                                     {
                                                         <option value="@item.Id">@item.CurrentConditionLimitState</option>
@@ -164,14 +169,14 @@
                                             <div class="form-group ">
                                                 <label for="field-inspection-date">Inspection Date</label>
                                                 <input id="field-inspection-date" type="text"
-                                                    class="form-control datepicker" name="InspectionDate"/>
+                                                    class="form-control datepicker" name="InspectionDate" />
                                             </div>
                                             <div class="form-group ">
-                                                <label for="field-inspection-current-condition-limit-state-b">Current Condition Failure of Function</label>
+                                                <label for="field-inspection-current-condition-limit-state-b">Current
+                                                    Condition Failure of Function</label>
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-b"
-                                                    name="CurrentConditionFailureOfFunctionID"
-                                                >
+                                                    name="CurrentConditionFailureOfFunctionID">
                                                     @foreach (var item in limitState)
                                                     {
                                                         <option value="@item.Id">@item.CurrentConditionLimitState</option>
@@ -181,7 +186,8 @@
                                             <div class="form-group ">
                                                 <label for="field-inspection-inspection-method">Inspection
                                                     Method</label>
-                                                <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID">
+                                                <select class="form-control" id="field-inspection-inspection-method"
+                                                    name="InspectionMethodID">
                                                     @foreach (var item in inspectionMethods)
                                                     {
                                                         <option value="@item.Id">@item.InspectionMethod</option>
@@ -195,8 +201,7 @@
                                                     Condition Passing Across Valve</label>
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-c"
-                                                    name="CurrentConditionPassingAcrossValveID"
-                                                >
+                                                    name="CurrentConditionPassingAcrossValveID">
                                                     @foreach (var item in limitState)
                                                     {
                                                         <option value="@item.Id">@item.CurrentConditionLimitState</option>
@@ -206,7 +211,8 @@
                                             <div class="form-group ">
                                                 <label for="field-inspection-effectiveness">Inspection
                                                     Effectiveness</label>
-                                                <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID">
+                                                <select class="form-control" id="field-inspection-effectiveness"
+                                                    name="InspectionEffectivenessID">
                                                     @foreach (var item in inspectionEffectivenessStates)
                                                     {
                                                         <option value="@item.Id">@item.Effectiveness</option>
@@ -217,9 +223,7 @@
                                                 <label for="field-inspection-function-condition">Function
                                                     Condition</label>
                                                 <input type="text" class="form-control"
-                                                    id="field-inspection-function-condition"
-                                                    name="FunctionCondition"
-                                                >
+                                                    id="field-inspection-function-condition" name="FunctionCondition">
                                             </div>
                                             <div class="form-group">
                                                 <label for="field-inspection-description">Inspection Description</label>
@@ -231,17 +235,17 @@
                                                     <div class="form-group col-md-12 mb-2">
                                                         <label for="field-inspection-test-pressure-if-any">Test Pressure
                                                             if Any</label>
-                                                        <input type="text" 
-                                                            name="TestPressureIfAny"
-                                                            class="form-control"
+                                                        <input type="text" name="TestPressureIfAny" class="form-control"
                                                             id="field-inspection-test-pressure-if-any">
                                                     </div>
                                                     <div class="col-md-12">
                                                         <label for="field-inspection-image">Inspection Image</label>
                                                         <div class="gallery-input">
-                                                            <input type="file" class="form-control image-gallery-upload" id="field-inspection-image" multiple>
+                                                            <input type="file" class="form-control image-gallery-upload"
+                                                                id="field-inspection-image" multiple>
                                                             <div class="preview-image-gallery">
-                                                                <label class="add-image" for="field-inspection-image"><i class="fa-solid fa-file-circle-plus"></i></label>
+                                                                <label class="add-image" for="field-inspection-image"><i
+                                                                        class="fa-solid fa-file-circle-plus"></i></label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -251,12 +255,11 @@
                                     </div>
                                     <div>
                                         <div class="box-footer">
-                                            <button type="button" class="btn submit-button"
-                                                id="btn-submit" onclick="submitForm(this)">Save</button>
-                                            <button type="button" class="btn print-button"
-                                                id="btn-print">Print</button>
-                                            <button type="button" class="btn delete-button"
-                                            id="btn-delete" onclick="deleteForm(this)">Delete</button>
+                                            <button type="button" class="btn submit-button" id="btn-submit"
+                                                onclick="submitForm(this)">Save</button>
+                                            <button type="button" class="btn print-button" id="btn-print">Print</button>
+                                            <button type="button" class="btn delete-button" id="btn-delete"
+                                                onclick="deleteForm(this)">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -265,8 +268,8 @@
                     </div>
                 </div>
             </div>
-        </div>
     </div>
+</div>
 </div>
 
 @section Scripts {
@@ -282,7 +285,7 @@
             const ctr = $(el).closest('.tab-pane').attr('tab-num')
             const nativeForm = form[0]
             const formData = new FormData(nativeForm);
-            if(form.hasClass('history-form')) {
+            if (form.hasClass('history-form')) {
                 // update
                 $.ajax({
                     url: '/Inspection/UpdateInspection',
@@ -290,12 +293,12 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function(response) {
+                    success: function (response) {
                         form.addClass('history-form')
                         // Handle success response
                         alert('Data successfully updated')
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         alert('Error submitting the form')
                     }
                 });
@@ -307,39 +310,43 @@
                     data: formData,
                     contentType: false,
                     processData: false,
-                    success: function(res) {
-                        form.addClass('history-form')
-                        // add menu to tree
-                        console.log(equipmentId)
-                        console.log($('ul[equipment-id='+equipmentId+']'))
-                        $('ul[equipment-id="'+equipmentId+'"]').append(`
-                            <li class="treeview">
-                                <a class="btn-add-new-inspection" history-button="" 
-                                attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
-                                attr-name="${res.asset.tagNo} ${res.inspectionDate}" 
-                                attr-sidebar-level="4" 
-                                attr-find-inspection="${res.asset.businessArea}" 
-                                attr-find-platform="${res.asset.platform}" 
-                                attr-find-equipment="${res.asset.tagNo}" 
-                                attr-find-imr="NEW"
-                                onclick="addTab.apply(this)"
-                                >
-                                    ${res.inspectionDate}
-                                </a>
-                            </li>
-                        `)
-
-                        form.find('.preview-image-gallery .single-image').remove()
-                        form.find('.preview-image-gallery input[type=file]').remove()
-                        fetchHistoryData({
-                            id: res.id,
-                            counter: ctr
-                        })
-                        alert('Data successfully inserted')
-
-                        
+                    success: function (result) {
+                        if (result.Status == 'Error') {
+                            alert(result.Message)
+                        } else {
+                            alert(result.Message)
+                            var res = JSON.parse(result.InspectionData)
+                            @* console.log(res) *@
+                            form.addClass('history-form')
+                            // add menu to tree
+                            @* console.log(equipmentId) *@
+                            @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
+                            $('ul[equipment-id="' + equipmentId + '"]').append(`
+                                <li class="treeview">
+                                    <a class="btn-add-new-inspection" history-button="" 
+                                    attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                    attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
+                                    attr-sidebar-level="4" 
+                                    attr-find-inspection="${res.Asset.BusinessArea}" 
+                                    attr-find-platform="${res.Asset.Platform}" 
+                                    attr-find-equipment="${res.Asset.TagNo}" 
+                                    attr-find-imr="NEW"
+                                    onclick="addTab.apply(this)"
+                                    >
+                                        ${res.InspectionDate}
+                                    </a>
+                                </li>
+                            `)
+                            form.find('.preview-image-gallery .single-image').remove()
+                            form.find('.preview-image-gallery input[type=file]').remove()
+                            fetchHistoryData({
+                                id: res.Id,
+                                counter: ctr
+                            })
+                        }
+                        @* alert('Data successfully inserted') *@
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         // Handle error
                         alert('error submitting the form')
                     }
@@ -349,38 +356,38 @@
 
         function deleteForm(el) {
             const form = $(el).closest('form.inspection-form')
-            
+
             const id = form.find('#data-id').val()
             const tabId = $(el).closest('.tab-pane').attr('id')
             const ctr = $(el).closest('.tab-pane').attr('tab-num')
 
-            if(confirm('Are you sure you want to delete this data?')) {
+            if (confirm('Are you sure you want to delete this data?')) {
                 $.ajax({
                     url: '/Inspection/DeleteInspection',
                     type: 'POST', // or 'GET' depending on your form method
                     data: {
                         Id: id
                     },
-                    success: function(response) {
+                    success: function (response) {
                         close_inspection(ctr, true)
                         alert('Data successfully deleted')
-                        $('.btn-add-new-inspection[attr-inspection-id='+id+']').closest('li').remove()
+                        $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
                         // Handle success response
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         alert('Error deleting data')
                     }
                 });
             }
         }
 
-        function fetchAssetData ({id, counter}) {
+        function fetchAssetData({ id, counter }) {
             $.ajax({
                 url: '/AssetRegister/GetAssetDetail',
                 type: 'GET',
                 data: { id },
                 success: function (data) {
-                    fillAssetInfo ({counter, data})
+                    fillAssetInfo({ counter, data })
                 },
                 error: function (error) {
                     alert('Valve Tag not found');
@@ -391,7 +398,7 @@
             });
         }
 
-        function fetchHistoryData ({id, counter}) {
+        function fetchHistoryData({ id, counter }) {
             $.ajax({
                 url: '/Inspection/GetInspectionDetail',
                 type: 'GET',
@@ -403,26 +410,26 @@
                     })
 
                     // fill history data
-                    $('#field-inspection-date'+counter).val(data.inspectionDate)
-                    $('#field-inspection-inspection-method'+counter).val(data.inspectionMethodID)
-                    $('#field-inspection-current-condition-limit-state-a'+counter).val(data.currentConditionLeakeageToAtmosphereID)
-                    $('#field-inspection-current-condition-limit-state-b'+counter).val(data.currentConditionFailureOfFunctionID)
-                    $('#field-inspection-current-condition-limit-state-c'+counter).val(data.currentConditionPassingAcrossValveID)
-                    $('#field-inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
-                    $('#field-inspection-function-condition'+counter).val(data.functionCondition)
-                    $('#field-inspection-description'+counter).val(data.inspectionDescription)
-                    $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
+                    $('#field-inspection-date' + counter).val(data.inspectionDate)
+                    $('#field-inspection-inspection-method' + counter).val(data.inspectionMethodID)
+                    $('#field-inspection-current-condition-limit-state-a' + counter).val(data.currentConditionLeakeageToAtmosphereID)
+                    $('#field-inspection-current-condition-limit-state-b' + counter).val(data.currentConditionFailureOfFunctionID)
+                    $('#field-inspection-current-condition-limit-state-c' + counter).val(data.currentConditionPassingAcrossValveID)
+                    $('#field-inspection-effectiveness' + counter).val(data.inspectionEffectivenessID)
+                    $('#field-inspection-function-condition' + counter).val(data.functionCondition)
+                    $('#field-inspection-description' + counter).val(data.inspectionDescription)
+                    $('#field-inspection-test-pressure-if-any' + counter).val(data.testPressureIfAny)
 
                     let galleryHtml = ''
                     data.inspectionFiles.forEach(i => {
                         galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                        <div class="single-image" data-identifier="gallery-${i.id}">
-                            <img src="/${i.filePath}"">
-                            <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                <i class="fa-solid fa-xmark"></i>
+                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                <img src="/${i.filePath}"">
+                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
                             </div>
-                        </div>
-                        `
+                            `
                     })
 
                     //fill image
@@ -430,7 +437,7 @@
                     $('#inspection' + counter).find('form').addClass('history-form')
 
                     //fill ID
-                    $('#inspection'+counter).find('#data-id').val(id)
+                    $('#inspection' + counter).find('#data-id').val(id)
                 },
                 error: function (error) {
                     alert('History not found');
@@ -441,7 +448,7 @@
             });
         }
 
-        function fillAssetInfo ({counter, data}) {
+        function fillAssetInfo({ counter, data }) {
             $('#field-inspection-assetid' + counter).val(data.id)
             $('#field-inspection-valvetype' + counter).val(data.valveType)
             $('#field-inspection-tagno' + counter).val(data.tagNo)
@@ -475,25 +482,25 @@
         template_inspection_header.remove();
 
         let idx = 0;
-        function addTab () {
+        function addTab() {
             let ctr = idx;
 
             let id = $(this).attr('attr-id');
             const equipmentId = id
             let isHistory = false
             let name = $(this).attr('attr-name');
-            if($(this).attr('attr-inspection-id')) {
+            if ($(this).attr('attr-inspection-id')) {
                 isHistory = true
                 id = $(this).attr('attr-inspection-id')
 
             } else {
                 name = `New Inspection ${name}`
             }
-            
+
             let tabheadercontainer = $('#inspectiontabheader');
             let tabcontentcontainer = $('#tabcontentcontainer');
-            tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
-            tabcontentcontainer.append('<div class="tab-pane" equipment-id="'+equipmentId+'" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
+            tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection' + ctr + '" type="button" role="tab" tab-num="' + ctr + '">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
+            tabcontentcontainer.append('<div class="tab-pane" equipment-id="' + equipmentId + '" id="inspection' + ctr + '" tab-num="' + ctr + '">' + template_inspection_html + '</div>');
             let tabcontent = tabcontentcontainer.find('.form-control');
             tabcontent.each(function () {
                 let name = $(this).attr('id') + ctr;
@@ -524,12 +531,12 @@
             })
 
             initDatepicker()
-            
+
             moveToLastTab()
 
             idx++;
 
-            $('.image-gallery-upload').on('change', function() {
+            $('.image-gallery-upload').on('change', function () {
                 imagesPreview(this);
             });
         }

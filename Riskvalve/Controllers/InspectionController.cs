@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Riskvalve.Models;
 
@@ -51,7 +52,7 @@ public class InspectionController : Controller
     }
 
     [HttpPost]
-    public InspectionModel AddInspection()
+    public IActionResult AddInspection()
     {
         List<IFormFile> files = Request.Form.Files.ToList();
         InspectionModel inspection = new();
@@ -79,51 +80,71 @@ public class InspectionController : Controller
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
                 CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
             };
-        int inspectionID = inspection.AddInspection(inspectionDB);
-        IWebHostEnvironment environment =
-            HttpContext.RequestServices.GetService<IWebHostEnvironment>();
-        string path = Path.Combine(
-            environment.WebRootPath,
-            "Uploads",
-            "Inspection",
-            inspectionID.ToString()
-        );
-        if (!Directory.Exists(path))
+        try
         {
-            Directory.CreateDirectory(path);
-        }
-        foreach (var formFile in files)
-        {
-            if (formFile.Length > 0)
+            int inspectionID = inspection.AddInspection(inspectionDB);
+            IWebHostEnvironment environment =
+                HttpContext.RequestServices.GetService<IWebHostEnvironment>();
+            string path = Path.Combine(
+                environment.WebRootPath,
+                "Uploads",
+                "Inspection",
+                inspectionID.ToString()
+            );
+            if (!Directory.Exists(path))
             {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
-                var filePath = Path.Combine(path, fileName);
-                using (var stream = System.IO.File.Create(filePath))
+                Directory.CreateDirectory(path);
+            }
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
                 {
-                    formFile.CopyTo(stream);
-                    InspectionFileModel inspectionFile =
-                        new()
-                        {
-                            MaintenanceID = null,
-                            InspectionID = inspectionID,
-                            FileName = fileName,
-                            FileSize = formFile.Length,
-                            FileType = formFile.ContentType,
-                            FilePath = Path.Combine(
-                                "Uploads",
-                                "Inspection",
-                                inspectionID.ToString(),
-                                fileName
-                            ),
-                            CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
-                            CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-                        };
-                    inspectionFile.AddInspectionFile(inspectionFile);
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+                    var filePath = Path.Combine(path, fileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        formFile.CopyTo(stream);
+                        InspectionFileModel inspectionFile =
+                            new()
+                            {
+                                MaintenanceID = null,
+                                InspectionID = inspectionID,
+                                FileName = fileName,
+                                FileSize = formFile.Length,
+                                FileType = formFile.ContentType,
+                                FilePath = Path.Combine(
+                                    "Uploads",
+                                    "Inspection",
+                                    inspectionID.ToString(),
+                                    fileName
+                                ),
+                                CreatedAt = DateTime.Now.ToString(
+                                    Environment.GetDateFormatString()
+                                ),
+                                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                            };
+                        inspectionFile.AddInspectionFile(inspectionFile);
+                    }
                 }
             }
+            InspectionModel result = inspection.GetInspectionModel(inspectionID);
+            string resultstring = JsonSerializer.Serialize(result);
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "Status", "Success"},
+                    { "Message", "Inspection added successfully" },
+                    { "InspectionData", resultstring }
+                }
+            );
         }
-        return inspection.GetInspectionModel(inspectionID);
-        // return RedirectToAction("Index");
+        catch (Exception ex)
+        {
+            string message = ex.Message;
+            return Json(
+                new Dictionary<string, string> { { "Status", "Error" }, { "Message", message } }
+            );
+        }
     }
 
     [HttpPost]

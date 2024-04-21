@@ -89,6 +89,12 @@ public class ToolController : Controller
     [HttpPost]
     public IActionResult ImportExcelFile()
     {
+        int total = 0;
+        int success = 0;
+        int failed = 0;
+        List<string> failedDatas = new();
+        LogDB logDB = new();
+        LogModel logModel = new();
         AssetModel assetModel = new();
         InspectionModel inspectionModel = new();
         MaintenanceModel maintenanceModel = new();
@@ -134,97 +140,270 @@ public class ToolController : Controller
         List<Dictionary<string, string>> result = new();
         if (mode.Equals("asset"))
         {
-            try
+            result = assetModel.MapAssetRegister(data);
+            AssetDB assetDB = new();
+            foreach (var item in result)
             {
-                List<AssetDB> pushData = new();
-                result = assetModel.MapAssetRegister(data);
-                foreach (var item in result)
+                total++;
+                try
                 {
                     string json = JsonConvert.SerializeObject(item);
-                    AssetDB assetDB = JsonConvert.DeserializeObject<AssetDB>(json);
+                    assetDB = JsonConvert.DeserializeObject<AssetDB>(json);
                     assetDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
                     assetDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-                    pushData.Add(assetDB);
+                    assetModel.AddAsset(assetDB);
                 }
-                foreach (var item in pushData)
+                catch (Exception ex)
                 {
-                    assetModel.AddAsset(item);
+                    logDB = new LogDB
+                    {
+                        Module = "ImportAssetRegister",
+                        CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                        CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
+                        Message = ex.Message,
+                        Data = JsonConvert.SerializeObject(assetDB)
+                    };
+                    logModel.AddLog(logDB);
+                    failed++;
+                    failedDatas.Add(assetDB.TagNo);
+                    continue;
                 }
             }
-            catch (Exception ex)
+            success = total - failed;
+            string message =
+                "Success import "
+                + success
+                + " data(s) of "
+                + total
+                + " data(s). Failed "
+                + failed
+                + " data(s)";
+            if (failed > 0)
             {
-                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+                string failedData = "";
+                foreach (var item in failedDatas)
+                {
+                    failedData += item + ", ";
+                }
+                failedData = failedData.Substring(0, failedData.Length - 2);
+                message += " with Tag No: " + failedData + ".";
             }
+            else
+            {
+                message += ".";
+            }
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "total", total.ToString() },
+                    { "success", success.ToString() },
+                    { "failed", failed.ToString() },
+                    { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+                    { "message", message }
+                }
+            );
         }
-        else if(mode.Equals("inspection"))
+        else if (mode.Equals("inspection"))
         {
-            List<InspectionDB> pushData = new();
-            try{
-                result = inspectionModel.MapInspection(data);
-                foreach (var item in result)
+            result = inspectionModel.MapInspection(data);
+            InspectionDB inspectionDB = new();
+            foreach (var item in result)
+            {
+                total++;
+                try
                 {
                     string json = JsonConvert.SerializeObject(item);
-                    InspectionDB inspectionDB = JsonConvert.DeserializeObject<InspectionDB>(json);
-                    inspectionDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    inspectionDB = JsonConvert.DeserializeObject<InspectionDB>(json);
+                    inspectionDB.CreatedAt = DateTime.Now.ToString(
+                        Environment.GetDateFormatString()
+                    );
                     inspectionDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-                    pushData.Add(inspectionDB);
+                    inspectionModel.AddInspection(inspectionDB);
                 }
-                foreach (var item in pushData)
+                catch (Exception ex)
                 {
-                    inspectionModel.AddInspection(item);
+                    logDB = new LogDB
+                    {
+                        Module = "ImportInspection",
+                        CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                        CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
+                        Message = ex.Message,
+                        Data = JsonConvert.SerializeObject(inspectionDB)
+                    };
+                    logModel.AddLog(logDB);
+                    failed++;
+                    failedDatas.Add(inspectionDB.InspectionDate);
+                    continue;
                 }
             }
-            catch (Exception ex)
+            success = total - failed;
+            string message =
+                "Success import "
+                + success
+                + " data(s) of "
+                + total
+                + " data(s). Failed "
+                + failed
+                + " data(s)";
+            if (failed > 0)
             {
-                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+                string failedData = "";
+                foreach (var item in failedDatas)
+                {
+                    failedData += item + ", ";
+                }
+                failedData = failedData.Substring(0, failedData.Length - 2);
+                message += " with Inspection Date: " + failedData + ".";
             }
+            else
+            {
+                message += ".";
+            }
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "total", total.ToString() },
+                    { "success", success.ToString() },
+                    { "failed", failed.ToString() },
+                    { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+                    { "message", message }
+                }
+            );
         }
         else if (mode.Equals("maintenance"))
         {
-            List<MaintenanceDB> pushData = new();
-            try{
-                result = maintenanceModel.MapMaintenanceRegister(data);
-                foreach (var item in result)
+            result = maintenanceModel.MapMaintenanceRegister(data);
+            MaintenanceDB maintenanceDB = new();
+            foreach (var item in result)
+            {
+                total++;
+                try
                 {
                     string json = JsonConvert.SerializeObject(item);
-                    MaintenanceDB maintenanceDB = JsonConvert.DeserializeObject<MaintenanceDB>(json);
-                    maintenanceDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    maintenanceDB = JsonConvert.DeserializeObject<MaintenanceDB>(json);
+                    maintenanceDB.CreatedAt = DateTime.Now.ToString(
+                        Environment.GetDateFormatString()
+                    );
                     maintenanceDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-                    pushData.Add(maintenanceDB);
+                    maintenanceModel.AddMaintenance(maintenanceDB);
                 }
-                foreach (var item in pushData)
+                catch (Exception ex)
                 {
-                    maintenanceModel.AddMaintenance(item);
+                    logDB = new LogDB
+                    {
+                        Module = "ImportMaintenance",
+                        CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                        CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
+                        Message = ex.Message,
+                        Data = JsonConvert.SerializeObject(maintenanceDB)
+                    };
+                    logModel.AddLog(logDB);
+                    failed++;
+                    failedDatas.Add(maintenanceDB.MaintenanceDate);
+                    continue;
                 }
             }
-            catch (Exception ex)
+            success = total - failed;
+            string message =
+                "Success import "
+                + success
+                + " data(s) of "
+                + total
+                + " data(s). Failed "
+                + failed
+                + " data(s)";
+            if (failed > 0)
             {
-                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+                string failedData = "";
+                foreach (var item in failedDatas)
+                {
+                    failedData += item + ", ";
+                }
+                failedData = failedData.Substring(0, failedData.Length - 2);
+                message += " with Maintenance Date: " + failedData + ".";
             }
+            else
+            {
+                message += ".";
+            }
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "total", total.ToString() },
+                    { "success", success.ToString() },
+                    { "failed", failed.ToString() },
+                    { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+                    { "message", message }
+                }
+            );
         }
-        else if(mode.Equals("assessment"))
+        else if (mode.Equals("assessment"))
         {
-            List<AssessmentDB> pushData = new();
-            try{
-                result = assessmentModel.MapAssessment(data);
-                foreach (var item in result)
+            result = assessmentModel.MapAssessment(data);
+            AssessmentDB assessmentDB = new();
+            foreach (var item in result)
+            {
+                total++;
+                try
                 {
                     string json = JsonConvert.SerializeObject(item);
-                    AssessmentDB assessmentDB = JsonConvert.DeserializeObject<AssessmentDB>(json);
-                    assessmentDB.CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
+                    assessmentDB = JsonConvert.DeserializeObject<AssessmentDB>(json);
+                    assessmentDB.CreatedAt = DateTime.Now.ToString(
+                        Environment.GetDateFormatString()
+                    );
                     assessmentDB.CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-                    pushData.Add(assessmentDB);
+                    assessmentModel.AddAssessment(assessmentDB);
                 }
-                foreach (var item in pushData)
+                catch (Exception ex)
                 {
-                    assessmentModel.AddAssessment(item);
+                    logDB = new LogDB
+                    {
+                        Module = "ImportAssessment",
+                        CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                        CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
+                        Message = ex.Message,
+                        Data = JsonConvert.SerializeObject(assessmentDB)
+                    };
+                    logModel.AddLog(logDB);
+                    failed++;
+                    failedDatas.Add(assessmentDB.AssessmentDate);
+                    continue;
                 }
             }
-            catch (Exception ex)
+            success = total - failed;
+            string message =
+                "Success import "
+                + success
+                + " data(s) of "
+                + total
+                + " data(s). Failed "
+                + failed
+                + " data(s)";
+            if (failed > 0)
             {
-                return Json(new Dictionary<string, string> { { "error", ex.Message } });
+                string failedData = "";
+                foreach (var item in failedDatas)
+                {
+                    failedData += item + ", ";
+                }
+                failedData = failedData.Substring(0, failedData.Length - 2);
+                message += " with Assessment Date: " + failedData + ".";
             }
+            else
+            {
+                message += ".";
+            }
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "total", total.ToString() },
+                    { "success", success.ToString() },
+                    { "failed", failed.ToString() },
+                    { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+                    { "message", message }
+                }
+            );
         }
-        return Json(result);
+        return Json("Error API");
     }
 }

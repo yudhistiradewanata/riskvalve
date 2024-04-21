@@ -323,9 +323,26 @@ public class AssetRegisterController : Controller
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        int assetId = assetModel.AddAsset(assetDb);
-        return Json(assetId);
-        // return RedirectToAction("Asset");
+        try{
+            int assetId = assetModel.AddAsset(assetDb);
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "Status", "Success"},
+                    { "Message", "Asset added successfully" },
+                    { "AssetId", assetId.ToString() }
+                }
+            );
+        } catch (Exception ex) {
+            string message = ex.Message;
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "Status", "Error" },
+                    { "Message", message }
+                }
+            );
+        }
     }
 
     [HttpPost]

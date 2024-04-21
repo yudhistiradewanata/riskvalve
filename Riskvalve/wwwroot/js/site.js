@@ -33,6 +33,10 @@ function dataTableSearch (value) {
   $('input[type=search].dt-input').val(value).trigger('input')
 }
 
+function refreshDatatableColumn () {
+  DataTable.tables({ visible: true, api: true }).columns.adjust();
+}
+
 function initDatatable (options) {
   const defaultLayout = {
     topStart: null,
@@ -46,12 +50,17 @@ function initDatatable (options) {
     layout = defaultLayout,
     paging = true
   } = options || {}
+  const scrollableConfig = options.scrollable? {
+    scrollCollapse: true,
+    scrollY: '60vh'
+  } : {}
   const table = $(selector).DataTable({
       scrollX: scrollable,
       scrollCollapse: scrollable,
       ordering: false,
       layout,
-      paging
+      paging,
+      ...scrollableConfig
   });
 
   return table
@@ -109,4 +118,12 @@ function deleteGalleryImage(key) {
     $(`input[identifier=${key}]`).remove()
     $(`input[identifier=delete-${key}]`).val('true')
   }
+}
+
+function formatDate(date) {
+  var dd = String(date.getDate()).padStart(2, '0');
+  var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var yyyy = date.getFullYear();
+
+  return dd + '-' + mm + '-' + yyyy;
 }

@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Riskvalve.Models;
 
@@ -50,7 +51,7 @@ public class MaintenanceController : Controller
     }
 
     [HttpPost]
-    public MaintenanceModel AddMaintenance()
+    public IActionResult AddMaintenance()
     {
         List<IFormFile> files = Request.Form.Files.ToList();
         MaintenanceModel maintenance = new();
@@ -65,47 +66,67 @@ public class MaintenanceController : Controller
                 CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString()),
             };
-        int maintenanceID = maintenance.AddMaintenance(maintenanceDB);
-        IWebHostEnvironment environment =
-            Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>();
-        string path = Path.Combine(
-            environment.WebRootPath,
-            "Uploads",
-            "Maintenance",
-            maintenanceID.ToString()
-        );
-        if (!Directory.Exists(path))
+        try
         {
-            Directory.CreateDirectory(path);
-        }
-        foreach (var formFile in files)
-        {
-            if (formFile.Length > 0)
+            int maintenanceID = maintenance.AddMaintenance(maintenanceDB);
+            IWebHostEnvironment environment =
+                Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>();
+            string path = Path.Combine(
+                environment.WebRootPath,
+                "Uploads",
+                "Maintenance",
+                maintenanceID.ToString()
+            );
+            if (!Directory.Exists(path))
             {
-                var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
-                var filePath = Path.Combine(path, fileName);
-                using (var stream = System.IO.File.Create(filePath))
+                Directory.CreateDirectory(path);
+            }
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
                 {
-                    formFile.CopyTo(stream);
-                    InspectionFileModel maintenanceFile =
-                        new()
-                        {
-                            MaintenanceID = maintenanceID,
-                            FileName = fileName,
-                            FileSize = formFile.Length,
-                            FileType = formFile.ContentType,
-                            FilePath = Path.Combine(
-                                "Uploads",
-                                "Inspection",
-                                maintenanceID.ToString(),
-                                fileName
-                            ),
-                        };
-                    maintenanceFile.AddInspectionFile(maintenanceFile);
+                    var fileName = Guid.NewGuid().ToString() + Path.GetExtension(formFile.FileName);
+                    var filePath = Path.Combine(path, fileName);
+                    using (var stream = System.IO.File.Create(filePath))
+                    {
+                        formFile.CopyTo(stream);
+                        InspectionFileModel maintenanceFile =
+                            new()
+                            {
+                                MaintenanceID = maintenanceID,
+                                FileName = fileName,
+                                FileSize = formFile.Length,
+                                FileType = formFile.ContentType,
+                                FilePath = Path.Combine(
+                                    "Uploads",
+                                    "Inspection",
+                                    maintenanceID.ToString(),
+                                    fileName
+                                ),
+                            };
+                        maintenanceFile.AddInspectionFile(maintenanceFile);
+                    }
                 }
             }
+            MaintenanceModel maintenanceModel = maintenance.GetMaintenanceModel(maintenanceID);
+            string resultstring = JsonSerializer.Serialize(maintenanceModel);
+            return Json(
+                new Dictionary<string, string>
+                {
+                    { "Status", "Success" },
+                    { "Message", "Maintenance added successfully" },
+                    { "MaintenanceData", resultstring }
+                }
+            );
         }
-        return maintenance.GetMaintenanceModel(maintenanceID);
+        catch (Exception ex)
+        {
+            string message = ex.Message;
+            return Json(
+                new Dictionary<string, string> { { "Status", "Error" }, { "Message", message } }
+            );
+        }
+        // return maintenance.GetMaintenanceModel(maintenanceID);
         // return RedirectToAction("Index");
     }
 

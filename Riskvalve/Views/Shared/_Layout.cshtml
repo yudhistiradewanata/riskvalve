@@ -144,84 +144,12 @@
                 </li>
             </ul>
         </header>
-        @*
-    <header>
-    <nav class="navbar navbar-default">
-    <div class="container-fluid">
-    <div class="row nav-row-custom header">
-    <div class="col-xs-2" style="background-color: white;">
-    <img src="~/lib/images/logo.jpg" class="img-responsive header-logo" alt="Riskvalve" />
-    </div>
-    <div class="col-xs-10">
-    <div class="collapse navbar-collapse" id="myNavbar">
-    <ul class="nav navbar-nav">
-    <li>
-    <a asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-    </li>
-    <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Asset Register
-    <span class="caret"></span></a>
-    <ul class="dropdown-menu">
-    <li><a asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
-    </li>
-    <li><a asp-area="" asp-controller="AssetRegister"
-    asp-action="Platform">Platform</a>
-    </li>
-    <li><a asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
-    </li>
-    </ul>
-    </li>
-    <li>
-    <a asp-area="" asp-controller="Inspection" asp-action="Index">IMR</a>
-    </li>
-    <li>
-    <a asp-area="" asp-controller="Assessment" asp-action="Index">Assessment</a>
-    </li>
-    <li class="dropdown">
-    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Tool
-    <span class="caret"></span></a>
-    <ul class="dropdown-menu">
-    <li><a asp-area="" asp-controller="Tool" asp-action="ImportAssetRegister">Import
-    Asset Register</a></li>
-    <li><a asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
-    Assessment</a></li>
-    </ul>
-    </li>
-    <li>
-    <a asp-area="" asp-controller="User" asp-action="Index">User</a>
-    </li>
-    </ul>
-    <p id="btn-signout" class="navbar-text navbar-user" style="text-align: right;">
-    <a class="navbar-link">
-    @Username
-    <br />
-    @Role
-    </a>
-    <a class="navbar-link logout-icon">
-    <i class="fa-solid fa-right-from-bracket"></i>
-    </a>
-    </p>
-    </div>
-    </div>
-    </div>
-    </div>
-    </nav>
-    </header>
-    *@
         <div>
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
         </div>
     </body>
-
-    @*
-<footer class="border-top footer text-muted">
-<div class="container">
-&copy; 2024 - Riskvalve - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-</div>
-</footer>
-*@
 }
 else
 {
@@ -235,6 +163,7 @@ else
     integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp"
     crossorigin="anonymous"></script>
 <script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://github.com/makeusabrew/bootbox/releases/download/v6.0.0/bootbox.all.min.js"></script>
 <script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-html5-3.0.1/datatables.min.js"></script>
 @*<link rel="stylesheet" href="~/lib/treejs/tree.css" asp-append-version="true" />*@
 <script src="https://code.highcharts.com/highcharts.js"></script>

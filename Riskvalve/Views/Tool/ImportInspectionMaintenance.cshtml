@@ -17,17 +17,19 @@
                         <form id="inspection-form">
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
-                                    Download the template file <a href="/Uploads/Downloads/InspectionTemplate.xlsx" target="_blank">here</a>
+                                    Download the template file <a href="/Uploads/Downloads/InspectionTemplate.xlsx"
+                                        target="_blank">here</a>
                                 </div>
                             </div>
-                            <br/>
+                            <br />
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
                                     <label for="fileUpload" class="col-form-label">File: </label>
                                 </div>
                                 <div class="col">
                                     <input type="hidden" id="modeInspection" name="mode" value="inspection" />
-                                    <input type="file" id="fileUploadInspection" name="file" class="form-control" accept=".xlsx, .xls">
+                                    <input type="file" id="fileUploadInspection" name="file" class="form-control"
+                                        accept=".xlsx, .xls">
                                 </div>
                             </div>
                             <br />
@@ -53,17 +55,19 @@
                         <form id="maintenance-form">
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
-                                    Download the template file <a href="/Uploads/Downloads/MaintenanceTemplate.xlsx" target="_blank">here</a>
+                                    Download the template file <a href="/Uploads/Downloads/MaintenanceTemplate.xlsx"
+                                        target="_blank">here</a>
                                 </div>
                             </div>
-                            <br/>
+                            <br />
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
                                     <label for="fileUpload" class="col-form-label">File: </label>
                                 </div>
                                 <div class="col">
                                     <input type="hidden" id="modeMaintenance" name="mode" value="maintenance" />
-                                    <input type="file" id="fileUploadMaintenance" name="file" class="form-control" accept=".xlsx, .xls">
+                                    <input type="file" id="fileUploadMaintenance" name="file" class="form-control"
+                                        accept=".xlsx, .xls">
                                 </div>
                             </div>
                             <br />
@@ -96,14 +100,10 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if (data.error) {
-                            alert(data.error);
-                            $("#fileUpload").val('');
-                        } else {
-                            alert('File uploaded successfully');
-                            $("#fileUpload").val('');
+                        bootbox.alert(data.message, function () {
+                            $("#fileUploadInspection").val('');
                             location.reload();
-                        }
+                        });
                     },
                     error: function (xhr, status, error) {
                         alert('Error submitting the form')
@@ -122,14 +122,10 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if (data.error) {
-                            alert(data.error);
-                            $("#fileUpload").val('');
-                        } else {
-                            alert('File uploaded successfully');
-                            $("#fileUpload").val('');
+                        bootbox.alert(data.message, function () {
+                            $("#fileUploadMaintenance").val('');
                             location.reload();
-                        }
+                        });
                     },
                     error: function (xhr, status, error) {
                         alert('Error submitting the form')

@@ -17,23 +17,26 @@
                         <form>
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
-                                    Download the template file <a href="/Uploads/Downloads/AssetTemplate.xlsx" target="_blank">here</a>
+                                    Download the template file <a href="/Uploads/Downloads/AssetTemplate.xlsx"
+                                        target="_blank">here</a>
                                 </div>
                             </div>
-                            <br/>
+                            <br />
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
                                     <label for="fileUpload" class="col-form-label">File: </label>
                                 </div>
                                 <div class="col">
                                     <input type="hidden" id="mode" name="mode" value="asset" />
-                                    <input type="file" id="fileUpload" name="file" class="form-control" accept=".xlsx, .xls">
+                                    <input type="file" id="fileUpload" name="file" class="form-control"
+                                        accept=".xlsx, .xls">
                                 </div>
                             </div>
                             <br />
                             <div class="row g-3 align-items-center">
                                 <div class="col">
-                                    <button type="submit" class="btn btn-outline-primary" style="width: 100%;">Import File</button>
+                                    <button type="submit" class="btn btn-outline-primary" style="width: 100%;">Import
+                                        File</button>
                                 </div>
                             </div>
                         </form>
@@ -59,17 +62,12 @@
                     contentType: false,
                     processData: false,
                     success: function (data) {
-                        if(data.error){
-                            alert(data.error);
-                            $("#fileUpload").val('');
-                        }
-                        else{
-                            alert('File uploaded successfully');
+                        bootbox.alert(data.message, function () {
                             $("#fileUpload").val('');
                             location.reload();
-                        }
+                        });
                     },
-                    error: function(xhr, status, error) {
+                    error: function (xhr, status, error) {
                         alert('Error submitting the form')
                     }
                 });

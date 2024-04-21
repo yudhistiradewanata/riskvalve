@@ -356,7 +356,11 @@
                         toxicorflamablefluidid: toxicorflamablefluid
                     },
                     success: function (data) {
-                        location.reload();
+                        if(data.Status == 'Success'){
+                            location.reload();
+                        } else {
+                            alert(data.Message);
+                        }
                     }
                 });
             } else if (mode == 'update') {

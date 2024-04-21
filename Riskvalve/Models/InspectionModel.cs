@@ -185,6 +185,20 @@ public class InspectionModel : InspectionDB
         using (var context = new InspectionContext())
         {
             inspection.IsDeleted = false;
+            // check if there is already an inspection with the same assetid and inspection date
+            if (
+                context
+                    .Inspection.Select(i => new { i.AssetID, i.InspectionDate })
+                    .Where(i =>
+                        i.AssetID == inspection.AssetID
+                        && i.InspectionDate == inspection.InspectionDate
+                    )
+                    .Count() > 0
+            )
+            {
+                Exception e = new("Inspection already exists for this asset on this date");
+                throw e;
+            }
             context.Inspection.Add(inspection);
             context.SaveChanges();
             return inspection.Id;
@@ -277,7 +291,7 @@ public class InspectionModel : InspectionDB
                     {
                         mappedValue = DateTime
                             .FromOADate(Convert.ToDouble(value))
-                            .ToString(Environment.GetDateFormatString());
+                            .ToString(Environment.GetDateFormatString(false));
                     }
                     else if (mappedKey.Equals("InspectionMethodID"))
                     {

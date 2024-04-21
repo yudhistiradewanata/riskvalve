@@ -663,6 +663,20 @@ svg * {
   display: block;
 }
 
+.assessment-form.not-editable .submit-button {
+  display: none;
+}
+
+/* .history-form .only-add {
+  display: none;
+} */
+
+select.readonly{
+  pointer-events: none;
+  background: none;
+  background-color: var(--bs-secondary-bg);
+}
+
 .form-select.no-arrow{
   background-image: none;
   padding-right: .5rem;

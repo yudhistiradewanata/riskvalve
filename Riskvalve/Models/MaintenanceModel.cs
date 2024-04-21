@@ -120,6 +120,17 @@ public class MaintenanceModel : MaintenanceDB
         using (var context = new MaintenanceContext())
         {
             maintenanceDB.IsDeleted = false;
+            // check if there is already an maintenance with the same assetid and maintenance date
+            if(
+                context.Maintenance
+                    .Where(m => m.AssetID == maintenanceDB.AssetID)
+                    .Where(m => m.MaintenanceDate == maintenanceDB.MaintenanceDate)
+                    .FirstOrDefault() != null
+            )
+            {
+                Exception e = new("Maintenance with the same asset and date already exist");
+                throw e;
+            }
             context.Maintenance.Add(maintenanceDB);
             context.SaveChanges();
             maintenanceID = maintenanceDB.Id;
@@ -197,7 +208,7 @@ public class MaintenanceModel : MaintenanceDB
                     {
                         mappedValue = DateTime
                             .FromOADate(Convert.ToDouble(value))
-                            .ToString(Environment.GetDateFormatString());
+                            .ToString(Environment.GetDateFormatString(false));
                     }
                     else if(mappedKey.Equals("IsValveRepairedID"))
                     {

@@ -43,6 +43,33 @@ public class AssessmentController : Controller
         return View();
     }
 
+    public IActionResult PrintAssessment(int id)
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
+        }
+        AssessmentModel assessment = new();
+        AssessmentModel assessmentModel = assessment.GetAssessmentModel(id);
+        ViewData["Assessment"] = assessmentModel;
+        return View();
+    }
+
     [HttpGet]
     public IActionResult GetAssessmentDetail(int id)
     {
@@ -71,54 +98,77 @@ public class AssessmentController : Controller
                 TimeToLimitStatePassingAccrosValve = Request.Form[
                     "TimeToLimitStatePassingAccrosValve"
                 ],
-                LeakageToAtmosphereID = Convert.ToInt32(Request.Form["LeakageToAtmosphereID"]),
-                FailureOfFunctionID = Convert.ToInt32(Request.Form["FailureOfFunctionID"]),
-                PassingAccrosValveID = Convert.ToInt32(Request.Form["PassingAccrosValveID"]),
-                LeakageToAtmosphereTP1ID = Convert.ToInt32(
+                LeakageToAtmosphereID = Environment.StringToInt(Request.Form["LeakageToAtmosphereID"]),
+                FailureOfFunctionID = Environment.StringToInt(Request.Form["FailureOfFunctionID"]),
+                PassingAccrosValveID = Environment.StringToInt(Request.Form["PassingAccrosValveID"]),
+                LeakageToAtmosphereTP1ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP1ID"]
                 ),
-                LeakageToAtmosphereTP2ID = Convert.ToInt32(
+                LeakageToAtmosphereTP2ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP2ID"]
                 ),
-                LeakageToAtmosphereTP3ID = Convert.ToInt32(
+                LeakageToAtmosphereTP3ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP3ID"]
                 ),
-                FailureOfFunctionTP1ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP1ID"]),
-                FailureOfFunctionTP2ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP2ID"]),
-                FailureOfFunctionTP3ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP3ID"]),
-                PassingAccrosValveTP1ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP1ID"]),
-                PassingAccrosValveTP2ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP2ID"]),
-                PassingAccrosValveTP3ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP3ID"]),
-                InspectionEffectivenessID = Convert.ToInt32(
+                FailureOfFunctionTP1ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP1ID"]),
+                FailureOfFunctionTP2ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP2ID"]),
+                FailureOfFunctionTP3ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP3ID"]),
+                PassingAccrosValveTP1ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP1ID"]),
+                PassingAccrosValveTP2ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP2ID"]),
+                PassingAccrosValveTP3ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP3ID"]),
+                InspectionEffectivenessID = Environment.StringToInt(
                     Request.Form["InspectionEffectivenessID"]
                 ),
-                ImpactOfInternalFluidImpuritiesID = Convert.ToInt32(
+                ImpactOfInternalFluidImpuritiesID = Environment.StringToInt(
                     Request.Form["ImpactOfInternalFluidImpuritiesID"]
                 ),
-                ImpactOfOperatingEnvelopesID = Convert.ToInt32(
+                ImpactOfOperatingEnvelopesID = Environment.StringToInt(
                     Request.Form["ImpactOfOperatingEnvelopesID"]
                 ),
-                UsedWithinOEMSpecificationID = Convert.ToInt32(
+                UsedWithinOEMSpecificationID = Environment.StringToInt(
                     Request.Form["UsedWithinOEMSpecificationID"]
                 ),
-                RepairedID = Convert.ToInt32(Request.Form["RepairedID"]),
+                RepairedID = Environment.StringToInt(Request.Form["RepairedID"]),
                 ProductLossDefinition = Request.Form["ProductLossDefinition"],
-                HSSEDefinisionID = Convert.ToInt32(Request.Form["HSSEDefinisionID"]),
+                HSSEDefinisionID = Environment.StringToInt(Request.Form["HSSEDefinisionID"]),
                 Summary = Request.Form["Summary"],
-                RecommendationActionID = Convert.ToInt32(Request.Form["RecommendationActionID"]),
+                RecommendationActionID = Environment.StringToInt(Request.Form["RecommendationActionID"]),
                 DetailedRecommendation = Request.Form["DetailedRecommendation"],
+                ConsequenceOfFailure = Request.Form["consequenceOfFailure"],
+                TP1A = Request.Form["tP1A"],
+                TP1B = Request.Form["tP1B"],
+                TP1C = Request.Form["tP1C"],
+                TP2A = Request.Form["tP2A"],
+                TP2B = Request.Form["tP2B"],
+                TP2C = Request.Form["tP2C"],
+                TP3A = Request.Form["tP3A"],
+                TP3B = Request.Form["tP3B"],
+                TP3C = Request.Form["tP3C"],
+                TPTimeToActionA = Request.Form["tPTimeToActionA"],
+                TPTimeToActionB = Request.Form["tPTimeToActionB"],
+                TPTimeToActionC = Request.Form["tPTimeToActionC"],
+                TP1Risk = Request.Form["TP1Risk"],
+                TP2Risk = Request.Form["TP2Risk"],
+                TP3Risk = Request.Form["TP3Risk"],
+                TPTimeToActionRisk = Request.Form["TPTimeToActionRisk"],
                 IsDeleted = false,
-                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
         int assessmentID = assessment.AddAssessment(assessmentDB);
-        List<int> inspectionIDs = Request.Form["selectedInspectionId"].ToString().Split(',').Select(
-            int.Parse
-        ).ToList();
+        List<int> inspectionIDs = Request
+            .Form["selectedInspectionId"]
+            .ToString()
+            .Split(',')
+            .Select(int.Parse)
+            .ToList();
         assessment.AddInspectionToAssessment(assessmentID, inspectionIDs);
-        List<int> maintenanceIDs = Request.Form["selectedMaintenanceId"].ToString().Split(',').Select(
-            int.Parse
-        ).ToList();
+        List<int> maintenanceIDs = Request
+            .Form["selectedMaintenanceId"]
+            .ToString()
+            .Split(',')
+            .Select(int.Parse)
+            .ToList();
         assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs);
         assessment = assessment.GetAssessmentModel(assessmentID);
         return Json(assessment);
@@ -127,13 +177,15 @@ public class AssessmentController : Controller
     [HttpPost]
     public IActionResult UpdateAssessment()
     {
+        int assessmentID = Convert.ToInt32(Request.Form["Id"]);
         AssessmentModel assessment = new();
         AssessmentDB assessmentDB =
             new()
             {
-                Id = Convert.ToInt32(Request.Form["Id"]),
+                Id = assessmentID,
                 AssetID = Convert.ToInt32(Request.Form["AssetID"]),
                 AssessmentNo = Request.Form["AssessmentNo"],
+                AssessmentDate = Request.Form["AssessmentDate"],
                 TimePeriode = Request.Form["TimePeriode"],
                 TimeToLimitStateLeakageToAtmosphere = Request.Form[
                     "TimeToLimitStateLeakageToAtmosphere"
@@ -144,47 +196,95 @@ public class AssessmentController : Controller
                 TimeToLimitStatePassingAccrosValve = Request.Form[
                     "TimeToLimitStatePassingAccrosValve"
                 ],
-                LeakageToAtmosphereID = Convert.ToInt32(Request.Form["LeakageToAtmosphereID"]),
-                FailureOfFunctionID = Convert.ToInt32(Request.Form["FailureOfFunctionID"]),
-                PassingAccrosValveID = Convert.ToInt32(Request.Form["PassingAccrosValveID"]),
-                LeakageToAtmosphereTP1ID = Convert.ToInt32(
+                LeakageToAtmosphereID = Environment.StringToInt(Request.Form["LeakageToAtmosphereID"]),
+                FailureOfFunctionID = Environment.StringToInt(Request.Form["FailureOfFunctionID"]),
+                PassingAccrosValveID = Environment.StringToInt(Request.Form["PassingAccrosValveID"]),
+                LeakageToAtmosphereTP1ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP1ID"]
                 ),
-                LeakageToAtmosphereTP2ID = Convert.ToInt32(
+                LeakageToAtmosphereTP2ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP2ID"]
                 ),
-                LeakageToAtmosphereTP3ID = Convert.ToInt32(
+                LeakageToAtmosphereTP3ID = Environment.StringToInt(
                     Request.Form["LeakageToAtmosphereTP3ID"]
                 ),
-                FailureOfFunctionTP1ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP1ID"]),
-                FailureOfFunctionTP2ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP2ID"]),
-                FailureOfFunctionTP3ID = Convert.ToInt32(Request.Form["FailureOfFunctionTP3ID"]),
-                PassingAccrosValveTP1ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP1ID"]),
-                PassingAccrosValveTP2ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP2ID"]),
-                PassingAccrosValveTP3ID = Convert.ToInt32(Request.Form["PassingAccrosValveTP3ID"]),
-                InspectionEffectivenessID = Convert.ToInt32(
+                FailureOfFunctionTP1ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP1ID"]),
+                FailureOfFunctionTP2ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP2ID"]),
+                FailureOfFunctionTP3ID = Environment.StringToInt(Request.Form["FailureOfFunctionTP3ID"]),
+                PassingAccrosValveTP1ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP1ID"]),
+                PassingAccrosValveTP2ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP2ID"]),
+                PassingAccrosValveTP3ID = Environment.StringToInt(Request.Form["PassingAccrosValveTP3ID"]),
+                InspectionEffectivenessID = Environment.StringToInt(
                     Request.Form["InspectionEffectivenessID"]
                 ),
-                ImpactOfInternalFluidImpuritiesID = Convert.ToInt32(
+                ImpactOfInternalFluidImpuritiesID = Environment.StringToInt(
                     Request.Form["ImpactOfInternalFluidImpuritiesID"]
                 ),
-                ImpactOfOperatingEnvelopesID = Convert.ToInt32(
+                ImpactOfOperatingEnvelopesID = Environment.StringToInt(
                     Request.Form["ImpactOfOperatingEnvelopesID"]
                 ),
-                UsedWithinOEMSpecificationID = Convert.ToInt32(
+                UsedWithinOEMSpecificationID = Environment.StringToInt(
                     Request.Form["UsedWithinOEMSpecificationID"]
                 ),
-                RepairedID = Convert.ToInt32(Request.Form["RepairedID"]),
+                RepairedID = Environment.StringToInt(Request.Form["RepairedID"]),
                 ProductLossDefinition = Request.Form["ProductLossDefinition"],
-                HSSEDefinisionID = Convert.ToInt32(Request.Form["HSSEDefinisionID"]),
+                HSSEDefinisionID = Environment.StringToInt(Request.Form["HSSEDefinisionID"]),
                 Summary = Request.Form["Summary"],
-                RecommendationActionID = Convert.ToInt32(Request.Form["RecommendationActionID"]),
+                RecommendationActionID = Environment.StringToInt(Request.Form["RecommendationActionID"]),
                 DetailedRecommendation = Request.Form["DetailedRecommendation"],
+                ConsequenceOfFailure = "1",
+                TP1A = "1",
+                TP1B = "1",
+                TP1C = "1",
+                TP2A = "1",
+                TP2B = "1",
+                TP2C = "1",
+                TP3A = "1",
+                TP3B = "1",
+                TP3C = "1",
+                TPTimeToActionA = "1",
+                TPTimeToActionB = "1",
+                TPTimeToActionC = "1",
+                TP1Risk = "1",
+                TP2Risk = "1",
+                TP3Risk = "1",
+                TPTimeToActionRisk = "1",
+                // ConsequenceOfFailure = Request.Form["ConsequenceOfFailure"],
+                // TP1A = Request.Form["TP1A"],
+                // TP1B = Request.Form["TP1B"],
+                // TP1C = Request.Form["TP1C"],
+                // TP2A = Request.Form["TP2A"],
+                // TP2B = Request.Form["TP2B"],
+                // TP2C = Request.Form["TP2C"],
+                // TP3A = Request.Form["TP3A"],
+                // TP3B = Request.Form["TP3B"],
+                // TP3C = Request.Form["TP3C"],
+                // TPTimeToActionA = Request.Form["TPTimeToActionA"],
+                // TPTimeToActionB = Request.Form["TPTimeToActionB"],
+                // TPTimeToActionC = Request.Form["TPTimeToActionC"],
+                // TP1Risk = Request.Form["TP1Risk"],
+                // TP2Risk = Request.Form["TP2Risk"],
+                // TP3Risk = Request.Form["TP3Risk"],
+                // TPTimeToActionRisk = Request.Form["TPTimeToActionRisk"],
                 IsDeleted = false,
-                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
         assessment.UpdateAssessment(assessmentDB);
+        List<int> inspectionIDs = Request
+            .Form["selectedInspectionId"]
+            .ToString()
+            .Split(',')
+            .Select(int.Parse)
+            .ToList();
+        assessment.AddInspectionToAssessment(assessmentID, inspectionIDs, true);
+        List<int> maintenanceIDs = Request
+            .Form["selectedMaintenanceId"]
+            .ToString()
+            .Split(',')
+            .Select(int.Parse)
+            .ToList();
+        assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs, true);
         assessment = assessment.GetAssessmentModel(assessmentDB.Id);
         return Json(assessment);
     }

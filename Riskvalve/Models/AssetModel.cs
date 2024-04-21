@@ -285,6 +285,13 @@ public class AssetModel : AssetDB
             {
                 asset.ToxicOrFlamableFluidID = null;
             }
+            // Check if there is already an asset with the same tag number
+            if (context.Asset.Any(a => a.TagNo == asset.TagNo))
+            {
+                throw new Exception(
+                    "An asset with the tag number " + asset.TagNo + " already exists."
+                );
+            }
             context.Asset.Add(asset);
             context.SaveChanges();
             return asset.Id;
@@ -430,7 +437,7 @@ public class AssetModel : AssetDB
                     {
                         mappedValue = DateTime
                             .Parse(value)
-                            .ToString(Environment.GetDateFormatString());
+                            .ToString(Environment.GetDateFormatString(false));
                     }
                     if (mappedValue == "")
                     {
