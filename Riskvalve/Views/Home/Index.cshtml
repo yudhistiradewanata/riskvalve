@@ -428,184 +428,184 @@ width="1242"></canvas>
                 },
 
                 tooltip: {
-        @* formatter: function () {
-            return '';
-            '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
-            this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
-            } *@
-                        },
-
-            /*want to make this part dynamically populated*/
-            series: [{
-                data: [
-                    { x: 0, y: 0, value: 100 },//color:'red'},
-                    { x: 0, y: 1, value: 10 },//color:'red'},
-                    { x: 0, y: 2, value: 20 },//color:'red'},
-                    { x: 0, y: 3, value: 30 },//color:'red'},
-                    { x: 0, y: 4, value: 40 },//color:'red'},
-                    { x: 0, y: 0, value: 50 },//color:'red'},
-
-                    { x: 1, y: 0, value: 60 },//color:'red'},
-                    { x: 2, y: 0, value: 70 },//color:'red'},
-                    { x: 3, y: 0, value: 80 },//color:'red'},
-                    { x: 4, y: 0, value: 90 },//color:'red'},
-                    { x: 1, y: 1, value: 70 },//color:'yellow'},
-                    { x: 1, y: 2, value: 80 },//color:'yellow'},
-                    { x: 2, y: 1, value: 90 },//color:'yellow'},
-
-                    { x: 1, y: 3, value: 80 },//color:'green'},
-                    { x: 1, y: 4, value: 90 },//color:'green'},
-                    { x: 2, y: 2, value: 90 },//color:'green'},
-                    { x: 2, y: 3, value: 80 },//color:'green'},
-                    { x: 1, y: 4, value: 90 },//color:'green'},                
-                    { x: 3, y: 1, value: 90 },//color:'green'},
-                    { x: 3, y: 2, value: 90 },//color:'green'},
-                    { x: 4, y: 1, value: 190 },//color:'green'},
-                    { x: 3, y: 3, value: 80 },//color:'green'},
-                    { x: 3, y: 4, value: 90 },//color:'orange'},
-                    { x: 4, y: 4, value: 90 },//color:'orange'},
-                    { x: 3, y: 3, value: 90 },//color:'orange'},
-                    { x: 4, y: 3, value: 90 },//color:'orange'},
-                    { x: 4, y: 2, value: 90 },//color:'orange'},
-                    { x: 2, y: 4, value: 90 } //color:'orange'}
-                ],
-                dataLabels: {
-                    enabled: true,
-                    color: 'black',
-                    style: {
-                        textShadow: 'none'
-                    }
-                }
-
-            }]
-
-                    });
-
-        $('#risk-piechart').highcharts({
-            chart: {
-                type: 'pie'
-            },
-            title: {
-                text: 'Risk Distribution'
-            },
-            tooltip: {
-            },
-            plotOptions: {
-                pie: {
-                    colors: [
-                        '#DDDF00',
-                        '#50B432',
-                        '#FFFF00',
-                        '#ED561B',
-                        '#FF0000',
-                    ],
+                    /* formatter: function () {
+                        return '';
+                        '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
+                        this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
+                        } */
                 },
-                series: {
-                    allowPointSelect: true,
-                    cursor: 'pointer',
-                    dataLabels: [{
-                        enabled: false,
-                        distance: 20
-                    }, {
-                        enabled: true,
-                        distance: -40,
-                        format: '{point.y:.1f}',
-                        style: {
-                            fontSize: '1.2em',
-                            textOutline: 'none',
-                            opacity: 0.7
-                        },
-                        filter: {
-                            operator: '>',
-                            property: 'percentage',
-                            value: 10
-                        }
-                    }],
-                    showInLegend: true
-                }
-            },
-            series: [
-                {
-                    name: 'Percentage',
+
+                /*want to make this part dynamically populated*/
+                series: [{
                     data: [
-                        {
-                            name: 'Very Low',
-                            y: 55.02
-                        },
-                        {
-                            name: 'Low',
-                            y: 26.71
-                        },
-                        {
-                            name: 'Medium',
-                            y: 1.09
-                        },
-                        {
-                            name: 'High',
-                            y: 15.5
-                        },
-                        {
-                            name: 'Very High',
-                            y: 5
+                        { x: 0, y: 0, value: 100 },//color:'red'},
+                        { x: 0, y: 1, value: 10 },//color:'red'},
+                        { x: 0, y: 2, value: 20 },//color:'red'},
+                        { x: 0, y: 3, value: 30 },//color:'red'},
+                        { x: 0, y: 4, value: 40 },//color:'red'},
+                        { x: 0, y: 0, value: 50 },//color:'red'},
+
+                        { x: 1, y: 0, value: 60 },//color:'red'},
+                        { x: 2, y: 0, value: 70 },//color:'red'},
+                        { x: 3, y: 0, value: 80 },//color:'red'},
+                        { x: 4, y: 0, value: 90 },//color:'red'},
+                        { x: 1, y: 1, value: 70 },//color:'yellow'},
+                        { x: 1, y: 2, value: 80 },//color:'yellow'},
+                        { x: 2, y: 1, value: 90 },//color:'yellow'},
+
+                        { x: 1, y: 3, value: 80 },//color:'green'},
+                        { x: 1, y: 4, value: 90 },//color:'green'},
+                        { x: 2, y: 2, value: 90 },//color:'green'},
+                        { x: 2, y: 3, value: 80 },//color:'green'},
+                        { x: 1, y: 4, value: 90 },//color:'green'},                
+                        { x: 3, y: 1, value: 90 },//color:'green'},
+                        { x: 3, y: 2, value: 90 },//color:'green'},
+                        { x: 4, y: 1, value: 190 },//color:'green'},
+                        { x: 3, y: 3, value: 80 },//color:'green'},
+                        { x: 3, y: 4, value: 90 },//color:'orange'},
+                        { x: 4, y: 4, value: 90 },//color:'orange'},
+                        { x: 3, y: 3, value: 90 },//color:'orange'},
+                        { x: 4, y: 3, value: 90 },//color:'orange'},
+                        { x: 4, y: 2, value: 90 },//color:'orange'},
+                        { x: 2, y: 4, value: 90 } //color:'orange'}
+                    ],
+                    dataLabels: {
+                        enabled: true,
+                        color: 'black',
+                        style: {
+                            textShadow: 'none'
                         }
-                    ]
-                }
-            ]
-        });
+                    }
+
+                }]
+
+            });
+
+            $('#risk-piechart').highcharts({
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Risk Distribution'
+                },
+                tooltip: {
+                },
+                plotOptions: {
+                    pie: {
+                        colors: [
+                            '#DDDF00',
+                            '#50B432',
+                            '#FFFF00',
+                            '#ED561B',
+                            '#FF0000',
+                        ],
+                    },
+                    series: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: [{
+                            enabled: false,
+                            distance: 20
+                        }, {
+                            enabled: true,
+                            distance: -40,
+                            format: '{point.y:.1f}',
+                            style: {
+                                fontSize: '1.2em',
+                                textOutline: 'none',
+                                opacity: 0.7
+                            },
+                            filter: {
+                                operator: '>',
+                                property: 'percentage',
+                                value: 10
+                            }
+                        }],
+                        showInLegend: true
+                    }
+                },
+                series: [
+                    {
+                        name: 'Percentage',
+                        data: [
+                            {
+                                name: 'Very Low',
+                                y: 55.02
+                            },
+                            {
+                                name: 'Low',
+                                y: 26.71
+                            },
+                            {
+                                name: 'Medium',
+                                y: 1.09
+                            },
+                            {
+                                name: 'High',
+                                y: 15.5
+                            },
+                            {
+                                name: 'Very High',
+                                y: 5
+                            }
+                        ]
+                    }
+                ]
+            });
 
 
-        $('#risk-barchart').highcharts({
-            chart: {
-                type: 'column'
-            },
-            title: {
-                text: 'Area Risk Status',
-            },
-            xAxis: {
-                categories: ['NBU', 'CBU', 'SBU', 'GMS CILEGON', 'PABELOKAN'],
-                crosshair: true,
-            },
-            yAxis: {
-                min: 0,
-            },
-            tooltip: {
-            },
-            plotOptions: {
-                column: {
-                    pointPadding: 0.2,
-                    borderWidth: 0,
-                }
-            },
-            colors: [
-                '#DDDF00',
-                '#50B432',
-                '#FFFF00',
-                '#ED561B',
-                '#FF0000',
-            ],
-            series: [
-                {
-                    name: 'Very Low',
-                    data: [10, 43, 31, 34, 4]
+            $('#risk-barchart').highcharts({
+                chart: {
+                    type: 'column'
                 },
-                {
-                    name: 'Low',
-                    data: [7, 3, 3, 2, 1]
+                title: {
+                    text: 'Area Risk Status',
                 },
-                {
-                    name: 'Medium',
-                    data: [3, 1, 33, 2, 1]
+                xAxis: {
+                    categories: ['NBU', 'CBU', 'SBU', 'GMS CILEGON', 'PABELOKAN'],
+                    crosshair: true,
                 },
-                {
-                    name: 'High',
-                    data: [2, 0, 3, 2, 1]
+                yAxis: {
+                    min: 0,
                 },
-                {
-                    name: 'Very High',
-                    data: [1, 0, 3, 2, 1]
+                tooltip: {
                 },
-            ]
+                plotOptions: {
+                    column: {
+                        pointPadding: 0.2,
+                        borderWidth: 0,
+                    }
+                },
+                colors: [
+                    '#DDDF00',
+                    '#50B432',
+                    '#FFFF00',
+                    '#ED561B',
+                    '#FF0000',
+                ],
+                series: [
+                    {
+                        name: 'Very Low',
+                        data: [10, 43, 31, 34, 4]
+                    },
+                    {
+                        name: 'Low',
+                        data: [7, 3, 3, 2, 1]
+                    },
+                    {
+                        name: 'Medium',
+                        data: [3, 1, 33, 2, 1]
+                    },
+                    {
+                        name: 'High',
+                        data: [2, 0, 3, 2, 1]
+                    },
+                    {
+                        name: 'Very High',
+                        data: [1, 0, 3, 2, 1]
+                    },
+                ]
+            });
         });
-                    });
     </script>
 }
