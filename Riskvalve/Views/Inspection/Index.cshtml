@@ -276,13 +276,14 @@
 @section Scripts {
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const idParam = urlParams.get('inspectionid');
+        const idParam = Number(urlParams.get('inspectionid'));
+        const assetIdParam = Number(urlParams.get('assetid'));
         $(document).ready(function () {
             $('.btn-add-new-inspection').click(addTab);
             if (idParam) {
-                if (idParam != "0") {
-                    $('.btn-add-new-inspection[attr-inspection-id=' + idParam + ']').trigger('click')
-                }
+                $('.btn-add-new-inspection[attr-inspection-id=' + idParam + ']').trigger('click')
+            } else if(assetIdParam) {
+                $('.btn-add-new-inspection[attr-id=' + assetIdParam + ']').first().trigger('click')
             }
         });
 

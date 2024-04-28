@@ -723,3 +723,14 @@ select.readonly{
 .risk-heatmap-container{
   padding-left: 50px;
 }
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  #assessment-print-table * {
+      print-color-adjust: exact;
+      -webkit-print-color-adjust: exact;
+  }
+}

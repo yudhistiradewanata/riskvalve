@@ -1561,11 +1561,14 @@
 @section Scripts {
         <script>
             const urlParams = new URLSearchParams(window.location.search);
-            const idParam = urlParams.get('assessmentid');
+            const idParam = Number(urlParams.get('assessmentid'));
+            const assetIdParam = Number(urlParams.get('assetid'));
             $(document).ready(function () {
                 $('.btn-add-new-inspection').click(addTab);
                 if(idParam) {
                     $('.btn-add-new-inspection[attr-inspection-id='+idParam+']').trigger('click')
+                } else if(assetIdParam) {
+                    $('.btn-add-new-inspection[attr-id=' + assetIdParam + ']').first().trigger('click')
                 }
                 // development purpose
                 @* $('.btn-add-new-inspection').eq(0).trigger('click') *@

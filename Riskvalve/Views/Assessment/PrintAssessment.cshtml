@@ -9,13 +9,13 @@
     <!-- @jsonassessment -->
     <!-- @jsonassessmentHeatMap -->
 
-    <div class="text-center" style="margin: 15px;">
+    <!-- <div class="text-center" style="margin: 15px;">
         <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="saveImage()"><i class="bi bi-save"></i> Save as Image</button>
-    </div>
+    </div> -->
     <div id="print-area">
         <table class="assessment-print" id="assessment-print-table">
             <tr>
-                <td colspan="10" class="heading" style="width: 100%;">Valve Passport</td>
+                <td colspan="10" class="heading" style="width: 100%; background-color: #1f487c !important;">Valve Passport</td>
                 <td colspan="2" rowspan="4" class="no-padding text-center">
                     <img class="logo" src="~/lib/images/logo-square.jpg">
                 </td>
@@ -381,7 +381,7 @@
                 <td colspan="10" rowspan="2"><b>@assessment.RecommendationAction</b> @assessment.DetailedRecommendation</td>
             </tr>
             <tr>
-                <td class="text-center" colspan="2">need help</td>
+                <td class="text-center" colspan="2">@assessment.TPTimeToActionRisk</td>
             </tr>
             <tr>
                 <td colspan="4" class="table-section sub-section">Prepared By</td>
@@ -425,6 +425,7 @@
     input {
         pointer-events: none
     }
+    
     #assessment-print-table td{
         /* background-color: red; */
         background-color: white;

@@ -204,11 +204,14 @@
 @section Scripts {
     <script>
         const urlParams = new URLSearchParams(window.location.search);
-        const idParam = urlParams.get('maintenanceid');
+        const idParam = Number(urlParams.get('maintenanceid'));
+        const assetIdParam = Number(urlParams.get('assetid'));
         $(document).ready(function () {
             $('.btn-add-new-inspection').click(addTab);
             if(idParam) {
                 $('.btn-add-new-inspection[attr-inspection-id='+idParam+']').trigger('click')
+            } else if(assetIdParam) {
+                $('.btn-add-new-inspection[attr-id=' + assetIdParam + ']').first().trigger('click')
             }
         });
 
