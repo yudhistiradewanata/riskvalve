@@ -1,6 +1,12 @@
 ﻿@{
     ViewData["Title"] = "Summary";
     var message = TempData["Message"];
+    var assessmentMap = ViewData["AssessmentHeatMap"] as Dictionary<string, string>;
+    var jsonAssessmentMap = Json.Serialize(assessmentMap);
+    var assessmentPieChart = ViewData["AssessmentPieChart"] as Dictionary<string, string>;
+    var jsonAssessmentPieChart = Json.Serialize(assessmentPieChart);
+    var assessmentBarChart = ViewData["AssessmentBarChart"] as Dictionary<string, Dictionary<string, string>>;
+    var jsonAssessmentBarChart = Json.Serialize(assessmentBarChart);
 }
 
 <style>
@@ -158,17 +164,17 @@ width="1242"></canvas>
                     </div>
                 }
                 <div class="row">
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">
                                 Risk Distribution
                             </div>
-                            <div class="card-body">
+                            <div class="card-body risk-heatmap-container">
                                 <div id="risk-heatmap"></div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <div class="card">
                             <div class="card-header">
                                 Risk Distribution
@@ -180,7 +186,7 @@ width="1242"></canvas>
                     </div>
                 </div>
                 <div class="row mt-4">
-                    <div class="col-md-8">
+                    <div class="col-md-10">
                         <div class="card">
                             <div class="card-header">
                                 Risk Distribution Area
@@ -198,142 +204,66 @@ width="1242"></canvas>
 
 @section Scripts {
     <script>
-        /*$(document).ready(function () {
-            var pieChartCanvas = $('#riskDistributonDoughnut').get(0).getContext('2d')
-            var pieChart = new Chart(pieChartCanvas)
-            var PieData = [{
-                value: 112,
-                color: '#009900',
-                highlight: '#009900',
-                label: 'Very Low'
-            },
-            {
-                value: 13,
-                color: '#00A65A',
-                highlight: '#00A65A',
-                label: 'Low'
-            },
-            {
-                value: 38,
-                color: '#FFFF00',
-                highlight: '#FFFF00',
-                label: 'Medium'
-            },
-            {
-                value: 7,
-                color: '#F39C12',
-                highlight: '#F39C12',
-                label: 'High'
-            },
-            {
-                value: 5,
-                color: '#FF0000',
-                highlight: '#FF0000',
-                label: 'Very High'
-            }
-            ]
-            var pieOptions = {
-                segmentShowStroke: true,
-                segmentStrokeColor: '#fff',
-                segmentStrokeWidth: 2,
-                percentageInnerCutout: 50,
-                animationSteps: 10,
-                animationEasing: 'easeOutBounce',
-                animateRotate: false,
-                animateScale: false,
-                responsive: true,
-                maintainAspectRatio: true,
-                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<segments.length; i++){%><li><span style="background-color:<%=segments[i].fillColor%>"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>'
-            }
-            pieChart.Doughnut(PieData, pieOptions)
+        const rawHeatmapData = [
+            { x: 0, y: 0, value: '' },
+            { x: 0, y: 1, value: '' },
+            { x: 0, y: 2, value: '' },
+            { x: 0, y: 3, value: '' },
+            { x: 0, y: 4, value: '' },
+            { x: 0, y: 0, value: '' },
 
-            var areaChartData = {
-                labels: ['NBU', 'CBU', 'SBD', 'TAK', 'ALDO'],
-                datasets: [
-                    {
-                        label: 'Very Low',
-                        fillColor: '#009900',
-                        strokeColor: '#009900',
-                        pointColor: 'rgba(210, 214, 222, 1)',
-                        pointStrokeColor: '#c1c7d1',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(220,220,220,1)',
-                        data: [65, 59, 80, 81, 56,]
-                    },
-                    {
-                        label: 'Low',
-                        fillColor: '#00A65A',
-                        strokeColor: '#00A65A',
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [28, 48, 40, 19, 86]
-                    },
-                    {
-                        label: 'Medium',
-                        fillColor: '#FFFF00',
-                        strokeColor: '#FFFF00',
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [5, 0, 33, 4, 19]
-                    },
-                    {
-                        label: 'High',
-                        fillColor: '#F39C12',
-                        strokeColor: '#F39C12',
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [7, 3, 8, 11, 3]
-                    },
-                    {
-                        label: 'Very High',
-                        fillColor: '#FF0000',
-                        strokeColor: '#FF0000',
-                        pointColor: '#3b8bba',
-                        pointStrokeColor: 'rgba(60,141,188,1)',
-                        pointHighlightFill: '#fff',
-                        pointHighlightStroke: 'rgba(60,141,188,1)',
-                        data: [10, 11, 2, 4, 6]
-                    }
-                ]
-            }
+            { x: 1, y: 0, value: '' },
+            { x: 2, y: 0, value: '' },
+            { x: 3, y: 0, value: '' },
+            { x: 4, y: 0, value: '' },
+            { x: 1, y: 1, value: '' },
+            { x: 1, y: 2, value: '' },
+            { x: 2, y: 1, value: '' },
 
-            var barChartCanvas = $('#barChart').get(0).getContext('2d')
-            var barChart = new Chart(barChartCanvas)
-            var barChartData = areaChartData
-            barChartData.datasets[1].fillColor = '#00a65a'
-            barChartData.datasets[1].strokeColor = '#00a65a'
-            barChartData.datasets[1].pointColor = '#00a65a'
-            var barChartOptions = {
-                scaleBeginAtZero: true,
-                scaleShowGridLines: true,
-                scaleGridLineColor: 'rgba(0,0,0,.05)',
-                scaleGridLineWidth: 1,
-                scaleShowHorizontalLines: true,
-                scaleShowVerticalLines: true,
-                barShowStroke: true,
-                barStrokeWidth: 2,
-                barValueSpacing: 5,
-                barDatasetSpacing: 1,
-                legendTemplate: '<ul class="<%=name.toLowerCase()%>-legend"><% for (var i=0; i<datasets.length; i++){%><li><span style="background-color:<%=datasets[i].fillColor%>"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>',
-                responsive: true,
-                maintainAspectRatio: true
-            }
+            { x: 1, y: 3, value: '' },
+            { x: 1, y: 4, value: '' },
+            { x: 2, y: 2, value: '' },
+            { x: 2, y: 3, value: '' },
+            { x: 1, y: 4, value: '' },                
+            { x: 3, y: 1, value: '' },
+            { x: 3, y: 2, value: '' },
+            { x: 4, y: 1, value: '' },
+            { x: 3, y: 3, value: '' },
+            { x: 3, y: 4, value: '' },
+            { x: 4, y: 4, value: '' },
+            { x: 3, y: 3, value: '' },
+            { x: 4, y: 3, value: '' },
+            { x: 4, y: 2, value: '' },
+            { x: 2, y: 4, value: '' }
+        ]
 
-            barChartOptions.datasetFill = false
-            barChart.Bar(barChartData, barChartOptions)
-        });
-        */
+        const heatmapYMap = {
+            A: 0,
+            B: 1,
+            C: 2,
+            D: 3,
+            E: 4
+        }
 
-        /* globals Chart:false */
+        function fillHeatmapData (data) {
+            Object.entries(data).forEach((dataItem) => {
+                const item = dataItem[1]
+                const key = dataItem[0]
+                const xPos = key.charAt(0) - 1
+                const yPos = heatmapYMap[key.charAt(1)]
+                const idx = rawHeatmapData.findIndex(mapItem => {
+                    // console.log(mapItem)
+                    // console.log(xPos)
+                    // console.log(yPos)
+                    return mapItem.x == xPos && mapItem.y == yPos
+                })
+                rawHeatmapData[idx]['value'] = Number(item)
+            })
+        }
 
         $(function () {
-
+            var assessmentMap = JSON.parse('@Html.Raw(jsonAssessmentMap)');
+            fillHeatmapData(assessmentMap)
             $('#risk-heatmap').highcharts({
                 chart: {
                     type: 'heatmap',
@@ -391,9 +321,14 @@ width="1242"></canvas>
                             this.isDirty = true;
                             this.redraw();
                         }
+                    },
+                },
+                plotOptions: {
+                    heatmap: {
+                        borderWidth: 0.5,
+                        borderColor: '#333'
                     }
                 },
-
 
                 title: null,
 
@@ -403,11 +338,16 @@ width="1242"></canvas>
                         text: "Likelihood of Failure"
                     }
                 },
-
                 yAxis: {
-                    categories: ['E', 'D', 'C', 'B', 'A'],
+                    categories: ['A', 'B', 'C', 'D', 'E'],
                     title: {
-                        text: "Consequance of Failure"
+                        enabled: true,
+                        text: 'Consequences of Failure',
+                        align: 'middle', // Align the title to the top of the axis
+                        offset: 0, // Adjust offset if needed
+                        x: -40,
+                        y: 0,
+                        useHTML: true
                     }
                 },
 
@@ -437,38 +377,7 @@ width="1242"></canvas>
 
                 /*want to make this part dynamically populated*/
                 series: [{
-                    data: [
-                        { x: 0, y: 0, value: 100 },//color:'red'},
-                        { x: 0, y: 1, value: 10 },//color:'red'},
-                        { x: 0, y: 2, value: 20 },//color:'red'},
-                        { x: 0, y: 3, value: 30 },//color:'red'},
-                        { x: 0, y: 4, value: 40 },//color:'red'},
-                        { x: 0, y: 0, value: 50 },//color:'red'},
-
-                        { x: 1, y: 0, value: 60 },//color:'red'},
-                        { x: 2, y: 0, value: 70 },//color:'red'},
-                        { x: 3, y: 0, value: 80 },//color:'red'},
-                        { x: 4, y: 0, value: 90 },//color:'red'},
-                        { x: 1, y: 1, value: 70 },//color:'yellow'},
-                        { x: 1, y: 2, value: 80 },//color:'yellow'},
-                        { x: 2, y: 1, value: 90 },//color:'yellow'},
-
-                        { x: 1, y: 3, value: 80 },//color:'green'},
-                        { x: 1, y: 4, value: 90 },//color:'green'},
-                        { x: 2, y: 2, value: 90 },//color:'green'},
-                        { x: 2, y: 3, value: 80 },//color:'green'},
-                        { x: 1, y: 4, value: 90 },//color:'green'},                
-                        { x: 3, y: 1, value: 90 },//color:'green'},
-                        { x: 3, y: 2, value: 90 },//color:'green'},
-                        { x: 4, y: 1, value: 190 },//color:'green'},
-                        { x: 3, y: 3, value: 80 },//color:'green'},
-                        { x: 3, y: 4, value: 90 },//color:'orange'},
-                        { x: 4, y: 4, value: 90 },//color:'orange'},
-                        { x: 3, y: 3, value: 90 },//color:'orange'},
-                        { x: 4, y: 3, value: 90 },//color:'orange'},
-                        { x: 4, y: 2, value: 90 },//color:'orange'},
-                        { x: 2, y: 4, value: 90 } //color:'orange'}
-                    ],
+                    data: structuredClone(rawHeatmapData),
                     dataLabels: {
                         enabled: true,
                         color: 'black',
@@ -481,6 +390,14 @@ width="1242"></canvas>
 
             });
 
+            var jsonAssessmentPieChart = JSON.parse('@Html.Raw(jsonAssessmentPieChart)');
+            const pieChartData = []
+            Object.keys(jsonAssessmentPieChart).forEach(key => {
+                pieChartData.push({
+                    name: key,
+                    y: parseFloat(jsonAssessmentPieChart[key])
+                })
+            })
             $('#risk-piechart').highcharts({
                 chart: {
                     type: 'pie'
@@ -527,32 +444,42 @@ width="1242"></canvas>
                 series: [
                     {
                         name: 'Percentage',
-                        data: [
-                            {
-                                name: 'Very Low',
-                                y: 55.02
-                            },
-                            {
-                                name: 'Low',
-                                y: 26.71
-                            },
-                            {
-                                name: 'Medium',
-                                y: 1.09
-                            },
-                            {
-                                name: 'High',
-                                y: 15.5
-                            },
-                            {
-                                name: 'Very High',
-                                y: 5
-                            }
-                        ]
+                        data: pieChartData
                     }
                 ]
             });
 
+            // Bar Chart
+            var jsonAssessmentBarChart = JSON.parse('@Html.Raw(jsonAssessmentBarChart)');
+            // console.log(jsonAssessmentBarChart, 'bar chart')
+            const barSeriesData = {
+                'Very Low' : {
+                    name: 'Very Low',
+                    data: []
+                },
+                'Low' : {
+                    name: 'Low',
+                    data: []
+                },
+                'Medium' : {
+                    name: 'Medium',
+                    data: []
+                },
+                'High' : {
+                    name: 'High',
+                    data: []
+                },
+                'Very High' : {
+                    name: 'Very High',
+                    data: []
+                },
+            }
+
+            Object.values(jsonAssessmentBarChart).forEach( (val, index) => {
+                Object.keys(val).forEach( key => {
+                    barSeriesData[key].data.push(Number(val[key]))
+                })
+            })
 
             $('#risk-barchart').highcharts({
                 chart: {
@@ -562,7 +489,7 @@ width="1242"></canvas>
                     text: 'Area Risk Status',
                 },
                 xAxis: {
-                    categories: ['NBU', 'CBU', 'SBU', 'GMS CILEGON', 'PABELOKAN'],
+                    categories: Object.keys(jsonAssessmentBarChart),
                     crosshair: true,
                 },
                 yAxis: {
@@ -583,28 +510,7 @@ width="1242"></canvas>
                     '#ED561B',
                     '#FF0000',
                 ],
-                series: [
-                    {
-                        name: 'Very Low',
-                        data: [10, 43, 31, 34, 4]
-                    },
-                    {
-                        name: 'Low',
-                        data: [7, 3, 3, 2, 1]
-                    },
-                    {
-                        name: 'Medium',
-                        data: [3, 1, 33, 2, 1]
-                    },
-                    {
-                        name: 'High',
-                        data: [2, 0, 3, 2, 1]
-                    },
-                    {
-                        name: 'Very High',
-                        data: [1, 0, 3, 2, 1]
-                    },
-                ]
+                series: Object.values(barSeriesData)
             });
         });
     </script>

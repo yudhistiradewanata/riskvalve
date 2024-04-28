@@ -152,7 +152,7 @@
                                             <div class="form-group ">
                                                 <label for="field-maintenance-date">Maintenance Date</label>
                                                 <input id="field-maintenance-date" type="text"
-                                                    class="form-control datepicker" name="MaintenanceDate" />
+                                                    class="form-control datepicker" name="MaintenanceDate" required/>
                                             </div>
                                             <div class="form-group ">
                                                 <label for="field-maintenance-repaired">Is Valve Repaired</label>
@@ -203,6 +203,15 @@
 
 @section Scripts {
     <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const idParam = urlParams.get('maintenanceid');
+        $(document).ready(function () {
+            $('.btn-add-new-inspection').click(addTab);
+            if(idParam) {
+                $('.btn-add-new-inspection[attr-inspection-id='+idParam+']').trigger('click')
+            }
+        });
+
         $(document).on('click', '.btn-close-inspection', function () {
             const ctr = $(this).closest('a').attr('tab-num')
             close_inspection(ctr);
@@ -214,72 +223,74 @@
             const ctr = $(el).closest('.tab-pane').attr('tab-num')
             const nativeForm = form[0]
             const formData = new FormData(nativeForm);
-            if (form.hasClass('history-form')) {
-                // update
-                $.ajax({
-                    url: '/Maintenance/UpdateMaintenance',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        form.addClass('history-form')
-                        // Handle success response
-                        alert('Data successfully updated')
-                    },
-                    error: function (xhr, status, error) {
-                        alert('Error submitting the form')
-                    }
-                });
-            } else {
-                // add new
-                $.ajax({
-                    url: '/Maintenance/AddMaintenance',
-                    type: 'POST',
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (result) {
-                        if (result.Status == 'Error') {
-                            alert(result.Message)
-                        } else {
-                            alert(result.Message)
-                            var res = JSON.parse(result.MaintenanceData)
+            if(form.valid()) {
+                if (form.hasClass('history-form')) {
+                    // update
+                    $.ajax({
+                        url: '/Maintenance/UpdateMaintenance',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (response) {
                             form.addClass('history-form')
-                            // add menu to tree
-                            @* console.log(equipmentId) *@
-                            @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
-                            $('ul[equipment-id="' + equipmentId + '"]').append(`
-                                <li class="treeview">
-                                    <a class="btn-add-new-inspection" history-button="" 
-                                    attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                    attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
-                                    attr-sidebar-level="4" 
-                                    attr-find-inspection="${res.Asset.BusinessArea}" 
-                                    attr-find-platform="${res.Asset.Platform}" 
-                                    attr-find-equipment="${res.Asset.TagNo}" 
-                                    attr-find-imr="NEW"
-                                    onclick="addTab.apply(this)"
-                                    >
-                                        ${res.MaintenanceDate}
-                                    </a>
-                                </li>
-                            `)
-
-                            form.find('.preview-image-gallery .single-image').remove()
-                            form.find('.preview-image-gallery input[type=file]').remove()
-                            fetchHistoryData({
-                                id: res.Id,
-                                counter: ctr
-                            })
+                            // Handle success response
+                            alert('Data successfully updated')
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error submitting the form')
                         }
-                        @* alert('Data successfully inserted') *@
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error
-                        alert('error submitting the form')
-                    }
-                });
+                    });
+                } else {
+                    // add new
+                    $.ajax({
+                        url: '/Maintenance/AddMaintenance',
+                        type: 'POST',
+                        data: formData,
+                        contentType: false,
+                        processData: false,
+                        success: function (result) {
+                            if (result.Status == 'Error') {
+                                alert(result.Message)
+                            } else {
+                                alert(result.Message)
+                                var res = JSON.parse(result.MaintenanceData)
+                                form.addClass('history-form')
+                                // add menu to tree
+                                @* console.log(equipmentId) *@
+                                @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
+                                $('ul[equipment-id="' + equipmentId + '"]').append(`
+                                    <li class="treeview">
+                                        <a class="btn-add-new-inspection" history-button="" 
+                                        attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                        attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
+                                        attr-sidebar-level="4" 
+                                        attr-find-inspection="${res.Asset.BusinessArea}" 
+                                        attr-find-platform="${res.Asset.Platform}" 
+                                        attr-find-equipment="${res.Asset.TagNo}" 
+                                        attr-find-imr="NEW"
+                                        onclick="addTab.apply(this)"
+                                        >
+                                            ${res.MaintenanceDate}
+                                        </a>
+                                    </li>
+                                `)
+
+                                form.find('.preview-image-gallery .single-image').remove()
+                                form.find('.preview-image-gallery input[type=file]').remove()
+                                fetchHistoryData({
+                                    id: res.Id,
+                                    counter: ctr
+                                })
+                            }
+                            @* alert('Data successfully inserted') *@
+                        },
+                        error: function (xhr, status, error) {
+                            // Handle error
+                            alert('error submitting the form')
+                        }
+                    });
+                }
             }
         }
 
@@ -392,10 +403,6 @@
             $('#pidno' + counter).val(data.pidNo)
             $('#classrating' + counter).val(data.classRating)
         }
-
-        $(document).ready(function () {
-            $('.btn-add-new-inspection').click(addTab);
-        });
 
         let template_inspection = $('#template_inspection');
         let template_inspection_html = template_inspection.html();

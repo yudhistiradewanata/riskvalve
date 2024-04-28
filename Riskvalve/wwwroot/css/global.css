@@ -268,6 +268,10 @@ body {
   font-size: 12px;
 }
 
+.form-control.error{
+  border-color: red;
+}
+
 .inspection-form .form-control[readonly] {
   background-color: rgb(242, 242, 242);
 }
@@ -550,9 +554,14 @@ svg * {
   margin-bottom: 15px;
 }
 
-.submenu-action .top-row button{
+.submenu-action .top-row button, .submenu-action .top-row a{
   flex: 1 1 50%;
   border-radius: 5px;
+  /* display: flex; */
+}
+
+.submenu-action .top-row .print-button button {
+  width: 100%;
 }
 
 .submenu-action .bottom-row button{
@@ -659,12 +668,16 @@ svg * {
   display: none;
 }
 
-.assessment-form.history-form .print-button, .assessment-form.history-form .delete-button{
+.assessment-form.history-form .delete-button{
   display: block;
 }
 
 .assessment-form.not-editable .submit-button {
   display: none;
+}
+
+.assessment-form.not-editable .print-button {
+  display: block;
 }
 
 /* .history-form .only-add {
@@ -696,4 +709,17 @@ select.readonly{
   background-position: center;
   background-repeat: no-repeat;
   background-size: 500px;
+}
+
+#risk-heatmap {
+  aspect-ratio: 1;
+  overflow: visible !important;
+}
+
+#risk-heatmap .highcharts-container {
+  overflow: visible !important;
+}
+
+.risk-heatmap-container{
+  padding-left: 50px;
 }

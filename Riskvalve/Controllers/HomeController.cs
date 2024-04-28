@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using Riskvalve.Models;
+using Newtonsoft.Json;
 
 namespace Riskvalve.Controllers;
 
@@ -15,6 +16,27 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        AssessmentModel assessmentModel = new();
+        Dictionary<string, string> assessmentHeatMap = new();
+        Dictionary<string, string> assessmentPieChart = new();
+        Dictionary<string, string> assessmentBarChart = new();
+        Dictionary<string, Dictionary<string, string>> assessmentBarChartFinal = new();
+        Dictionary<string, Dictionary<string, string>> recap_assessment = new();
+        recap_assessment = assessmentModel.GetAssessmentRecap();
+        assessmentHeatMap = recap_assessment["heatmap"];
+        assessmentPieChart = recap_assessment["piechart"];
+        assessmentBarChart = recap_assessment["barchart"];
+        foreach (var item in assessmentBarChart)
+        {
+            Dictionary<string, string> temp = new();
+            temp = JsonConvert.DeserializeObject<Dictionary<string, string>>(item.Value);
+            assessmentBarChartFinal.Add(item.Key, temp);
+        }
+        ViewData["AssessmentHeatMap"] = assessmentHeatMap;
+        ViewData["AssessmentPieChart"] = assessmentPieChart;
+        ViewData["AssessmentBarChart"] = assessmentBarChartFinal;
+        // string assessmentHeatMapString = JsonConvert.SerializeObject(assessmentBarChartFinal);
+        // Console.WriteLine("AssessmentHeatMap: " + assessmentHeatMapString);
         UserModel login = new();
         if (!login.isLogin(HttpContext))
         {

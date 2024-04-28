@@ -7,7 +7,10 @@ function initDatepicker () {
     format: "dd-mm-yyyy",
     autoclose: true,
     todayHighlight: true,
-  });
+  }).on('changeDate', function(e){
+    $(this).removeClass('error');
+    $(this).trigger('change');
+  });;
 }
 
 $(document).ready(function () {
@@ -37,7 +40,7 @@ function refreshDatatableColumn () {
   DataTable.tables({ visible: true, api: true }).columns.adjust();
 }
 
-function initDatatable (options) {
+function initDatatable (options = {}) {
   const defaultLayout = {
     topStart: null,
     topEnd: 'search',
@@ -127,3 +130,12 @@ function formatDate(date) {
 
   return dd + '-' + mm + '-' + yyyy;
 }
+
+
+$.validator.setDefaults({
+  errorClass: "error",
+  errorPlacement: function(error, element) {
+      return true; // Suppress error messages
+  },
+  ignore: ""
+});

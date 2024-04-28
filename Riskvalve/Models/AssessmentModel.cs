@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Riskvalve.Models;
 
@@ -111,6 +112,38 @@ public class AssessmentModel : AssessmentDB
     public string? DeletedByUser { get; set; }
     public List<InspectionModel>? InspectionHistory { get; set; }
     public List<MaintenanceModel>? MaintenanceHistory { get; set; }
+    public string? RiskMax { get; set; }
+
+    // public string? LastInspectionDate { get; set; }
+    // public string? MaxRisk { get; set; }
+    // public string? MaxRiskColor { get; set; }
+    public Dictionary<string, string> ColorRiskMap =
+        new()
+        {
+            { "olive", "Very Low" },
+            { "green", "Low" },
+            { "yellow", "Medium" },
+            { "orange", "High" },
+            { "red", "Very High" }
+        };
+    public Dictionary<string, int> ColorRank =
+        new()
+        {
+            { "olive", 1 },
+            { "green", 2 },
+            { "yellow", 3 },
+            { "orange", 4 },
+            { "red", 5 }
+        };
+    public Dictionary<string, int> RiskRank =
+        new()
+        {
+            { "Very Low", 1 },
+            { "Low", 2 },
+            { "Medium", 3 },
+            { "High", 4 },
+            { "Very High", 5 }
+        };
 
     public List<AssessmentModel> GetAssessmentList(bool IncludeDeleted = false)
     {
@@ -120,7 +153,7 @@ public class AssessmentModel : AssessmentDB
             assessmentList = (
                 from assessment in context.Assessment
                 join asset in context.Asset on assessment.AssetID equals asset.Id
-                where assessment.IsDeleted == IncludeDeleted
+                where assessment.IsDeleted == false || IncludeDeleted == true
                 select new AssessmentModel
                 {
                     Id = assessment.Id,
@@ -283,7 +316,7 @@ public class AssessmentModel : AssessmentDB
                     ),
                     MaintenanceHistory = new AssessmentMaintenanceModel().GetMaintenanceList(
                         assessment.Id
-                    )
+                    ),
                 }
             ).ToList();
         }
@@ -1151,6 +1184,532 @@ public class AssessmentModel : AssessmentDB
             default:
                 return "";
         }
+    }
+
+    public Dictionary<string, Dictionary<string, string>> GetAssessmentRecap()
+    {
+        Dictionary<string, Dictionary<string, string>> recap_final = new();
+        Dictionary<string, string> recap_heatmap = new();
+        Dictionary<string, string> recap_piechart = new();
+        Dictionary<string, Dictionary<string, string>> recap_barchart = new();
+        Dictionary<string, string> recap_barchart_convert = new();
+        Dictionary<string, string> bartemplate = new();
+        bartemplate.Add("Very Low", "0");
+        bartemplate.Add("Low", "0");
+        bartemplate.Add("Medium", "0");
+        bartemplate.Add("High", "0");
+        bartemplate.Add("Very High", "0");
+        using (var context = new AssessmentContext())
+        {
+            int a1 = 0;
+            int a2 = 0;
+            int a3 = 0;
+            int a4 = 0;
+            int a5 = 0;
+            int b1 = 0;
+            int b2 = 0;
+            int b3 = 0;
+            int b4 = 0;
+            int b5 = 0;
+            int c1 = 0;
+            int c2 = 0;
+            int c3 = 0;
+            int c4 = 0;
+            int c5 = 0;
+            int d1 = 0;
+            int d2 = 0;
+            int d3 = 0;
+            int d4 = 0;
+            int d5 = 0;
+            int e1 = 0;
+            int e2 = 0;
+            int e3 = 0;
+            int e4 = 0;
+            int e5 = 0;
+            int risk_verylow = 0;
+            int risk_low = 0;
+            int risk_medium = 0;
+            int risk_high = 0;
+            int risk_veryhigh = 0;
+            List<AssessmentModel> assessmentList = GetAssessmentList();
+            foreach (var assessment in assessmentList)
+            {
+                if (
+                    assessment.TP1Risk == null
+                    || assessment.TP2Risk == null
+                    || assessment.TP3Risk == null
+                )
+                {
+                    continue;
+                }
+                string heat_risk = decide_risk_full(
+                    assessment.TP1Risk,
+                    assessment.TP2Risk,
+                    assessment.TP3Risk
+                );
+                switch (heat_risk)
+                {
+                    case "1A":
+                        a1++;
+                        break;
+                    case "1B":
+                        b1++;
+                        break;
+                    case "1C":
+                        c1++;
+                        break;
+                    case "1D":
+                        d1++;
+                        break;
+                    case "1E":
+                        e1++;
+                        break;
+                    case "2A":
+                        a2++;
+                        break;
+                    case "2B":
+                        b2++;
+                        break;
+                    case "2C":
+                        c2++;
+                        break;
+                    case "2D":
+                        d2++;
+                        break;
+                    case "2E":
+                        e2++;
+                        break;
+                    case "3A":
+                        a3++;
+                        break;
+                    case "3B":
+                        b3++;
+                        break;
+                    case "3C":
+                        c3++;
+                        break;
+                    case "3D":
+                        d3++;
+                        break;
+                    case "3E":
+                        e3++;
+                        break;
+                    case "4A":
+                        a4++;
+                        break;
+                    case "4B":
+                        b4++;
+                        break;
+                    case "4C":
+                        c4++;
+                        break;
+                    case "4D":
+                        d4++;
+                        break;
+                    case "4E":
+                        e4++;
+                        break;
+                    case "5A":
+                        a5++;
+                        break;
+                    case "5B":
+                        b5++;
+                        break;
+                    case "5C":
+                        c5++;
+                        break;
+                    case "5D":
+                        d5++;
+                        break;
+                    case "5E":
+                        e5++;
+                        break;
+                }
+                // calculate risk_var
+                string risk = decide_risk(
+                    assessment.TP1Risk,
+                    assessment.TP2Risk,
+                    assessment.TP3Risk
+                );
+                switch (risk)
+                {
+                    case "Very Low":
+                        risk_verylow++;
+                        break;
+                    case "Low":
+                        risk_low++;
+                        break;
+                    case "Medium":
+                        risk_medium++;
+                        break;
+                    case "High":
+                        risk_high++;
+                        break;
+                    case "Very High":
+                        risk_veryhigh++;
+                        break;
+                }
+                // string assessmentjson = JsonConvert.SerializeObject(assessment.TP1Risk);
+                // Console.WriteLine(assessmentjson);
+                if (!recap_barchart.ContainsKey(assessment.Asset.BusinessArea))
+                {
+                    recap_barchart.Add(assessment.Asset.BusinessArea, bartemplate);
+                }
+                int curr_risk = int.Parse(recap_barchart[assessment.Asset.BusinessArea][risk]);
+                curr_risk++;
+                recap_barchart[assessment.Asset.BusinessArea][risk] = curr_risk.ToString();
+            }
+            recap_heatmap.Add("1A", a1.ToString());
+            recap_heatmap.Add("1B", b1.ToString());
+            recap_heatmap.Add("1C", c1.ToString());
+            recap_heatmap.Add("1D", d1.ToString());
+            recap_heatmap.Add("1E", e1.ToString());
+            recap_heatmap.Add("2A", a2.ToString());
+            recap_heatmap.Add("2B", b2.ToString());
+            recap_heatmap.Add("2C", c2.ToString());
+            recap_heatmap.Add("2D", d2.ToString());
+            recap_heatmap.Add("2E", e2.ToString());
+            recap_heatmap.Add("3A", a3.ToString());
+            recap_heatmap.Add("3B", b3.ToString());
+            recap_heatmap.Add("3C", c3.ToString());
+            recap_heatmap.Add("3D", d3.ToString());
+            recap_heatmap.Add("3E", e3.ToString());
+            recap_heatmap.Add("4A", a4.ToString());
+            recap_heatmap.Add("4B", b4.ToString());
+            recap_heatmap.Add("4C", c4.ToString());
+            recap_heatmap.Add("4D", d4.ToString());
+            recap_heatmap.Add("4E", e4.ToString());
+            recap_heatmap.Add("5A", a5.ToString());
+            recap_heatmap.Add("5B", b5.ToString());
+            recap_heatmap.Add("5C", c5.ToString());
+            recap_heatmap.Add("5D", d5.ToString());
+            recap_heatmap.Add("5E", e5.ToString());
+            recap_piechart.Add("Very Low", risk_verylow.ToString());
+            recap_piechart.Add("Low", risk_low.ToString());
+            recap_piechart.Add("Medium", risk_medium.ToString());
+            recap_piechart.Add("High", risk_high.ToString());
+            recap_piechart.Add("Very High", risk_veryhigh.ToString());
+        }
+        recap_final.Add("heatmap", recap_heatmap);
+        recap_final.Add("piechart", recap_piechart);
+        foreach (var item in recap_barchart)
+        {
+            recap_barchart_convert.Add(item.Key, JsonConvert.SerializeObject(item.Value));
+        }
+        recap_final.Add("barchart", recap_barchart_convert);
+        return recap_final;
+    }
+
+    private List<string> split_risk(string risk)
+    {
+        if (risk.Length < 2)
+        {
+            return new List<string> { "0", "0" };
+        }
+        string lof = risk.Substring(0, 1);
+        string cos = risk.Substring(1, 1);
+        return new List<string> { lof, cos };
+    }
+
+    private string decide_risk_full(string tp1, string tp2, string tp3)
+    {
+        List<string> tp1_split = split_risk(tp1);
+        List<string> tp2_split = split_risk(tp2);
+        List<string> tp3_split = split_risk(tp3);
+        string cos = tp1_split[1];
+
+        int tp1_value = int.Parse(tp1_split[0]);
+        int tp2_value = int.Parse(tp2_split[0]);
+        int tp3_value = int.Parse(tp3_split[0]);
+        int max_value = Math.Max(tp1_value, Math.Max(tp2_value, tp3_value));
+        string lof = max_value.ToString();
+        string risk = max_value + cos;
+        return risk;
+    }
+
+    private string decide_risk(string tp1, string tp2, string tp3)
+    {
+        string tp1_color = ColorRiskMap[GetHeatColor(tp1)];
+        int tp1_riskrank = RiskRank[tp1_color];
+        string tp2_color = ColorRiskMap[GetHeatColor(tp2)];
+        int tp2_riskrank = RiskRank[tp2_color];
+        string tp3_color = ColorRiskMap[GetHeatColor(tp3)];
+        int tp3_riskrank = RiskRank[tp3_color];
+        int max_risk = Math.Max(tp1_riskrank, Math.Max(tp2_riskrank, tp3_riskrank));
+        int risk_rank = RiskRank.FirstOrDefault(x => x.Value == max_risk).Value;
+        string risk_max = RiskRank.FirstOrDefault(x => x.Value == max_risk).Key;
+        return risk_max;
+        // string color_risk = ColorRank.FirstOrDefault(x => x.Value == max_risk).Key;
+        // string risk_max = ColorRiskMap.FirstOrDefault(x => x.Value == color_risk).Key;
+        // return risk_max;
+    }
+
+    private int LofToInt(string lof)
+    {
+        if (lof == "A")
+        {
+            return 1;
+        }
+        else if (lof == "B")
+        {
+            return 2;
+        }
+        else if (lof == "C")
+        {
+            return 3;
+        }
+        else if (lof == "D")
+        {
+            return 4;
+        }
+        else if (lof == "E")
+        {
+            return 5;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
+    public string GetHeatColor(string pos)
+    {
+        List<string> olivePositions = new List<string> { "1A", "2A", "1B" };
+        List<string> greenPositions = new List<string> { "3A", "2B", "1C" };
+        List<string> yellowPositions = new List<string> { "4A", "3B", "3C", "2C", "1D" };
+        List<string> orangePositions = new List<string>
+        {
+            "5A",
+            "5B",
+            "4B",
+            "4C",
+            "3D",
+            "2D",
+            "2E",
+            "1E"
+        };
+
+        if (olivePositions.Contains(pos))
+        {
+            return "olive";
+        }
+        else if (greenPositions.Contains(pos))
+        {
+            return "green";
+        }
+        else if (yellowPositions.Contains(pos))
+        {
+            return "yellow";
+        }
+        else if (orangePositions.Contains(pos))
+        {
+            return "orange";
+        }
+        else
+        {
+            return "red";
+        }
+    }
+
+    public Dictionary<string, int> GetHeatXYpos(string pos)
+    {
+        List<string> pos_split = split_risk(pos);
+        string lof = pos_split[0];
+        string cos = pos_split[1];
+        int ypos = (int.Parse(lof) * 20) - 10;
+        int xpos = (LofToInt(cos) * 20) - 10;
+        return new Dictionary<string, int> { { "xpos", xpos }, { "ypos", ypos } };
+    }
+    public AssessmentModel GetLastAssetAssessment(int assetID)
+    {
+        AssessmentModel assessmentModel = new();
+        using (var context = new AssessmentContext())
+        {
+            assessmentModel = (
+                from assessment in context.Assessment
+                join asset in context.Asset on assessment.AssetID equals asset.Id
+                where asset.Id == assetID
+                where assessment.TP1Risk != null
+                where assessment.TP2Risk != null
+                where assessment.TP3Risk != null
+                orderby assessment.AssessmentDate descending
+                orderby assessment.Id descending
+                select new AssessmentModel
+                {
+                    Id = assessment.Id,
+                    AssetID = assessment.AssetID,
+                    AssessmentNo = assessment.AssessmentNo,
+                    AssessmentDate = assessment.AssessmentDate,
+                    TimePeriode = assessment.TimePeriode,
+                    TimeToLimitStateLeakageToAtmosphere =
+                        assessment.TimeToLimitStateLeakageToAtmosphere,
+                    TimeToLimitStateFailureOfFunction =
+                        assessment.TimeToLimitStateFailureOfFunction,
+                    TimeToLimitStatePassingAccrosValve =
+                        assessment.TimeToLimitStatePassingAccrosValve,
+                    LeakageToAtmosphereID = assessment.LeakageToAtmosphereID,
+                    FailureOfFunctionID = assessment.FailureOfFunctionID,
+                    PassingAccrosValveID = assessment.PassingAccrosValveID,
+                    LeakageToAtmosphereTP1ID = assessment.LeakageToAtmosphereTP1ID,
+                    LeakageToAtmosphereTP2ID = assessment.LeakageToAtmosphereTP2ID,
+                    LeakageToAtmosphereTP3ID = assessment.LeakageToAtmosphereTP3ID,
+                    FailureOfFunctionTP1ID = assessment.FailureOfFunctionTP1ID,
+                    FailureOfFunctionTP2ID = assessment.FailureOfFunctionTP2ID,
+                    FailureOfFunctionTP3ID = assessment.FailureOfFunctionTP3ID,
+                    PassingAccrosValveTP1ID = assessment.PassingAccrosValveTP1ID,
+                    PassingAccrosValveTP2ID = assessment.PassingAccrosValveTP2ID,
+                    PassingAccrosValveTP3ID = assessment.PassingAccrosValveTP3ID,
+                    InspectionEffectivenessID = assessment.InspectionEffectivenessID,
+                    ImpactOfInternalFluidImpuritiesID =
+                        assessment.ImpactOfInternalFluidImpuritiesID,
+                    ImpactOfOperatingEnvelopesID = assessment.ImpactOfOperatingEnvelopesID,
+                    UsedWithinOEMSpecificationID = assessment.UsedWithinOEMSpecificationID,
+                    RepairedID = assessment.RepairedID,
+                    ProductLossDefinition = assessment.ProductLossDefinition,
+                    HSSEDefinisionID = assessment.HSSEDefinisionID,
+                    Summary = assessment.Summary,
+                    RecommendationActionID = assessment.RecommendationActionID,
+                    DetailedRecommendation = assessment.DetailedRecommendation,
+                    ConsequenceOfFailure = assessment.ConsequenceOfFailure,
+                    TP1A = assessment.TP1A,
+                    TP2A = assessment.TP2A,
+                    TP3A = assessment.TP3A,
+                    TP1B = assessment.TP1B,
+                    TP2B = assessment.TP2B,
+                    TP3B = assessment.TP3B,
+                    TP1C = assessment.TP1C,
+                    TP2C = assessment.TP2C,
+                    TP3C = assessment.TP3C,
+                    TPTimeToActionA = assessment.TPTimeToActionA,
+                    TPTimeToActionB = assessment.TPTimeToActionB,
+                    TPTimeToActionC = assessment.TPTimeToActionC,
+                    TP1Risk = assessment.TP1Risk,
+                    TP2Risk = assessment.TP2Risk,
+                    TP3Risk = assessment.TP3Risk,
+                    TPTimeToActionRisk = assessment.TPTimeToActionRisk,
+                    IsDeleted = assessment.IsDeleted,
+                    CreatedAt = assessment.CreatedAt,
+                    CreatedBy = assessment.CreatedBy,
+                    DeletedAt = assessment.DeletedAt,
+                    DeletedBy = assessment.DeletedBy,
+                    Asset = new AssetModel().GetAssetModel(assessment.AssetID),
+                    LeakageToAtmosphere = context
+                        .CurrentConditionLimitState.Where(cc =>
+                            cc.Id == assessment.LeakageToAtmosphereID
+                        )
+                        .FirstOrDefault()
+                        .CurrentConditionLimitState,
+                    FailureOfFunction = context
+                        .CurrentConditionLimitState.Where(cc =>
+                            cc.Id == assessment.FailureOfFunctionID
+                        )
+                        .FirstOrDefault()
+                        .CurrentConditionLimitState,
+                    PassingAccrosValve = context
+                        .CurrentConditionLimitState.Where(cc =>
+                            cc.Id == assessment.PassingAccrosValveID
+                        )
+                        .FirstOrDefault()
+                        .CurrentConditionLimitState,
+                    LeakageToAtmosphereTP1 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP1ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    LeakageToAtmosphereTP2 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP2ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    LeakageToAtmosphereTP3 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP3ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    FailureOfFunctionTP1 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.FailureOfFunctionTP1ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    FailureOfFunctionTP2 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.FailureOfFunctionTP2ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    FailureOfFunctionTP3 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.FailureOfFunctionTP3ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    PassingAccrosValveTP1 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.PassingAccrosValveTP1ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    PassingAccrosValveTP2 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.PassingAccrosValveTP2ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    PassingAccrosValveTP3 = context
+                        .TimeToLimitState.Where(tp => tp.Id == assessment.PassingAccrosValveTP3ID)
+                        .FirstOrDefault()
+                        .TimeToLimitState,
+                    InspectionEffectiveness = context
+                        .InspectionEffectiveness.Where(ie =>
+                            ie.Id == assessment.InspectionEffectivenessID
+                        )
+                        .FirstOrDefault()
+                        .Effectiveness,
+                    ImpactOfInternalFluidImpurities = context
+                        .ImpactEffect.Where(ie =>
+                            ie.Id == assessment.ImpactOfInternalFluidImpuritiesID
+                        )
+                        .FirstOrDefault()
+                        .ImpactEffect,
+                    ImpactOfOperatingEnvelopes = context
+                        .ImpactEffect.Where(ie => ie.Id == assessment.ImpactOfOperatingEnvelopesID)
+                        .FirstOrDefault()
+                        .ImpactEffect,
+                    UsedWithinOEMSpecification = context
+                        .UsedWithinOEMSpecification.Where(uos =>
+                            uos.Id == assessment.UsedWithinOEMSpecificationID
+                        )
+                        .FirstOrDefault()
+                        .UsedWithinOEMSpecification,
+                    Repaired = context
+                        .Repaired.Where(r => r.Id == assessment.RepairedID)
+                        .FirstOrDefault()
+                        .Repaired,
+                    HSSEDefinision = context
+                        .HSSEDefinision.Where(hsse => hsse.Id == assessment.HSSEDefinisionID)
+                        .FirstOrDefault()
+                        .HSSEDefinision,
+                    RecommendationAction = context
+                        .RecommendationAction.Where(ra =>
+                            ra.Id == assessment.RecommendationActionID
+                        )
+                        .FirstOrDefault()
+                        .RecommendationAction,
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == assessment.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == assessment.DeletedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    InspectionHistory = new AssessmentInspectionModel().GetInspectionList(
+                        assessment.Id
+                    ),
+                    MaintenanceHistory = new AssessmentMaintenanceModel().GetMaintenanceList(
+                        assessment.Id
+                    ),
+                }
+            ).FirstOrDefault();
+        }
+        if(assessmentModel == null)
+        {
+            return null;
+        }
+        assessmentModel.RiskMax = decide_risk_full(
+            assessmentModel.TP1Risk,
+            assessmentModel.TP2Risk,
+            assessmentModel.TP3Risk
+        );
+        return assessmentModel;
     }
 }
 

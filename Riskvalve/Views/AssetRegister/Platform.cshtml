@@ -15,7 +15,7 @@
             </div>
             <div class="table-container">
                 <div class="d-flex justify-content-between align-items-center mb-3">
-                    <button type="button" class="btn btn-primary custom btn-platform-action btn-with-icon" attr-mode="create">
+                    <button onclick="editAction.apply(this)" type="button" class="btn btn-primary custom btn-platform-action btn-with-icon" attr-mode="create">
                         <i class="fa-solid fa-plus"></i> Add New
                     </button>
                     <div class="">
@@ -68,7 +68,7 @@
 <div class="modal fade" id="addPlatformModal" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form>
+            <form id="platform-form">
                 <input id="field-platform-mode" type="hidden">
                 <input id="field-platform-id" name="platformid" type="hidden">
                 <div class="modal-header">
@@ -110,6 +110,7 @@
 @section Scripts {
     <script>
         function editAction () {
+            $('.form-control').removeClass('error');
             $('#field-platform-area').val('');
             $('#field-platform-name').val('');
             $('#field-platform-code').val('');
@@ -139,35 +140,37 @@
 
         $(document).ready(function () {
             $('#btn-platform-modal-save').click(function () {
-                var mode = $('#field-platform-mode').val();
-                if (mode == 'create') {
-                    $.ajax({
-                        url: '/AssetRegister/AddPlatform',
-                        type: 'POST',
-                        data: {
-                            areaID: $('#field-platform-area').val(),
-                            platform: $('#field-platform-name').val(),
-                            code: $('#field-platform-code').val()
-                        },
-                        success: function (data) {
-                            location.reload();
-                        }
-                    });
-                } else if (mode == 'update') {
-                    var id = $('#field-platform-id').val();
-                    $.ajax({
-                        url: '/AssetRegister/UpdatePlatform',
-                        type: 'POST',
-                        data: {
-                            id: id,
-                            areaID: $('#field-platform-area').val(),
-                            platform: $('#field-platform-name').val(),
-                            code: $('#field-platform-code').val()
-                        },
-                        success: function (data) {
-                            location.reload();
-                        }
-                    });
+                if($('#platform-form').valid()) {    
+                    var mode = $('#field-platform-mode').val();
+                    if (mode == 'create') {
+                        $.ajax({
+                            url: '/AssetRegister/AddPlatform',
+                            type: 'POST',
+                            data: {
+                                areaID: $('#field-platform-area').val(),
+                                platform: $('#field-platform-name').val(),
+                                code: $('#field-platform-code').val()
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
+                    } else if (mode == 'update') {
+                        var id = $('#field-platform-id').val();
+                        $.ajax({
+                            url: '/AssetRegister/UpdatePlatform',
+                            type: 'POST',
+                            data: {
+                                id: id,
+                                areaID: $('#field-platform-area').val(),
+                                platform: $('#field-platform-name').val(),
+                                code: $('#field-platform-code').val()
+                            },
+                            success: function (data) {
+                                location.reload();
+                            }
+                        });
+                    }
                 }
             });
             $('#btn-platform-modal-delete').click(function () {

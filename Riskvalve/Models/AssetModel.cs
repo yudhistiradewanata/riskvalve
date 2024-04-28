@@ -12,7 +12,6 @@ public class AssetContext : DbContext
     public DbSet<FluidPhaseModel> FluidPhase { get; set; }
     public DbSet<ToxicOrFlamableFluidModel> ToxicOrFlamableFluid { get; set; }
     public DbSet<UserModel> User { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
             .UseSqlServer(Environment.GetConnectionStringDB())
@@ -69,7 +68,9 @@ public class AssetModel : AssetDB
     public string? ToxicOrFlamableFluid { get; set; }
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
-
+    public InspectionModel? lastInspection { get; set; }
+    public MaintenanceModel? lastMaintenance { get; set; }
+    public AssessmentModel? lastAssessment { get; set; }
     public AssetModel GetAssetModel(int id)
     {
         AssetModel asset = new();
@@ -241,6 +242,9 @@ public class AssetModel : AssetDB
                         .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
                         .FirstOrDefault()
                         .ToxicOrFlamableFluid,
+                    lastInspection = new InspectionModel().GetLastAssetInspection(a.Id),
+                    lastMaintenance = new MaintenanceModel().GetLastAssetMaintenance(a.Id),
+                    lastAssessment = new AssessmentModel().GetLastAssetAssessment(a.Id),
                     IsDeleted = a.IsDeleted,
                     CreatedBy = a.CreatedBy,
                     CreatedAt = a.CreatedAt,

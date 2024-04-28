@@ -1,7 +1,520 @@
 @{
     ViewData["Title"] = "Print Assessment";
-    var assessment = ViewData["Assessment"];
+    var assessment = ViewData["Assessment"] as AssessmentModel;
+    var jsonassessment = Newtonsoft.Json.JsonConvert.SerializeObject(assessment);
+    var assessmentHeatMap = ViewData["AssessmentHeatMap"] as Dictionary<string, Dictionary<string,string>>;
+    var jsonassessmentHeatMap = Newtonsoft.Json.JsonConvert.SerializeObject(assessmentHeatMap);
 }
 <div class="container-fluid">
-    @assessment
+    <!-- @jsonassessment -->
+    <!-- @jsonassessmentHeatMap -->
+
+    <div class="text-center" style="margin: 15px;">
+        <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="saveImage()"><i class="bi bi-save"></i> Save as Image</button>
+    </div>
+    <div id="print-area">
+        <table class="assessment-print" id="assessment-print-table">
+            <tr>
+                <td colspan="10" class="heading" style="width: 100%;">Valve Passport</td>
+                <td colspan="2" rowspan="4" class="no-padding text-center">
+                    <img class="logo" src="~/lib/images/logo-square.jpg">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="width: 30%;">Tag Number</td>
+                <td colspan="2" style="width: 25%;">@assessment.Asset.TagNo</td>
+                <td colspan="2" style="width: 20%;">Date</td>
+                <td colspan="2" style="width: 20%;">@assessment.AssessmentDate</td>
+            </tr>
+            <tr>
+                <td colspan="4">Business Area</td>
+                <td colspan="2">@assessment.Asset.BusinessArea</td>
+                <td colspan="2">Assessment</td>
+                <td colspan="2">@assessment.AssessmentNo</td>
+            </tr>
+            <tr>
+                <td colspan="4">Platofrm</td>
+                <td colspan="2">@assessment.Asset.Platform</td>
+                <td colspan="2">Valve Type</td>
+                <td colspan="2">@assessment.Asset.ValveType</td>
+            </tr>
+            <!-- Second section -->
+            <tr>
+                <td colspan="6" class="table-section">Valve Information</td>
+                <td colspan="6" class="table-section">Process Information</td>
+            </tr>
+            <tr>
+                <td colspan="4">P&ID Number</td>
+                <td colspan="2">@assessment.Asset.PIDNo</td>
+                <td colspan="3">Operating Pressure (Psig)</td>
+                <td colspan="3">@assessment.Asset.OperatingPressure</td>
+            </tr>
+            <tr>
+                <td colspan="4">Parent Equipment No.</td>
+                <td colspan="2">@assessment.Asset.ParentEquipmentNo</td>
+                <td colspan="3">Operating Temperature (F)</td>
+                <td colspan="3">@assessment.Asset.OperatingTemperature</td>
+            </tr>
+            <tr>
+                <td colspan="4">Parent Equipment Desc</td>
+                <td colspan="2">@assessment.Asset.ParentEquipmentDescription</td>
+                <td colspan="3">Service Fluid</td>
+                <td colspan="3">@assessment.Asset.ServiceFluid</td>
+            </tr>
+            <tr>
+                <td colspan="4">Size (Inch)</td>
+                <td colspan="2">@assessment.Asset.Size</td>
+                <td colspan="3">Fluid Phase</td>
+                <td colspan="3">@assessment.Asset.FluidPhase</td>
+            </tr>
+            <tr>
+                <td colspan="4">Class Rating</td>
+                <td colspan="2">@assessment.Asset.ClassRating</td>
+                <td colspan="3">Toxic or Flamable Fluid</td>
+                <td colspan="3">@assessment.Asset.ToxicOrFlamableFluid</td>
+            </tr>
+            <tr>
+                <td colspan="4">Installation Date</td>
+                <td colspan="2">@assessment.Asset.InstallationDate</td>
+                <td colspan="6" class="table-section sub-section">Actuation</td>
+            </tr>
+            <tr>
+                <td colspan="4">Manufacturer</td>
+                <td colspan="2">@assessment.Asset.Manufacturer</td>
+                <td colspan="5">Pneumatic</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" />
+                    ----
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Body Material</td>
+                <td colspan="2">@assessment.Asset.BodyMaterial</td>
+                <td colspan="5">Hydraulic</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Remaining Life</td>
+                <td colspan="2">-------</td>
+                <td colspan="5">Manual Override</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.ManualOverrideID == 1 ? "checked" : "")/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
+                <td colspan="2">@assessment.Asset.CostOfReplacementAndRepair</td>
+                <td colspan="6" class="table-section sub-section">Usage Type</td>
+            </tr>
+            <tr>
+                <td colspan="6" class="table-section">Valve Inspection History</td>
+                <td colspan="5">Manual valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <!-- Inspection rows -->
+            
+            <tr>
+                <td class="table-section no-transform">Inspection Date</td>
+                <td class="table-section no-transform">Inspection Method</td>
+                @* <td class="table-section no-transform">Visual Condition</td> *@
+                <td class="table-section no-transform">Function Condition</td>
+                <td class="table-section no-transform">Test Pressure</td>
+                <td class="table-section no-transform" colspan="2">Inspection Image</td>
+                <td colspan="5">Auto On-Off Valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <!-- first inspection/ inspection [0] -->
+            @if(assessment.InspectionHistory.Count > 0)
+            {
+            <tr class="inspection-maintenance-row">
+                <td rowspan="4">@assessment.InspectionHistory[0].InspectionDate</td>
+                <td rowspan="4">@assessment.InspectionHistory[0].InspectionMethod</td>
+                @* <td rowspan="4">assessment.InspectionHistory[0].VisualCondition</td> *@
+                <td rowspan="4">@assessment.InspectionHistory[0].FunctionCondition</td>
+                <td rowspan="4">@assessment.InspectionHistory[0].TestPressureIfAny</td>
+                <td rowspan="4" colspan="2">
+                    @foreach (var image in assessment.InspectionHistory[0].InspectionFiles) {
+                        <img src="/@image.FilePath"/>
+                    }
+                </td>
+                <td colspan="5">Control Valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            } else {
+                <tr>
+                    <td rowspan="4"></td>
+                    <td rowspan="4"></td>
+                    @* <td rowspan="4"></td> *@
+                    <td rowspan="4"></td>
+                    <td rowspan="4"></td>
+                    <td rowspan="4" colspan="2"></td>
+                    <td colspan="5">Control Valve</td>
+                    <td colspan="1" class="checkbox">
+                        <input type="checkbox" /> ---
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td colspan="5">PSV/PRV</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="table-section sub-section">Status</td>
+            </tr>
+            <tr>
+                <td colspan="5">In-service</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <!-- second inspection -->
+            @if(assessment.InspectionHistory.Count > 1)
+            {
+            <tr class="inspection-maintenance-row">
+                <td rowspan="2">@assessment.InspectionHistory[1].InspectionDate</td>
+                <td rowspan="2">@assessment.InspectionHistory[1].InspectionMethod</td>
+                @* <td rowspan="2">assessment.InspectionHistory[1].VisualCondition</td> *@
+                <td rowspan="2">@assessment.InspectionHistory[1].FunctionCondition</td>
+                <td rowspan="2">@assessment.InspectionHistory[1].TestPressureIfAny</td>
+                <td rowspan="2" colspan="2">@foreach (var image in assessment.InspectionHistory[1].InspectionFiles) {
+                    <img src="/@image.FilePath"/>
+                }</td>
+                <td colspan="5">Waiting For Refurbishment</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            } else {
+            <tr>
+                <td rowspan="2"></td>
+                <td rowspan="2"></td>
+                @* <td rowspan="2"></td> *@
+                <td rowspan="2"></td>
+                <td rowspan="2"></td>
+                <td rowspan="2" colspan="2"></td>
+                <td colspan="5">Waiting For Refurbishment</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            } 
+            <tr>
+                <td colspan="5">Spare</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <!-- loop additional Inspection here -->
+            @if(assessment.InspectionHistory.Count > 2)
+            {
+                for(int i = 2; i < assessment.InspectionHistory.Count; i++)
+                {
+                    <tr class="inspection-maintenance-row">
+                        <td>@assessment.InspectionHistory[i].InspectionDate</td>
+                        <td>@assessment.InspectionHistory[i].InspectionMethod</td>
+                        @* <td>assessment.InspectionHistory[i].VisualCondition</td> *@
+                        <td>@assessment.InspectionHistory[i].FunctionCondition</td>
+                        <td>@assessment.InspectionHistory[i].TestPressureIfAny</td>
+                        <td colspan="2">@foreach (var image in assessment.InspectionHistory[i].InspectionFiles) {
+                            <img src="/@image.FilePath"/>
+                        }</td>
+                        <td class="spacing" colspan="6"></td>
+                    </tr>
+                }
+            }
+            <!-- end of inspection loop -->
+            <tr>
+                <td colspan="6" class="table-section">Valve Maintenance History</td>
+                <td colspan="6" class="table-section">Risk Result</td>
+            </tr>
+            <tr>
+                <td class="table-section no-transform">Maintenance Date</td>
+                <td class="table-section no-transform">Is Valve Repaired</td>
+                <td class="table-section no-transform" colspan="3">Maintenance Description</td>
+                <td class="table-section no-transform">Maintenance Image</td>
+                <td colspan="6" rowspan="3">
+                    <div class="risk-chart">
+                        <img class="risk-matrix-legend" src="~/lib/images/risk-matrix-legend.png">
+                        <div class="print-risk-table">
+                            <div class="risk-dots">
+                                <div class="dot-tp1 dot" style="bottom: @assessmentHeatMap["TP1"]["xpos"]%; left: @assessmentHeatMap["TP1"]["ypos"]%;"></div>
+                                <div class="dot-tp2 dot" style="bottom: @assessmentHeatMap["TP2"]["xpos"]%; left: @assessmentHeatMap["TP2"]["ypos"]%;"></div>
+                                <div class="dot-tp3 dot" style="bottom: @assessmentHeatMap["TP3"]["xpos"]%; left: @assessmentHeatMap["TP3"]["ypos"]%;"></div>
+                            </div>
+                            <img src="~/lib/images/risk-matrix.png">
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            <style>
+                .risk-dots .dot {
+                    position: absolute;
+                    transform: translate(-50%, 50%);
+                }
+                .risk-dots .dot-tp1:before {
+                    content: "";
+                    border-left: 9px solid transparent;
+                    border-right: 9px solid transparent;
+                    border-bottom: 14px solid #333;
+                    background-color: transparent;
+                    z-index: 1;
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    transform: translate(-50%,-50%);
+                }
+
+                .risk-dots .dot-tp1:after{
+                    border-bottom: 10px solid #333;
+                }
+
+                .risk-dots .dot-tp2 {
+                    position: absolute;
+                    width: 12px; 
+                    height: 12px; 
+                    border-radius: 50%;
+                    background-color: #333;
+                    border: solid 2px #333;
+                }
+
+                .risk-dots .dot-tp3 {
+                    position: absolute;
+                    width: 12px; 
+                    height: 12px; 
+                    background-color: #333;
+                    border: solid 2px #333;
+                }
+            </style>
+            <!-- Maintenance 1 -->
+            @if(assessment.MaintenanceHistory.Count > 0)
+            {
+            <tr class="inspection-maintenance-row">
+                <td>@assessment.MaintenanceHistory[0].MaintenanceDate</td>
+                <td>@assessment.MaintenanceHistory[0].IsValveRepaired</td>
+                <td colspan="3">@assessment.MaintenanceHistory[0].MaintenanceDescription</td>
+                <td>@foreach (var image in assessment.MaintenanceHistory[0].MaintenanceFiles) {
+                    <img src="/@image.FilePath"/>
+                }</td>
+            </tr>
+            } else {
+                <tr class="inspection-maintenance-row">
+                    <td></td>
+                    <td></td>
+                    <td colspan="3"></td>
+                    <td></td>
+                </tr>
+            }
+            <!-- Maintenance 2 -->
+            @if(assessment.MaintenanceHistory.Count > 1)
+            {
+            <tr class="inspection-maintenance-row">
+                <td rowspan="3">@assessment.MaintenanceHistory[1].MaintenanceDate</td>
+                <td rowspan="3">@assessment.MaintenanceHistory[1].IsValveRepaired</td>
+                <td rowspan="3" colspan="3">@assessment.MaintenanceHistory[1].MaintenanceDescription</td>
+                <td rowspan="3">@foreach (var image in assessment.MaintenanceHistory[1].MaintenanceFiles) {
+                    <img src="/@image.FilePath"/>
+                }</td>
+            </tr>
+            } else {
+            <tr class="inspection-maintenance-row">
+                <td rowspan="3"></td>
+                <td rowspan="3"></td>
+                <td rowspan="3" colspan="3"></td>
+                <td rowspan="3"></td>
+            </tr>
+            }
+            <tr>
+                <td class="table-section no-transform">Tag Number</td>
+                <td class="table-section no-transform">TP1</td>
+                <td class="table-section no-transform">TP2</td>
+                <td class="table-section no-transform">TP3</td>
+                <td class="table-section no-transform">Inspection Due Date</td>
+                <td class="table-section no-transform">Remarks</td>
+            </tr>
+            <tr>
+                <td>@assessment.Asset.TagNo</td>
+                <td style="background-color: @assessmentHeatMap["TP1"]["color"];">@assessmentHeatMap["TP1"]["value"]</td>
+                <td style="background-color: @assessmentHeatMap["TP2"]["color"];">@assessmentHeatMap["TP2"]["value"]</td>
+                <td style="background-color: @assessmentHeatMap["TP3"]["color"];">@assessmentHeatMap["TP3"]["value"]</td>
+                <td class="nowrap">@assessment.AssessmentDate</td>
+                <td></td>
+            </tr>
+    
+            <!-- Loop maintenance here -->
+            @if(assessment.MaintenanceHistory.Count > 2){
+                for(int i = 2; i < assessment.MaintenanceHistory.Count; i++)
+                {
+                    <td>@assessment.MaintenanceHistory[0].MaintenanceDate</td>
+                    <td>@assessment.MaintenanceHistory[0].IsValveRepaired</td>
+                    <td colspan="3">@assessment.MaintenanceHistory[0].MaintenanceDescription</td>
+                    <td>@foreach (var image in assessment.MaintenanceHistory[0].MaintenanceFiles) {
+                        <img src="/@image.FilePath"/>
+                    }</td>
+                    <td colspan="6" class="spacing"></td>
+                }
+            }
+            <!-- end of maintenance loop -->
+            <!-- Report summary -->
+            <tr>
+                <td colspan="12" class="table-section">Report Summary</td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    @assessment.Summary&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12" class="table-section">Final Recommendation</td>
+            </tr>
+            <tr>
+                <td class="text-center" colspan="2">Action Date</td>
+                <td colspan="10" rowspan="2"><b>@assessment.RecommendationAction</b> @assessment.DetailedRecommendation</td>
+            </tr>
+            <tr>
+                <td class="text-center" colspan="2">need help</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="table-section sub-section">Prepared By</td>
+                <td colspan="4" class="table-section sub-section">Reviewed By</td>
+                <td colspan="4" class="table-section sub-section">Approved By</td>
+            </tr>
+            <tr>
+                <td colspan="4">Septian A.p</td>
+                <td colspan="4">Septian A.p</td>
+                <td colspan="4">Septian A.p</td>
+            </tr>
+        </table>
+    </div>
 </div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('header').hide()
+        })
+
+        function saveImage () {
+            // Get the div element
+            var divElement = document.getElementById("print-area");
+
+            // Convert div content to canvas
+            html2canvas(divElement).then(function(canvas) {
+                // Convert canvas to image
+                var imgData = canvas.toDataURL('image/png');
+
+                // Create a link element to download the image
+                var link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'image.png';
+                link.click();
+            });
+        }
+    </script>
+}
+<style>
+    input {
+        pointer-events: none
+    }
+    #assessment-print-table td{
+        /* background-color: red; */
+        background-color: white;
+    }
+    .text-center{
+        text-align: center;
+    }
+    .inspection-maintenance-row td{
+        /* min-height: 80px; */
+        height: 150px;
+    }
+    .inspection-maintenance-row img {
+        width: 160px;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 10px;
+    }
+    .inspection-maintenance-row img:last-child{
+        margin-bottom: 0;
+    }
+    .risk-chart {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 400px;
+    }
+
+    .risk-matrix-legend{
+        width: 100%;
+    }
+
+    .print-risk-table {
+        width: 60%;
+        position: absolute;
+        top: 12%;
+        left: calc(50%);
+        transform: translateX(-50%);
+    }
+
+    .print-risk-table img{
+        width: 100%;
+    }
+
+    .checkbox{
+        width: 50%;
+        text-align: center;
+    }
+    .assessment-print{
+        width: 100%;
+    }
+    .table-section{
+        font-weight: bold;
+        background-color: #ccc !important;
+        padding: 8px;
+        text-align: center;
+        text-transform: uppercase;
+        height: 50px;
+    }
+    .table-section.no-transform{
+        text-transform: none;
+        font-weight: normal;
+    }
+    .table-section.sub-section{
+        text-transform: none;
+        height: 36px;
+    }
+    .assessment-print td.no-padding{
+        padding: 0;
+    }
+    .assessment-print td.spacing{
+        border: none !important;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-right: solid 1px #000000 !important;
+    }
+    .assessment-print td{
+        border: solid 1px #000000;
+        padding: 5px;
+    }
+
+    .assessment-print .logo{
+        width: 160px;
+        height: 160px;
+        background-color: grey;
+    }
+    .assessment-print .heading{
+        color: white;
+        background-color: #1f487c !important;
+        font-size: 32px;
+        padding: 15px;
+        text-align: center;
+    }
+</style>

@@ -9,7 +9,7 @@
 <div class="modal fade" id="addAssetModal" role="dialog">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
-            <form>
+            <form id="asset-form">
                 <input id="field-asset-mode" type="hidden" />
                 <input id="field-asset-id" name="assetid" type="hidden" />
                 <div class="modal-header">
@@ -31,26 +31,26 @@
                             <div class="form-group">
                                 <label for="field-asset-classrating">Class Rating</label>
                                 <input id="field-asset-classrating" name="classrating" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-tagno">Tag No</label>
-                                <input id="field-asset-tagno" name="tagno" type="text" class="form-control" />
+                                <input id="field-asset-tagno" name="tagno" type="text" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-parentequipmentno">Parent Equipment No</label>
                                 <input id="field-asset-parentequipmentno" name="parentequipmentno" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-platform">Platform</label>
-                                <select id="field-asset-platform" name="platform" class="form-control">
+                                <select id="field-asset-platform" name="platform" class="form-control" required>
                                     <option value="">Select Platform</option>
                                     @foreach (var item in platformList)
                                     {
@@ -63,13 +63,13 @@
                             <div class="form-group">
                                 <label for="field-asset-parentequipmentdescription">Parent Equipment Description</label>
                                 <input id="field-asset-parentequipmentdescription" name="parentequipmentdescription"
-                                    type="text" class="form-control" />
+                                    type="text" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-valvetype">Valve Type</label>
-                                <select id="field-asset-valvetype" name="valvetype" class="form-control">
+                                <select id="field-asset-valvetype" name="valvetype" class="form-control" required>
                                     <option value="">Select Valve Type</option>
                                     @foreach (var item in valveTypeList)
                                     {
@@ -82,19 +82,19 @@
                             <div class="form-group">
                                 <label for="field-asset-installationdate">Installation Date</label>
                                 <input id="field-asset-installationdate" name="installationdate" type="text"
-                                    class="form-control datepicker" />
+                                    class="form-control datepicker" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-size">Size (inch)</label>
-                                <input id="field-asset-size" name="size" type="text" class="form-control" />
+                                <input id="field-asset-size" name="size" type="text" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-pidno">PID Number</label>
-                                <input id="field-asset-pidno" name="pidno" type="text" class="form-control" />
+                                <input id="field-asset-pidno" name="pidno" type="text" class="form-control" required/>
                             </div>
                         </div>
                     </div>
@@ -106,13 +106,13 @@
                             <div class="form-group">
                                 <label for="field-asset-manufacturer">Manufacturer</label>
                                 <input id="field-asset-manufacturer" name="manufacturer" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-manualoverride">Manual Override</label>
-                                <select id="field-asset-manualoverride" name="manualoverride" class="form-control">
+                                <select id="field-asset-manualoverride" name="manualoverride" class="form-control" required>
                                     <option value="">Select Manual Override</option>
                                     @foreach (var item in manualOverrideList)
                                     {
@@ -124,55 +124,55 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-bodymodel">Body Model</label>
-                                <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control" />
+                                <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatormfg">Actuator Mfg</label>
                                 <input id="field-asset-actuatormfg" name="actuatormfg" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-bodymaterial">Body Material</label>
                                 <input id="field-asset-bodymaterial" name="bodymaterial" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatorserialno">Actuator Serial No.</label>
                                 <input id="field-asset-actuatorserialno" name="actuatorserialno" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-endconnection">End Connection</label>
                                 <input id="field-asset-endconnection" name="endconnection" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatortypemodel">Actuator Type/Model</label>
                                 <input id="field-asset-actuatortypemodel" name="actuatortypemodel" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-serialno">Serial No</label>
-                                <input id="field-asset-serialno" name="serialno" type="text" class="form-control" />
+                                <input id="field-asset-serialno" name="serialno" type="text" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatorpower">Actuator Power</label>
                                 <input id="field-asset-actuatorpower" name="actuatorpower" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                     </div>
@@ -184,27 +184,27 @@
                             <div class="form-group">
                                 <label for="field-asset-operatingtemperature">Operating Temperature (F)</label>
                                 <input id="field-asset-operatingtemperature" name="operatingtemperature" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-servicefluid">Service Fluid</label>
                                 <input id="field-asset-servicefluid" name="servicefluid" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-operatingpressure">Operating Pressure (Psig)</label>
                                 <input id="field-asset-operatingpressure" name="operatingpressure" type="text"
-                                    class="form-control" />
+                                    class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-fluidphase">Fluid Phase</label>
-                                <select id="field-asset-fluidphase" name="fluidphase" class="form-control">
+                                <select id="field-asset-fluidphase" name="fluidphase" class="form-control" required>
                                     <option value="">Select Fluid Phase</option>
                                     @foreach (var item in fluidPhaseList)
                                     {
@@ -216,14 +216,14 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-flowrate">Flow Rate (m3/hr)</label>
-                                <input id="field-asset-flowrate" name="flowrate" type="text" class="form-control" />
+                                <input id="field-asset-flowrate" name="flowrate" type="text" class="form-control" required/>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-toxicorflamablefluid">Toxic or Flamable Fluid</label>
                                 <select id="field-asset-toxicorflamablefluid" name="toxicorflamablefluid"
-                                    class="form-control">
+                                    class="form-control" required>
                                     <option value="">Select Toxic or Flamable Fluid</option>
                                     @foreach (var item in toxicOrFlamableFluidList)
                                     {
@@ -248,6 +248,7 @@
 @<script>
     function editAction () {
         $('.form-control').val('');
+        $('.form-control').removeClass('error');
         var mode = $(this).attr('attr-mode');
         if (mode == 'create') {
             $('#field-asset-mode').val('create');
@@ -298,108 +299,110 @@
 
     $(document).ready(function () {
         $('#btn-asset-modal-save').click(function () {
-            var mode = $('#field-asset-mode').val();
-            var classrating = $('#field-asset-classrating').val();
-            var tagno = $('#field-asset-tagno').val();
-            var parentequipmentno = $('#field-asset-parentequipmentno').val();
-            var platform = $('#field-asset-platform').val();
-            var parentequipmentdescription = $('#field-asset-parentequipmentdescription').val();
-            var valvetype = $('#field-asset-valvetype').val();
-            var installationdate = $('#field-asset-installationdate').val();
-            var size = $('#field-asset-size').val();
-            var pidno = $('#field-asset-pidno').val();
-            var manufacturer = $('#field-asset-manufacturer').val();
-            var manualoverride = $('#field-asset-manualoverride').val();
-            var bodymodel = $('#field-asset-bodymodel').val();
-            var actuatormfg = $('#field-asset-actuatormfg').val();
-            var bodymaterial = $('#field-asset-bodymaterial').val();
-            var serialno = $('#field-asset-serialno').val();
-            var endconnection = $('#field-asset-endconnection').val();
-            var actuatortypemodel = $('#field-asset-actuatortypemodel').val();
-            var actuatorserialno = $('#field-asset-actuatorserialno').val();
-            var actuatorpower = $('#field-asset-actuatorpower').val();
-            var operatingtemperature = $('#field-asset-operatingtemperature').val();
-            var servicefluid = $('#field-asset-servicefluid').val();
-            var operatingpressure = $('#field-asset-operatingpressure').val();
-            var fluidphase = $('#field-asset-fluidphase').val();
-            var flowrate = $('#field-asset-flowrate').val();
-            var toxicorflamablefluid = $('#field-asset-toxicorflamablefluid').val();
-            if (mode == 'create') {
-                $.ajax({
-                    url: '/AssetRegister/AddAsset',
-                    type: 'POST',
-                    data: {
-                        tagno: tagno,
-                        platformid: platform,
-                        valvetypeid: valvetype,
-                        size: size,
-                        classrating: classrating,
-                        parentequipmentno: parentequipmentno,
-                        parentequipmentdescription: parentequipmentdescription,
-                        installationdate: installationdate,
-                        pidno: pidno,
-                        manufacturer: manufacturer,
-                        bodymodel: bodymodel,
-                        bodymaterial: bodymaterial,
-                        endconnection: endconnection,
-                        serialno: serialno,
-                        manualoverrideid: manualoverride,
-                        actuatormfg: actuatormfg,
-                        actuatorserialno: actuatorserialno,
-                        actuatortypemodel: actuatortypemodel,
-                        actuatorpower: actuatorpower,
-                        operatingtemperature: operatingtemperature,
-                        operatingpressure: operatingpressure,
-                        flowrate: flowrate,
-                        servicefluid: servicefluid,
-                        fluidphaseid: fluidphase,
-                        toxicorflamablefluidid: toxicorflamablefluid
-                    },
-                    success: function (data) {
-                        if(data.Status == 'Success'){
-                            location.reload();
-                        } else {
-                            alert(data.Message);
+            if($('#asset-form').valid()) {    
+                var mode = $('#field-asset-mode').val();
+                var classrating = $('#field-asset-classrating').val();
+                var tagno = $('#field-asset-tagno').val();
+                var parentequipmentno = $('#field-asset-parentequipmentno').val();
+                var platform = $('#field-asset-platform').val();
+                var parentequipmentdescription = $('#field-asset-parentequipmentdescription').val();
+                var valvetype = $('#field-asset-valvetype').val();
+                var installationdate = $('#field-asset-installationdate').val();
+                var size = $('#field-asset-size').val();
+                var pidno = $('#field-asset-pidno').val();
+                var manufacturer = $('#field-asset-manufacturer').val();
+                var manualoverride = $('#field-asset-manualoverride').val();
+                var bodymodel = $('#field-asset-bodymodel').val();
+                var actuatormfg = $('#field-asset-actuatormfg').val();
+                var bodymaterial = $('#field-asset-bodymaterial').val();
+                var serialno = $('#field-asset-serialno').val();
+                var endconnection = $('#field-asset-endconnection').val();
+                var actuatortypemodel = $('#field-asset-actuatortypemodel').val();
+                var actuatorserialno = $('#field-asset-actuatorserialno').val();
+                var actuatorpower = $('#field-asset-actuatorpower').val();
+                var operatingtemperature = $('#field-asset-operatingtemperature').val();
+                var servicefluid = $('#field-asset-servicefluid').val();
+                var operatingpressure = $('#field-asset-operatingpressure').val();
+                var fluidphase = $('#field-asset-fluidphase').val();
+                var flowrate = $('#field-asset-flowrate').val();
+                var toxicorflamablefluid = $('#field-asset-toxicorflamablefluid').val();
+                if (mode == 'create') {
+                    $.ajax({
+                        url: '/AssetRegister/AddAsset',
+                        type: 'POST',
+                        data: {
+                            tagno: tagno,
+                            platformid: platform,
+                            valvetypeid: valvetype,
+                            size: size,
+                            classrating: classrating,
+                            parentequipmentno: parentequipmentno,
+                            parentequipmentdescription: parentequipmentdescription,
+                            installationdate: installationdate,
+                            pidno: pidno,
+                            manufacturer: manufacturer,
+                            bodymodel: bodymodel,
+                            bodymaterial: bodymaterial,
+                            endconnection: endconnection,
+                            serialno: serialno,
+                            manualoverrideid: manualoverride,
+                            actuatormfg: actuatormfg,
+                            actuatorserialno: actuatorserialno,
+                            actuatortypemodel: actuatortypemodel,
+                            actuatorpower: actuatorpower,
+                            operatingtemperature: operatingtemperature,
+                            operatingpressure: operatingpressure,
+                            flowrate: flowrate,
+                            servicefluid: servicefluid,
+                            fluidphaseid: fluidphase,
+                            toxicorflamablefluidid: toxicorflamablefluid
+                        },
+                        success: function (data) {
+                            if(data.Status == 'Success'){
+                                location.reload();
+                            } else {
+                                alert(data.Message);
+                            }
                         }
-                    }
-                });
-            } else if (mode == 'update') {
-                var id = $('#field-asset-id').val();
-                $.ajax({
-                    url: '/AssetRegister/UpdateAsset',
-                    type: 'POST',
-                    data: {
-                        id: id,
-                        tagno: tagno,
-                        platformid: platform,
-                        valvetypeid: valvetype,
-                        size: size,
-                        classrating: classrating,
-                        parentequipmentno: parentequipmentno,
-                        parentequipmentdescription: parentequipmentdescription,
-                        installationdate: installationdate,
-                        pidno: pidno,
-                        manufacturer: manufacturer,
-                        bodymodel: bodymodel,
-                        bodymaterial: bodymaterial,
-                        endconnection: endconnection,
-                        serialno: serialno,
-                        manualoverrideid: manualoverride,
-                        actuatormfg: actuatormfg,
-                        actuatorserialno: actuatorserialno,
-                        actuatortypemodel: actuatortypemodel,
-                        actuatorpower: actuatorpower,
-                        operatingtemperature: operatingtemperature,
-                        operatingpressure: operatingpressure,
-                        flowrate: flowrate,
-                        servicefluid: servicefluid,
-                        fluidphaseid: fluidphase,
-                        toxicorflamablefluidid: toxicorflamablefluid
-                    },
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
+                    });
+                } else if (mode == 'update') {
+                    var id = $('#field-asset-id').val();
+                    $.ajax({
+                        url: '/AssetRegister/UpdateAsset',
+                        type: 'POST',
+                        data: {
+                            id: id,
+                            tagno: tagno,
+                            platformid: platform,
+                            valvetypeid: valvetype,
+                            size: size,
+                            classrating: classrating,
+                            parentequipmentno: parentequipmentno,
+                            parentequipmentdescription: parentequipmentdescription,
+                            installationdate: installationdate,
+                            pidno: pidno,
+                            manufacturer: manufacturer,
+                            bodymodel: bodymodel,
+                            bodymaterial: bodymaterial,
+                            endconnection: endconnection,
+                            serialno: serialno,
+                            manualoverrideid: manualoverride,
+                            actuatormfg: actuatormfg,
+                            actuatorserialno: actuatorserialno,
+                            actuatortypemodel: actuatortypemodel,
+                            actuatorpower: actuatorpower,
+                            operatingtemperature: operatingtemperature,
+                            operatingpressure: operatingpressure,
+                            flowrate: flowrate,
+                            servicefluid: servicefluid,
+                            fluidphaseid: fluidphase,
+                            toxicorflamablefluidid: toxicorflamablefluid
+                        },
+                        success: function (data) {
+                            location.reload();
+                        }
+                    });
+                }
             }
         });
         $('#btn-asset-modal-delete').click(function () {

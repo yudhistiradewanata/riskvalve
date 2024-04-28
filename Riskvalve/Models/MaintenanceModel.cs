@@ -4,6 +4,7 @@ namespace Riskvalve.Models;
 
 public class MaintenanceContext : DbContext
 {
+    public DbSet<AssetDB> Asset { get; set; }
     public DbSet<MaintenanceDB> Maintenance { get; set; }
     public DbSet<IsValveRepairedModel> IsValveRepaired { get; set; }
     public DbSet<UserModel> User { get; set; }
@@ -260,6 +261,46 @@ public class MaintenanceModel : MaintenanceDB
             default:
                 return "";
         }
+    }
+    public MaintenanceModel GetLastAssetMaintenance(int assetID)
+    {
+        MaintenanceModel maintenance = new();
+        using (var context = new MaintenanceContext())
+        {
+            maintenance = (
+                from m in context.Maintenance
+                join a in context.Asset on m.AssetID equals a.Id
+                join ivr in context.IsValveRepaired on m.IsValveRepairedID equals ivr.Id
+                where a.Id == assetID
+                orderby m.MaintenanceDate descending
+                orderby m.Id descending
+                select new MaintenanceModel
+                {
+                    Id = m.Id,
+                    AssetID = m.AssetID,
+                    IsValveRepairedID = m.IsValveRepairedID,
+                    MaintenanceDate = m.MaintenanceDate,
+                    MaintenanceDescription = m.MaintenanceDescription,
+                    IsDeleted = m.IsDeleted,
+                    CreatedBy = m.CreatedBy,
+                    CreatedAt = m.CreatedAt,
+                    DeletedBy = m.DeletedBy,
+                    DeletedAt = m.DeletedAt,
+                    Asset = new AssetModel().GetAssetModel(m.AssetID),
+                    IsValveRepaired = ivr.IsValveRepaired,
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == m.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == m.DeletedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    MaintenanceFiles = new InspectionFileModel().GetMaintenanceFiles(m.Id)
+                }
+            ).ToList().FirstOrDefault();
+        }
+        return maintenance;
     }
 }
 

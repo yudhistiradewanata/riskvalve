@@ -67,6 +67,73 @@ public class AssessmentController : Controller
         AssessmentModel assessment = new();
         AssessmentModel assessmentModel = assessment.GetAssessmentModel(id);
         ViewData["Assessment"] = assessmentModel;
+
+        string tp1 = assessmentModel.TP1Risk;
+        string tp1_color = assessmentModel.GetHeatColor(tp1);
+        Dictionary<string, int> tp1_xypos = assessmentModel.GetHeatXYpos(tp1);
+        string tp1_xpos = tp1_xypos["xpos"].ToString();
+        string tp1_ypos = tp1_xypos["ypos"].ToString();
+        string tp2 = assessmentModel.TP2Risk;
+        string tp2_color = assessmentModel.GetHeatColor(tp2);
+        Dictionary<string, int> tp2_xypos = assessmentModel.GetHeatXYpos(tp2);
+        string tp2_xpos = tp2_xypos["xpos"].ToString();
+        string tp2_ypos = tp2_xypos["ypos"].ToString();
+        string tp3 = assessmentModel.TP3Risk;
+        string tp3_color = assessmentModel.GetHeatColor(tp3);
+        Dictionary<string, int> tp3_xypos = assessmentModel.GetHeatXYpos(tp3);
+        string tp3_xpos = tp3_xypos["xpos"].ToString();
+        string tp3_ypos = tp3_xypos["ypos"].ToString();
+        Dictionary<string, Dictionary<string,string>> assessmentHeatMap = new();
+        assessmentHeatMap.Add("TP1", new Dictionary<string, string>
+        {
+            { "value", tp1 },
+            { "color", tp1_color },
+            { "xpos", tp1_xpos },
+            { "ypos", tp1_ypos }
+        });
+        assessmentHeatMap.Add("TP2", new Dictionary<string, string>
+        {
+            { "value", tp2 },
+            { "color", tp2_color },
+            { "xpos", tp2_xpos },
+            { "ypos", tp2_ypos }
+        });
+        assessmentHeatMap.Add("TP3", new Dictionary<string, string>
+        {
+            { "value", tp3 },
+            { "color", tp3_color },
+            { "xpos", tp3_xpos },
+            { "ypos", tp3_ypos }
+        });
+        ViewData["AssessmentHeatMap"] = assessmentHeatMap;
+        return View();
+    }
+
+    public IActionResult PrintAssessmentVar(int id)
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect("/Login/Index");
+        }
+        else
+        {
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect("/Home/Index");
+            }
+        }
+        AssessmentModel assessment = new();
+        AssessmentModel assessmentModel = assessment.GetAssessmentModel(id);
+        return Json(assessmentModel);
+        ViewData["Assessment"] = assessmentModel;
         return View();
     }
 

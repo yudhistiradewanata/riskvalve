@@ -3,7 +3,6 @@
     var assetList = ViewData["assetList"] as List<AssetModel>;
     var areaList = ViewData["areaList"] as List<AreaModel>;
 }
-
 <div class="container-fluid">
     <div class="row">
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
@@ -11,7 +10,7 @@
         </div>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
             <div class="subheader">
-                <b>Assets</b>
+                <b>Assessment</b>
             </div>
             <div class="content-container">
                 <div class="row ">
@@ -66,6 +65,30 @@
                                     {
                                         foreach (var item in assetList)
                                         {
+                                            var assetID = item.Id;
+                                            var lastInspectionDate = "No inspection history";
+                                            var lastInspectionID = 0;
+                                            var lastMaintenanceID = 0;
+                                            var lastAssessmentID = 0;
+                                            var assessmentTimeToAction = "No assessment history";
+                                            var assessmentRisk = "";
+                                            var assessmentRiskColor = "";
+                                            if (item.lastInspection != null)
+                                            {
+                                                lastInspectionDate = @item.lastInspection.InspectionDate;
+                                                lastInspectionID = @item.lastInspection.Id;
+                                            }
+                                            if(item.lastMaintenance != null)
+                                            {
+                                                lastMaintenanceID = @item.lastMaintenance.Id;
+                                            }
+                                            if(item.lastAssessment != null)
+                                            {
+                                                lastAssessmentID = @item.lastAssessment.Id;
+                                                assessmentTimeToAction = @item.lastAssessment.TPTimeToActionRisk;
+                                                assessmentRisk = @item.lastAssessment.RiskMax;
+                                                assessmentRiskColor = new AssessmentModel().GetHeatColor(assessmentRisk);
+                                            }
                                             ctr++;
                                             <tr>
                                                 <td>@ctr</td>
@@ -77,18 +100,18 @@
                                                 <td>@item.ClassRating</td>
                                                 <td>@item.PIDNo</td>
                                                 <td>@item.ParentEquipmentNo</td>
-                                                <td>1-Jan-2030</td>
+                                                <td>@lastInspectionDate</td>
                                                 <td>
                                                     <div class="risk-status-item">
-                                                        <div class="box"></div>
-                                                        <div>1D</div>
+                                                        <div class="status-box @assessmentRiskColor"></div>
+                                                        <div>@assessmentRisk</div>
                                                     </div>
                                                 </td>
-                                                <td>1-Jan-2030</td>
+                                                <td>@assessmentTimeToAction</td>
                                                 <td class="nowrap">
-                                                    <a class="btn btn-light btn-sm">Assessment</a>
-                                                    <a class="btn btn-light btn-sm">Inspection</a>
-                                                    <a class="btn btn-light btn-sm">Maintenance</a>
+                                                    <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index" asp-route-assetid="@item.Id" asp-route-assessmentid="@lastAssessmentID" target="_blank">Assessment</a>
+                                                    <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index" asp-route-assetid="@item.Id" asp-route-inspectionid="@lastInspectionID" target="_blank">Inspection</a>
+                                                    <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index" asp-route-assetid="@item.Id" asp-route-maintenanceid="@lastMaintenanceID" target="_blank">Maintenance</a>
                                                 </td>
                                             </tr>
                                         }
@@ -161,8 +184,8 @@
                                     <td>1-Jan-2030</td>
                                     <td>
                                         <div class="risk-status-item">
-                                            <div class="box"></div>
-                                            <div>1D</div>
+                                            <div class="status-box"></div>
+                                            <div>--</div>
                                         </div>
                                     </td>
                                     <td>1-Jan-2030</td>

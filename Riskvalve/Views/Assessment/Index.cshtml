@@ -83,7 +83,7 @@
                                         <div class="submenu-action">
                                             <div class="top-row">
                                                 <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="submitForm(this)"><i class="bi bi-save"></i> Save</button>
-                                                @* <button type="button" class="btn btn-block btn-warning print-button" id="btn-print"><i class="bi bi-printer"></i> Print</button> *@
+                                                <a  target="_blank" class="print-button"><button type="button" class="btn btn-block btn-warning" id="btn-print"><i class="bi bi-printer"></i> Print</button></a>
                                             </div>
                                             <div class="bottom-row">
                                                 <button type="button" class="btn btn-block btn-danger delete-button" id="btn-delete" onclick="deleteForm(this)"><i class="bi bi-trash"></i> Delete</button>
@@ -373,7 +373,7 @@
                                                                 <label class="col-form-label" for="assessment-no">Assessment No</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo" value="">
+                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo" value="" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -381,7 +381,7 @@
                                                                 <label class="col-form-label" for="assessment-date">Assessment Date</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control datepicker form-control-sm" id="assessment-date" name="AssessmentDate" value="@defaultDate">
+                                                                <input class="form-control datepicker form-control-sm" id="assessment-date" name="AssessmentDate" value="@defaultDate" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -389,7 +389,7 @@
                                                                 <label class="col-form-label" for="time-period">Time Period (Month)</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1" onchange="calculateAssessment.apply(this)" value="12">
+                                                                <input class="form-control form-control-sm calculate-assessment" id="time-period" name="timePeriode" type="number" step="1" onchange="calculateAssessment.apply(this)" value="12" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -399,7 +399,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-a">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere" value="0">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere" value="0" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -407,7 +407,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-b">Time to Limit State Failure of function (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction" value="0">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction" value="0" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -415,7 +415,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-c">Time to Limit State Passing accros valve (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve" value="0">
+                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve" value="0" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -736,7 +736,7 @@
                                                                 <label class="col-form-label" for="product-loss-definition">Product loss definition (bbls)</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <input class="form-control form-control-sm bbls-assessment calculate-assessment" id="product-loss-definition" name="ProductLossDefinition" type="number" step="1" value="0" onchange="calculateAssessment.apply(this)">
+                                                                <input class="form-control form-control-sm bbls-assessment calculate-assessment" id="product-loss-definition" name="ProductLossDefinition" type="number" step="1" value="0" onchange="calculateAssessment.apply(this)" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -803,11 +803,11 @@
                                                                         </defs>
                                                                         <g transform="matrix(1 0 0 1 -174 -55 )">
                                                                             <g transform="matrix(0.902272727272727 0 0 0.902272727272727 200.875 55 )" clip-path="url(#clip34)" filter="url(#filter35)">
-                                                                                <text x="125" y="275" font-size="12">E</text>
-                                                                                <text x="125" y="225" font-size="12">D</text>
+                                                                                <text x="125" y="275" font-size="12">A</text>
+                                                                                <text x="125" y="225" font-size="12">B</text>
                                                                                 <text x="125" y="175" font-size="12">C</text>
-                                                                                <text x="125" y="125" font-size="12">B</text>
-                                                                                <text x="125" y="75" font-size="12">A</text>
+                                                                                <text x="125" y="125" font-size="12">D</text>
+                                                                                <text x="125" y="75" font-size="12">E</text>
                                                                                 <text x="175" y="322" font-size="12">1</text>
                                                                                 <text x="225" y="322" font-size="12">2</text>
                                                                                 <text x="275" y="322" font-size="12">3</text>
@@ -1111,7 +1111,7 @@
                                                             <div class="col-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label fw-500">Time To Action</label>
-                                                                    <input id="time-to-action" class="form-control datepicker form-control-sm" name="TimeToAction"/>
+                                                                    <input id="time-to-action" class="form-control datepicker form-control-sm" name="TimeToAction" required/>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label fw-500" for="recommended-action">Recommendation Action</label>
@@ -1560,6 +1560,35 @@
 
 @section Scripts {
         <script>
+            const urlParams = new URLSearchParams(window.location.search);
+            const idParam = urlParams.get('assessmentid');
+            $(document).ready(function () {
+                $('.btn-add-new-inspection').click(addTab);
+                if(idParam) {
+                    $('.btn-add-new-inspection[attr-inspection-id='+idParam+']').trigger('click')
+                }
+                // development purpose
+                @* $('.btn-add-new-inspection').eq(0).trigger('click') *@
+
+                @* $('.bbls-assessment').on('change', function () {
+                    if($(this).val() < 0 || $(this).val() == ''){
+                        $(this).val(0);
+                    }
+                    var ctr = $(this).closest('.tab-pane').attr('tab-num');
+                    var bbls = $(this).val()*1;
+                    var hsseSelect = $('#hsse-definition' + ctr);
+                    var hsseOptions = hsseSelect.find('option');
+                    var selectedHsse = '';
+                    hsseOptions.each(function(){
+                        var hsseValue = $(this).attr('attr-minvalue')*1;
+                        if(bbls >= hsseValue){
+                            selectedHsse = $(this).val();
+                        }
+                    });
+                    hsseSelect.val(selectedHsse);
+                }) *@
+            });
+
             const assessmentCalculatedField = [
                 'consequenceOfFailure',
                 'tP1A',
@@ -1589,61 +1618,76 @@
                 const ctr = $(el).closest('.tab-pane').attr('tab-num')
                 const nativeForm = form[0]
                 const formData = new FormData(nativeForm);
-                if(form.hasClass('history-form')) {
-                    // update
-                    $.ajax({
-                        url: '/Assessment/UpdateAssessment',
-                        type: 'POST', // or 'GET' depending on your form method
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(response) {
-                            // Handle success response
-                            alert('Data successfully updated')
-                        },
-                        error: function(xhr, status, error) {
-                            alert('Error submitting the form')
-                        }
-                    });
-                } else {
-                    // add new
-                    $.ajax({
-                        url: '/Assessment/AddAssessment',
-                        type: 'POST', // or 'GET' depending on your form method
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        success: function(res) {
-                            form.addClass('history-form')
-                            // add menu to tree
-                            $('ul[equipment-id="'+equipmentId+'"]').append(`
-                                <li class="treeview">
-                                    <a class="btn-add-new-inspection" history-button="" 
-                                    attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
-                                    attr-name="${res.assessmentNo}" 
-                                    attr-sidebar-level="4" 
-                                    attr-find-inspection="${res.asset.businessArea}" 
-                                    attr-find-platform="${res.asset.platform}" 
-                                    attr-find-equipment="${res.asset.tagNo}" 
-                                    attr-find-imr="NEW"
-                                    onclick="addTab.apply(this)"
-                                    >
-                                        ${res.assessmentNo}
-                                    </a>
-                                </li>
-                            `)
+                const selectedInspectionCount = form.find('input[name=selectedInspectionId]').length
+                const selectedMaintenanceCount = form.find('input[name=selectedMaintenanceId]').length
+                if(!selectedInspectionCount || !selectedMaintenanceCount) {
+                    alert('please input at least one inspection and one maintenance')
+                    return
+                }
+                if(form.valid()) {
+                    if(form.hasClass('history-form')) {
+                        // update
+                        $.ajax({
+                            url: '/Assessment/UpdateAssessment',
+                            type: 'POST', // or 'GET' depending on your form method
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(response) {
+                                // Handle success response
+                                alert('Data successfully updated')
+                                fetchHistoryData({
+                                    id: res.id,
+                                    counter: ctr
+                                })
+                            },
+                            error: function(xhr, status, error) {
+                                alert('Error submitting the form')
+                            }
+                        });
+                    } else {
+                        // add new
+                        $.ajax({
+                            url: '/Assessment/AddAssessment',
+                            type: 'POST', // or 'GET' depending on your form method
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function(res) {
+                                form.addClass('history-form')
+                                // add menu to tree
+                                $('ul[equipment-id="'+equipmentId+'"]').append(`
+                                    <li class="treeview">
+                                        <a class="btn-add-new-inspection" history-button="" 
+                                        attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
+                                        attr-name="${res.assessmentNo}" 
+                                        attr-sidebar-level="4" 
+                                        attr-find-inspection="${res.asset.businessArea}" 
+                                        attr-find-platform="${res.asset.platform}" 
+                                        attr-find-equipment="${res.asset.tagNo}" 
+                                        attr-find-imr="NEW"
+                                        onclick="addTab.apply(this)"
+                                        >
+                                            ${res.assessmentNo}
+                                        </a>
+                                    </li>
+                                `)
+                                $('.nav-tab-menus').find('a[tab-num='+ctr+'] div[tab-title]').text(res.asset.tagNo + ' ' + res.assessmentNo)
 
-                            fetchHistoryData({
-                                id: res.id,
-                                counter: ctr
-                            })
-                            alert('Data successfully inserted')
-                        },
-                        error: function(xhr, status, error) {
-                            // Handle error
-                            alert('An assessment with the same asset and date already exists')
-                        }
-                    });
+                                fetchHistoryData({
+                                    id: res.id,
+                                    counter: ctr
+                                })
+                                alert('Data successfully inserted')
+                            },
+                            error: function(xhr, status, error) {
+                                // Handle error
+                                alert('An assessment with the same asset and date already exists')
+                            }
+                        });
+                    }
+                } else {
+                    alert('please check the required fields')
                 }
             }
 
@@ -1713,6 +1757,7 @@
                         const editable = assessmentCalculatedField.some(field => data[field] === null)
                         if(!editable) {
                             $('#inspection'+counter).find('input:not([type="hidden"]), textarea, select').attr('disabled', true)
+                            $('#inspection'+counter).find('.print-button').attr('href', '/Assessment/PrintAssessment/'+id)
                             $('#inspection'+counter+' .assessment-form').addClass('not-editable')
                             $('.only-add').hide()
                         }
@@ -1836,13 +1881,13 @@
             }
 
             function getHeatColor(pos) {
-                if(['1E', '2E', '1D'].includes(pos)){
+                if(['1A', '2A', '1B'].includes(pos)){
                     return 'olive';
-                } else if(['3E', '2D', '1C'].includes(pos)){
+                } else if(['3A', '2B', '1C'].includes(pos)){
                     return 'green';
-                } else if(['4E', '3D', '3C', '2C','1B'].includes(pos)){
+                } else if(['4A', '3B', '3C', '2C','1D'].includes(pos)){
                     return 'yellow';
-                } else if(['5E', '5D', '4D', '4C', '3B', '2B', '2A', '1A'].includes(pos)){
+                } else if(['5A', '5B', '4B', '4C', '3D', '2D', '2E', '1E'].includes(pos)){
                     return 'orange';
                 } else {
                     return 'red';
@@ -1852,6 +1897,9 @@
             function calculateAssessment(ctr = -1) {
                 if(ctr == -1){
                     var ctr = $(this).closest('.tab-pane').attr('tab-num');
+                }
+                if($('#leakage-to-atmosphere' + ctr).find('option:selected').length == 0) {
+                    return
                 }
                 var timePeriod = $('#time-period' + ctr).val();
                 var assessmentDate = $('#assessment-date' + ctr).val();
@@ -2027,25 +2075,28 @@
                 });
                 hsseSelect.val(selectedHsse);
                 var hsseSelectReal = $('#hsse-definition' + ctr);
+                if(hsseSelectReal.find('option:selected').length == 0){
+                    return
+                }
                 var cof1 = hsseSelectReal.find('option:selected').attr('attr-cofcategory');
                 var cof2 = hsseSelect.find('option:selected').attr('attr-cofcategory');
                 var cof = String.fromCharCode(Math.min(cof1.charCodeAt(0), cof2.charCodeAt(0)));
                 $('#consequenceOfFailure' + ctr).val(cof);
                 var ypos = 0;
                 switch(cof){
-                    case 'A':
+                    case 'E':
                         ypos = 10;
                         break;
-                    case 'B':
+                    case 'D':
                         ypos = 30;
                         break;
                     case 'C':
                         ypos = 50;
                         break;
-                    case 'D':
+                    case 'B':
                         ypos = 70;
                         break;
-                    case 'E':
+                    case 'A':
                         ypos = 90;
                         break;
                 }
@@ -2297,30 +2348,6 @@
                 return new Date(parts[2], parts[1] - 1, parts[0]);
             }
 
-            $(document).ready(function () {
-                $('.btn-add-new-inspection').click(addTab);
-                // development purpose
-                @* $('.btn-add-new-inspection').eq(0).trigger('click') *@
-
-                @* $('.bbls-assessment').on('change', function () {
-                    if($(this).val() < 0 || $(this).val() == ''){
-                        $(this).val(0);
-                    }
-                    var ctr = $(this).closest('.tab-pane').attr('tab-num');
-                    var bbls = $(this).val()*1;
-                    var hsseSelect = $('#hsse-definition' + ctr);
-                    var hsseOptions = hsseSelect.find('option');
-                    var selectedHsse = '';
-                    hsseOptions.each(function(){
-                        var hsseValue = $(this).attr('attr-minvalue')*1;
-                        if(bbls >= hsseValue){
-                            selectedHsse = $(this).val();
-                        }
-                    });
-                    hsseSelect.val(selectedHsse);
-                }) *@
-            });
-
             let template_inspection = $('#template_inspection');
             let template_inspection_html = template_inspection.html();
             template_inspection.remove();
@@ -2346,7 +2373,7 @@
 
                 let tabheadercontainer = $('#inspectiontabheader');
                 let tabcontentcontainer = $('#tabcontentcontainer');
-                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
+                tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'"><div tab-title>' + name + '</div><button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
                 tabcontentcontainer.append('<div class="tab-pane" equipment-id="'+equipmentId+'" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
                 let tabcontent = tabcontentcontainer.find('.form-control,.form-select');
                 tabcontent.each(function () {
@@ -2589,13 +2616,12 @@
                 $('#failure-of-function'+tabNum).val(latestData.currentConditionFailureOfFunctionID)
                 $('#passing-accross-valve'+tabNum).val(latestData.currentConditionPassingAcrossValveID)
                 $('#inspection-effectiveness'+tabNum).val(latestData.inspectionEffectivenessID)
-
-                calculateAssessment(tabNum)
-
                 initDatatable({
                     scrollable: false,
                     selector: tableSelector
                 })
+
+                calculateAssessment(tabNum)
             }
 
             function addMaintenance(el) {
