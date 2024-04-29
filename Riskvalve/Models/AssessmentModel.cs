@@ -501,95 +501,94 @@ public class AssessmentModel : AssessmentDB
         return assessmentModel;
     }
 
-    public int AddAssessment(AssessmentDB assessment)
+    public int AddAssessment(AssessmentDB assessmentDB)
     {
+        int assessmentID = 0;
         using (var context = new AssessmentContext())
         {
-            assessment.IsDeleted = false;
-            if (assessment.LeakageToAtmosphereID == 0)
+            assessmentDB.IsDeleted = false;
+            if (assessmentDB.LeakageToAtmosphereID == 0)
             {
-                assessment.LeakageToAtmosphereID = null;
+                assessmentDB.LeakageToAtmosphereID = null;
             }
-            if (assessment.FailureOfFunctionID == 0)
+            if (assessmentDB.FailureOfFunctionID == 0)
             {
-                assessment.FailureOfFunctionID = null;
+                assessmentDB.FailureOfFunctionID = null;
             }
-            if (assessment.PassingAccrosValveID == 0)
+            if (assessmentDB.PassingAccrosValveID == 0)
             {
-                assessment.PassingAccrosValveID = null;
+                assessmentDB.PassingAccrosValveID = null;
             }
-            if (assessment.LeakageToAtmosphereTP1ID == 0)
+            if (assessmentDB.LeakageToAtmosphereTP1ID == 0)
             {
-                assessment.LeakageToAtmosphereTP1ID = null;
+                assessmentDB.LeakageToAtmosphereTP1ID = null;
             }
-            if (assessment.LeakageToAtmosphereTP2ID == 0)
+            if (assessmentDB.LeakageToAtmosphereTP2ID == 0)
             {
-                assessment.LeakageToAtmosphereTP2ID = null;
+                assessmentDB.LeakageToAtmosphereTP2ID = null;
             }
-            if (assessment.LeakageToAtmosphereTP3ID == 0)
+            if (assessmentDB.LeakageToAtmosphereTP3ID == 0)
             {
-                assessment.LeakageToAtmosphereTP3ID = null;
+                assessmentDB.LeakageToAtmosphereTP3ID = null;
             }
-            if (assessment.FailureOfFunctionTP1ID == 0)
+            if (assessmentDB.FailureOfFunctionTP1ID == 0)
             {
-                assessment.FailureOfFunctionTP1ID = null;
+                assessmentDB.FailureOfFunctionTP1ID = null;
             }
-            if (assessment.FailureOfFunctionTP2ID == 0)
+            if (assessmentDB.FailureOfFunctionTP2ID == 0)
             {
-                assessment.FailureOfFunctionTP2ID = null;
+                assessmentDB.FailureOfFunctionTP2ID = null;
             }
-            if (assessment.FailureOfFunctionTP3ID == 0)
+            if (assessmentDB.FailureOfFunctionTP3ID == 0)
             {
-                assessment.FailureOfFunctionTP3ID = null;
+                assessmentDB.FailureOfFunctionTP3ID = null;
             }
-            if (assessment.PassingAccrosValveTP1ID == 0)
+            if (assessmentDB.PassingAccrosValveTP1ID == 0)
             {
-                assessment.PassingAccrosValveTP1ID = null;
+                assessmentDB.PassingAccrosValveTP1ID = null;
             }
-            if (assessment.PassingAccrosValveTP2ID == 0)
+            if (assessmentDB.PassingAccrosValveTP2ID == 0)
             {
-                assessment.PassingAccrosValveTP2ID = null;
+                assessmentDB.PassingAccrosValveTP2ID = null;
             }
-            if (assessment.PassingAccrosValveTP3ID == 0)
+            if (assessmentDB.PassingAccrosValveTP3ID == 0)
             {
-                assessment.PassingAccrosValveTP3ID = null;
+                assessmentDB.PassingAccrosValveTP3ID = null;
             }
-            if (assessment.InspectionEffectivenessID == 0)
+            if (assessmentDB.InspectionEffectivenessID == 0)
             {
-                assessment.InspectionEffectivenessID = null;
+                assessmentDB.InspectionEffectivenessID = null;
             }
-            if (assessment.ImpactOfInternalFluidImpuritiesID == 0)
+            if (assessmentDB.ImpactOfInternalFluidImpuritiesID == 0)
             {
-                assessment.ImpactOfInternalFluidImpuritiesID = null;
+                assessmentDB.ImpactOfInternalFluidImpuritiesID = null;
             }
-            if (assessment.ImpactOfOperatingEnvelopesID == 0)
+            if (assessmentDB.ImpactOfOperatingEnvelopesID == 0)
             {
-                assessment.ImpactOfOperatingEnvelopesID = null;
+                assessmentDB.ImpactOfOperatingEnvelopesID = null;
             }
-            if (assessment.UsedWithinOEMSpecificationID == 0)
+            if (assessmentDB.UsedWithinOEMSpecificationID == 0)
             {
-                assessment.UsedWithinOEMSpecificationID = null;
+                assessmentDB.UsedWithinOEMSpecificationID = null;
             }
-            if (assessment.RepairedID == 0)
+            if (assessmentDB.RepairedID == 0)
             {
-                assessment.RepairedID = null;
+                assessmentDB.RepairedID = null;
             }
-            if (assessment.RecommendationActionID == 0)
+            if (assessmentDB.RecommendationActionID == 0)
             {
-                assessment.RecommendationActionID = null;
+                assessmentDB.RecommendationActionID = null;
             }
-            if (assessment.HSSEDefinisionID == 0)
+            if (assessmentDB.HSSEDefinisionID == 0)
             {
-                assessment.HSSEDefinisionID = null;
+                assessmentDB.HSSEDefinisionID = null;
             }
             // check if there is already an assessment with the same assetid and assessment date
             if (
-                context
-                    .Assessment.Where(a =>
-                        a.AssetID == assessment.AssetID
-                        && a.AssessmentDate == assessment.AssessmentDate
-                    )
-                    .FirstOrDefault() != null
+                context.Assessment.Select(a => new { a.AssetID, a.AssessmentDate })
+                    .Where(a => a.AssetID == assessmentDB.AssetID)
+                    .Where(a => a.AssessmentDate == assessmentDB.AssessmentDate)
+                    .Count() > 0
             )
             {
                 Exception e = new Exception(
@@ -597,20 +596,20 @@ public class AssessmentModel : AssessmentDB
                 );
                 throw e;
             }
-            context.Add(assessment);
+            context.Assessment.Add(assessmentDB);
             context.SaveChanges();
             if (
-                assessment.AssessmentNo == null
-                || assessment.AssessmentNo == ""
-                || assessment.AssessmentNo == "IMPORT"
+                string.IsNullOrEmpty(assessmentDB.AssessmentNo)
+                || assessmentDB.AssessmentNo == "IMPORT"
             )
             {
-                AssessmentDB assessmentNo = context.Assessment.Find(assessment.Id);
-                assessmentNo.AssessmentNo = "ASSESSMENT" + assessment.Id;
-                context.Update(assessmentNo);
+                AssessmentDB assessmentNo = context.Assessment.Find(assessmentDB.Id);
+                assessmentNo.AssessmentNo = "ASSESSMENT" + assessmentDB.Id;
+                context.Assessment.Update(assessmentNo);
                 context.SaveChanges();
             }
-            return assessment.Id;
+            assessmentID = assessmentDB.Id;
+            return assessmentID;
         }
     }
 
@@ -1520,6 +1519,7 @@ public class AssessmentModel : AssessmentDB
         int xpos = (LofToInt(cos) * 20) - 10;
         return new Dictionary<string, int> { { "xpos", xpos }, { "ypos", ypos } };
     }
+
     public AssessmentModel GetLastAssetAssessment(int assetID)
     {
         AssessmentModel assessmentModel = new();
@@ -1700,7 +1700,7 @@ public class AssessmentModel : AssessmentDB
                 }
             ).FirstOrDefault();
         }
-        if(assessmentModel == null)
+        if (assessmentModel == null)
         {
             return null;
         }
