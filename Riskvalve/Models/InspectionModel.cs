@@ -289,9 +289,26 @@ public class InspectionModel : InspectionDB
                     }
                     else if (mappedKey.Equals("InspectionDate"))
                     {
-                        mappedValue = DateTime
-                            .FromOADate(Convert.ToDouble(value))
-                            .ToString(Environment.GetDateFormatString(false));
+                        if (value.Contains("/"))
+                        {
+                            Console.WriteLine("ALDOFEBRIAN");
+                            Console.WriteLine(value);
+                            string date = value.Split(" ")[0];
+                            Console.WriteLine(date);
+                            List<string> dateParts = date.Split("/").ToList();
+                            if (dateParts[0].Length == 1)
+                            {
+                                dateParts[0] = "0" + dateParts[0];
+                            }
+                            string newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                            mappedValue = newDate;
+                        }
+                        else
+                        {
+                            mappedValue = DateTime
+                                .FromOADate(Convert.ToDouble(value))
+                                .ToString(Environment.GetDateFormatString(false));
+                        }
                     }
                     else if (mappedKey.Equals("InspectionMethodID"))
                     {
@@ -353,6 +370,7 @@ public class InspectionModel : InspectionDB
         }
         return finalResult;
     }
+
     private string MapHeader(string header)
     {
         switch (header)
@@ -381,6 +399,7 @@ public class InspectionModel : InspectionDB
                 return "";
         }
     }
+
     public InspectionModel GetLastAssetInspection(int assetID)
     {
         InspectionModel inspectionData = new();
