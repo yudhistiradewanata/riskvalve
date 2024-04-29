@@ -121,6 +121,7 @@ public class ToolController : Controller
         List<Dictionary<string, string>> data = new();
         using (var package = new ExcelPackage(new FileInfo(filePath)))
         {
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
             int rowCount = worksheet.Dimension.Rows;
             int colCount = worksheet.Dimension.Columns;
