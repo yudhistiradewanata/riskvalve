@@ -399,7 +399,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-a">Time to Limit State Leakage to atmosphere (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere" value="0" required>
+                                                                <input class="form-control form-control-sm" id="time-to-limit-a" name="TimeToLimitStateLeakageToAtmosphere" value="0" type="number" step="1" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -407,7 +407,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-b">Time to Limit State Failure of function (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction" value="0" required>
+                                                                <input class="form-control form-control-sm" id="time-to-limit-b" name="TimeToLimitStateFailureOfFunction" value="0" type="number" step="1" required>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -415,7 +415,7 @@
                                                                 <label class="col-form-label" for="time-to-limit-c">Time to Limit State Passing accros valve (Month)</label>
                                                             </div>
                                                             <div class="col-4">
-                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve" value="0" required>
+                                                                <input class="form-control form-control-sm" id="time-to-limit-c" name="TimeToLimitStatePassingAccrosValve" value="0" type="number" step="1" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -1911,6 +1911,107 @@
                 var timeToLimitA = $('#time-to-limit-a' + ctr).val();
                 var timeToLimitB = $('#time-to-limit-b' + ctr).val();
                 var timeToLimitC = $('#time-to-limit-c' + ctr).val();
+                var idImprobable = 1;
+                var idDoubtful = 2;
+                var idExpected = 3;
+                var tp_limit_1 = 1.5 * timePeriod;
+                var tp_limit_2 = 3 * timePeriod;
+                var tp_limit_3 = 4.5 * timePeriod;
+                var timeToLimitAint = timeToLimitA*1;
+                var timeToLimitBint = timeToLimitB*1;
+                var timeToLimitCint = timeToLimitC*1;
+                var calculated_lf2LeakageToAtmosphereTP1 = 1;
+                if(timeToLimitAint > tp_limit_1 * 2){
+                    calculated_lf2LeakageToAtmosphereTP1 = idImprobable;
+                } else if(timeToLimitAint > tp_limit_1){
+                    calculated_lf2LeakageToAtmosphereTP1 = idDoubtful;
+                } else if(timeToLimitAint <= tp_limit_1){
+                    calculated_lf2LeakageToAtmosphereTP1 = idExpected;
+                }
+                var calculated_lf2LeakageToAtmosphereTP2 = 1;
+                if(timeToLimitAint > tp_limit_2 * 2){
+                    calculated_lf2LeakageToAtmosphereTP2 = idImprobable;
+                } else if(timeToLimitAint > tp_limit_2){
+                    calculated_lf2LeakageToAtmosphereTP2 = idDoubtful;
+                } else if(timeToLimitAint <= tp_limit_2){
+                    calculated_lf2LeakageToAtmosphereTP2 = idExpected;
+                }
+                var calculated_lf2LeakageToAtmosphereTP3 = 1;
+                if(timeToLimitAint > tp_limit_3 * 2){
+                    calculated_lf2LeakageToAtmosphereTP3 = idImprobable;
+                } else if(timeToLimitAint > tp_limit_3){
+                    calculated_lf2LeakageToAtmosphereTP3 = idDoubtful;
+                } else if(timeToLimitAint <= tp_limit_3){
+                    calculated_lf2LeakageToAtmosphereTP3 = idExpected;
+                }
+                var calculated_lf2FailureOfFunctionTP1 = 1;
+                if(timeToLimitBint > tp_limit_1 * 2){
+                    calculated_lf2FailureOfFunctionTP1 = idImprobable;
+                } else if(timeToLimitBint > tp_limit_1){
+                    calculated_lf2FailureOfFunctionTP1 = idDoubtful;
+                } else if(timeToLimitBint <= tp_limit_1){
+                    calculated_lf2FailureOfFunctionTP1 = idExpected;
+                }
+                var calculated_lf2FailureOfFunctionTP2 = 1;
+                if(timeToLimitBint > tp_limit_2 * 2){
+                    calculated_lf2FailureOfFunctionTP2 = idImprobable;
+                } else if(timeToLimitBint > tp_limit_2){
+                    calculated_lf2FailureOfFunctionTP2 = idDoubtful;
+                } else if(timeToLimitBint <= tp_limit_2){
+                    calculated_lf2FailureOfFunctionTP2 = idExpected;
+                }
+                var calculated_lf2FailureOfFunctionTP3 = 1;
+                if(timeToLimitBint > tp_limit_3 * 2){
+                    calculated_lf2FailureOfFunctionTP3 = idImprobable;
+                } else if(timeToLimitBint > tp_limit_3){
+                    calculated_lf2FailureOfFunctionTP3 = idDoubtful;
+                } else if(timeToLimitBint <= tp_limit_3){
+                    calculated_lf2FailureOfFunctionTP3 = idExpected;
+                }
+                var calculated_lf2PassingAccrossValveTP1 = 1;
+                if(timeToLimitCint > tp_limit_1 * 2){
+                    calculated_lf2PassingAccrossValveTP1 = idImprobable;
+                } else if(timeToLimitCint > tp_limit_1){
+                    calculated_lf2PassingAccrossValveTP1 = idDoubtful;
+                } else if(timeToLimitCint <= tp_limit_1){
+                    calculated_lf2PassingAccrossValveTP1 = idExpected;
+                }
+                var calculated_lf2PassingAccrossValveTP2 = 1;
+                if(timeToLimitCint > tp_limit_2 * 2){
+                    calculated_lf2PassingAccrossValveTP2 = idImprobable;
+                } else if(timeToLimitCint > tp_limit_2){
+                    calculated_lf2PassingAccrossValveTP2 = idDoubtful;
+                } else if(timeToLimitCint <= tp_limit_2){
+                    calculated_lf2PassingAccrossValveTP2 = idExpected;
+                }
+                var calculated_lf2PassingAccrossValveTP3 = 1;
+                if(timeToLimitCint > tp_limit_3 * 2){
+                    calculated_lf2PassingAccrossValveTP3 = idImprobable;
+                } else if(timeToLimitCint > tp_limit_3){
+                    calculated_lf2PassingAccrossValveTP3 = idDoubtful;
+                } else if(timeToLimitCint <= tp_limit_3){
+                    calculated_lf2PassingAccrossValveTP3 = idExpected;
+                }
+                $('#leakage-tp1' + ctr).val(calculated_lf2LeakageToAtmosphereTP1);
+                $('#leakage-tp2' + ctr).val(calculated_lf2LeakageToAtmosphereTP2);
+                $('#leakage-tp3' + ctr).val(calculated_lf2LeakageToAtmosphereTP3);
+                $('#failure-tp1' + ctr).val(calculated_lf2FailureOfFunctionTP1);
+                $('#failure-tp2' + ctr).val(calculated_lf2FailureOfFunctionTP2);
+                $('#failure-tp3' + ctr).val(calculated_lf2FailureOfFunctionTP3);
+                $('#passing-tp1' + ctr).val(calculated_lf2PassingAccrossValveTP1);
+                $('#passing-tp2' + ctr).val(calculated_lf2PassingAccrossValveTP2);
+                $('#passing-tp3' + ctr).val(calculated_lf2PassingAccrossValveTP3);
+                console.log('calculated', {
+                    calculated_lf2LeakageToAtmosphereTP1,
+                    calculated_lf2LeakageToAtmosphereTP2,
+                    calculated_lf2LeakageToAtmosphereTP3,
+                    calculated_lf2FailureOfFunctionTP1,
+                    calculated_lf2FailureOfFunctionTP2,
+                    calculated_lf2FailureOfFunctionTP3,
+                    calculated_lf2PassingAccrossValveTP1,
+                    calculated_lf2PassingAccrossValveTP2,
+                    calculated_lf2PassingAccrossValveTP3
+                })
                 //LF1
                 var lf1LeakageToAtmosphere = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-value').replace(',','.');
                 var lf1LeakageToAtmosphereWeighting = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
@@ -2083,7 +2184,7 @@
                 }
                 var cof1 = hsseSelectReal.find('option:selected').attr('attr-cofcategory');
                 var cof2 = hsseSelect.find('option:selected').attr('attr-cofcategory');
-                var cof = String.fromCharCode(Math.min(cof1.charCodeAt(0), cof2.charCodeAt(0)));
+                var cof = String.fromCharCode(Math.max(cof1.charCodeAt(0), cof2.charCodeAt(0)));
                 $('#consequenceOfFailure' + ctr).val(cof);
                 var ypos = 0;
                 switch(cof){
