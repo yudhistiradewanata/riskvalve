@@ -930,9 +930,30 @@ public class AssessmentModel : AssessmentDB
                     }
                     else if (mappedKey.Equals("AssessmentDate"))
                     {
-                        mappedValue = DateTime
-                            .FromOADate(Convert.ToDouble(value))
-                            .ToString(Environment.GetDateFormatString(false));
+                        // mappedValue = DateTime
+                        //     .FromOADate(Convert.ToDouble(value))
+                        //     .ToString(Environment.GetDateFormatString(false));
+                        if (value.Contains("/"))
+                        {
+                            string date = value.Split(" ")[0];
+                            List<string> dateParts = date.Split("/").ToList();
+                            if (dateParts[0].Length == 1)
+                            {
+                                dateParts[0] = "0" + dateParts[0];
+                            }
+                            if (dateParts[1].Length == 1)
+                            {
+                                dateParts[1] = "0" + dateParts[1];
+                            }
+                            string newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                            mappedValue = newDate;
+                        }
+                        else
+                        {
+                            mappedValue = DateTime
+                                .FromOADate(Convert.ToDouble(value))
+                                .ToString(Environment.GetDateFormatString(false));
+                        }
                     }
                     else if (
                         mappedKey.Equals("ImpactOfInternalFluidImpuritiesID")
