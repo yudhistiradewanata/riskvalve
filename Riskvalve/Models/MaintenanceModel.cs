@@ -167,10 +167,12 @@ public class MaintenanceModel : MaintenanceDB
         }
     }
 
-    public List<Dictionary<string, string>> MapMaintenanceRegister(
+    public ToolImportModel MapMaintenanceRegister(
         List<Dictionary<string, string>> data
     )
     {
+        ToolImportModel toolImport = new();
+        List<string> failedRecords = new();
         List<AssetModel> assetList = new AssetModel().GetAssetList(0, 0, true);
         List<IsValveRepairedModel> isValveRepairedList =
             new IsValveRepairedModel().GetIsValveRepairedList();
@@ -181,7 +183,7 @@ public class MaintenanceModel : MaintenanceDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value;
+                string value = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -198,7 +200,7 @@ public class MaintenanceModel : MaintenanceDB
                     {
                         foreach (var asset in assetList)
                         {
-                            if (asset.TagNo.Equals(value))
+                            if (asset.TagNo.Trim().Equals(value))
                             {
                                 mappedValue = asset.Id.ToString();
                                 break;
@@ -236,7 +238,7 @@ public class MaintenanceModel : MaintenanceDB
                     {
                         foreach (var ivr in isValveRepairedList)
                         {
-                            if (ivr.IsValveRepaired.Equals(value))
+                            if (ivr.IsValveRepaired.Trim().Equals(value))
                             {
                                 mappedValue = ivr.Id.ToString();
                                 break;
@@ -245,15 +247,22 @@ public class MaintenanceModel : MaintenanceDB
                     }
                     if (mappedValue == "")
                     {
-                        Exception e =
-                            new(
-                                "Value '"
-                                    + record.Value
-                                    + "' on field '"
-                                    + key
-                                    + "' is not match with the database value"
-                            );
-                        throw e;
+                        // Exception e =
+                        //     new(
+                        //         "Value '"
+                        //             + record.Value
+                        //             + "' on field '"
+                        //             + key
+                        //             + "' is not match with the database value"
+                        //     );
+                        // throw e;
+                        failedRecords.Add(
+                            "Value '"
+                            + record.Value
+                            + "' on field '"
+                            + key
+                            + "' is not match with the database value"
+                        );
                     }
                     else
                     {
@@ -264,7 +273,10 @@ public class MaintenanceModel : MaintenanceDB
             }
             finalResult.Add(result);
         }
-        return finalResult;
+        toolImport.failedRecords = failedRecords;
+        toolImport.mappedRecords = finalResult;
+        // return finalResult;
+        return toolImport;
     }
 
     private string MapHeader(string header)

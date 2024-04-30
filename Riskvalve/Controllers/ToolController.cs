@@ -141,7 +141,9 @@ public class ToolController : Controller
         List<Dictionary<string, string>> result = new();
         if (mode.Equals("asset"))
         {
-            result = assetModel.MapAssetRegister(data);
+            ToolImportModel toolImport = assetModel.MapAssetRegister(data);
+            // result = assetModel.MapAssetRegister(data);
+            result = toolImport.mappedRecords;
             AssetDB assetDB = new();
             foreach (var item in result)
             {
@@ -181,17 +183,36 @@ public class ToolController : Controller
                 + " data(s)";
             if (failed > 0)
             {
-                string failedData = "";
-                foreach (var item in failedDatas)
+                if (failedDatas.Count > 1)
                 {
-                    failedData += item + ", ";
+                    string failedData = "";
+                    foreach (var item in failedDatas)
+                    {
+                        failedData += item + ", ";
+                    }
+                    failedData = failedData.Substring(0, failedData.Length - 2);
+                    message += " with Tag No: " + failedData + ".";
                 }
-                failedData = failedData.Substring(0, failedData.Length - 2);
-                message += " with Tag No: " + failedData + ".";
+                else
+                {
+                    message += ".";
+                }
             }
             else
             {
                 message += ".";
+            }
+            string messageFailed = "";
+            foreach (var item in toolImport.failedRecords)
+            {
+                total++;
+                failed++;
+                messageFailed += item + ", ";
+                if (item.Equals(toolImport.failedRecords.Last()))
+                {
+                    messageFailed = messageFailed.Substring(0, messageFailed.Length - 2);
+                    message += " Exception Error: " + messageFailed + ".";
+                }
             }
             return Json(
                 new Dictionary<string, string>
@@ -206,7 +227,9 @@ public class ToolController : Controller
         }
         else if (mode.Equals("inspection"))
         {
-            result = inspectionModel.MapInspection(data);
+            ToolImportModel toolImport = inspectionModel.MapInspection(data);
+            // result = inspectionModel.MapInspection(data);
+            result = toolImport.mappedRecords;
             InspectionDB inspectionDB = new();
             foreach (var item in result)
             {
@@ -248,17 +271,35 @@ public class ToolController : Controller
                 + " data(s)";
             if (failed > 0)
             {
-                string failedData = "";
-                foreach (var item in failedDatas)
-                {
-                    failedData += item + ", ";
+                if(failedDatas.Count > 0){
+                    string failedData = "";
+                    foreach (var item in failedDatas)
+                    {
+                        failedData += item + ", ";
+                    }
+                    failedData = failedData.Substring(0, failedData.Length - 2);
+                    message += " with Inspection Date: " + failedData + ".";
                 }
-                failedData = failedData.Substring(0, failedData.Length - 2);
-                message += " with Inspection Date: " + failedData + ".";
+                else
+                {
+                    message += ".";
+                }
             }
             else
             {
                 message += ".";
+            }
+            string messageFailed = "";
+            foreach (var item in toolImport.failedRecords)
+            {
+                total++;
+                failed++;
+                messageFailed += item + ", ";
+                if (item.Equals(toolImport.failedRecords.Last()))
+                {
+                    messageFailed = messageFailed.Substring(0, messageFailed.Length - 2);
+                    message += " Exception Error: " + messageFailed + ".";
+                }
             }
             return Json(
                 new Dictionary<string, string>
@@ -273,7 +314,9 @@ public class ToolController : Controller
         }
         else if (mode.Equals("maintenance"))
         {
-            result = maintenanceModel.MapMaintenanceRegister(data);
+            ToolImportModel toolImport = maintenanceModel.MapMaintenanceRegister(data);
+            // result = maintenanceModel.MapMaintenanceRegister(data);
+            result = toolImport.mappedRecords;
             MaintenanceDB maintenanceDB = new();
             foreach (var item in result)
             {
@@ -315,17 +358,36 @@ public class ToolController : Controller
                 + " data(s)";
             if (failed > 0)
             {
-                string failedData = "";
-                foreach (var item in failedDatas)
+                if (failedDatas.Count > 0)
                 {
-                    failedData += item + ", ";
+                    string failedData = "";
+                    foreach (var item in failedDatas)
+                    {
+                        failedData += item + ", ";
+                    }
+                    failedData = failedData.Substring(0, failedData.Length - 2);
+                    message += " with Maintenance Date: " + failedData + ".";
                 }
-                failedData = failedData.Substring(0, failedData.Length - 2);
-                message += " with Maintenance Date: " + failedData + ".";
+                else
+                {
+                    message += ".";
+                }
             }
             else
             {
                 message += ".";
+            }
+            string messageFailed = "";
+            foreach (var item in toolImport.failedRecords)
+            {
+                total++;
+                failed++;
+                messageFailed += item + ", ";
+                if (item.Equals(toolImport.failedRecords.Last()))
+                {
+                    messageFailed = messageFailed.Substring(0, messageFailed.Length - 2);
+                    message += " Exception Error: " + messageFailed + ".";
+                }
             }
             return Json(
                 new Dictionary<string, string>
@@ -340,7 +402,9 @@ public class ToolController : Controller
         }
         else if (mode.Equals("assessment"))
         {
-            result = assessmentModel.MapAssessment(data);
+            ToolImportModel toolImport = assessmentModel.MapAssessment(data);
+            // result = assessmentModel.MapAssessment(data);
+            result = toolImport.mappedRecords;
             AssessmentDB assessmentDB = new();
             foreach (var item in result)
             {
@@ -382,17 +446,36 @@ public class ToolController : Controller
                 + " data(s)";
             if (failed > 0)
             {
-                string failedData = "";
-                foreach (var item in failedDatas)
+                if (failedDatas.Count > 0)
                 {
-                    failedData += item + ", ";
+                    string failedData = "";
+                    foreach (var item in failedDatas)
+                    {
+                        failedData += item + ", ";
+                    }
+                    failedData = failedData.Substring(0, failedData.Length - 2);
+                    message += " with Assessment Date: " + failedData + ".";
                 }
-                failedData = failedData.Substring(0, failedData.Length - 2);
-                message += " with Assessment Date: " + failedData + ".";
+                else
+                {
+                    message += ".";
+                }
             }
             else
             {
                 message += ".";
+            }
+            string messageFailed = "";
+            foreach (var item in toolImport.failedRecords)
+            {
+                total++;
+                failed++;
+                messageFailed += item + ", ";
+                if (item.Equals(toolImport.failedRecords.Last()))
+                {
+                    messageFailed = messageFailed.Substring(0, messageFailed.Length - 2);
+                    message += " Exception Error: " + messageFailed + ".";
+                }
             }
             return Json(
                 new Dictionary<string, string>

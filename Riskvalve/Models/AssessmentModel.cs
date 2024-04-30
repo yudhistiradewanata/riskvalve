@@ -879,8 +879,10 @@ public class AssessmentModel : AssessmentDB
         }
     }
 
-    public List<Dictionary<string, string>> MapAssessment(List<Dictionary<string, string>> data)
+    public ToolImportModel MapAssessment(List<Dictionary<string, string>> data)
     {
+        ToolImportModel toolImport = new();
+        List<string> failedRecords = new();
         List<AssetModel> assetList = new AssetModel().GetAssetList(0, 0, true);
         List<CurrentConditionLimitStateModel> currentConditionLimitStateList =
             new CurrentConditionLimitStateModel().GetConditionLimitStates();
@@ -901,7 +903,7 @@ public class AssessmentModel : AssessmentDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value;
+                string value = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -921,7 +923,7 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var asset in assetList)
                         {
-                            if (asset.TagNo.Equals(value))
+                            if (asset.TagNo.Trim().Equals(value))
                             {
                                 mappedValue = asset.Id.ToString();
                                 break;
@@ -962,7 +964,7 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var impactEffect in impactEffectList)
                         {
-                            if (impactEffect.ImpactEffect.Equals(value))
+                            if (impactEffect.ImpactEffect.Trim().Equals(value))
                             {
                                 mappedValue = impactEffect.Id.ToString();
                                 break;
@@ -973,7 +975,7 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var usedWithinOEMSpecification in usedWithinOEMSpecificationList)
                         {
-                            if (usedWithinOEMSpecification.UsedWithinOEMSpecification.Equals(value))
+                            if (usedWithinOEMSpecification.UsedWithinOEMSpecification.Trim().Equals(value))
                             {
                                 mappedValue = usedWithinOEMSpecification.Id.ToString();
                                 break;
@@ -984,7 +986,7 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var repaired in repairedList)
                         {
-                            if (repaired.Repaired.Equals(value))
+                            if (repaired.Repaired.Trim().Equals(value))
                             {
                                 mappedValue = repaired.Id.ToString();
                                 break;
@@ -993,15 +995,22 @@ public class AssessmentModel : AssessmentDB
                     }
                     if (mappedValue == "")
                     {
-                        Exception e =
-                            new(
-                                "Value '"
-                                    + record.Value
-                                    + "' on field '"
-                                    + key
-                                    + "' is not match with the database value"
-                            );
-                        throw e;
+                        // Exception e =
+                        //     new(
+                        //         "Value '"
+                        //             + record.Value
+                        //             + "' on field '"
+                        //             + key
+                        //             + "' is not match with the database value"
+                        //     );
+                        // throw e;
+                        failedRecords.Add(
+                            "Value '"
+                                + record.Value
+                                + "' on field '"
+                                + key
+                                + "' is not match with the database value"
+                        );
                     }
                     else
                     {
@@ -1172,7 +1181,10 @@ public class AssessmentModel : AssessmentDB
             result.Add("AssessmentNo", "IMPORT");
             finalResult.Add(result);
         }
-        return finalResult;
+        toolImport.mappedRecords = finalResult;
+        toolImport.failedRecords = failedRecords;
+        // return finalResult;
+        return toolImport;
     }
 
     private string MapHeader(string header)

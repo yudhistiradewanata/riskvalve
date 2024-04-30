@@ -243,8 +243,10 @@ public class InspectionModel : InspectionDB
         return true;
     }
 
-    public List<Dictionary<string, string>> MapInspection(List<Dictionary<string, string>> data)
+    public ToolImportModel MapInspection(List<Dictionary<string, string>> data)
     {
+        ToolImportModel toolImport = new();
+        List<string> failedRecords = new();
         List<AssetModel> assetList = new AssetModel().GetAssetList(0, 0, true);
         List<InspectionMethodModel> inspectionMethodList =
             new InspectionMethodModel().GetInspectionMethods();
@@ -259,7 +261,7 @@ public class InspectionModel : InspectionDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value;
+                string value = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -280,7 +282,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var asset in assetList)
                         {
-                            if (asset.TagNo.Equals(value))
+                            if (asset.TagNo.Trim().Equals(value))
                             {
                                 mappedValue = asset.Id.ToString();
                                 break;
@@ -315,7 +317,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var inspectionMethod in inspectionMethodList)
                         {
-                            if (inspectionMethod.InspectionMethod.Equals(value))
+                            if (inspectionMethod.InspectionMethod.Trim().Equals(value))
                             {
                                 mappedValue = inspectionMethod.Id.ToString();
                                 break;
@@ -326,7 +328,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var inspectionEffectiveness in inspectionEffectivenessList)
                         {
-                            if (inspectionEffectiveness.Effectiveness.Equals(value))
+                            if (inspectionEffectiveness.Effectiveness.Trim().Equals(value))
                             {
                                 mappedValue = inspectionEffectiveness.Id.ToString();
                                 break;
@@ -341,7 +343,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var currentConditionLimitState in currentConditionLimitStateList)
                         {
-                            if (currentConditionLimitState.CurrentConditionLimitState.Equals(value))
+                            if (currentConditionLimitState.CurrentConditionLimitState.Trim().Equals(value))
                             {
                                 mappedValue = currentConditionLimitState.Id.ToString();
                                 break;
@@ -350,15 +352,22 @@ public class InspectionModel : InspectionDB
                     }
                     if (mappedValue == "")
                     {
-                        Exception e =
-                            new(
-                                "Value '"
-                                    + record.Value
-                                    + "' on field '"
-                                    + key
-                                    + "' is not match with the database value"
-                            );
-                        throw e;
+                        // Exception e =
+                        //     new(
+                        //         "Value '"
+                        //             + record.Value
+                        //             + "' on field '"
+                        //             + key
+                        //             + "' is not match with the database value"
+                        //     );
+                        // throw e;
+                        failedRecords.Add(
+                            "Value '"
+                                + record.Value
+                                + "' on field '"
+                                + key
+                                + "' is not match with the database value"
+                        );
                     }
                     else
                     {
@@ -369,7 +378,10 @@ public class InspectionModel : InspectionDB
             }
             finalResult.Add(result);
         }
-        return finalResult;
+        toolImport.failedRecords = failedRecords;
+        toolImport.mappedRecords = finalResult;
+        return toolImport;
+        // return finalResult;
     }
 
     private string MapHeader(string header)

@@ -351,8 +351,10 @@ public class AssetModel : AssetDB
         }
     }
 
-    public List<Dictionary<string, string>> MapAssetRegister(List<Dictionary<string, string>> datas)
+    public ToolImportModel MapAssetRegister(List<Dictionary<string, string>> datas)
     {
+        ToolImportModel toolImport = new();
+        List<string> failedRecords = new();
         List<PlatformModel> platformList = new PlatformModel().GetPlatformList(0, true);
         List<ValveTypeModel> valveTypeList = new ValveTypeModel().GetValveTypeList();
         List<ManualOverrideModel> manualOverrideModel =
@@ -367,7 +369,7 @@ public class AssetModel : AssetDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value;
+                string value = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey == "")
@@ -386,7 +388,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var platform in platformList)
                         {
-                            if (platform.Platform.Equals(value))
+                            if (platform.Platform.Trim().Equals(value))
                             {
                                 mappedValue = platform.Id.ToString();
                                 break;
@@ -397,7 +399,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var valveType in valveTypeList)
                         {
-                            if (valveType.ValveType.Equals(value))
+                            if (valveType.ValveType.Trim().Equals(value))
                             {
                                 mappedValue = valveType.Id.ToString();
                                 break;
@@ -408,7 +410,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var manualOverride in manualOverrideModel)
                         {
-                            if (manualOverride.ManualOverride.Equals(value))
+                            if (manualOverride.ManualOverride.Trim().Equals(value))
                             {
                                 mappedValue = manualOverride.Id.ToString();
                                 break;
@@ -419,7 +421,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var fluidPhase in fluidPhaseList)
                         {
-                            if (fluidPhase.FluidPhase.Equals(value))
+                            if (fluidPhase.FluidPhase.Trim().Equals(value))
                             {
                                 mappedValue = fluidPhase.Id.ToString();
                                 break;
@@ -430,7 +432,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var toxicOrFlamableFluid in toxicOrFlamableFluidList)
                         {
-                            if (toxicOrFlamableFluid.ToxicOrFlamableFluid.Equals(value))
+                            if (toxicOrFlamableFluid.ToxicOrFlamableFluid.Trim().Equals(value))
                             {
                                 mappedValue = toxicOrFlamableFluid.Id.ToString();
                                 break;
@@ -466,15 +468,22 @@ public class AssetModel : AssetDB
                     }
                     if (mappedValue == "")
                     {
-                        Exception e =
-                            new(
-                                "Value '"
-                                    + record.Value
-                                    + "' on field '"
-                                    + key
-                                    + "' is not match with the database value"
-                            );
-                        throw e;
+                        // Exception e =
+                        //     new(
+                        //         "Value '"
+                        //             + record.Value
+                        //             + "' on field '"
+                        //             + key
+                        //             + "' is not match with the database value"
+                        //     );
+                        // throw e;
+                        failedRecords.Add(
+                            "Value '"
+                                + record.Value
+                                + "' on field '"
+                                + key
+                                + "' is not match with the database value"
+                        );
                     }
                     else
                     {
@@ -485,7 +494,10 @@ public class AssetModel : AssetDB
             }
             finalresult.Add(result);
         }
-        return finalresult;
+        toolImport.mappedRecords = finalresult;
+        toolImport.failedRecords = failedRecords;
+        // return finalresult;
+        return toolImport;
     }
 
     private string MapHeader(string name)
