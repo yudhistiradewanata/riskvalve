@@ -19,7 +19,7 @@ public class MaintenanceController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -31,7 +31,7 @@ public class MaintenanceController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect("/Home/Index");
+                return Redirect(Environment.app_path+"/Home/Index");
             }
         }
         InspectionSidebarHistory inspectionSidebarHistory = new();

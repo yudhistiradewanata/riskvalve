@@ -19,12 +19,13 @@ namespace Riskvalve.Controllers
             bool isLogin = user.isLogin(HttpContext);
             if (isLogin)
             {
-                return Redirect("/Home/Index");
+                return Redirect(Environment.app_path+"/Home/Index");
             }
             string message = TempData["Message"] as string ?? "";
             ViewData["message"] = message;
             ViewData["IsLogin"] = isLogin.ToString();
             ViewData["AppVersion"] = Environment.GetAppVersion();
+            ViewData["AppPath"] = Environment.app_path;
             return View();
         }
 
@@ -44,7 +45,7 @@ namespace Riskvalve.Controllers
         {
             UserModel user = new();
             user.doLogout(HttpContext);
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
     }
 }

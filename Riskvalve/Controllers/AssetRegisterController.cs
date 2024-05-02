@@ -19,7 +19,7 @@ public class AssetRegisterController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -31,7 +31,7 @@ public class AssetRegisterController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect("/Home/Index");
+                return Redirect(Environment.app_path+"/Home/Index");
             }
         }
         AreaModel areaModel = new AreaModel();
@@ -101,7 +101,7 @@ public class AssetRegisterController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -113,7 +113,7 @@ public class AssetRegisterController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect("/Home/Index");
+                return Redirect(Environment.app_path+"/Home/Index");
             }
         }
         PlatformModel platformModel = new();
@@ -195,7 +195,7 @@ public class AssetRegisterController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -207,7 +207,7 @@ public class AssetRegisterController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect("/Home/Index");
+                return Redirect(Environment.app_path+"/Home/Index");
             }
         }
         AssetModel assetModel = new();

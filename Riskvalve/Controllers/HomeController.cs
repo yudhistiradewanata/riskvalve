@@ -41,7 +41,7 @@ public class HomeController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -61,7 +61,7 @@ public class HomeController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -104,7 +104,7 @@ public class HomeController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {

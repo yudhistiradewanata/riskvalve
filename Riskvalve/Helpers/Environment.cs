@@ -3,6 +3,8 @@ public static class Environment
     private static string _DbAldo =
         "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;";
 
+    public static string app_path = "/Riskvalve";
+    public static string app_version = "v0.0.24";
     public static string GetConnectionStringDB()
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -19,7 +21,7 @@ public static class Environment
 
     public static string GetAppVersion()
     {
-        return "v0.0.23";
+        return app_version;
     }
 
     public static int StringToInt(string value)

@@ -2,6 +2,7 @@
     ViewData["Title"] = "Login";
     var message = TempData["Message"];
     var version = ViewData["AppVersion"];
+    var app_path = ViewData["AppPath"];
 }
 
 <body class="hold-transition login-page">
@@ -25,8 +26,7 @@
                     Email
                 </div>
                 <div class="form-group has-feedback">
-                    <input type="text" class="form-control" name="username" autocomplete="off"
-                        required autofocus>
+                    <input type="text" class="form-control" name="username" autocomplete="off" required autofocus>
                     <span class="glyphicon glyphicon-user form-control-feedback"></span>
                 </div>
                 <div class="label">
@@ -38,7 +38,8 @@
                 </div>
                 <div class="label"></div>
                 <div class="form-group">
-                    <button id="btn-signin" type="submit" class="btn btn-primary btn-login btn-block btn-flat">Login</button>
+                    <button id="btn-signin" type="button"
+                        class="btn btn-primary btn-login btn-block btn-flat">Login</button>
                 </div>
             </form>
             <div class="copyright">
@@ -54,6 +55,7 @@
 
 @section Scripts {
     <script>
+        var app_path = '@app_path';
         $(document).ready(function () {
             $('#btn-signin').click(function (e) {
                 e.preventDefault();
@@ -68,7 +70,8 @@
                     },
                     success: function (data) {
                         if (data == true) {
-                            location.href = '/Home/Index';
+                            var path = app_path + '/Home/Index';
+                            location.href = path;
                         } else {
                             alert('Invalid username or password');
                         }

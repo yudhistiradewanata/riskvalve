@@ -19,7 +19,7 @@ public class UserController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect("/Login/Index");
+            return Redirect(Environment.app_path+"/Login/Index");
         }
         else
         {
@@ -31,7 +31,7 @@ public class UserController : Controller
             if (ViewData["IsAdmin"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect("/Home/Index");
+                return Redirect(Environment.app_path+"/Home/Index");
             }
         }
         List<UserModel> userList = new UserModel().GetUserList();
@@ -58,13 +58,13 @@ public class UserController : Controller
     public IActionResult UpdateUser(UserModel user)
     {
         new UserModel().UpdateUser(user);
-        return Redirect("/User/Index");
+        return Redirect(Environment.app_path+"/User/Index");
     }
 
     [HttpPost]
     public IActionResult DeleteUser(int id)
     {
         new UserModel().DeleteUser(id);
-        return Redirect("/User/Index");
+        return Redirect(Environment.app_path+"/User/Index");
     }
 }
