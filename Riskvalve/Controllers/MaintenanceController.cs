@@ -99,7 +99,7 @@ public class MaintenanceController : Controller
                                 FileType = formFile.ContentType,
                                 FilePath = Path.Combine(
                                     "Uploads",
-                                    "Inspection",
+                                    "Maintenance",
                                     maintenanceID.ToString(),
                                     fileName
                                 ),

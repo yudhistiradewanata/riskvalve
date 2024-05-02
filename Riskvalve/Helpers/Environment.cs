@@ -19,7 +19,7 @@ public static class Environment
 
     public static string GetAppVersion()
     {
-        return "v0.0.22";
+        return "v0.0.23";
     }
 
     public static int StringToInt(string value)
