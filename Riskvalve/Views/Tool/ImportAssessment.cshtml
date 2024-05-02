@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Import Assessment";
+    var urlimportexcel = Url.Action("ImportExcelFile", "Tool");
 }
 
 <div class="container-fluid">
@@ -55,7 +56,7 @@
                 formData.append("file", $("#fileUpload")[0].files[0]);
                 formData.append("mode", $("#mode").val());
                 $.ajax({
-                    url: "/Tool/ImportExcelFile",
+                    url: '@urlimportexcel',
                     type: "POST",
                     data: formData,
                     contentType: false,

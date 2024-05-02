@@ -4,6 +4,10 @@
     var manualOverrideList = ViewData["manualOverrideList"] as List<ManualOverrideModel>;
     var fluidPhaseList = ViewData["FluidPhaseList"] as List<FluidPhaseModel>;
     var toxicOrFlamableFluidList = ViewData["ToxicOrFlamableFluidList"] as List<ToxicOrFlamableFluidModel>;
+    var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
+    var urladdasset = Url.Action("AddAsset", "AssetRegister");
+    var urlupdateasset = Url.Action("UpdateAsset", "AssetRegister");
+    var urldeleteasset = Url.Action("DeleteAsset", "AssetRegister");
 }
 
 <div class="modal fade" id="addAssetModal" role="dialog">
@@ -257,7 +261,7 @@
         } else if (mode == 'view') {
             var id = $(this).attr('attr-itemid');
             $.ajax({
-                url: '/AssetRegister/GetAssetDetail',
+                url: '@urlgetassetdetail',
                 type: 'GET',
                 data: { id: id },
                 success: function (data) {
@@ -328,7 +332,7 @@
                 var toxicorflamablefluid = $('#field-asset-toxicorflamablefluid').val();
                 if (mode == 'create') {
                     $.ajax({
-                        url: '/AssetRegister/AddAsset',
+                        url: '@urladdasset',
                         type: 'POST',
                         data: {
                             tagno: tagno,
@@ -368,7 +372,7 @@
                 } else if (mode == 'update') {
                     var id = $('#field-asset-id').val();
                     $.ajax({
-                        url: '/AssetRegister/UpdateAsset',
+                        url: '@urlupdateasset',
                         type: 'POST',
                         data: {
                             id: id,
@@ -408,7 +412,7 @@
         $('#btn-asset-modal-delete').click(function () {
             var id = $('#field-asset-id').val();
             $.ajax({
-                url: '/AssetRegister/DeleteAsset',
+                url: '@urldeleteasset',
                 type: 'POST',
                 data: { id: id },
                 success: function (data) {

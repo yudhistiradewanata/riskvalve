@@ -25,7 +25,7 @@ namespace Riskvalve.Controllers
             ViewData["message"] = message;
             ViewData["IsLogin"] = isLogin.ToString();
             ViewData["AppVersion"] = Environment.GetAppVersion();
-            ViewData["AppPath"] = Environment.app_path;
+            // ViewData["AppPath"] = Environment.app_path;
             return View();
         }
 

@@ -1,5 +1,6 @@
 @{
     ViewData["Title"] = "Import Inspection / Maintenance";
+    var urlimportexcel = Url.Action("ImportExcelFile", "Tool");
 }
 
 <div class="container-fluid">
@@ -94,7 +95,7 @@
                 formData.append("file", $("#fileUploadInspection")[0].files[0]);
                 formData.append("mode", $("#modeInspection").val());
                 $.ajax({
-                    url: "/Tool/ImportExcelFile",
+                    url: "@urlimportexcel",
                     type: "POST",
                     data: formData,
                     contentType: false,
@@ -117,7 +118,7 @@
                 formData.append("file", $("#fileUploadMaintenance")[0].files[0]);
                 formData.append("mode", $("#modeMaintenance").val());
                 $.ajax({
-                    url: "/Tool/ImportExcelFile",
+                    url: "@urlimportexcel",
                     type: "POST",
                     data: formData,
                     contentType: false,

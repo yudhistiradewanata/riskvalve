@@ -2,6 +2,10 @@
     ViewData["Title"] = "Platform";
     var platformList = ViewData["PlatformList"] as List<PlatformModel>;
     var areaList = ViewData["AreaList"] as List<AreaModel>;
+    var urlgetplatformdetail = Url.Action("GetPlatformDetail", "AssetRegister");
+    var urladdplatform = Url.Action("AddPlatform", "AssetRegister");
+    var urlupdateplatform = Url.Action("UpdatePlatform", "AssetRegister");
+    var urldeleteplatform = Url.Action("DeletePlatform", "AssetRegister");
 }
 
 <div class="container-fluid">
@@ -122,7 +126,7 @@
             } else if (mode == 'view') {
                 var id = $(this).attr('attr-itemid');
                 $.ajax({
-                    url: '/AssetRegister/GetPlatformDetail',
+                    url: '@urlgetplatformdetail',
                     type: 'GET',
                     data: { id: id },
                     success: function (data) {
@@ -144,7 +148,7 @@
                     var mode = $('#field-platform-mode').val();
                     if (mode == 'create') {
                         $.ajax({
-                            url: '/AssetRegister/AddPlatform',
+                            url: '@urladdplatform',
                             type: 'POST',
                             data: {
                                 areaID: $('#field-platform-area').val(),
@@ -158,7 +162,7 @@
                     } else if (mode == 'update') {
                         var id = $('#field-platform-id').val();
                         $.ajax({
-                            url: '/AssetRegister/UpdatePlatform',
+                            url: '@urlupdateplatform',
                             type: 'POST',
                             data: {
                                 id: id,
@@ -176,7 +180,7 @@
             $('#btn-platform-modal-delete').click(function () {
                 var id = $('#field-platform-id').val();
                 $.ajax({
-                    url: '/AssetRegister/DeletePlatform',
+                    url: '@urldeleteplatform',
                     type: 'POST',
                     data: { id: id },
                     success: function (data) {

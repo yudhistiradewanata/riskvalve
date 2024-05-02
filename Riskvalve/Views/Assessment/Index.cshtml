@@ -28,6 +28,17 @@
     var hsseDefinisions = HSSEDefinisionModel.GetHSSEDefinisions();
 
     var defaultDate = ViewData["date"] as string;
+    string baseurl = Url.Action("","");
+    string urlassessmentupdate = Url.Action("UpdateAssessment", "Assessment");
+    string urlassessmentdelete = Url.Action("DeleteAssessment", "Assessment");
+    string urlassessmentadd = Url.Action("AddAssessment", "Assessment");
+    string urlassessmentprint = Url.Action("PrintAssessment", "Assessment");
+    string urlassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
+    string urlassessmentdetail = Url.Action("GetAssessmentDetail", "Assessment");
+    string urlassessmentinspection = Url.Action("GetInspectionList", "Inspection");
+    string urlassessmentmaintenance = Url.Action("GetMaintenanceList", "Maintenance");
+    string urlinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
+    string urlmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance");
 }
     <div class="container-fluid">
         <div class="row">
@@ -35,7 +46,7 @@
                 <b class="inspection-sidebar-title">Risk Assessment</b>
                 <partial name="InspectionAssessmentSidebar" />
             </div>
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 with-bg-image">
+            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
                 <div>
                     <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                         <li class="nav-item">
@@ -1631,7 +1642,7 @@
                     if(form.hasClass('history-form')) {
                         // update
                         $.ajax({
-                            url: '/Assessment/UpdateAssessment',
+                            url: '@urlassessmentupdate',
                             type: 'POST', // or 'GET' depending on your form method
                             data: formData,
                             contentType: false,
@@ -1651,7 +1662,7 @@
                     } else {
                         // add new
                         $.ajax({
-                            url: '/Assessment/AddAssessment',
+                            url: '@urlassessmentadd',
                             type: 'POST', // or 'GET' depending on your form method
                             data: formData,
                             contentType: false,
@@ -1703,7 +1714,7 @@
 
                 if(confirm('Are you sure you want to delete this data?')) {
                     $.ajax({
-                        url: '/Assessment/DeleteAssessment',
+                        url: '@urlassessmentdelete',
                         type: 'POST', // or 'GET' depending on your form method
                         data: {
                             Id: id
@@ -1723,7 +1734,7 @@
 
             function fetchAssetData ({id, counter}) {
                 $.ajax({
-                    url: '/AssetRegister/GetAssetDetail',
+                    url: '@urlassetdetail',
                     type: 'GET',
                     data: { id },
                     success: function (data) {
@@ -1740,7 +1751,7 @@
 
             function fetchHistoryData ({id, counter}) {
                 $.ajax({
-                    url: '/Assessment/GetAssessmentDetail',
+                    url: '@urlassessmentdetail',
                     type: 'GET',
                     data: { id },
                     success: function (data) {
@@ -1760,7 +1771,7 @@
                         const editable = assessmentCalculatedField.some(field => data[field] === null)
                         if(!editable) {
                             $('#inspection'+counter).find('input:not([type="hidden"]), textarea, select').attr('disabled', true)
-                            $('#inspection'+counter).find('.print-button').attr('href', '/Assessment/PrintAssessment/'+id)
+                            $('#inspection'+counter).find('.print-button').attr('href', '@urlassessmentprint'+'/'+id)
                             $('#inspection'+counter+' .assessment-form').addClass('not-editable')
                             $('.only-add').hide()
                         }
@@ -2524,7 +2535,7 @@
                     const table = $(tableSelector+ ' tbody')
                     table.html('')
                     $.ajax({
-                        url: '/Inspection/GetInspectionList',
+                        url: '@urlassessmentinspection',
                         data: {
                             AssetID: assetId
                         },
@@ -2569,7 +2580,7 @@
                     const table = $(tableSelector+ ' tbody')
                     table.html('')
                     $.ajax({
-                        url: '/Maintenance/GetMaintenanceList',
+                        url: '@urlassessmentmaintenance',
                         data: {
                             AssetID: assetId
                         },
@@ -2826,11 +2837,11 @@
 
             function fetchModalDetailData (id, type) {
             // type = maintenance or inspection
-            let endPoint = '/Inspection/GetInspectionDetail'
+            let endPoint = '@urlinspectiondetail'
             let modalSelector = '#detailInspectionModal'
             if (type === 'maintenance') {
                 modalSelector = '#detailMaintenanceModal'
-                endPoint = '/Maintenance/GetMaintenanceDetail'
+                endPoint = '@urlmaintenancedetail'
             }
             $.ajax({
                 url: endPoint,

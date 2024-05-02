@@ -11,6 +11,12 @@
 
     var IsValveRepairedModel = new IsValveRepairedModel();
     var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
+    var baseurl = Url.Action("","");
+    var urlupdateinspection = Url.Action("UpdateInspection", "Inspection");
+    var urladdinspection = Url.Action("AddInspection", "Inspection");
+    var urldeleteinspection = Url.Action("DeleteInspection", "Inspection");
+    var urlgetinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
+    var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
 }
 
 <div class="container-fluid">
@@ -18,7 +24,7 @@
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <partial name="InspectionAssessmentSidebar" />
         </div>
-        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image">
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
             <div>
                 <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                     <li class="nav-item">
@@ -302,7 +308,7 @@
                 if (form.hasClass('history-form')) {
                     // update
                     $.ajax({
-                        url: '/Inspection/UpdateInspection',
+                        url: '@urlupdateinspection',
                         type: 'POST', // or 'GET' depending on your form method
                         data: formData,
                         contentType: false,
@@ -319,7 +325,7 @@
                 } else {
                     // add new
                     $.ajax({
-                        url: '/Inspection/AddInspection',
+                        url: '@urladdinspection',
                         type: 'POST', // or 'GET' depending on your form method
                         data: formData,
                         contentType: false,
@@ -378,7 +384,7 @@
 
             if (confirm('Are you sure you want to delete this data?')) {
                 $.ajax({
-                    url: '/Inspection/DeleteInspection',
+                    url: '@urldeleteinspection',
                     type: 'POST', // or 'GET' depending on your form method
                     data: {
                         Id: id
@@ -398,7 +404,7 @@
 
         function fetchAssetData({ id, counter }) {
             $.ajax({
-                url: '/AssetRegister/GetAssetDetail',
+                url: '@urlgetassetdetail',
                 type: 'GET',
                 data: { id },
                 success: function (data) {
@@ -415,7 +421,7 @@
 
         function fetchHistoryData({ id, counter }) {
             $.ajax({
-                url: '/Inspection/GetInspectionDetail',
+                url: '@urlgetinspectiondetail',
                 type: 'GET',
                 data: { id },
                 success: function (data) {

@@ -2,6 +2,8 @@
     ViewData["Title"] = "Detail";
     var assetList = ViewData["assetList"] as List<AssetModel>;
     var areaList = ViewData["areaList"] as List<AreaModel>;
+    string urlddlbusinessarea = Url.Action("GetPlatformList", "AssetRegister");
+    string urlbtnfilter = Url.Action("GetAssetList", "AssetRegister");
 }
 <div class="container-fluid">
     <div class="row">
@@ -146,7 +148,7 @@
             $('#ddlBusinessArea').on('change', function () {
                 var areaId = $(this).val();
                 $.ajax({
-                    url: '/AssetRegister/GetPlatformList',
+                    url: '@urlddlbusinessarea',
                     type: 'GET',
                     data: { areaId: areaId },
                     success: function (data) {
@@ -163,7 +165,7 @@
                 var areaId = $('#ddlBusinessArea').val();
                 var platformId = $('#ddlPlatform').val();
                 $.ajax({
-                    url: '/AssetRegister/GetAssetList',
+                    url: '@urlbtnfilter',
                     type: 'GET',
                     data: { areaId: areaId, platformId: platformId },
                     success: function (data) {

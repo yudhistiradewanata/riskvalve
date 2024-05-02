@@ -1,6 +1,10 @@
 @{
     ViewData["Title"] = "Area";
     var areaList = ViewData["areaList"] as List<AreaModel>;
+    var urlgetareadetail = Url.Action("GetAreaDetail", "AssetRegister");
+    var urladdarea = Url.Action("AddArea", "AssetRegister");
+    var urlupdatearea = Url.Action("UpdateArea", "AssetRegister");
+    var urldeletearea = Url.Action("DeleteArea", "AssetRegister");
 }
 
 <div class="container-fluid">
@@ -101,7 +105,7 @@
             } else if (mode == 'view') {
                 var id = $(this).attr('attr-itemid');
                 $.ajax({
-                    url: '/AssetRegister/GetAreaDetail',
+                    url: '@urlgetareadetail',
                     type: 'GET',
                     data: { id: id },
                     success: function (data) {
@@ -125,7 +129,7 @@
                 } else {
                     if (mode == 'create') {
                         $.ajax({
-                            url: '/AssetRegister/AddArea',
+                            url: '@urladdarea',
                             type: 'POST',
                             data: { businessArea: name },
                             success: function (data) {
@@ -135,7 +139,7 @@
                     } else if (mode == 'update') {
                         var id = $('#field-business-area-id').val();
                         $.ajax({
-                            url: '/AssetRegister/UpdateArea',
+                            url: '@urlupdatearea',
                             type: 'POST',
                             data: { id: id, businessArea: name },
                             success: function (data) {
@@ -148,7 +152,7 @@
             $('#btn-area-modal-delete').click(function () {
                 var id = $('#field-business-area-id').val();
                 $.ajax({
-                    url: '/AssetRegister/DeleteArea',
+                    url: '@urldeletearea',
                     type: 'POST',
                     data: { id: id },
                     success: function (data) {

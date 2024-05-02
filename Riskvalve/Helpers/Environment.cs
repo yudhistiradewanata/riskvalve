@@ -1,9 +1,9 @@
 public static class Environment
 {
-    private static string _DbAldo =
-        "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;";
+    // private static string _DbAldo =
+    //     "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;";
 
-    public static string app_path = "/Riskvalve";
+    public static string app_path = "/tesvims";
     public static string app_version = "v0.0.24";
     public static string GetConnectionStringDB()
     {

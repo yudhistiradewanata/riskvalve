@@ -1,6 +1,10 @@
 @{
     ViewData["Title"] = "User";
     var userList = ViewData["UserList"] as List<UserModel>;
+    var urlgetuser = Url.Action("GetUser", "User");
+    var urladduser = Url.Action("AddUser", "User");
+    var urlupdateuser = Url.Action("UpdateUser", "User");
+    var urldeleteuser = Url.Action("DeleteUser", "User");
 }
 
 <div class="container-fluid">
@@ -149,7 +153,7 @@
             } else if (mode == 'view') {
                 var id = $(this).attr('attr-itemid');
                 $.ajax({
-                    url: '/User/GetUser',
+                    url: '@urlgetuser',
                     type: 'GET',
                     data: { id: id },
                     success: function (data) {
@@ -189,7 +193,7 @@
                 var isViewer = $('#field-isviewer').prop('checked');
                 if (mode == 'create') {
                     $.ajax({
-                        url: '/User/AddUser',
+                        url: '@urladduser',
                         type: 'POST',
                         data: { username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
                         success: function (data) {
@@ -202,7 +206,7 @@
                     });
                 } else if (mode == 'update') {
                     $.ajax({
-                        url: '/User/UpdateUser',
+                        url: '@urlupdateuser',
                         type: 'POST',
                         data: { id: id, username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
                         success: function (data) {
@@ -214,7 +218,7 @@
             $('#btn-user-modal-delete').click(function () {
                 var id = $('#field-user-id').val();
                 $.ajax({
-                    url: '/User/DeleteUser',
+                    url: '@urldeleteuser',
                     type: 'POST',
                     data: { id: id },
                     success: function (data) {
