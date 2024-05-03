@@ -861,7 +861,7 @@ public class AssessmentModel : AssessmentDB
             oldAssessment.TP2Risk = assessment.TP2Risk;
             oldAssessment.TP3Risk = assessment.TP3Risk;
             oldAssessment.TPTimeToActionRisk = assessment.TPTimeToActionRisk;
-            context.Update(oldAssessment);
+            context.Assessment.Update(oldAssessment);
             context.SaveChanges();
         }
     }

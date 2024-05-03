@@ -708,10 +708,10 @@ select.readonly {
 
 .with-bg-image {
   background-image: linear-gradient(
-      rgba(255, 255, 255, 0.8),
-      rgba(255, 255, 255, 0.8)
-    ),
-    /* url("~/lib/images/u45.png"); */
+    rgba(255, 255, 255, 0.8),
+    rgba(255, 255, 255, 0.8)
+  );
+  /* url("~/lib/images/u45.png"); */
   background-position: center;
   background-repeat: no-repeat;
   background-size: 500px;

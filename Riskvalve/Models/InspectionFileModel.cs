@@ -33,8 +33,10 @@ public class InspectionFileModel : InspectionFileDB
 {
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
+
     public List<InspectionFileModel> GetInspectionFiles(int inspectionID)
     {
+        var baseurl = Environment.app_path.Replace("/", "");
         List<InspectionFileModel> inspectionFiles = new();
         using (var context = new InspectionFileModelContext())
         {
@@ -49,14 +51,20 @@ public class InspectionFileModel : InspectionFileDB
                     FileName = f.FileName,
                     FileSize = f.FileSize,
                     FileType = f.FileType,
-                    FilePath = f.FilePath,
+                    FilePath = baseurl + '/' + f.FilePath,
                     IsDeleted = f.IsDeleted,
                     CreatedAt = f.CreatedAt,
                     CreatedBy = f.CreatedBy,
                     DeletedAt = f.DeletedAt,
                     DeletedBy = f.DeletedBy,
-                    CreatedByUser = context.User.Where(u => u.Id == f.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == f.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == f.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == f.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
         }
@@ -65,6 +73,7 @@ public class InspectionFileModel : InspectionFileDB
 
     public List<InspectionFileModel> GetMaintenanceFiles(int maintenanceID)
     {
+        var baseurl = Environment.app_path.Replace("/", "");
         List<InspectionFileModel> maintenanceFiles = new();
         using (var context = new InspectionFileModelContext())
         {
@@ -79,14 +88,20 @@ public class InspectionFileModel : InspectionFileDB
                     FileName = f.FileName,
                     FileSize = f.FileSize,
                     FileType = f.FileType,
-                    FilePath = f.FilePath,
+                    FilePath = baseurl + '/' + f.FilePath,
                     IsDeleted = f.IsDeleted,
                     CreatedAt = f.CreatedAt,
                     CreatedBy = f.CreatedBy,
                     DeletedAt = f.DeletedAt,
                     DeletedBy = f.DeletedBy,
-                    CreatedByUser = context.User.Where(u => u.Id == f.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == f.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == f.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == f.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
         }
