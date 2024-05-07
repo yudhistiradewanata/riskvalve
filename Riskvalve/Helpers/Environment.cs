@@ -4,7 +4,7 @@ public static class Environment
     //     "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;";
 
     public static string app_path = "/tesvims";
-    public static string app_version = "v0.0.26";
+    public static string app_version = "v0.0.27";
     public static string GetConnectionStringDB()
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()

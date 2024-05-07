@@ -1925,82 +1925,94 @@
                 var idImprobable = 1;
                 var idDoubtful = 2;
                 var idExpected = 3;
-                var tp_limit_1 = 1.5 * timePeriod;
-                var tp_limit_2 = 3 * timePeriod;
-                var tp_limit_3 = 4.5 * timePeriod;
+                var tp_limit_1 = timePeriod;
+                var tp_limit_2 = 2 * timePeriod;
+                var tp_limit_3 = 3 * timePeriod;
                 var timeToLimitAint = timeToLimitA*1;
                 var timeToLimitBint = timeToLimitB*1;
                 var timeToLimitCint = timeToLimitC*1;
-                var calculated_lf2LeakageToAtmosphereTP1 = 1;
-                if(timeToLimitAint > tp_limit_1 * 2){
+                // LF2 Leakage to Atmosphere Calculation
+                var calculated_lf2LeakageToAtmosphereTP1 = idImprobable;
+                var calculated_lf2LeakageToAtmosphereTP2 = idImprobable;
+                var calculated_lf2LeakageToAtmosphereTP3 = idImprobable;
+                // TP1
+                if (timeToLimitAint >= 2 * tp_limit_1) {
                     calculated_lf2LeakageToAtmosphereTP1 = idImprobable;
-                } else if(timeToLimitAint > tp_limit_1){
+                } else if (timeToLimitAint > tp_limit_1) {
                     calculated_lf2LeakageToAtmosphereTP1 = idDoubtful;
-                } else if(timeToLimitAint <= tp_limit_1){
+                } else {
                     calculated_lf2LeakageToAtmosphereTP1 = idExpected;
                 }
-                var calculated_lf2LeakageToAtmosphereTP2 = 1;
-                if(timeToLimitAint > tp_limit_2 * 2){
+                // TP2
+                if (timeToLimitAint >= 2 * tp_limit_2) {
                     calculated_lf2LeakageToAtmosphereTP2 = idImprobable;
-                } else if(timeToLimitAint > tp_limit_2){
+                } else if (timeToLimitAint > tp_limit_2) {
                     calculated_lf2LeakageToAtmosphereTP2 = idDoubtful;
-                } else if(timeToLimitAint <= tp_limit_2){
+                } else {
                     calculated_lf2LeakageToAtmosphereTP2 = idExpected;
                 }
-                var calculated_lf2LeakageToAtmosphereTP3 = 1;
-                if(timeToLimitAint > tp_limit_3 * 2){
+                // TP3
+                if (timeToLimitAint >= 2 * tp_limit_3) {
                     calculated_lf2LeakageToAtmosphereTP3 = idImprobable;
-                } else if(timeToLimitAint > tp_limit_3){
+                } else if (timeToLimitAint > tp_limit_3) {
                     calculated_lf2LeakageToAtmosphereTP3 = idDoubtful;
-                } else if(timeToLimitAint <= tp_limit_3){
+                } else {
                     calculated_lf2LeakageToAtmosphereTP3 = idExpected;
                 }
-                var calculated_lf2FailureOfFunctionTP1 = 1;
-                if(timeToLimitBint > tp_limit_1 * 2){
+                // LF2 Failure of Function Calculation
+                var calculated_lf2FailureOfFunctionTP1 = idImprobable;
+                var calculated_lf2FailureOfFunctionTP2 = idImprobable;
+                var calculated_lf2FailureOfFunctionTP3 = idImprobable;
+                // TP1
+                if (timeToLimitBint >= 2 * tp_limit_1) {
                     calculated_lf2FailureOfFunctionTP1 = idImprobable;
-                } else if(timeToLimitBint > tp_limit_1){
+                } else if (timeToLimitBint > tp_limit_1) {
                     calculated_lf2FailureOfFunctionTP1 = idDoubtful;
-                } else if(timeToLimitBint <= tp_limit_1){
+                } else {
                     calculated_lf2FailureOfFunctionTP1 = idExpected;
                 }
-                var calculated_lf2FailureOfFunctionTP2 = 1;
-                if(timeToLimitBint > tp_limit_2 * 2){
+                // TP2
+                if (timeToLimitBint >= 2 * tp_limit_2) {
                     calculated_lf2FailureOfFunctionTP2 = idImprobable;
-                } else if(timeToLimitBint > tp_limit_2){
+                } else if (timeToLimitBint > tp_limit_2) {
                     calculated_lf2FailureOfFunctionTP2 = idDoubtful;
-                } else if(timeToLimitBint <= tp_limit_2){
+                } else {
                     calculated_lf2FailureOfFunctionTP2 = idExpected;
                 }
-                var calculated_lf2FailureOfFunctionTP3 = 1;
-                if(timeToLimitBint > tp_limit_3 * 2){
+                // TP3
+                if (timeToLimitBint >= 2 * tp_limit_3) {
                     calculated_lf2FailureOfFunctionTP3 = idImprobable;
-                } else if(timeToLimitBint > tp_limit_3){
+                } else if (timeToLimitBint > tp_limit_3) {
                     calculated_lf2FailureOfFunctionTP3 = idDoubtful;
-                } else if(timeToLimitBint <= tp_limit_3){
+                } else {
                     calculated_lf2FailureOfFunctionTP3 = idExpected;
                 }
-                var calculated_lf2PassingAccrossValveTP1 = 1;
-                if(timeToLimitCint > tp_limit_1 * 2){
+                // LF2 Passing Accross Valve Calculation
+                var calculated_lf2PassingAccrossValveTP1 = idImprobable;
+                var calculated_lf2PassingAccrossValveTP2 = idImprobable;
+                var calculated_lf2PassingAccrossValveTP3 = idImprobable;
+                // TP1
+                if (timeToLimitCint >= 2 * tp_limit_1) {
                     calculated_lf2PassingAccrossValveTP1 = idImprobable;
-                } else if(timeToLimitCint > tp_limit_1){
+                } else if (timeToLimitCint > tp_limit_1) {
                     calculated_lf2PassingAccrossValveTP1 = idDoubtful;
-                } else if(timeToLimitCint <= tp_limit_1){
+                } else {
                     calculated_lf2PassingAccrossValveTP1 = idExpected;
                 }
-                var calculated_lf2PassingAccrossValveTP2 = 1;
-                if(timeToLimitCint > tp_limit_2 * 2){
+                // TP2
+                if (timeToLimitCint >= 2 * tp_limit_2) {
                     calculated_lf2PassingAccrossValveTP2 = idImprobable;
-                } else if(timeToLimitCint > tp_limit_2){
+                } else if (timeToLimitCint > tp_limit_2) {
                     calculated_lf2PassingAccrossValveTP2 = idDoubtful;
-                } else if(timeToLimitCint <= tp_limit_2){
+                } else {
                     calculated_lf2PassingAccrossValveTP2 = idExpected;
                 }
-                var calculated_lf2PassingAccrossValveTP3 = 1;
-                if(timeToLimitCint > tp_limit_3 * 2){
+                // TP3
+                if (timeToLimitCint >= 2 * tp_limit_3) {
                     calculated_lf2PassingAccrossValveTP3 = idImprobable;
-                } else if(timeToLimitCint > tp_limit_3){
+                } else if (timeToLimitCint > tp_limit_3) {
                     calculated_lf2PassingAccrossValveTP3 = idDoubtful;
-                } else if(timeToLimitCint <= tp_limit_3){
+                } else {
                     calculated_lf2PassingAccrossValveTP3 = idExpected;
                 }
                 $('#leakage-tp1' + ctr).val(calculated_lf2LeakageToAtmosphereTP1);

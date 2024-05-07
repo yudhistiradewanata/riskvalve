@@ -23,6 +23,7 @@ public class AssetRegisterController : Controller
         }
         else
         {
+            TempData["Message"] = null;
             Dictionary<string, string> session = login.GetLoginSession(HttpContext);
             foreach (var item in session)
             {
@@ -105,6 +106,7 @@ public class AssetRegisterController : Controller
         }
         else
         {
+            TempData["Message"] = null;
             Dictionary<string, string> session = login.GetLoginSession(HttpContext);
             foreach (var item in session)
             {
@@ -199,6 +201,7 @@ public class AssetRegisterController : Controller
         }
         else
         {
+            TempData["Message"] = null;
             Dictionary<string, string> session = login.GetLoginSession(HttpContext);
             foreach (var item in session)
             {

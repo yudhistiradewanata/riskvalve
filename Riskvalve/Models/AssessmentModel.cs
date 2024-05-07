@@ -585,7 +585,8 @@ public class AssessmentModel : AssessmentDB
             }
             // check if there is already an assessment with the same assetid and assessment date
             if (
-                context.Assessment.Select(a => new { a.AssetID, a.AssessmentDate })
+                context
+                    .Assessment.Select(a => new { a.AssetID, a.AssessmentDate })
                     .Where(a => a.AssetID == assessmentDB.AssetID)
                     .Where(a => a.AssessmentDate == assessmentDB.AssessmentDate)
                     .Count() > 0
@@ -899,16 +900,21 @@ public class AssessmentModel : AssessmentDB
         List<Dictionary<string, string>> finalResult = new();
         foreach (var records in data)
         {
+            int timeperiod = 0;
             Dictionary<string, string> result = new();
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value.Trim();
+                string value = record.Value.Trim().ToLower();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
                 {
                     continue;
+                }
+                if (mappedKey.Equals("TimePeriode"))
+                {
+                    timeperiod = Convert.ToInt32(value);
                 }
                 if (
                     mappedKey.Equals("AssetID")
@@ -917,13 +923,14 @@ public class AssessmentModel : AssessmentDB
                     || mappedKey.Equals("ImpactOfOperatingEnvelopesID")
                     || mappedKey.Equals("UsedWithinOEMSpecificationID")
                     || mappedKey.Equals("RepairedID")
+                    || mappedKey.Equals("HSSEDefinisionID")
                 )
                 {
                     if (mappedKey.Equals("AssetID"))
                     {
                         foreach (var asset in assetList)
                         {
-                            if (asset.TagNo.Trim().Equals(value))
+                            if (asset.TagNo.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = asset.Id.ToString();
                                 break;
@@ -964,7 +971,7 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var impactEffect in impactEffectList)
                         {
-                            if (impactEffect.ImpactEffect.Trim().Equals(value))
+                            if (impactEffect.ImpactEffect.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = impactEffect.Id.ToString();
                                 break;
@@ -975,7 +982,12 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var usedWithinOEMSpecification in usedWithinOEMSpecificationList)
                         {
-                            if (usedWithinOEMSpecification.UsedWithinOEMSpecification.Trim().Equals(value))
+                            if (
+                                usedWithinOEMSpecification
+                                    .UsedWithinOEMSpecification.Trim()
+                                    .ToLower()
+                                    .Equals(value)
+                            )
                             {
                                 mappedValue = usedWithinOEMSpecification.Id.ToString();
                                 break;
@@ -986,9 +998,20 @@ public class AssessmentModel : AssessmentDB
                     {
                         foreach (var repaired in repairedList)
                         {
-                            if (repaired.Repaired.Trim().Equals(value))
+                            if (repaired.Repaired.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = repaired.Id.ToString();
+                                break;
+                            }
+                        }
+                    }
+                    else if (mappedKey.Equals("HSSEDefinisionID"))
+                    {
+                        foreach (var hsseDefinision in hsseDefinisionList)
+                        {
+                            if (hsseDefinision.HSSEDefinision.Trim().ToLower().Equals(value))
+                            {
+                                mappedValue = hsseDefinision.Id.ToString();
                                 break;
                             }
                         }
@@ -1022,9 +1045,9 @@ public class AssessmentModel : AssessmentDB
             int idImprobable = 1;
             int idDoubtful = 2;
             int idExpected = 3;
-            double tp_limit_1 = 1.5 * 12;
-            double tp_limit_2 = 3 * 12;
-            double tp_limit_3 = 4.5 * 12;
+            double tp_limit_1 = timeperiod;
+            double tp_limit_2 = 2 * timeperiod;
+            double tp_limit_3 = 3 * timeperiod;
             int LeakageToAtmosphereTP1ID = 0;
             int LeakageToAtmosphereTP2ID = 0;
             int LeakageToAtmosphereTP3ID = 0;
@@ -1041,7 +1064,8 @@ public class AssessmentModel : AssessmentDB
                 )
             )
             {
-                if (timeToLimitStateLeakage > tp_limit_1 * 2)
+                // TP 1
+                if (timeToLimitStateLeakage >= 2 * tp_limit_1)
                 {
                     LeakageToAtmosphereTP1ID = idImprobable;
                 }
@@ -1049,11 +1073,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     LeakageToAtmosphereTP1ID = idDoubtful;
                 }
-                else if (timeToLimitStateLeakage <= tp_limit_1)
+                else
                 {
                     LeakageToAtmosphereTP1ID = idExpected;
                 }
-                if (timeToLimitStateLeakage > tp_limit_2 * 2)
+                // TP 2
+                if (timeToLimitStateLeakage >= 2 * tp_limit_2)
                 {
                     LeakageToAtmosphereTP2ID = idImprobable;
                 }
@@ -1061,11 +1086,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     LeakageToAtmosphereTP2ID = idDoubtful;
                 }
-                else if (timeToLimitStateLeakage <= tp_limit_2)
+                else
                 {
                     LeakageToAtmosphereTP2ID = idExpected;
                 }
-                if (timeToLimitStateLeakage > tp_limit_3 * 2)
+                // TP 3
+                if (timeToLimitStateLeakage >= 2 * tp_limit_3)
                 {
                     LeakageToAtmosphereTP3ID = idImprobable;
                 }
@@ -1073,7 +1099,7 @@ public class AssessmentModel : AssessmentDB
                 {
                     LeakageToAtmosphereTP3ID = idDoubtful;
                 }
-                else if (timeToLimitStateLeakage <= tp_limit_3)
+                else
                 {
                     LeakageToAtmosphereTP3ID = idExpected;
                 }
@@ -1089,7 +1115,8 @@ public class AssessmentModel : AssessmentDB
                 )
             )
             {
-                if (timeToLimitStateFailure > tp_limit_1 * 2)
+                // TP 1
+                if (timeToLimitStateFailure >= 2 * tp_limit_1)
                 {
                     FailureOfFunctionTP1ID = idImprobable;
                 }
@@ -1097,11 +1124,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     FailureOfFunctionTP1ID = idDoubtful;
                 }
-                else if (timeToLimitStateFailure <= tp_limit_1)
+                else
                 {
                     FailureOfFunctionTP1ID = idExpected;
                 }
-                if (timeToLimitStateFailure > tp_limit_2 * 2)
+                // TP 2
+                if (timeToLimitStateFailure >= 2 * tp_limit_2)
                 {
                     FailureOfFunctionTP2ID = idImprobable;
                 }
@@ -1109,11 +1137,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     FailureOfFunctionTP2ID = idDoubtful;
                 }
-                else if (timeToLimitStateFailure <= tp_limit_2)
+                else
                 {
                     FailureOfFunctionTP2ID = idExpected;
                 }
-                if (timeToLimitStateFailure > tp_limit_3 * 2)
+                // TP 3
+                if (timeToLimitStateFailure >= 2 * tp_limit_3)
                 {
                     FailureOfFunctionTP3ID = idImprobable;
                 }
@@ -1121,7 +1150,7 @@ public class AssessmentModel : AssessmentDB
                 {
                     FailureOfFunctionTP3ID = idDoubtful;
                 }
-                else if (timeToLimitStateFailure <= tp_limit_3)
+                else
                 {
                     FailureOfFunctionTP3ID = idExpected;
                 }
@@ -1137,7 +1166,8 @@ public class AssessmentModel : AssessmentDB
                 )
             )
             {
-                if (timeToLimitStatePassing > tp_limit_1 * 2)
+                // TP 1
+                if (timeToLimitStatePassing >= 2 * tp_limit_1)
                 {
                     PassingAccrosValveTP1ID = idImprobable;
                 }
@@ -1145,11 +1175,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     PassingAccrosValveTP1ID = idDoubtful;
                 }
-                else if (timeToLimitStatePassing <= tp_limit_1)
+                else
                 {
                     PassingAccrosValveTP1ID = idExpected;
                 }
-                if (timeToLimitStatePassing > tp_limit_2 * 2)
+                // TP 2
+                if (timeToLimitStatePassing >= 2 * tp_limit_2)
                 {
                     PassingAccrosValveTP2ID = idImprobable;
                 }
@@ -1157,11 +1188,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     PassingAccrosValveTP2ID = idDoubtful;
                 }
-                else if (timeToLimitStatePassing <= tp_limit_2)
+                else
                 {
                     PassingAccrosValveTP2ID = idExpected;
                 }
-                if (timeToLimitStatePassing > tp_limit_3 * 2)
+                // TP 3
+                if (timeToLimitStatePassing >= 2 * tp_limit_3)
                 {
                     PassingAccrosValveTP3ID = idImprobable;
                 }
@@ -1169,7 +1201,7 @@ public class AssessmentModel : AssessmentDB
                 {
                     PassingAccrosValveTP3ID = idDoubtful;
                 }
-                else if (timeToLimitStatePassing <= tp_limit_3)
+                else
                 {
                     PassingAccrosValveTP3ID = idExpected;
                 }
@@ -1213,6 +1245,8 @@ public class AssessmentModel : AssessmentDB
                 return "RepairedID";
             case "CF1 - Product loss definition (bbls)":
                 return "ProductLossDefinition";
+            case "CF2 - HSSE Definision":
+                return "HSSEDefinisionID";
             default:
                 return "";
         }

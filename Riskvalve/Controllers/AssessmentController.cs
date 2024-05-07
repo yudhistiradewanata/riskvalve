@@ -19,10 +19,11 @@ public class AssessmentController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
+            TempData["Message"] = null;
             Dictionary<string, string> session = login.GetLoginSession(HttpContext);
             foreach (var item in session)
             {
@@ -31,7 +32,7 @@ public class AssessmentController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         InspectionSidebarHistory inspectionSidebarHistory = new();
@@ -49,10 +50,11 @@ public class AssessmentController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
+            TempData["Message"] = null;
             Dictionary<string, string> session = login.GetLoginSession(HttpContext);
             foreach (var item in session)
             {
@@ -61,7 +63,7 @@ public class AssessmentController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         AssessmentModel assessment = new();
@@ -83,28 +85,37 @@ public class AssessmentController : Controller
         Dictionary<string, int> tp3_xypos = assessmentModel.GetHeatXYpos(tp3);
         string tp3_xpos = tp3_xypos["xpos"].ToString();
         string tp3_ypos = tp3_xypos["ypos"].ToString();
-        Dictionary<string, Dictionary<string,string>> assessmentHeatMap = new();
-        assessmentHeatMap.Add("TP1", new Dictionary<string, string>
-        {
-            { "value", tp1 },
-            { "color", tp1_color },
-            { "xpos", tp1_xpos },
-            { "ypos", tp1_ypos }
-        });
-        assessmentHeatMap.Add("TP2", new Dictionary<string, string>
-        {
-            { "value", tp2 },
-            { "color", tp2_color },
-            { "xpos", tp2_xpos },
-            { "ypos", tp2_ypos }
-        });
-        assessmentHeatMap.Add("TP3", new Dictionary<string, string>
-        {
-            { "value", tp3 },
-            { "color", tp3_color },
-            { "xpos", tp3_xpos },
-            { "ypos", tp3_ypos }
-        });
+        Dictionary<string, Dictionary<string, string>> assessmentHeatMap = new();
+        assessmentHeatMap.Add(
+            "TP1",
+            new Dictionary<string, string>
+            {
+                { "value", tp1 },
+                { "color", tp1_color },
+                { "xpos", tp1_xpos },
+                { "ypos", tp1_ypos }
+            }
+        );
+        assessmentHeatMap.Add(
+            "TP2",
+            new Dictionary<string, string>
+            {
+                { "value", tp2 },
+                { "color", tp2_color },
+                { "xpos", tp2_xpos },
+                { "ypos", tp2_ypos }
+            }
+        );
+        assessmentHeatMap.Add(
+            "TP3",
+            new Dictionary<string, string>
+            {
+                { "value", tp3 },
+                { "color", tp3_color },
+                { "xpos", tp3_xpos },
+                { "ypos", tp3_ypos }
+            }
+        );
         ViewData["AssessmentHeatMap"] = assessmentHeatMap;
         return View();
     }
@@ -115,10 +126,11 @@ public class AssessmentController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
+            TempData["Message"] = null;
             Dictionary<string, string> session = login.GetLoginSession(HttpContext);
             foreach (var item in session)
             {
@@ -127,7 +139,7 @@ public class AssessmentController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         AssessmentModel assessment = new();

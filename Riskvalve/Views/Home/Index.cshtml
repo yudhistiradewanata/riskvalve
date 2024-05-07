@@ -224,7 +224,7 @@ width="1242"></canvas>
             { x: 1, y: 4, value: '' },
             { x: 2, y: 2, value: '' },
             { x: 2, y: 3, value: '' },
-            { x: 1, y: 4, value: '' },                
+            { x: 1, y: 4, value: '' },
             { x: 3, y: 1, value: '' },
             { x: 3, y: 2, value: '' },
             { x: 4, y: 1, value: '' },
@@ -245,7 +245,7 @@ width="1242"></canvas>
             E: 4
         }
 
-        function fillHeatmapData (data) {
+        function fillHeatmapData(data) {
             Object.entries(data).forEach((dataItem) => {
                 const item = dataItem[1]
                 const key = dataItem[0]
@@ -410,11 +410,11 @@ width="1242"></canvas>
                 plotOptions: {
                     pie: {
                         colors: [
-                            '#DDDF00',
-                            '#50B432',
-                            '#FFFF00',
-                            '#ED561B',
-                            '#FF0000',
+                            '#81B014',
+                            'green',
+                            'yellow',
+                            'orange',
+                            'red',
                         ],
                     },
                     series: {
@@ -453,30 +453,30 @@ width="1242"></canvas>
             var jsonAssessmentBarChart = JSON.parse('@Html.Raw(jsonAssessmentBarChart)');
             // console.log(jsonAssessmentBarChart, 'bar chart')
             const barSeriesData = {
-                'Very Low' : {
+                'Very Low': {
                     name: 'Very Low',
                     data: []
                 },
-                'Low' : {
+                'Low': {
                     name: 'Low',
                     data: []
                 },
-                'Medium' : {
+                'Medium': {
                     name: 'Medium',
                     data: []
                 },
-                'High' : {
+                'High': {
                     name: 'High',
                     data: []
                 },
-                'Very High' : {
+                'Very High': {
                     name: 'Very High',
                     data: []
                 },
             }
 
-            Object.values(jsonAssessmentBarChart).forEach( (val, index) => {
-                Object.keys(val).forEach( key => {
+            Object.values(jsonAssessmentBarChart).forEach((val, index) => {
+                Object.keys(val).forEach(key => {
                     barSeriesData[key].data.push(Number(val[key]))
                 })
             })
@@ -504,11 +504,11 @@ width="1242"></canvas>
                     }
                 },
                 colors: [
-                    '#DDDF00',
-                    '#50B432',
-                    '#FFFF00',
-                    '#ED561B',
-                    '#FF0000',
+                    '#81B014',
+                    'green',
+                    'yellow',
+                    'orange',
+                    'red',
                 ],
                 series: Object.values(barSeriesData)
             });

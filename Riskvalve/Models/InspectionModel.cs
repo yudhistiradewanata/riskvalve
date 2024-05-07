@@ -261,7 +261,7 @@ public class InspectionModel : InspectionDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value.Trim();
+                string value = record.Value.Trim().ToLower();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -282,7 +282,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var asset in assetList)
                         {
-                            if (asset.TagNo.Trim().Equals(value))
+                            if (asset.TagNo.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = asset.Id.ToString();
                                 break;
@@ -303,7 +303,7 @@ public class InspectionModel : InspectionDB
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                            string newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
                             mappedValue = newDate;
                         }
                         else
@@ -317,7 +317,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var inspectionMethod in inspectionMethodList)
                         {
-                            if (inspectionMethod.InspectionMethod.Trim().Equals(value))
+                            if (inspectionMethod.InspectionMethod.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = inspectionMethod.Id.ToString();
                                 break;
@@ -328,7 +328,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var inspectionEffectiveness in inspectionEffectivenessList)
                         {
-                            if (inspectionEffectiveness.Effectiveness.Trim().Equals(value))
+                            if (inspectionEffectiveness.Effectiveness.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = inspectionEffectiveness.Id.ToString();
                                 break;
@@ -343,7 +343,7 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var currentConditionLimitState in currentConditionLimitStateList)
                         {
-                            if (currentConditionLimitState.CurrentConditionLimitState.Trim().Equals(value))
+                            if (currentConditionLimitState.CurrentConditionLimitState.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = currentConditionLimitState.Id.ToString();
                                 break;

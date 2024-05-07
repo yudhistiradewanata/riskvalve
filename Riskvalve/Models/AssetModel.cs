@@ -369,7 +369,7 @@ public class AssetModel : AssetDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value.Trim();
+                string value = record.Value.Trim().ToLower();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey == "")
@@ -388,7 +388,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var platform in platformList)
                         {
-                            if (platform.Platform.Trim().Equals(value))
+                            if (platform.Platform.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = platform.Id.ToString();
                                 break;
@@ -399,7 +399,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var valveType in valveTypeList)
                         {
-                            if (valveType.ValveType.Trim().Equals(value))
+                            if (valveType.ValveType.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = valveType.Id.ToString();
                                 break;
@@ -410,7 +410,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var manualOverride in manualOverrideModel)
                         {
-                            if (manualOverride.ManualOverride.Trim().Equals(value))
+                            if (manualOverride.ManualOverride.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = manualOverride.Id.ToString();
                                 break;
@@ -421,7 +421,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var fluidPhase in fluidPhaseList)
                         {
-                            if (fluidPhase.FluidPhase.Trim().Equals(value))
+                            if (fluidPhase.FluidPhase.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = fluidPhase.Id.ToString();
                                 break;
@@ -432,7 +432,7 @@ public class AssetModel : AssetDB
                     {
                         foreach (var toxicOrFlamableFluid in toxicOrFlamableFluidList)
                         {
-                            if (toxicOrFlamableFluid.ToxicOrFlamableFluid.Trim().Equals(value))
+                            if (toxicOrFlamableFluid.ToxicOrFlamableFluid.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = toxicOrFlamableFluid.Id.ToString();
                                 break;
@@ -456,7 +456,7 @@ public class AssetModel : AssetDB
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                            string newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
                             mappedValue = newDate;
                         }
                         else

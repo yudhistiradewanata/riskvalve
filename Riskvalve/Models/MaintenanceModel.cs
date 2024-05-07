@@ -183,7 +183,7 @@ public class MaintenanceModel : MaintenanceDB
             foreach (var record in records)
             {
                 string key = record.Key;
-                string value = record.Value.Trim();
+                string value = record.Value.Trim().ToLower();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -200,7 +200,7 @@ public class MaintenanceModel : MaintenanceDB
                     {
                         foreach (var asset in assetList)
                         {
-                            if (asset.TagNo.Trim().Equals(value))
+                            if (asset.TagNo.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = asset.Id.ToString();
                                 break;
@@ -224,7 +224,7 @@ public class MaintenanceModel : MaintenanceDB
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                            string newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
                             mappedValue = newDate;
                         }
                         else
@@ -238,7 +238,7 @@ public class MaintenanceModel : MaintenanceDB
                     {
                         foreach (var ivr in isValveRepairedList)
                         {
-                            if (ivr.IsValveRepaired.Trim().Equals(value))
+                            if (ivr.IsValveRepaired.Trim().ToLower().Equals(value))
                             {
                                 mappedValue = ivr.Id.ToString();
                                 break;
