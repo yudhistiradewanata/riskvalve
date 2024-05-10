@@ -1,6 +1,7 @@
 @{
     ViewData["Title"] = "Import Assessment";
     var urlimportexcel = Url.Action("ImportExcelFile", "Tool");
+    var urltemplate = Url.Content("~/Uploads/Downloads/AssessmentTemplate.xlsx");
 }
 
 <div class="container-fluid">
@@ -18,8 +19,7 @@
                         <form id="assessment-form">
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
-                                    Download the template file <a href="/Uploads/Downloads/AssessmentTemplate.xlsx"
-                                        target="_blank">here</a>
+                                    Download the template file <a href="@urltemplate" target="_blank">here</a>
                                 </div>
                             </div>
                             <br />

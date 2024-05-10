@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Riskvalve.Models;
 
 namespace Riskvalve.Controllers;
@@ -19,7 +20,7 @@ public class AssetRegisterController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -32,7 +33,7 @@ public class AssetRegisterController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         AreaModel areaModel = new AreaModel();
@@ -102,7 +103,7 @@ public class AssetRegisterController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -115,7 +116,7 @@ public class AssetRegisterController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         PlatformModel platformModel = new();
@@ -197,7 +198,7 @@ public class AssetRegisterController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -210,7 +211,7 @@ public class AssetRegisterController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         AssetModel assetModel = new();
@@ -285,7 +286,14 @@ public class AssetRegisterController : Controller
                 FlowRate = Request.Form["FlowRate"],
                 ServiceFluid = Request.Form["ServiceFluid"],
                 FluidPhaseID = Environment.StringToInt(Request.Form["FluidPhaseID"]),
-                ToxicOrFlamableFluidID = Environment.StringToInt(Request.Form["ToxicOrFlamableFluidID"]),
+                ToxicOrFlamableFluidID = Environment.StringToInt(
+                    Request.Form["ToxicOrFlamableFluidID"]
+                ),
+                AssetName = Request.Form["AssetName"],
+                CostOfReplacementAndRepair = Request.Form["CostOfReplacementAndRepair"],
+                Status = Request.Form["Status"],
+                UsageType = Request.Form["UsageType"],
+                Actuation = Request.Form["Actuation"],
             };
         assetModel.UpdateAsset(assetDb);
         return RedirectToAction("Asset");
@@ -295,6 +303,9 @@ public class AssetRegisterController : Controller
     public IActionResult AddAsset()
     {
         AssetModel assetModel = new();
+        // Console.WriteLine("ALDOOOOOO");
+        // string json = JsonConvert.SerializeObject(Request.Form);
+        // Console.WriteLine(json);
         AssetDB assetDb =
             new()
             {
@@ -322,28 +333,34 @@ public class AssetRegisterController : Controller
                 FlowRate = Request.Form["FlowRate"],
                 ServiceFluid = Request.Form["ServiceFluid"],
                 FluidPhaseID = Environment.StringToInt(Request.Form["FluidPhaseID"]),
-                ToxicOrFlamableFluidID = Environment.StringToInt(Request.Form["ToxicOrFlamableFluidID"]),
+                ToxicOrFlamableFluidID = Environment.StringToInt(
+                    Request.Form["ToxicOrFlamableFluidID"]
+                ),
+                AssetName = Request.Form["AssetName"],
+                CostOfReplacementAndRepair = Request.Form["CostOfReplacementAndRepair"],
+                Status = Request.Form["Status"],
+                UsageType = Request.Form["UsageType"],
+                Actuation = Request.Form["Actuation"],
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        try{
+        try
+        {
             int assetId = assetModel.AddAsset(assetDb);
             return Json(
                 new Dictionary<string, string>
                 {
-                    { "Status", "Success"},
+                    { "Status", "Success" },
                     { "Message", "Asset added successfully" },
                     { "AssetId", assetId.ToString() }
                 }
             );
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             string message = ex.Message;
             return Json(
-                new Dictionary<string, string>
-                {
-                    { "Status", "Error" },
-                    { "Message", message }
-                }
+                new Dictionary<string, string> { { "Status", "Error" }, { "Message", message } }
             );
         }
     }

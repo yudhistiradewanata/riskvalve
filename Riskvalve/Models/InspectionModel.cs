@@ -328,7 +328,9 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var inspectionEffectiveness in inspectionEffectivenessList)
                         {
-                            if (inspectionEffectiveness.Effectiveness.Trim().ToLower().Equals(value))
+                            if (
+                                inspectionEffectiveness.Effectiveness.Trim().ToLower().Equals(value)
+                            )
                             {
                                 mappedValue = inspectionEffectiveness.Id.ToString();
                                 break;
@@ -343,7 +345,12 @@ public class InspectionModel : InspectionDB
                     {
                         foreach (var currentConditionLimitState in currentConditionLimitStateList)
                         {
-                            if (currentConditionLimitState.CurrentConditionLimitState.Trim().ToLower().Equals(value))
+                            if (
+                                currentConditionLimitState
+                                    .CurrentConditionLimitState.Trim()
+                                    .ToLower()
+                                    .Equals(value)
+                            )
                             {
                                 mappedValue = currentConditionLimitState.Id.ToString();
                                 break;
@@ -386,27 +393,27 @@ public class InspectionModel : InspectionDB
 
     private string MapHeader(string header)
     {
-        switch (header)
+        switch (header.ToLower())
         {
-            case "Valve Tag No.":
+            case "valve tag no.":
                 return "AssetID";
-            case "Inspection Date\n(dd/mm/yyyy)":
+            case "inspection date\n(dd/mm/yyyy)":
                 return "InspectionDate";
-            case "Inspection Method":
+            case "inspection method":
                 return "InspectionMethodID";
-            case "Inspection Effectiveness":
+            case "inspection effectiveness":
                 return "InspectionEffectivenessID";
-            case "Inspection Description":
+            case "inspection description":
                 return "InspectionDescription";
-            case "Current Condition Leakage to Atmosphere":
+            case "current condition leakage to atmosphere":
                 return "CurrentConditionLeakeageToAtmosphereID";
-            case "Current Condition Failure of Function":
+            case "current condition failure of function":
                 return "CurrentConditionFailureOfFunctionID";
-            case "Current Condition Passing Across Valve":
+            case "current condition passing across valve":
                 return "CurrentConditionPassingAcrossValveID";
-            case "Function Condition":
+            case "function condition":
                 return "FunctionCondition";
-            case "Test Pressure If Any":
+            case "test pressure if any":
                 return "TestPressureIfAny";
             default:
                 return "";

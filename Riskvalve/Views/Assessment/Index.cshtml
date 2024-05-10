@@ -71,11 +71,11 @@
                                 <div class="content">
                                     <h3>Welcome to Assessment</h3>
                                     <div>To start Inspection please choose assessment in tree view</div>
-                                    <p style="margin-top: 24px;">
+                                    @* <p style="margin-top: 24px;">
                                         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
                                         aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
                                         tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
-                                    </p>
+                                    </p> *@
                                 </div>
                             </div>
                         </div>
@@ -777,7 +777,10 @@
                                             <div class="card-header">
                                                 Risk
                                             </div>
-
+                                            @{
+                                                bool devmode = false;
+                                                string hidden_dev = devmode ? "" : "hidden";
+                                            }
                                             <input type="hidden" name='ConsequenceOfFailure' id="consequenceOfFailure" />
                                             <input type="hidden" name='TP1A' id="TP1A-field" />
                                             <input type="hidden" name='TP2A' id="TP2A-field" />
@@ -795,6 +798,76 @@
                                             <input type="hidden" name='TP2Risk' id="TP2RISK-field" />
                                             <input type="hidden" name='TP3Risk' id="TP3RISK-field" />
                                             <input type="hidden" name="TPTimeToActionRisk" id="TPRISK-TTA-field" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScoreLeakageToAtmophereTP1</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreLeakageToAtmophereTP1" id="TP1A-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScoreLeakageToAtmophereTP2</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreLeakageToAtmophereTP2" id="TP2A-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScoreLeakageToAtmophereTP3</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreLeakageToAtmophereTP3" id="TP3A-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScoreFailureOfFunctionTP1</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreFailureOfFunctionTP1" id="TP1B-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScoreFailureOfFunctionTP2</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreFailureOfFunctionTP2" id="TP2B-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScoreFailureOfFunctionTP3</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreFailureOfFunctionTP3" id="TP3B-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScorePassingAccrossValveTP1</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScorePassingAccrossValveTP1" id="TP1C-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScorePassingAccrossValveTP2</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScorePassingAccrossValveTP2" id="TP2C-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>LoFScorePassingAccrossValveTP3</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="LoFScorePassingAccrossValveTP3" id="TP3C-value" />
+                                            @{
+                                                if(devmode){
+                                                    <br/>
+                                                    <b>CoFScore</b>
+                                                }
+                                            }
+                                            <input class="col-md-3" type="@hidden_dev" name="CoFScore" id="COF-value" />
 
                                             <div class="card-content">
                                                 <div class="row">
@@ -884,6 +957,7 @@
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="200" y="200" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                    <rect x="200" y="200" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="0" y="150" width="50" height="50" fill="#6FA529" stroke="rgb(0,0,0)" stroke-width="1"></rect>
@@ -896,6 +970,8 @@
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="150" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                    <rect x="150" y="150" width="1" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                                                                    <rect x="150" y="200" width="50" height="1" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="5"></rect>
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="200" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
@@ -911,6 +987,7 @@
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="150" y="100" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                    <rect x="150" y="100" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="200" y="100" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
@@ -920,9 +997,12 @@
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="50" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                    <rect x="50" y="50" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                                                                    <rect x="50" y="100" width="50" height="1" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="100" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                    <rect x="100" y="100" width="50" height="1" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="150" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
@@ -935,6 +1015,7 @@
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="50" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                                                                    <rect x="50" y="0" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
                                                                                 </g>
                                                                                 <g>
                                                                                     <rect x="100" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
@@ -1647,7 +1728,7 @@
                             data: formData,
                             contentType: false,
                             processData: false,
-                            success: function(response) {
+                            success: function(res) {
                                 // Handle success response
                                 alert('Data successfully updated')
                                 fetchHistoryData({
@@ -1874,20 +1955,32 @@
             }
 
             function calculateXPos(value) {
+                let gapx = 20;
+                let cat1min = 16;
+                let cat1max = 49;
+                let cat2min = cat1max + 1;
+                let cat2max = 210;
+                let cat3min = cat2max + 1;
+                let cat3max = 891;
+                let cat4min = cat3max + 1;
+                let cat4max = 3769;
+                let cat5min = cat4max + 1;
+                let cat5max = 16050;
+
                 value = value*1;
                 xpos = 0;
-                if(value <= 13){
+                if(value <= cat1min){
                     xpos = 0;
-                } else if(value<=40) {
-                    xpos = ((value-13)/(40-13) * 20);
-                } else if(value<=175) {
-                    xpos = ((value-40)/(175-40) * 20) + 20;
-                } else if(value<=758) {
-                    xpos = ((value-175)/(758-175) * 20) + 40;
-                } else if(value<=3275) {
-                    xpos = ((value-758)/(3275-758) * 20) + 60;
-                } else if(value<=14250) {
-                    xpos = ((value-3275)/(14250-3275) * 20) + 80;
+                } else if(value<=cat1max) {
+                    xpos = ((value-cat1min)/(cat1max-cat1min) * 20) + (gapx*0);
+                } else if(value<=cat2max) {
+                    xpos = ((value-cat2min)/(cat2max-cat2min) * 20) + (gapx*1);
+                } else if(value<=cat3max) {
+                    xpos = ((value-cat3min)/(cat3max-cat3min) * 20) + (gapx*2);
+                } else if(value<=cat4max) {
+                    xpos = ((value-cat4min)/(cat4max-cat4min) * 20) + (gapx*3);
+                } else if(value<=cat5max) {
+                    xpos = ((value-cat5min)/(cat5max-cat5min) * 20) + (gapx*4);
                 } else {
                     xpos = 100;
                 }
@@ -2100,7 +2193,7 @@
                 // TP1B
                 var lofLeakageToAtmosphereB = (lf2LeakageToAtmosphereTP2 * lf2LeakageToAtmosphereTP2Weighting) *
                     (
-                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
                         (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
                         (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
                         (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
@@ -2111,7 +2204,7 @@
                 // TP1C
                 var lofLeakageToAtmosphereC = (lf2LeakageToAtmosphereTP3 * lf2LeakageToAtmosphereTP3Weighting) *
                     (
-                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
                         (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
                         (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
                         (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
@@ -2122,7 +2215,7 @@
                 // TP2A
                 var lofFailureOfFunctionA = (lf2FailureOfFunctionTP1 * lf2FailureOfFunctionTP1Weighting) *
                     (
-                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
                         (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
                         (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
                         (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
@@ -2144,7 +2237,7 @@
                 // TP2C
                 var lofFailureOfFunctionC = (lf2FailureOfFunctionTP3 * lf2FailureOfFunctionTP3Weighting) *
                     (
-                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
+                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
                         (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
                         (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
                         (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
@@ -2155,7 +2248,7 @@
                 // TP3A
                 var lofPassingAccrossValveA = (lf2PassingAccrossValveTP1 * lf2PassingAccrossValveTP1Weighting) *
                     (
-                        (lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting) +
+                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
                         (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
                         (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
                         (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
@@ -2166,7 +2259,7 @@
                 // TP3B
                 var lofPassingAccrossValveB = (lf2PassingAccrossValveTP2 * lf2PassingAccrossValveTP2Weighting) *
                     (
-                        (lf1FailureOfFunction * lf1FailureOfFunctionWeighting) +
+                        (lf1PassingAccrossValve * lf1PassingAccrossValveWeighting) +
                         (lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting) +
                         (lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting) +
                         (lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting) +
@@ -2208,6 +2301,14 @@
                 var cof1 = hsseSelectReal.find('option:selected').attr('attr-cofcategory');
                 var cof2 = hsseSelect.find('option:selected').attr('attr-cofcategory');
                 var cof = String.fromCharCode(Math.max(cof1.charCodeAt(0), cof2.charCodeAt(0)));
+                var cofval = Math.max(hsseSelectReal.find('option:selected').attr('attr-score'), hsseSelect.find('option:selected').attr('attr-score'));
+                var cof_rac = [];
+                cof_rac['A'] = 3769
+                cof_rac['B'] = 891
+                cof_rac['C'] = 891
+                cof_rac['D'] = 49
+                cof_rac['E'] = 49
+                var rac = cof_rac[cof];
                 $('#consequenceOfFailure' + ctr).val(cof);
                 var ypos = 0;
                 switch(cof){
@@ -2287,7 +2388,7 @@
                         'lof': Number(lofLeakageToAtmosphereA),
                         'cof': cof,
                         'xpos': Number(lofLeakageToAtmosphereAPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)-8,
                         'label': tpos1a,
                         'color': getHeatColor(tpos1a)
                     },
@@ -2295,7 +2396,7 @@
                         'lof': Number(lofLeakageToAtmosphereB),
                         'cof': cof,
                         'xpos': Number(lofLeakageToAtmosphereBPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)-6,
                         'label': tpos1b,
                         'color': getHeatColor(tpos1b)
                     },
@@ -2303,7 +2404,7 @@
                         'lof': Number(lofLeakageToAtmosphereC),
                         'cof': cof,
                         'xpos': Number(lofLeakageToAtmosphereCPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)-4,
                         'label': tpos1c,
                         'color': getHeatColor(tpos1c)
                     },
@@ -2311,7 +2412,7 @@
                         'lof': Number(lofFailureOfFunctionA),
                         'cof': cof,
                         'xpos': Number(lofFailureOfFunctionAPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)-2,
                         'label': tpos2a,
                         'color': getHeatColor(tpos2a)
                     },
@@ -2327,7 +2428,7 @@
                         'lof': Number(lofFailureOfFunctionC),
                         'cof': cof,
                         'xpos': Number(lofFailureOfFunctionCPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)+2,
                         'label': tpos2c,
                         'color': getHeatColor(tpos2c)
                     },
@@ -2335,7 +2436,7 @@
                         'lof': Number(lofPassingAccrossValveA),
                         'cof': cof,
                         'xpos': Number(lofPassingAccrossValveAPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)+4,
                         'label': tpos3a,
                         'color': getHeatColor(tpos3a)
                     },
@@ -2343,7 +2444,7 @@
                         'lof': Number(lofPassingAccrossValveB),
                         'cof': cof,
                         'xpos': Number(lofPassingAccrossValveBPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)+6,
                         'label': tpos3b,
                         'color': getHeatColor(tpos3b)
                     },
@@ -2351,7 +2452,7 @@
                         'lof': Number(lofPassingAccrossValveC),
                         'cof': cof,
                         'xpos': Number(lofPassingAccrossValveCPos),
-                        'ypos': Number(ypos),
+                        'ypos': Number(ypos)+8,
                         'label': tpos3c,
                         'color': getHeatColor(tpos3c)
                     }
@@ -2375,6 +2476,8 @@
                     dotColorLabel.addClass(item.color)
 
                     $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item.label)
+                    $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-value').val(item.lof)
+                    $('.tab-pane[tab-num='+ctr+']').find('#COF-value').val(cofval)
                 }
                 // set cof
                 $('.tab-pane[tab-num='+ctr+']').find('#consequenceOfFailure').val(cof)
@@ -2412,27 +2515,47 @@
                     $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item.label)
                 }
 
-                // Time to Limit
-                var minvaltp1 = timePeriod*1;
-                var minvaltp2 = timePeriod*2;
-                var minvaltp3 = timePeriod*3;
-                var ttla = decideTTL(lf2LeakageToAtmosphereTP1Value, lf2LeakageToAtmosphereTP2Value, lf2LeakageToAtmosphereTP3Value, minvaltp1, minvaltp2, minvaltp3);
-                var ttlb = decideTTL(lf2FailureOfFunctionTP1Value, lf2FailureOfFunctionTP2Value, lf2FailureOfFunctionTP3Value, minvaltp1, minvaltp2, minvaltp3);
-                var ttlc = decideTTL(lf2PassingAccrossValveTP1Value, lf2PassingAccrossValveTP2Value, lf2PassingAccrossValveTP3Value, minvaltp1, minvaltp2, minvaltp3);
-                var lastInspectionDate = gLastInspectionDate;
-                var ttla_date = new Date(createDateFromString(lastInspectionDate));
-                ttla_date.setMonth(ttla_date.getMonth() + ttla);
-                var ttlb_date = new Date(createDateFromString(lastInspectionDate));
-                ttlb_date.setMonth(ttlb_date.getMonth() + ttlb);
-                var ttlc_date = new Date(createDateFromString(lastInspectionDate));
-                ttlc_date.setMonth(ttlc_date.getMonth() + ttlc);
+                //TTL NEW
+                var timelimittp1 = timePeriod*1;
+                var timelimittp2 = timePeriod*2;
+                var timelimittp3 = timePeriod*3;
+                var loftp1a = lofLeakageToAtmosphereA;
+                var loftp1b = lofFailureOfFunctionA;
+                var loftp1c = lofPassingAccrossValveA;
+                var loftp2a = lofLeakageToAtmosphereB;
+                var loftp2b = lofFailureOfFunctionB;
+                var loftp2c = lofPassingAccrossValveB;
+                var loftp3a = lofLeakageToAtmosphereC;
+                var loftp3b = lofFailureOfFunctionC;
+                var loftp3c = lofPassingAccrossValveC;
+                var loftp1aval = lf2LeakageToAtmosphereTP1Value;
+                var loftp1bval = lf2FailureOfFunctionTP1Value;
+                var loftp1cval = lf2PassingAccrossValveTP1Value;
+                var loftp2aval = lf2LeakageToAtmosphereTP2Value;
+                var loftp2bval = lf2FailureOfFunctionTP2Value;
+                var loftp2cval = lf2PassingAccrossValveTP2Value;
+                var loftp3aval = lf2LeakageToAtmosphereTP3Value;
+                var loftp3bval = lf2FailureOfFunctionTP3Value;
+                var loftp3cval = lf2PassingAccrossValveTP3Value;
+                var tta_year = decideTTARAC(loftp1a, loftp2a, loftp3a, timelimittp1, timelimittp2, timelimittp3, rac, loftp1aval, loftp2aval, loftp3aval);
+                var tta_days = tta_year * 365.25;
+                var ttb_year = decideTTARAC(loftp1b, loftp2b, loftp3b, timelimittp1, timelimittp2, timelimittp3, rac, loftp1bval, loftp2bval, loftp3bval);
+                var ttb_days = ttb_year * 365.25;
+                var ttc_year = decideTTARAC(loftp1c, loftp2c, loftp3c, timelimittp1, timelimittp2, timelimittp3, rac, loftp1cval, loftp2cval, loftp3cval);
+                var ttc_days = ttc_year * 365.25;
+                var tta_date = new Date(createDateFromString(gLastInspectionDate));
+                tta_date.setDate(tta_date.getDate() + tta_days);
+                var ttb_date = new Date(createDateFromString(gLastInspectionDate));
+                ttb_date.setDate(ttb_date.getDate() + ttb_days);
+                var ttc_date = new Date(createDateFromString(gLastInspectionDate));
+                ttc_date.setDate(ttc_date.getDate() + ttc_days);
                 var map_ttl = {
-                    'TPA-TTA': formatDate(ttla_date),
-                    'TPB-TTA': formatDate(ttlb_date),
-                    'TPC-TTA': formatDate(ttlc_date),
-                    'TPRISK-TTA': formatDate(new Date(Math.min(ttla_date.getTime(), ttlb_date.getTime(), ttlc_date.getTime()))),
+                    'TPA-TTA': formatDate(tta_date),
+                    'TPB-TTA': formatDate(ttb_date),
+                    'TPC-TTA': formatDate(ttc_date),
+                    'TPRISK-TTA': formatDate(new Date(Math.min(tta_date.getTime(), ttb_date.getTime(), ttc_date.getTime()))),
                 };
-                console.log(map_ttl, 'map_ttl');
+                console.log(map_ttl, 'map_tt');
                 // apply
                 for (const [key, item] of Object.entries(map_ttl)) {
                     const dotLabel = $('.tab-pane[tab-num='+ctr+']').find('['+key+']')
@@ -2440,6 +2563,35 @@
                     $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item)
                 }
                 $('#time-to-action' + ctr).val(map_ttl['TPRISK-TTA']);
+            }
+
+            function decideTTARAC(loftp1, loftp2, loftp3, timelimittp1, timelimittp2, timelimittp3, rac, loftp1val, loftp2val, loftp3val){
+                console.log("==START DECIDE TTL==");
+                console.log("loftp1: "+loftp1);
+                console.log("loftp2: "+loftp2);
+                console.log("loftp3: "+loftp3);
+                console.log("timelimittp1: "+timelimittp1);
+                console.log("timelimittp2: "+timelimittp2);
+                console.log("timelimittp3: "+timelimittp3);
+                console.log("rac: "+rac);
+                var calculate = 0;
+                if(loftp1 > rac) {
+                    calculate = 0;
+                }
+                else {
+                    if (loftp3 > rac && loftp2 <= rac){
+                        calculate = ((((timelimittp3-timelimittp2)*(rac-loftp2))/(loftp3-loftp2))/12) + (timelimittp2/12);
+                    }
+                    else if(loftp2 > rac){
+                        calculate = ((((timelimittp2-timelimittp1)*(rac-loftp1))/(loftp2-loftp1))/12) + (timelimittp1/12);
+                    }
+                    else{
+                        calculate = decideTTL(loftp1val, loftp2val, loftp3val, timelimittp1, timelimittp2, timelimittp3)/12;
+                    }
+                }
+                console.log("calculate: "+calculate);
+                console.log("==END DECIDE TTL==");
+                return calculate;
             }
 
             function decideTTL(tp1, tp2, tp3, tp1val, tp2val, tp3val){
@@ -2496,6 +2648,10 @@
 
                 } else {
                     name = `New Assessment ${name}`
+                }
+                if($('.tab-pane[equipment-id="'+equipmentId+'"]').length > 0){
+                    alert('This equipment already exist in the tab');
+                    return;
                 }
 
                 let tabheadercontainer = $('#inspectiontabheader');

@@ -1,0 +1,304 @@
+@{
+    ViewData["Title"] = "Print Maintenance";
+    var maintenance = ViewData["Maintenance"] as MaintenanceModel;
+    var jsonmaintenance = Newtonsoft.Json.JsonConvert.SerializeObject(maintenance);
+}
+<div class="container-fluid">
+    @* @jsonmaintenance *@
+
+    <!-- <div class="text-center" style="margin: 15px;">
+        <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="saveImage()"><i class="bi bi-save"></i> Save as Image</button>
+    </div> -->
+    <div id="print-area">
+        <table class="maintenance-print" id="maintenance-print-table">
+            <tr>
+                <td colspan="10" class="heading" style="width: 100%; background-color: #1f487c !important;">Valve
+                    Inspection</td>
+                <td colspan="2" rowspan="4" class="no-padding text-center">
+                    <img class="logo" src="~/lib/images/logo-square.jpg">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="width: 30%;">Tag Number</td>
+                <td colspan="2" style="width: 25%;">@maintenance.Asset.TagNo</td>
+                <td colspan="2" style="width: 20%;">Date</td>
+                <td colspan="2" style="width: 20%;">@maintenance.MaintenanceDate</td>
+            </tr>
+            <tr>
+                <td colspan="4">Business Area</td>
+                <td colspan="2">@maintenance.Asset.BusinessArea</td>
+            </tr>
+            <tr>
+                <td colspan="4">Platofrm</td>
+                <td colspan="2">@maintenance.Asset.Platform</td>
+                <td colspan="2">Valve Type</td>
+                <td colspan="2">@maintenance.Asset.ValveType</td>
+            </tr>
+            <!-- Second section -->
+            <tr>
+                <td colspan="6" class="table-section">Valve Information</td>
+                <td colspan="6" class="table-section">Process Information</td>
+            </tr>
+            <tr>
+                <td colspan="4">P&ID Number</td>
+                <td colspan="2">@maintenance.Asset.PIDNo</td>
+                <td colspan="3">Operating Pressure (Psig)</td>
+                <td colspan="3">@maintenance.Asset.OperatingPressure</td>
+            </tr>
+            <tr>
+                <td colspan="4">Parent Equipment No.</td>
+                <td colspan="2">@maintenance.Asset.ParentEquipmentNo</td>
+                <td colspan="3">Operating Temperature (F)</td>
+                <td colspan="3">@maintenance.Asset.OperatingTemperature</td>
+            </tr>
+            <tr>
+                <td colspan="4">Parent Equipment Desc</td>
+                <td colspan="2">@maintenance.Asset.ParentEquipmentDescription</td>
+                <td colspan="3">Service Fluid</td>
+                <td colspan="3">@maintenance.Asset.ServiceFluid</td>
+            </tr>
+            <tr>
+                <td colspan="4">Size (Inch)</td>
+                <td colspan="2">@maintenance.Asset.Size</td>
+                <td colspan="3">Fluid Phase</td>
+                <td colspan="3">@maintenance.Asset.FluidPhase</td>
+            </tr>
+            <tr>
+                <td colspan="4">Class Rating</td>
+                <td colspan="2">@maintenance.Asset.ClassRating</td>
+                <td colspan="3">Toxic or Flamable Fluid</td>
+                <td colspan="3">@maintenance.Asset.ToxicOrFlamableFluid</td>
+            </tr>
+            <tr>
+                <td colspan="4">Installation Date</td>
+                <td colspan="2">@maintenance.Asset.InstallationDate</td>
+                <td colspan="6" class="table-section sub-section">Actuation</td>
+            </tr>
+            <tr>
+                <td colspan="4">Manufacturer</td>
+                <td colspan="2">@maintenance.Asset.Manufacturer</td>
+                <td colspan="5">Pneumatic</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" />
+                    ----
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Body Material</td>
+                <td colspan="2">@maintenance.Asset.BodyMaterial</td>
+                <td colspan="5">Hydraulic</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Remaining Life</td>
+                <td colspan="2">-------</td>
+                <td colspan="5">Manual Override</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(maintenance.Asset.ManualOverrideID == 1 ? "checked" : "") />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
+                <td colspan="2">@maintenance.Asset.CostOfReplacementAndRepair</td>
+                <td colspan="6" class="table-section sub-section">Usage Type</td>
+            </tr>
+            <tr>
+                <td colspan="6" class="table-section">Valve Inspection</td>
+                <td colspan="5">Manual valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <!-- Inspection rows -->
+            <tr>
+                <td colspan="4">Is Valve Repaired</td>
+                <td colspan="2">@maintenance.IsValveRepaired</td>
+                <td colspan="5">Auto On-Off Valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Maintenance Description</td>
+                <td colspan="2">@maintenance.MaintenanceDescription</td>
+                <td colspan="5">Control Valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4">Maintenance Description</td>
+                <td colspan="2">@maintenance.MaintenanceDescription</td>
+                <td colspan="5">PSV/PRV</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td rowspan="4" colspan="4">Inspection image</td>
+                <td rowspan="4" colspan="2">
+                    @foreach (var image in maintenance.MaintenanceFiles) {
+                        <img style="max-width: 100px;" src="/@image.FilePath"/>
+                    }
+                </td>
+                <td colspan="6" class="table-section sub-section">Status</td>
+            </tr>
+            <tr>
+                <td colspan="5">In-service</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Waiting For Refurbishment</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Spare</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" /> ---
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.5.0-beta4/html2canvas.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('header').hide()
+        })
+
+        function saveImage() {
+            // Get the div element
+            var divElement = document.getElementById("print-area");
+
+            // Convert div content to canvas
+            html2canvas(divElement).then(function (canvas) {
+                // Convert canvas to image
+                var imgData = canvas.toDataURL('image/png');
+
+                // Create a link element to download the image
+                var link = document.createElement('a');
+                link.href = imgData;
+                link.download = 'image.png';
+                link.click();
+            });
+        }
+    </script>
+}
+<style>
+    input {
+        pointer-events: none
+    }
+
+    #maintenance-print-table td {
+        /* background-color: red; */
+        background-color: white;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .maintenance-maintenance-row td {
+        /* min-height: 80px; */
+        height: 150px;
+    }
+
+    .maintenance-maintenance-row img {
+        width: 160px;
+        display: block;
+        margin: 0 auto;
+        margin-bottom: 10px;
+    }
+
+    .maintenance-maintenance-row img:last-child {
+        margin-bottom: 0;
+    }
+
+    .risk-chart {
+        position: relative;
+        width: 100%;
+        margin: 0 auto;
+        max-width: 400px;
+    }
+
+    .risk-matrix-legend {
+        width: 100%;
+    }
+
+    .print-risk-table {
+        width: 60%;
+        position: absolute;
+        top: 12%;
+        left: calc(50%);
+        transform: translateX(-50%);
+    }
+
+    .print-risk-table img {
+        width: 100%;
+    }
+
+    .checkbox {
+        width: 50%;
+        text-align: center;
+    }
+
+    .maintenance-print {
+        width: 100%;
+    }
+
+    .table-section {
+        font-weight: bold;
+        background-color: #ccc !important;
+        padding: 8px;
+        text-align: center;
+        text-transform: uppercase;
+        height: 50px;
+    }
+
+    .table-section.no-transform {
+        text-transform: none;
+        font-weight: normal;
+    }
+
+    .table-section.sub-section {
+        text-transform: none;
+        height: 36px;
+    }
+
+    .maintenance-print td.no-padding {
+        padding: 0;
+    }
+
+    .maintenance-print td.spacing {
+        border: none !important;
+        border-bottom-width: 0px;
+        border-top-width: 0px;
+        border-right: solid 1px #000000 !important;
+    }
+
+    .maintenance-print td {
+        border: solid 1px #000000;
+        padding: 5px;
+    }
+
+    .maintenance-print .logo {
+        width: 160px;
+        height: 160px;
+        background-color: grey;
+    }
+
+    .maintenance-print .heading {
+        color: white;
+        background-color: #1f487c !important;
+        font-size: 32px;
+        padding: 15px;
+        text-align: center;
+    }
+</style>

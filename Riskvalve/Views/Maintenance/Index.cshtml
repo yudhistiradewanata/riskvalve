@@ -17,6 +17,7 @@
     var urldeletemainenance = Url.Action("DeleteMaintenance", "Maintenance");
     var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
     var urlgetmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance");
+    var urlmaintenanceprint = Url.Action("PrintMaintenance", "Maintenance");
 }
 
 <div class="container-fluid">
@@ -47,11 +48,11 @@
                         <div class="sub-container">
                             <h1>Welcome to Maintenance</h1>
                             <p>To start Inspection please choose assessment in tree view</p>
-                            <p>
+                            @* <p>
                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
                                 aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
                                 tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
-                            </p>
+                            </p> *@
                         </div>
                     </div>
                     <div class="tab-pane show active" role="tabpanel" id="template_inspection">
@@ -192,7 +193,7 @@
                                             <button type="button" class="btn submit-button form-submit" id="btn-submit"
                                                 onclick="submitForm(this)">Save</button>
                                             <button type="button" class="btn print-button form-submit"
-                                                id="btn-submit">Print</button>
+                                                id="btn-submit" onclick="printForm(this)">Print</button>
                                             <button type="button" class="btn delete-button form-submit" id="btn-submit"
                                                 onclick="deleteForm(this)">Delete</button>
                                         </div>
@@ -330,6 +331,12 @@
             }
         }
 
+        function printForm(el){
+            const form = $(el).closest('form.inspection-form')
+            const id = form.find('#data-id').val()
+            window.open('@urlmaintenanceprint/' + id, '_blank');
+        }
+
         function fetchAssetData({ id, counter }) {
             $.ajax({
                 url: '@urlgetassetdetail',
@@ -434,6 +441,10 @@
 
             } else {
                 name = `New Maintenance ${name}`
+            }
+            if($('.tab-pane[equipment-id="'+equipmentId+'"]').length > 0){
+                alert('This equipment already exist in the tab');
+                return;
             }
 
             let tabheadercontainer = $('#inspectiontabheader');

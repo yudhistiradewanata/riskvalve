@@ -5,7 +5,7 @@
     string IsAdmin = ViewData["IsAdmin"] as string;
     string IsEngineer = ViewData["IsEngineer"] as string;
     string IsViewer = ViewData["IsViewer"] as string;
-    string urllogout = Url.Action( "Logout", "Login");
+    string urllogout = Url.Action("Logout", "Login");
 }
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@
 {
 
     <body>
-    <header class="navbar flex-md-nowrap p-0">
+    <header class="navbar flex-md-nowrap p-0 non-printable">
         <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">
             <img src="~/lib/images/u45.png" style="height:62px" />
         </a>
@@ -100,6 +100,8 @@
                                     Inspection / Maintenance</a></li>
                             <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
                                     Assessment</a></li>
+                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ExportAssessment">Export
+                                    Assessment</a></li>
                         </ul>
                     </li>
                 }
@@ -112,10 +114,10 @@
                     </li>
                 }
                 @* <li class="nav-item text-nowrap">
-                    <a class="nav-link px-3 text-white" href="#">
-                        Help
-                    </a>
-                </li> *@
+            <a class="nav-link px-3 text-white" href="#">
+            Help
+            </a>
+            </li> *@
             </ul>
             <ul class="navbar-nav flex-row mx-3">
                 <li class="nav-item text-nowrap">

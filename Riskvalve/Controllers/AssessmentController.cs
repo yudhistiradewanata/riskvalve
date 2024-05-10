@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using Riskvalve.Models;
 
 namespace Riskvalve.Controllers;
@@ -120,35 +121,6 @@ public class AssessmentController : Controller
         return View();
     }
 
-    public IActionResult PrintAssessmentVar(int id)
-    {
-        UserModel login = new();
-        if (!login.isLogin(HttpContext))
-        {
-            TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path + "/Login/Index");
-        }
-        else
-        {
-            TempData["Message"] = null;
-            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
-            foreach (var item in session)
-            {
-                ViewData[item.Key] = item.Value;
-            }
-            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
-            {
-                TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path + "/Home/Index");
-            }
-        }
-        AssessmentModel assessment = new();
-        AssessmentModel assessmentModel = assessment.GetAssessmentModel(id);
-        return Json(assessmentModel);
-        ViewData["Assessment"] = assessmentModel;
-        return View();
-    }
-
     [HttpGet]
     public IActionResult GetAssessmentDetail(int id)
     {
@@ -248,6 +220,34 @@ public class AssessmentController : Controller
                 TP2Risk = Request.Form["tP2Risk"],
                 TP3Risk = Request.Form["tP3Risk"],
                 TPTimeToActionRisk = Request.Form["tpTimeToActionRisk"],
+                LoFScoreLeakageToAtmophereTP1 = Environment.StringToDouble(
+                    Request.Form["LoFScoreLeakageToAtmophereTP1"]
+                ),
+                LoFScoreLeakageToAtmophereTP2 = Environment.StringToDouble(
+                    Request.Form["LoFScoreLeakageToAtmophereTP2"]
+                ),
+                LoFScoreLeakageToAtmophereTP3 = Environment.StringToDouble(
+                    Request.Form["LoFScoreLeakageToAtmophereTP3"]
+                ),
+                LoFScoreFailureOfFunctionTP1 = Environment.StringToDouble(
+                    Request.Form["LoFScoreFailureOfFunctionTP1"]
+                ),
+                LoFScoreFailureOfFunctionTP2 = Environment.StringToDouble(
+                    Request.Form["LoFScoreFailureOfFunctionTP2"]
+                ),
+                LoFScoreFailureOfFunctionTP3 = Environment.StringToDouble(
+                    Request.Form["LoFScoreFailureOfFunctionTP3"]
+                ),
+                LoFScorePassingAccrosValveTP1 = Environment.StringToDouble(
+                    Request.Form["LoFScorePassingAccrossValveTP1"]
+                ),
+                LoFScorePassingAccrosValveTP2 = Environment.StringToDouble(
+                    Request.Form["LoFScorePassingAccrossValveTP2"]
+                ),
+                LoFScorePassingAccrosValveTP3 = Environment.StringToDouble(
+                    Request.Form["LoFScorePassingAccrossValveTP3"]
+                ),
+                CoFScore = Environment.StringToDouble(Request.Form["CoFScore"]),
                 IsDeleted = false,
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -347,23 +347,6 @@ public class AssessmentController : Controller
                     Request.Form["RecommendationActionID"]
                 ),
                 DetailedRecommendation = Request.Form["DetailedRecommendation"],
-                // ConsequenceOfFailure = "1",
-                // TP1A = "1",
-                // TP1B = "1",
-                // TP1C = "1",
-                // TP2A = "1",
-                // TP2B = "1",
-                // TP2C = "1",
-                // TP3A = "1",
-                // TP3B = "1",
-                // TP3C = "1",
-                // TPTimeToActionA = "1",
-                // TPTimeToActionB = "1",
-                // TPTimeToActionC = "1",
-                // TP1Risk = "1",
-                // TP2Risk = "1",
-                // TP3Risk = "1",
-                // TPTimeToActionRisk = "1",
                 ConsequenceOfFailure = Request.Form["consequenceOfFailure"],
                 TP1A = Request.Form["tP1A"],
                 TP1B = Request.Form["tP1B"],
@@ -381,10 +364,40 @@ public class AssessmentController : Controller
                 TP2Risk = Request.Form["tP2Risk"],
                 TP3Risk = Request.Form["tP3Risk"],
                 TPTimeToActionRisk = Request.Form["tpTimeToActionRisk"],
+                LoFScoreLeakageToAtmophereTP1 = Environment.StringToDouble(
+                    Request.Form["LoFScoreLeakageToAtmophereTP1"]
+                ),
+                LoFScoreLeakageToAtmophereTP2 = Environment.StringToDouble(
+                    Request.Form["LoFScoreLeakageToAtmophereTP2"]
+                ),
+                LoFScoreLeakageToAtmophereTP3 = Environment.StringToDouble(
+                    Request.Form["LoFScoreLeakageToAtmophereTP3"]
+                ),
+                LoFScoreFailureOfFunctionTP1 = Environment.StringToDouble(
+                    Request.Form["LoFScoreFailureOfFunctionTP1"]
+                ),
+                LoFScoreFailureOfFunctionTP2 = Environment.StringToDouble(
+                    Request.Form["LoFScoreFailureOfFunctionTP2"]
+                ),
+                LoFScoreFailureOfFunctionTP3 = Environment.StringToDouble(
+                    Request.Form["LoFScoreFailureOfFunctionTP3"]
+                ),
+                LoFScorePassingAccrosValveTP1 = Environment.StringToDouble(
+                    Request.Form["LoFScorePassingAccrossValveTP1"]
+                ),
+                LoFScorePassingAccrosValveTP2 = Environment.StringToDouble(
+                    Request.Form["LoFScorePassingAccrossValveTP2"]
+                ),
+                LoFScorePassingAccrosValveTP3 = Environment.StringToDouble(
+                    Request.Form["LoFScorePassingAccrossValveTP3"]
+                ),
+                CoFScore = Environment.StringToDouble(Request.Form["CoFScore"]),
                 IsDeleted = false,
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
             };
+        // string json = JsonConvert.SerializeObject(assessmentDB);
+        // return Json(json);
         // return Json(assessmentDB);
         assessment.UpdateAssessment(assessmentDB);
         List<int> inspectionIDs = Request
@@ -419,5 +432,11 @@ public class AssessmentController : Controller
                 DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
         assessmentModel.DeleteAssessment(assessment);
+    }
+
+    public IActionResult GetAssessmentList(int AreaID = 0, int PlatformID = 0)
+    {
+        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentList(AreaID, PlatformID);
+        return Json(assessmentList);
     }
 }

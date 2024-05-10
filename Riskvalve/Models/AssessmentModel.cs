@@ -7,6 +7,7 @@ public class AssessmentContext : DbContext
 {
     public DbSet<AssessmentDB> Assessment { get; set; }
     public DbSet<AssetModel> Asset { get; set; }
+    public DbSet<PlatformDB> Platform { get; set; }
     public DbSet<CurrentConditionLimitStateModel> CurrentConditionLimitState { get; set; }
     public DbSet<InspectionEffectivenessModel> InspectionEffectiveness { get; set; }
     public DbSet<ImpactEffectModel> ImpactEffect { get; set; }
@@ -78,6 +79,16 @@ public class AssessmentDB
     public string? TP2Risk { get; set; }
     public string? TP3Risk { get; set; }
     public string? TPTimeToActionRisk { get; set; }
+    public double? LoFScoreLeakageToAtmophereTP1 { get; set; }
+    public double? LoFScoreLeakageToAtmophereTP2 { get; set; }
+    public double? LoFScoreLeakageToAtmophereTP3 { get; set; }
+    public double? LoFScoreFailureOfFunctionTP1 { get; set; }
+    public double? LoFScoreFailureOfFunctionTP2 { get; set; }
+    public double? LoFScoreFailureOfFunctionTP3 { get; set; }
+    public double? LoFScorePassingAccrosValveTP1 { get; set; }
+    public double? LoFScorePassingAccrosValveTP2 { get; set; }
+    public double? LoFScorePassingAccrosValveTP3 { get; set; }
+    public double? CoFScore { get; set; }
     public bool? IsDeleted { get; set; }
     public string? CreatedAt { get; set; }
     public int? CreatedBy { get; set; }
@@ -113,10 +124,8 @@ public class AssessmentModel : AssessmentDB
     public List<InspectionModel>? InspectionHistory { get; set; }
     public List<MaintenanceModel>? MaintenanceHistory { get; set; }
     public string? RiskMax { get; set; }
-
-    // public string? LastInspectionDate { get; set; }
-    // public string? MaxRisk { get; set; }
-    // public string? MaxRiskColor { get; set; }
+    public string? LastInspectionDate { get; set; }
+    public string? LastMaintenanceDate { get; set; }
     public Dictionary<string, string> ColorRiskMap =
         new()
         {
@@ -145,7 +154,105 @@ public class AssessmentModel : AssessmentDB
             { "Very High", 5 }
         };
 
-    public List<AssessmentModel> GetAssessmentList(bool IncludeDeleted = false)
+    public AssessmentDB GetAssessmentDB(int id)
+    {
+        AssessmentDB assessmentDB = new();
+        using (var context = new AssessmentContext())
+        {
+            assessmentDB = context
+                .Assessment.Where(a => a.Id == id)
+                .Select(a => new AssessmentDB
+                {
+                    Id = a.Id,
+                    AssetID = a.AssetID,
+                    AssessmentNo = a.AssessmentNo,
+                    AssessmentDate = a.AssessmentDate,
+                    TimePeriode = a.TimePeriode,
+                    TimeToLimitStateLeakageToAtmosphere = a.TimeToLimitStateLeakageToAtmosphere,
+                    TimeToLimitStateFailureOfFunction = a.TimeToLimitStateFailureOfFunction,
+                    TimeToLimitStatePassingAccrosValve = a.TimeToLimitStatePassingAccrosValve,
+                    LeakageToAtmosphereID =
+                        a.LeakageToAtmosphereID != 0 ? a.LeakageToAtmosphereID : null,
+                    FailureOfFunctionID = a.FailureOfFunctionID != 0 ? a.FailureOfFunctionID : null,
+                    PassingAccrosValveID =
+                        a.PassingAccrosValveID != 0 ? a.PassingAccrosValveID : null,
+                    LeakageToAtmosphereTP1ID =
+                        a.LeakageToAtmosphereTP1ID != 0 ? a.LeakageToAtmosphereTP1ID : null,
+                    LeakageToAtmosphereTP2ID =
+                        a.LeakageToAtmosphereTP2ID != 0 ? a.LeakageToAtmosphereTP2ID : null,
+                    LeakageToAtmosphereTP3ID =
+                        a.LeakageToAtmosphereTP3ID != 0 ? a.LeakageToAtmosphereTP3ID : null,
+                    FailureOfFunctionTP1ID =
+                        a.FailureOfFunctionTP1ID != 0 ? a.FailureOfFunctionTP1ID : null,
+                    FailureOfFunctionTP2ID =
+                        a.FailureOfFunctionTP2ID != 0 ? a.FailureOfFunctionTP2ID : null,
+                    FailureOfFunctionTP3ID =
+                        a.FailureOfFunctionTP3ID != 0 ? a.FailureOfFunctionTP3ID : null,
+                    PassingAccrosValveTP1ID =
+                        a.PassingAccrosValveTP1ID != 0 ? a.PassingAccrosValveTP1ID : null,
+                    PassingAccrosValveTP2ID =
+                        a.PassingAccrosValveTP2ID != 0 ? a.PassingAccrosValveTP2ID : null,
+                    PassingAccrosValveTP3ID =
+                        a.PassingAccrosValveTP3ID != 0 ? a.PassingAccrosValveTP3ID : null,
+                    InspectionEffectivenessID =
+                        a.InspectionEffectivenessID != 0 ? a.InspectionEffectivenessID : null,
+                    ImpactOfInternalFluidImpuritiesID =
+                        a.ImpactOfInternalFluidImpuritiesID != 0
+                            ? a.ImpactOfInternalFluidImpuritiesID
+                            : null,
+                    ImpactOfOperatingEnvelopesID =
+                        a.ImpactOfOperatingEnvelopesID != 0 ? a.ImpactOfOperatingEnvelopesID : null,
+                    UsedWithinOEMSpecificationID =
+                        a.UsedWithinOEMSpecificationID != 0 ? a.UsedWithinOEMSpecificationID : null,
+                    RepairedID = a.RepairedID != 0 ? a.RepairedID : null,
+                    HSSEDefinisionID = a.HSSEDefinisionID != 0 ? a.HSSEDefinisionID : null,
+                    RecommendationActionID =
+                        a.RecommendationActionID != 0 ? a.RecommendationActionID : null,
+                    ProductLossDefinition = a.ProductLossDefinition,
+                    Summary = a.Summary,
+                    DetailedRecommendation = a.DetailedRecommendation,
+                    ConsequenceOfFailure = a.ConsequenceOfFailure,
+                    TP1A = a.TP1A,
+                    TP2A = a.TP2A,
+                    TP3A = a.TP3A,
+                    TP1B = a.TP1B,
+                    TP2B = a.TP2B,
+                    TP3B = a.TP3B,
+                    TP1C = a.TP1C,
+                    TP2C = a.TP2C,
+                    TP3C = a.TP3C,
+                    TPTimeToActionA = a.TPTimeToActionA,
+                    TPTimeToActionB = a.TPTimeToActionB,
+                    TPTimeToActionC = a.TPTimeToActionC,
+                    TP1Risk = a.TP1Risk,
+                    TP2Risk = a.TP2Risk,
+                    TP3Risk = a.TP3Risk,
+                    TPTimeToActionRisk = a.TPTimeToActionRisk,
+                    LoFScoreLeakageToAtmophereTP1 = a.LoFScoreLeakageToAtmophereTP1,
+                    LoFScoreLeakageToAtmophereTP2 = a.LoFScoreLeakageToAtmophereTP2,
+                    LoFScoreLeakageToAtmophereTP3 = a.LoFScoreLeakageToAtmophereTP3,
+                    LoFScoreFailureOfFunctionTP1 = a.LoFScoreFailureOfFunctionTP1,
+                    LoFScoreFailureOfFunctionTP2 = a.LoFScoreFailureOfFunctionTP2,
+                    LoFScoreFailureOfFunctionTP3 = a.LoFScoreFailureOfFunctionTP3,
+                    LoFScorePassingAccrosValveTP1 = a.LoFScorePassingAccrosValveTP1,
+                    LoFScorePassingAccrosValveTP2 = a.LoFScorePassingAccrosValveTP2,
+                    LoFScorePassingAccrosValveTP3 = a.LoFScorePassingAccrosValveTP3,
+                    IsDeleted = a.IsDeleted,
+                    CreatedAt = a.CreatedAt,
+                    CreatedBy = a.CreatedBy,
+                    DeletedAt = a.DeletedAt,
+                    DeletedBy = a.DeletedBy
+                })
+                .FirstOrDefault();
+        }
+        return assessmentDB;
+    }
+
+    public List<AssessmentModel> GetAssessmentList(
+        int AreaID = 0,
+        int PlatformID = 0,
+        bool IncludeDeleted = false
+    )
     {
         List<AssessmentModel> assessmentList = new();
         using (var context = new AssessmentContext())
@@ -153,7 +260,11 @@ public class AssessmentModel : AssessmentDB
             assessmentList = (
                 from assessment in context.Assessment
                 join asset in context.Asset on assessment.AssetID equals asset.Id
-                where assessment.IsDeleted == false || IncludeDeleted == true
+                join platform in context.Platform on asset.PlatformID equals platform.Id
+                where
+                    (AreaID == 0 || platform.AreaID == AreaID) &&
+                    (PlatformID == 0 || asset.PlatformID == PlatformID) &&
+                    (assessment.IsDeleted == false || IncludeDeleted == true)
                 select new AssessmentModel
                 {
                     Id = assessment.Id,
@@ -207,6 +318,16 @@ public class AssessmentModel : AssessmentDB
                     TP2Risk = assessment.TP2Risk,
                     TP3Risk = assessment.TP3Risk,
                     TPTimeToActionRisk = assessment.TPTimeToActionRisk,
+                    LoFScoreLeakageToAtmophereTP1 = assessment.LoFScoreLeakageToAtmophereTP1,
+                    LoFScoreLeakageToAtmophereTP2 = assessment.LoFScoreLeakageToAtmophereTP2,
+                    LoFScoreLeakageToAtmophereTP3 = assessment.LoFScoreLeakageToAtmophereTP3,
+                    LoFScoreFailureOfFunctionTP1 = assessment.LoFScoreFailureOfFunctionTP1,
+                    LoFScoreFailureOfFunctionTP2 = assessment.LoFScoreFailureOfFunctionTP2,
+                    LoFScoreFailureOfFunctionTP3 = assessment.LoFScoreFailureOfFunctionTP3,
+                    LoFScorePassingAccrosValveTP1 = assessment.LoFScorePassingAccrosValveTP1,
+                    LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2,
+                    LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3,
+                    CoFScore = assessment.CoFScore,
                     IsDeleted = assessment.IsDeleted,
                     CreatedAt = assessment.CreatedAt,
                     CreatedBy = assessment.CreatedBy,
@@ -317,6 +438,12 @@ public class AssessmentModel : AssessmentDB
                     MaintenanceHistory = new AssessmentMaintenanceModel().GetMaintenanceList(
                         assessment.Id
                     ),
+                    LastInspectionDate = new AssessmentInspectionModel().GetLastInspectionDate(
+                        assessment.Id
+                    ),
+                    LastMaintenanceDate = new AssessmentMaintenanceModel().GetLastMaintenanceDate(
+                        assessment.Id
+                    ),
                 }
             ).ToList();
         }
@@ -385,6 +512,16 @@ public class AssessmentModel : AssessmentDB
                     TP2Risk = assessment.TP2Risk,
                     TP3Risk = assessment.TP3Risk,
                     TPTimeToActionRisk = assessment.TPTimeToActionRisk,
+                    LoFScoreLeakageToAtmophereTP1 = assessment.LoFScoreLeakageToAtmophereTP1,
+                    LoFScoreLeakageToAtmophereTP2 = assessment.LoFScoreLeakageToAtmophereTP2,
+                    LoFScoreLeakageToAtmophereTP3 = assessment.LoFScoreLeakageToAtmophereTP3,
+                    LoFScoreFailureOfFunctionTP1 = assessment.LoFScoreFailureOfFunctionTP1,
+                    LoFScoreFailureOfFunctionTP2 = assessment.LoFScoreFailureOfFunctionTP2,
+                    LoFScoreFailureOfFunctionTP3 = assessment.LoFScoreFailureOfFunctionTP3,
+                    LoFScorePassingAccrosValveTP1 = assessment.LoFScorePassingAccrosValveTP1,
+                    LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2,
+                    LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3,
+                    CoFScore = assessment.CoFScore,
                     IsDeleted = assessment.IsDeleted,
                     CreatedAt = assessment.CreatedAt,
                     CreatedBy = assessment.CreatedBy,
@@ -599,12 +736,18 @@ public class AssessmentModel : AssessmentDB
             }
             context.Assessment.Add(assessmentDB);
             context.SaveChanges();
+            assessmentID = assessmentDB.Id;
+        }
+        using (var context = new AssessmentContext())
+        {
+            AssessmentDB assessmentNo = GetAssessmentDB(assessmentID);
             if (
-                string.IsNullOrEmpty(assessmentDB.AssessmentNo)
-                || assessmentDB.AssessmentNo == "IMPORT"
+                string.IsNullOrEmpty(assessmentNo.AssessmentNo)
+                || assessmentNo.AssessmentNo == "IMPORT"
             )
             {
-                AssessmentDB assessmentNo = context.Assessment.Find(assessmentDB.Id);
+                int assId = assessmentDB.Id;
+                // AssessmentDB assessmentNo = GetAssessmentDB(assId);
                 assessmentNo.AssessmentNo = "ASSESSMENT" + assessmentDB.Id;
                 context.Assessment.Update(assessmentNo);
                 context.SaveChanges();
@@ -674,9 +817,11 @@ public class AssessmentModel : AssessmentDB
 
     public void UpdateAssessment(AssessmentDB assessment)
     {
+        int id = assessment.Id;
+        AssessmentDB oldAssessment = new AssessmentDB() { Id = 0, AssetID = 0, };
         using (var context = new AssessmentContext())
         {
-            AssessmentDB oldAssessment = context.Assessment.Find(assessment.Id);
+            oldAssessment = GetAssessmentDB(id);
             oldAssessment.AssetID = assessment.AssetID;
             oldAssessment.AssessmentNo = assessment.AssessmentNo;
             oldAssessment.AssessmentDate = assessment.AssessmentDate;
@@ -862,6 +1007,16 @@ public class AssessmentModel : AssessmentDB
             oldAssessment.TP2Risk = assessment.TP2Risk;
             oldAssessment.TP3Risk = assessment.TP3Risk;
             oldAssessment.TPTimeToActionRisk = assessment.TPTimeToActionRisk;
+            oldAssessment.LoFScoreLeakageToAtmophereTP1 = assessment.LoFScoreLeakageToAtmophereTP1;
+            oldAssessment.LoFScoreLeakageToAtmophereTP2 = assessment.LoFScoreLeakageToAtmophereTP2;
+            oldAssessment.LoFScoreLeakageToAtmophereTP3 = assessment.LoFScoreLeakageToAtmophereTP3;
+            oldAssessment.LoFScoreFailureOfFunctionTP1 = assessment.LoFScoreFailureOfFunctionTP1;
+            oldAssessment.LoFScoreFailureOfFunctionTP2 = assessment.LoFScoreFailureOfFunctionTP2;
+            oldAssessment.LoFScoreFailureOfFunctionTP3 = assessment.LoFScoreFailureOfFunctionTP3;
+            oldAssessment.LoFScorePassingAccrosValveTP1 = assessment.LoFScorePassingAccrosValveTP1;
+            oldAssessment.LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2;
+            oldAssessment.LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3;
+            oldAssessment.CoFScore = assessment.CoFScore;
             context.Assessment.Update(oldAssessment);
             context.SaveChanges();
         }
@@ -869,13 +1024,14 @@ public class AssessmentModel : AssessmentDB
 
     public void DeleteAssessment(AssessmentDB assessment)
     {
+        int id = assessment.Id;
+        AssessmentDB oldAssessment = GetAssessmentDB(id);
         using (var context = new AssessmentContext())
         {
-            AssessmentDB oldAssessment = context.Assessment.Find(assessment.Id);
             oldAssessment.IsDeleted = true;
             oldAssessment.DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString());
             oldAssessment.DeletedBy = assessment.DeletedBy;
-            context.Update(oldAssessment);
+            context.Assessment.Update(oldAssessment);
             context.SaveChanges();
         }
     }
@@ -1221,31 +1377,31 @@ public class AssessmentModel : AssessmentDB
 
     private string MapHeader(string header)
     {
-        switch (header)
+        switch (header.ToLower())
         {
-            case "Valve Tag No.":
+            case "valve tag no.":
                 return "AssetID";
-            case "Assessment Date\n(dd/mm/yyyy)":
+            case "assessment date\n(dd/mm/yyyy)":
                 return "AssessmentDate";
-            case "Time Periode\n(Month)":
+            case "time periode\n(month)":
                 return "TimePeriode";
-            case "LF2 - Time to Limit State Leakage to atmosphere \n(Month)":
+            case "lf2 - time to limit state leakage to atmosphere \n(month)":
                 return "TimeToLimitStateLeakageToAtmosphere";
-            case "LF2 - Time to Limit State Failure of function (Month)":
+            case "lf2 - time to limit state failure of function (month)":
                 return "TimeToLimitStateFailureOfFunction";
-            case "LF2 - Time to Limit State Passing accros valve (Month)":
+            case "lf2 - time to limit state passing accros valve (month)":
                 return "TimeToLimitStatePassingAccrosValve";
-            case "LF4 - Impact of Internal Fluid Impurities":
+            case "lf4 - impact of internal fluid impurities":
                 return "ImpactOfInternalFluidImpuritiesID";
-            case "LF5 - Impact of Operating Envelopes":
+            case "lf5 - impact of operating envelopes":
                 return "ImpactOfOperatingEnvelopesID";
-            case "LF6 - Used within OEM Specification":
+            case "lf6 - used within oem specification":
                 return "UsedWithinOEMSpecificationID";
-            case "LF7 - Repaired":
+            case "lf7 - repaired":
                 return "RepairedID";
-            case "CF1 - Product loss definition (bbls)":
+            case "cf1 - product loss definition (bbls)":
                 return "ProductLossDefinition";
-            case "CF2 - HSSE Definision":
+            case "cf2 - hsse definision":
                 return "HSSEDefinisionID";
             default:
                 return "";
@@ -1948,6 +2104,29 @@ public class AssessmentMaintenanceModel
         }
         return maintenanceList;
     }
+
+    public string GetLastMaintenanceDate(int AssessmentID)
+    {
+        string lastMaintenanceDate = "";
+        try
+        {
+            using (var context = new AssessmentContext())
+            {
+                lastMaintenanceDate = (
+                    from m in context.Maintenance
+                    join assessmentMaintenance in context.AssessmentMaintenance
+                        on m.Id equals assessmentMaintenance.MaintenanceID
+                    where assessmentMaintenance.AssessmentID == AssessmentID
+                    orderby m.MaintenanceDate descending
+                    select m.MaintenanceDate
+                )
+                    .FirstOrDefault()
+                    .ToString();
+            }
+        }
+        catch (Exception e) { }
+        return lastMaintenanceDate;
+    }
 }
 
 public class AssessmentInspectionModel
@@ -2045,5 +2224,28 @@ public class AssessmentInspectionModel
             ).ToList();
         }
         return inspectionList;
+    }
+
+    public string GetLastInspectionDate(int AssessmentID)
+    {
+        string lastAssessmentDate = "";
+        try
+        {
+            using (var context = new AssessmentContext())
+            {
+                lastAssessmentDate = (
+                    from inspection in context.Inspection
+                    join assessmentInspection in context.AssessmentInspection
+                        on inspection.Id equals assessmentInspection.InspectionID
+                    where assessmentInspection.AssessmentID == AssessmentID
+                    orderby inspection.InspectionDate descending
+                    select inspection.InspectionDate
+                )
+                    .FirstOrDefault()
+                    .ToString();
+            }
+        }
+        catch (Exception e) { }
+        return lastAssessmentDate;
     }
 }

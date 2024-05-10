@@ -1,6 +1,8 @@
 @{
     ViewData["Title"] = "Import Inspection / Maintenance";
     var urlimportexcel = Url.Action("ImportExcelFile", "Tool");
+    var urltemplateInspection = Url.Content("~/Uploads/Downloads/InspectionTemplate.xlsx");
+    var urltemplateMaintenance = Url.Content("~/Uploads/Downloads/MaintenanceTemplate.xlsx");
 }
 
 <div class="container-fluid">
@@ -18,8 +20,7 @@
                         <form id="inspection-form">
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
-                                    Download the template file <a href="/Uploads/Downloads/InspectionTemplate.xlsx"
-                                        target="_blank">here</a>
+                                    Download the template file <a href="@urltemplateInspection" target="_blank">here</a>
                                 </div>
                             </div>
                             <br />
@@ -56,7 +57,7 @@
                         <form id="maintenance-form">
                             <div class="row g-3 align-items-center">
                                 <div class="col-auto">
-                                    Download the template file <a href="/Uploads/Downloads/MaintenanceTemplate.xlsx"
+                                    Download the template file <a href="@urltemplateMaintenance"
                                         target="_blank">here</a>
                                 </div>
                             </div>

@@ -42,6 +42,32 @@ public class MaintenanceController : Controller
         ViewData["pageType"] = "Maintenance";
         return View();
     }
+    public IActionResult PrintMaintenance(int id)
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect(Environment.app_path+"/Login/Index");
+        }
+        else
+        {
+            TempData["Message"] = null;
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect(Environment.app_path+"/Home/Index");
+            }
+        }
+        MaintenanceModel maintenance = new MaintenanceModel().GetMaintenanceModel(id);
+        ViewData["maintenance"] = maintenance;
+        return View();
+    }
 
     [HttpGet]
     public IActionResult GetMaintenanceDetail(int id)

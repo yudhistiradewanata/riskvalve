@@ -122,9 +122,9 @@ public class MaintenanceModel : MaintenanceDB
         {
             maintenanceDB.IsDeleted = false;
             // check if there is already an maintenance with the same assetid and maintenance date
-            if(
-                context.Maintenance
-                    .Where(m => m.AssetID == maintenanceDB.AssetID)
+            if (
+                context
+                    .Maintenance.Where(m => m.AssetID == maintenanceDB.AssetID)
                     .Where(m => m.MaintenanceDate == maintenanceDB.MaintenanceDate)
                     .FirstOrDefault() != null
             )
@@ -167,9 +167,7 @@ public class MaintenanceModel : MaintenanceDB
         }
     }
 
-    public ToolImportModel MapMaintenanceRegister(
-        List<Dictionary<string, string>> data
-    )
+    public ToolImportModel MapMaintenanceRegister(List<Dictionary<string, string>> data)
     {
         ToolImportModel toolImport = new();
         List<string> failedRecords = new();
@@ -234,7 +232,7 @@ public class MaintenanceModel : MaintenanceDB
                                 .ToString(Environment.GetDateFormatString(false));
                         }
                     }
-                    else if(mappedKey.Equals("IsValveRepairedID"))
+                    else if (mappedKey.Equals("IsValveRepairedID"))
                     {
                         foreach (var ivr in isValveRepairedList)
                         {
@@ -258,10 +256,10 @@ public class MaintenanceModel : MaintenanceDB
                         // throw e;
                         failedRecords.Add(
                             "Value '"
-                            + record.Value
-                            + "' on field '"
-                            + key
-                            + "' is not match with the database value"
+                                + record.Value
+                                + "' on field '"
+                                + key
+                                + "' is not match with the database value"
                         );
                     }
                     else
@@ -281,20 +279,21 @@ public class MaintenanceModel : MaintenanceDB
 
     private string MapHeader(string header)
     {
-        switch (header)
+        switch (header.ToLower())
         {
-            case "Valve Tag No.":
+            case "valve tag no.":
                 return "AssetID";
-            case "Is valve repaired?\n(Y/N)":
+            case "is valve repaired?\n(y/n)":
                 return "IsValveRepairedID";
-            case "Maintenance Date\n(dd/mm/yyyy)":
+            case "maintenance date\n(dd/mm/yyyy)":
                 return "MaintenanceDate";
-            case "Maintenance Description":
+            case "maintenance description":
                 return "MaintenanceDescription";
             default:
                 return "";
         }
     }
+
     public MaintenanceModel GetLastAssetMaintenance(int assetID)
     {
         MaintenanceModel maintenance = new();

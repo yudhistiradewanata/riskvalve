@@ -44,6 +44,33 @@ public class InspectionController : Controller
         return View();
     }
 
+    public IActionResult PrintInspection(int id)
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect(Environment.app_path+"/Login/Index");
+        }
+        else
+        {
+            TempData["Message"] = null;
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect(Environment.app_path+"/Home/Index");
+            }
+        }
+        InspectionModel inspection = new InspectionModel().GetInspectionModel(id);
+        ViewData["Inspection"] = inspection;
+        return View();
+    }
+
     [HttpGet]
     public IActionResult GetInspectionDetail(int id)
     {

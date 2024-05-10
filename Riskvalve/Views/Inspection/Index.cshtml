@@ -11,20 +11,23 @@
 
     var IsValveRepairedModel = new IsValveRepairedModel();
     var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
-    var baseurl = Url.Action("","");
+    var baseurl = Url.Action("", "");
     var urlupdateinspection = Url.Action("UpdateInspection", "Inspection");
     var urladdinspection = Url.Action("AddInspection", "Inspection");
     var urldeleteinspection = Url.Action("DeleteInspection", "Inspection");
     var urlgetinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
     var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
+    var urlinspectionprint = Url.Action("PrintInspection", "Inspection");
 }
+<link rel="stylesheet" href="~/css/print.css" asp-append-version="true" />
 
 <div class="container-fluid">
     <div class="row">
-        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
+        <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary non-printable">
             <partial name="InspectionAssessmentSidebar" />
         </div>
-        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image"
+            style="background-image:url('@baseurl/lib/images/u45.png')">
             <div>
                 <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                     <li class="nav-item">
@@ -47,15 +50,15 @@
                         <div class="sub-container">
                             <h1>Welcome to Inspection</h1>
                             <p>To start Inspection please choose assessment in tree view</p>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
-                                aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
-                                tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
-                            </p>
+                            @* <p>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed euismod, nisl id tincidunt
+                            aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc. Sed euismod, nisl id
+                            tincidunt aliquam, nunc nunc lacinia elit, nec tincidunt mauris nisl id nunc.
+                            </p> *@
                         </div>
                     </div>
                     <div class="tab-pane show active" role="tabpanel" id="template_inspection">
-                        <form class="inspection-form">
+                        <form class="inspection-form printable">
                             <div class="box">
                                 <div class="subheader m-0">
                                     <b>Asset Information</b>
@@ -260,11 +263,12 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div>
+                                    <div class="non-printable">
                                         <div class="box-footer">
                                             <button type="button" class="btn submit-button" id="btn-submit"
                                                 onclick="submitForm(this)">Save</button>
-                                            <button type="button" class="btn print-button" id="btn-print">Print</button>
+                                            <button type="button" class="btn print-button" id="btn-print"
+                                                onclick="printForm(this)">Print</button>
                                             <button type="button" class="btn delete-button" id="btn-delete"
                                                 onclick="deleteForm(this)">Delete</button>
                                         </div>
@@ -288,7 +292,7 @@
             $('.btn-add-new-inspection').click(addTab);
             if (idParam) {
                 $('.btn-add-new-inspection[attr-inspection-id=' + idParam + ']').trigger('click')
-            } else if(assetIdParam) {
+            } else if (assetIdParam) {
                 $('.btn-add-new-inspection[attr-id=' + assetIdParam + ']').first().trigger('click')
             }
         });
@@ -342,21 +346,21 @@
         @* console.log(equipmentId) *@
         @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
                                     $('ul[equipment-id="' + equipmentId + '"]').append(`
-                                        <li class="treeview">
-                                            <a class="btn-add-new-inspection" history-button="" 
-                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                            attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
-                                            attr-sidebar-level="4" 
-                                            attr-find-inspection="${res.Asset.BusinessArea}" 
-                                            attr-find-platform="${res.Asset.Platform}" 
-                                            attr-find-equipment="${res.Asset.TagNo}" 
-                                            attr-find-imr="NEW"
-                                            onclick="addTab.apply(this)"
-                                            >
-                                                ${res.InspectionDate}
-                                            </a>
-                                        </li>
-                                    `)
+                                                    <li class="treeview">
+                                                        <a class="btn-add-new-inspection" history-button="" 
+                                                        attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                                        attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
+                                                        attr-sidebar-level="4" 
+                                                        attr-find-inspection="${res.Asset.BusinessArea}" 
+                                                        attr-find-platform="${res.Asset.Platform}" 
+                                                        attr-find-equipment="${res.Asset.TagNo}" 
+                                                        attr-find-imr="NEW"
+                                                        onclick="addTab.apply(this)"
+                                                        >
+                                                            ${res.InspectionDate}
+                                                        </a>
+                                                    </li>
+                                                `)
                                 form.find('.preview-image-gallery .single-image').remove()
                                 form.find('.preview-image-gallery input[type=file]').remove()
                                 fetchHistoryData({
@@ -365,7 +369,7 @@
                                 })
                             }
         @* alert('Data successfully inserted') *@
-                            },
+                                        },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('error submitting the form')
@@ -400,6 +404,12 @@
                     }
                 });
             }
+        }
+
+        function printForm(el){
+            const form = $(el).closest('form.inspection-form')
+            const id = form.find('#data-id').val()
+            window.open('@urlinspectionprint/' + id, '_blank');
         }
 
         function fetchAssetData({ id, counter }) {
@@ -444,13 +454,13 @@
                     let galleryHtml = ''
                     data.inspectionFiles.forEach(i => {
                         galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                                <div class="single-image" data-identifier="gallery-${i.id}">
-                                    <img src="/${i.filePath}"">
-                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                        <i class="fa-solid fa-xmark"></i>
-                                    </div>
-                                </div>
-                                `
+                                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                                <img src="/${i.filePath}"">
+                                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </div>
+                                            </div>
+                                            `
                     })
 
                     //fill image
@@ -512,6 +522,10 @@
 
             } else {
                 name = `New Inspection ${name}`
+            }
+            if ($('.tab-pane[equipment-id="' + equipmentId + '"]').length > 0) {
+                alert('This equipment already exist in the tab');
+                return;
             }
 
             let tabheadercontainer = $('#inspectiontabheader');

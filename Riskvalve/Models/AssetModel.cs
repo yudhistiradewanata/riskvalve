@@ -12,6 +12,7 @@ public class AssetContext : DbContext
     public DbSet<FluidPhaseModel> FluidPhase { get; set; }
     public DbSet<ToxicOrFlamableFluidModel> ToxicOrFlamableFluid { get; set; }
     public DbSet<UserModel> User { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
         options
             .UseSqlServer(Environment.GetConnectionStringDB())
@@ -71,6 +72,7 @@ public class AssetModel : AssetDB
     public InspectionModel? lastInspection { get; set; }
     public MaintenanceModel? lastMaintenance { get; set; }
     public AssessmentModel? lastAssessment { get; set; }
+
     public AssetModel GetAssetModel(int id)
     {
         AssetModel asset = new();
@@ -143,6 +145,11 @@ public class AssetModel : AssetDB
                         .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
                         .FirstOrDefault()
                         .ToxicOrFlamableFluid,
+                    AssetName = a.AssetName,
+                    CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
+                    Status = a.Status,
+                    UsageType = a.UsageType,
+                    Actuation = a.Actuation,
                     IsDeleted = a.IsDeleted,
                     CreatedBy = a.CreatedBy,
                     CreatedAt = a.CreatedAt,
@@ -242,6 +249,11 @@ public class AssetModel : AssetDB
                         .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
                         .FirstOrDefault()
                         .ToxicOrFlamableFluid,
+                    AssetName = a.AssetName,
+                    CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
+                    Status = a.Status,
+                    UsageType = a.UsageType,
+                    Actuation = a.Actuation,
                     lastInspection = new InspectionModel().GetLastAssetInspection(a.Id),
                     lastMaintenance = new MaintenanceModel().GetLastAssetMaintenance(a.Id),
                     lastAssessment = new AssessmentModel().GetLastAssetAssessment(a.Id),
@@ -333,6 +345,11 @@ public class AssetModel : AssetDB
             oldAsset.ServiceFluid = asset.ServiceFluid;
             oldAsset.FluidPhaseID = asset.FluidPhaseID;
             oldAsset.ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID;
+            oldAsset.AssetName = asset.AssetName;
+            oldAsset.CostOfReplacementAndRepair = asset.CostOfReplacementAndRepair;
+            oldAsset.Status = asset.Status;
+            oldAsset.UsageType = asset.UsageType;
+            oldAsset.Actuation = asset.Actuation;
             context.Asset.Update(oldAsset);
             context.SaveChanges();
         }
@@ -432,7 +449,12 @@ public class AssetModel : AssetDB
                     {
                         foreach (var toxicOrFlamableFluid in toxicOrFlamableFluidList)
                         {
-                            if (toxicOrFlamableFluid.ToxicOrFlamableFluid.Trim().ToLower().Equals(value))
+                            if (
+                                toxicOrFlamableFluid
+                                    .ToxicOrFlamableFluid.Trim()
+                                    .ToLower()
+                                    .Equals(value)
+                            )
                             {
                                 mappedValue = toxicOrFlamableFluid.Id.ToString();
                                 break;
@@ -503,96 +525,96 @@ public class AssetModel : AssetDB
     private string MapHeader(string name)
     {
         string result = "";
-        switch (name)
+        switch (name.ToLower())
         {
-            case "Valve Tag No.":
+            case "valve tag no.":
                 result = "TagNo";
                 break;
-            case "Equipment Name":
+            case "equipment name":
                 result = "AssetName";
                 break;
-            case "Platform":
+            case "platform":
                 result = "PlatformID";
                 break;
-            case "Parent Equipment No.":
+            case "parent equipment no.":
                 result = "ParentEquipmentNo";
                 break;
-            case "Parent Equipment \nDescription":
+            case "parent equipment \ndescription":
                 result = "ParentEquipmentDescription";
                 break;
-            case "Installation Date\n(dd/mm/yyyy)":
+            case "installation date\n(dd/mm/yyyy)":
                 result = "InstallationDate";
                 break;
-            case "PID. No.":
+            case "pid. no.":
                 result = "PIDNo";
                 break;
-            case "Valve Type":
+            case "valve type":
                 result = "ValveTypeID";
                 break;
-            case "Manufacturer":
+            case "manufacturer":
                 result = "Manufacturer";
                 break;
-            case "Body Material":
+            case "body material":
                 result = "BodyMaterial";
                 break;
-            case "Body Model":
+            case "body model":
                 result = "BodyModel";
                 break;
-            case "End Connection":
+            case "end connection":
                 result = "EndConnection";
                 break;
-            case "Serial Number":
+            case "serial number":
                 result = "SerialNo";
                 break;
-            case "Usage Type":
+            case "usage type":
                 result = "UsageType";
                 break;
-            case "Size":
+            case "size":
                 result = "Size";
                 break;
-            case "Class/Rating":
+            case "class/rating":
                 result = "ClassRating";
                 break;
-            case "Service Fluid":
+            case "service fluid":
                 result = "ServiceFluid";
                 break;
-            case "Fluid Phase":
+            case "fluid phase":
                 result = "FluidPhaseID";
                 break;
-            case "Flow Rate\n(m3/hr)":
+            case "flow rate\n(m3/hr)":
                 result = "FlowRate";
                 break;
-            case "Operating Temperature\n( °F)":
+            case "operating temperature\n( °f)":
                 result = "OperatingTemperature";
                 break;
-            case "Operating Pressure\n(psig)":
+            case "operating pressure\n(psig)":
                 result = "OperatingPressure";
                 break;
-            case "Toxic or Flamable Fluid?\n(Y/N)":
+            case "toxic or flamable fluid?\n(y/n)":
                 result = "ToxicOrFlamableFluidID";
                 break;
-            case "Cost of Replacement and repair (USD)":
+            case "cost of replacement and repair (usd)":
                 result = "CostOfReplacementAndRepair";
                 break;
-            case "Actuation":
+            case "actuation":
                 result = "Actuation";
                 break;
-            case "Actuator Mfg.":
+            case "actuator mfg.":
                 result = "ActuatorMfg";
                 break;
-            case "Actuator Serial No.":
+            case "actuator serial no.":
                 result = "ActuatorSerialNo";
                 break;
-            case "Actuator Type/Model":
+            case "actuator type/model":
                 result = "ActuatorTypeModel";
                 break;
-            case "Actuator Power":
+            case "actuator power":
                 result = "ActuatorPower";
                 break;
-            case "Manual Override":
+            case "manual override":
                 result = "ManualOverrideID";
                 break;
-            case "Status":
+            case "status":
                 result = "Status";
                 break;
         }

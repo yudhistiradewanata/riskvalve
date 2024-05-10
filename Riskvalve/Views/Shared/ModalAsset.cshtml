@@ -34,21 +34,21 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-classrating">Class Rating</label>
-                                <input id="field-asset-classrating" name="classrating" type="text"
-                                    class="form-control" required/>
+                                <input id="field-asset-classrating" name="classrating" type="text" class="form-control"
+                                    required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-tagno">Tag No</label>
-                                <input id="field-asset-tagno" name="tagno" type="text" class="form-control" required/>
+                                <input id="field-asset-tagno" name="tagno" type="text" class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-parentequipmentno">Parent Equipment No</label>
                                 <input id="field-asset-parentequipmentno" name="parentequipmentno" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -67,7 +67,7 @@
                             <div class="form-group">
                                 <label for="field-asset-parentequipmentdescription">Parent Equipment Description</label>
                                 <input id="field-asset-parentequipmentdescription" name="parentequipmentdescription"
-                                    type="text" class="form-control" required/>
+                                    type="text" class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -86,19 +86,54 @@
                             <div class="form-group">
                                 <label for="field-asset-installationdate">Installation Date</label>
                                 <input id="field-asset-installationdate" name="installationdate" type="text"
-                                    class="form-control datepicker" required/>
+                                    class="form-control datepicker" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-size">Size (inch)</label>
-                                <input id="field-asset-size" name="size" type="text" class="form-control" required/>
+                                <input id="field-asset-size" name="size" type="text" class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-pidno">PID Number</label>
-                                <input id="field-asset-pidno" name="pidno" type="text" class="form-control" required/>
+                                <input id="field-asset-pidno" name="pidno" type="text" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-asset-equipmentname">Equipment Name</label>
+                                <input id="field-asset-equipmentname" name="equipmentname" type="text"
+                                    class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-asset-replacementcost">Cost of Replacement & Repair (USD)</label>
+                                <input id="field-asset-replacementcost" name="replacementcost" type="text"
+                                    class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-asset-status">Status</label>
+                                <input id="field-asset-status" name="status" type="text" class="form-control"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-asset-usagetype">Usage Type</label>
+                                <input id="field-asset-usagetype" name="usagetype" type="text" class="form-control"
+                                    required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="field-asset-actuation">Actuation</label>
+                                <input id="field-asset-actuation" name="actuation" type="text" class="form-control"
+                                    required />
                             </div>
                         </div>
                     </div>
@@ -110,13 +145,14 @@
                             <div class="form-group">
                                 <label for="field-asset-manufacturer">Manufacturer</label>
                                 <input id="field-asset-manufacturer" name="manufacturer" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-manualoverride">Manual Override</label>
-                                <select id="field-asset-manualoverride" name="manualoverride" class="form-control" required>
+                                <select id="field-asset-manualoverride" name="manualoverride" class="form-control"
+                                    required>
                                     <option value="">Select Manual Override</option>
                                     @foreach (var item in manualOverrideList)
                                     {
@@ -128,55 +164,57 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-bodymodel">Body Model</label>
-                                <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control" required/>
+                                <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control"
+                                    required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatormfg">Actuator Mfg</label>
-                                <input id="field-asset-actuatormfg" name="actuatormfg" type="text"
-                                    class="form-control" required/>
+                                <input id="field-asset-actuatormfg" name="actuatormfg" type="text" class="form-control"
+                                    required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-bodymaterial">Body Material</label>
                                 <input id="field-asset-bodymaterial" name="bodymaterial" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatorserialno">Actuator Serial No.</label>
                                 <input id="field-asset-actuatorserialno" name="actuatorserialno" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-endconnection">End Connection</label>
                                 <input id="field-asset-endconnection" name="endconnection" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatortypemodel">Actuator Type/Model</label>
                                 <input id="field-asset-actuatortypemodel" name="actuatortypemodel" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-serialno">Serial No</label>
-                                <input id="field-asset-serialno" name="serialno" type="text" class="form-control" required/>
+                                <input id="field-asset-serialno" name="serialno" type="text" class="form-control"
+                                    required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuatorpower">Actuator Power</label>
                                 <input id="field-asset-actuatorpower" name="actuatorpower" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                     </div>
@@ -188,21 +226,21 @@
                             <div class="form-group">
                                 <label for="field-asset-operatingtemperature">Operating Temperature (F)</label>
                                 <input id="field-asset-operatingtemperature" name="operatingtemperature" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-servicefluid">Service Fluid</label>
                                 <input id="field-asset-servicefluid" name="servicefluid" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-operatingpressure">Operating Pressure (Psig)</label>
                                 <input id="field-asset-operatingpressure" name="operatingpressure" type="text"
-                                    class="form-control" required/>
+                                    class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -220,7 +258,8 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-flowrate">Flow Rate (m3/hr)</label>
-                                <input id="field-asset-flowrate" name="flowrate" type="text" class="form-control" required/>
+                                <input id="field-asset-flowrate" name="flowrate" type="text" class="form-control"
+                                    required />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -250,7 +289,7 @@
 
 @Html.PartialSectionScripts(
 @<script>
-    function editAction () {
+    function editAction() {
         $('.form-control').val('');
         $('.form-control').removeClass('error');
         var mode = $(this).attr('attr-mode');
@@ -265,6 +304,7 @@
                 type: 'GET',
                 data: { id: id },
                 success: function (data) {
+                    console.log(data);
                     $('#field-asset-mode').val('update');
                     $('#field-asset-id').val(data.id);
                     $('#field-asset-id-show').val(data.id);
@@ -293,6 +333,11 @@
                     $('#field-asset-fluidphase').val(data.fluidPhaseID);
                     $('#field-asset-flowrate').val(data.flowRate);
                     $('#field-asset-toxicorflamablefluid').val(data.toxicOrFlamableFluidID);
+                    $('#field-asset-equipmentname').val(data.assetName);
+                    $('#field-asset-replacementcost').val(data.costOfReplacementAndRepair);
+                    $('#field-asset-status').val(data.status);
+                    $('#field-asset-usagetype').val(data.usageType);
+                    $('#field-asset-actuation').val(data.actuation);
                     $('#btn-asset-modal-delete').show();
                     $('#addAssetModal').modal('show');
                 }
@@ -303,7 +348,7 @@
 
     $(document).ready(function () {
         $('#btn-asset-modal-save').click(function () {
-            if($('#asset-form').valid()) {    
+            if ($('#asset-form').valid()) {
                 var mode = $('#field-asset-mode').val();
                 var classrating = $('#field-asset-classrating').val();
                 var tagno = $('#field-asset-tagno').val();
@@ -330,6 +375,11 @@
                 var fluidphase = $('#field-asset-fluidphase').val();
                 var flowrate = $('#field-asset-flowrate').val();
                 var toxicorflamablefluid = $('#field-asset-toxicorflamablefluid').val();
+                var assetname = $('#field-asset-equipmentname').val();
+                var replacementcost = $('#field-asset-replacementcost').val();
+                var status = $('#field-asset-status').val();
+                var usagetype = $('#field-asset-usagetype').val();
+                var actuation = $('#field-asset-actuation').val();
                 if (mode == 'create') {
                     $.ajax({
                         url: '@urladdasset',
@@ -359,10 +409,15 @@
                             flowrate: flowrate,
                             servicefluid: servicefluid,
                             fluidphaseid: fluidphase,
-                            toxicorflamablefluidid: toxicorflamablefluid
+                            toxicorflamablefluidid: toxicorflamablefluid,
+                            assetname: assetname,
+                            costofreplacementandrepair: replacementcost,
+                            status: status,
+                            usagetype: usagetype,
+                            actuation: actuation
                         },
                         success: function (data) {
-                            if(data.Status == 'Success'){
+                            if (data.Status == 'Success') {
                                 location.reload();
                             } else {
                                 alert(data.Message);
@@ -400,7 +455,12 @@
                             flowrate: flowrate,
                             servicefluid: servicefluid,
                             fluidphaseid: fluidphase,
-                            toxicorflamablefluidid: toxicorflamablefluid
+                            toxicorflamablefluidid: toxicorflamablefluid,
+                            assetname: assetname,
+                            costofreplacementandrepair: replacementcost,
+                            status: status,
+                            usagetype: usagetype,
+                            actuation: actuation
                         },
                         success: function (data) {
                             location.reload();
