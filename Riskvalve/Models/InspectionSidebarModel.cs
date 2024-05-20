@@ -44,7 +44,7 @@ public class InspectionSidebarHistory
                             Id = p.Id,
                             Name = p.Platform,
                             Child = context
-                                .Asset.Where(asset => asset.PlatformID == p.Id)
+                                .Asset.Where(asset => asset.PlatformID == p.Id && asset.IsDeleted == false)
                                 .Select(asset => new InspectionSidebarModel
                                 {
                                     Id = asset.Id,

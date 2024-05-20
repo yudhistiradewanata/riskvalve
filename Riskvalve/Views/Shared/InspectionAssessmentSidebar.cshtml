@@ -1,6 +1,7 @@
 @{
     var inspectionSidebar = ViewData["InspectionSidebar"] as List<InspectionSidebarModel>;
     var pageType = ViewData["PageType"] as string;
+    var urldeleteasset = Url.Action("DeleteAsset", "AssetRegister");
 }
 
 <aside class="main-sidebar">
@@ -8,7 +9,8 @@
         <section class="sidebar inspection-sidebar" id="tree-menu">
             <form class="form-inline" role="form">
                 <div class="position-relative">
-                    <input type="text" class="form-control" id="searchForm" placeholder="Search Area / Platform / Asset">
+                    <input type="text" class="form-control" id="searchForm"
+                        placeholder="Search Area / Platform / Asset">
                     <div class="search-button">
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
@@ -33,7 +35,8 @@
                                                 <li class="treeview">
                                                     <a class="sidebartreea" attr-sidebar-level="3" attr-find-inspection="@item.Name"
                                                         attr-find-platform="@platform.Name"
-                                                        attr-find-equipment="@equipment.Name">@equipment.Name</a>
+                                                        attr-find-equipment="@equipment.Name">@equipment.Name <i class="fa fa-trash"
+                                                            onclick="deleteAsset(@equipment.Id, '@equipment.Name')" style="color: red;"></i></a>
                                                     <ul class="treeview-menu" equipment-id="@equipment.Id">
                                                         <li class="treeview">
                                                             <a class="btn-add-new-inspection" attr-id="@equipment.Id"
@@ -45,7 +48,8 @@
                                                         @foreach (var inspection in equipment.Child)
                                                         {
                                                             <li class="treeview">
-                                                                <a class="btn-add-new-inspection" history-button attr-id="@equipment.Id" attr-inspection-id="@inspection.Id"
+                                                                <a class="btn-add-new-inspection" history-button attr-id="@equipment.Id"
+                                                                    attr-inspection-id="@inspection.Id"
                                                                     attr-name="@equipment.Name @inspection.Name" attr-sidebar-level="4"
                                                                     attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
                                                                     attr-find-equipment="@equipment.Name"
@@ -70,8 +74,22 @@
 
 @Html.PartialSectionScripts(
 @<script>
+    function deleteAsset(idx, name) {
+        var id = idx;
+        if (confirm('Are you sure you want to delete this asset  ' + name + '?')) {
+            $.ajax({
+                url: '@urldeleteasset',
+                type: 'POST',
+                data: { id: id },
+                success: function (data) {
+                    location.reload();
+                }
+            });
+        }
+    }
+
     function close_inspection(ctr, force) {
-        if(force || confirm('Are you sure you want to close this assessment?')) {
+        if (force || confirm('Are you sure you want to close this assessment?')) {
             $('#inspectionheader' + ctr).remove();
             $('#inspection' + ctr).remove();
             moveToLastTab()
@@ -89,7 +107,7 @@
             $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="' + i + '"]').each(function () {
                 var parent = $(this).parent();
                 parent.hide();
-            
+
             });
         }
     }
@@ -116,7 +134,7 @@
                 $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="' + i + '"]').each(function () {
                     var parent = $(this).parent();
                     parent.hide();
-                
+
                 });
             }
             var level = $(this).attr('attr-sidebar-level');
@@ -126,7 +144,7 @@
             let selectedEl = $(this)
             selectedEl.toggleClass('child-open')
             const isChildOpening = selectedEl.hasClass('child-open')
-            if(!isChildOpening) {
+            if (!isChildOpening) {
                 selectedEl.closest('.treeview').find('a').removeClass('child-open')
             } else {
                 selectedEl.closest('.treeview').siblings().each(function () {
@@ -155,7 +173,7 @@
                 });
                 $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
                     var parent = $(this).parent();
-                    if ($(this).attr('attr-find-equipment') != level_3  || !isChildOpening) {
+                    if ($(this).attr('attr-find-equipment') != level_3 || !isChildOpening) {
                         parent.hide();
                     }
                     else {

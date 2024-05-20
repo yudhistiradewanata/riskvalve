@@ -1,3 +1,7 @@
+.highcharts-credits {
+  display: none;
+}
+
 body {
   /* padding-bottom: 61px !important; */
   color: #333;
