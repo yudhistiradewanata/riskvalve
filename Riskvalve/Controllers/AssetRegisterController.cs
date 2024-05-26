@@ -52,7 +52,7 @@ public class AssetRegisterController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateArea()
+    public ResultModel UpdateArea()
     {
         AreaDB areaModel =
             new()
@@ -61,12 +61,12 @@ public class AssetRegisterController : Controller
                 BusinessArea = Request.Form["BusinessArea"]
             };
         AreaModel area = new();
-        area.UpdateArea(areaModel);
-        return RedirectToAction("Area");
+        ResultModel result = area.UpdateArea(areaModel);
+        return result;
     }
 
     [HttpPost]
-    public IActionResult AddArea()
+    public ResultModel AddArea()
     {
         AreaDB areaModel =
             new()
@@ -76,12 +76,12 @@ public class AssetRegisterController : Controller
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
         AreaModel area = new();
-        area.AddArea(areaModel);
-        return RedirectToAction("Area");
+        ResultModel result = area.AddArea(areaModel);
+        return result;
     }
 
     [HttpPost]
-    public IActionResult DeleteArea()
+    public ResultModel DeleteArea()
     {
         AreaModel areaModel = new();
         int id = Convert.ToInt32(Request.Form["Id"]);
@@ -93,8 +93,8 @@ public class AssetRegisterController : Controller
                 DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                 DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        areaModel.DeleteArea(areaToDelete);
-        return RedirectToAction("Area");
+        ResultModel result = areaModel.DeleteArea(areaToDelete);
+        return result;
     }
 
     public IActionResult Platform()
@@ -145,7 +145,7 @@ public class AssetRegisterController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdatePlatform()
+    public ResultModel UpdatePlatform()
     {
         PlatformModel platformModel = new();
         PlatformDB platformDb =
@@ -156,12 +156,12 @@ public class AssetRegisterController : Controller
                 Platform = Request.Form["Platform"],
                 Code = Request.Form["Code"]
             };
-        platformModel.UpdatePlatform(platformDb);
-        return RedirectToAction("Platform");
+        ResultModel result = platformModel.UpdatePlatform(platformDb);
+        return result;
     }
 
     [HttpPost]
-    public IActionResult AddPlatform()
+    public ResultModel AddPlatform()
     {
         PlatformModel platformModel = new();
         PlatformDB platformDb =
@@ -173,12 +173,12 @@ public class AssetRegisterController : Controller
                 CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        platformModel.AddPlatform(platformDb);
-        return RedirectToAction("Platform");
+        ResultModel result = platformModel.AddPlatform(platformDb);
+        return result;
     }
 
     [HttpPost]
-    public IActionResult DeletePlatform()
+    public ResultModel DeletePlatform()
     {
         PlatformModel platformModel =
             new()
@@ -188,8 +188,8 @@ public class AssetRegisterController : Controller
                 DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                 DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        platformModel.DeletePlatform(platformModel);
-        return RedirectToAction("Platform");
+        ResultModel result = platformModel.DeletePlatform(platformModel);
+        return result;
     }
 
     public IActionResult Asset()
@@ -366,7 +366,7 @@ public class AssetRegisterController : Controller
     }
 
     [HttpPost]
-    public IActionResult DeleteAsset()
+    public ResultModel DeleteAsset()
     {
         AssetModel assetModel =
             new()
@@ -376,8 +376,8 @@ public class AssetRegisterController : Controller
                 DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                 DeletedAt = DateTime.Now.ToString(Environment.GetDateFormatString())
             };
-        assetModel.DeleteAsset(assetModel);
-        return RedirectToAction("Asset");
+        ResultModel result = assetModel.DeleteAsset(assetModel);
+        return result;
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

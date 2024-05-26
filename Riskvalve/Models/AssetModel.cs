@@ -7,6 +7,9 @@ public class AssetContext : DbContext
     public DbSet<AssetDB> Asset { get; set; }
     public DbSet<PlatformDB> Platform { get; set; }
     public DbSet<AreaModel> Area { get; set; }
+    public DbSet<AssessmentModel> Assessment { get; set; }
+    public DbSet<InspectionModel> Inspection { get; set; }
+    public DbSet<MaintenanceModel> Maintenance { get; set; }
     public DbSet<ValveTypeModel> ValveType { get; set; }
     public DbSet<ManualOverrideModel> ManualOverride { get; set; }
     public DbSet<FluidPhaseModel> FluidPhase { get; set; }
@@ -355,16 +358,48 @@ public class AssetModel : AssetDB
         }
     }
 
-    public void DeleteAsset(AssetDB asset)
+    public ResultModel DeleteAsset(AssetDB asset)
     {
         using (var context = new AssetContext())
         {
+            int inspectionCount = context.Inspection
+                .Where(i => i.AssetID == asset.Id && i.IsDeleted == false)
+                .Count();
+            int maintenanceCount = context.Maintenance
+                .Where(m => m.AssetID == asset.Id && m.IsDeleted == false)
+                .Count();
+            int assessmentCount = context.Assessment
+                .Where(a => a.AssetID == asset.Id && a.IsDeleted == false)
+                .Count();
+            if (inspectionCount > 0 || maintenanceCount > 0 || assessmentCount > 0){
+                string message = "Asset cannot be deleted because it has ";
+                if(inspectionCount > 0){
+                    message += inspectionCount + " related inspection(s), ";
+                }
+                if(maintenanceCount > 0){
+                    message += maintenanceCount + " related maintenance(s), ";
+                }
+                if(assessmentCount > 0){
+                    message += assessmentCount + " related assessment(s), ";
+                }
+                message = message.Substring(0, message.Length - 2);
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = message
+                };
+            }
             AssetDB oldAsset = context.Asset.Find(asset.Id);
             oldAsset.IsDeleted = true;
             oldAsset.DeletedBy = asset.DeletedBy;
             oldAsset.DeletedAt = asset.DeletedAt;
             context.Asset.Update(oldAsset);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Asset deleted successfully"
+            };
         }
     }
 

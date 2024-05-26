@@ -11,7 +11,7 @@
 
     var IsValveRepairedModel = new IsValveRepairedModel();
     var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
-    var baseurl = Url.Action("","");
+    var baseurl = Url.Action("", "");
     var urlupdatemainenance = Url.Action("UpdateMaintenance", "Maintenance");
     var urladdmainenance = Url.Action("AddMaintenance", "Maintenance");
     var urldeletemainenance = Url.Action("DeleteMaintenance", "Maintenance");
@@ -25,7 +25,8 @@
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <partial name="InspectionAssessmentSidebar" />
         </div>
-        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image"
+            style="background-image:url('@baseurl/lib/images/u45.png')">
             <div>
                 <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                     <li class="nav-item">
@@ -154,7 +155,7 @@
                                             <div class="form-group ">
                                                 <label for="field-maintenance-date">Maintenance Date</label>
                                                 <input id="field-maintenance-date" type="text"
-                                                    class="form-control datepicker" name="MaintenanceDate" required/>
+                                                    class="form-control datepicker" name="MaintenanceDate" required />
                                             </div>
                                             <div class="form-group ">
                                                 <label for="field-maintenance-repaired">Is Valve Repaired</label>
@@ -187,8 +188,8 @@
                                         <div class="box-footer">
                                             <button type="button" class="btn submit-button form-submit" id="btn-submit"
                                                 onclick="submitForm(this)">Save</button>
-                                            <button type="button" class="btn print-button form-submit"
-                                                id="btn-submit" onclick="printForm(this)">Print</button>
+                                            <button type="button" class="btn print-button form-submit" id="btn-submit"
+                                                onclick="printForm(this)">Print</button>
                                             <button type="button" class="btn delete-button form-submit" id="btn-submit"
                                                 onclick="deleteForm(this)">Delete</button>
                                         </div>
@@ -210,9 +211,9 @@
         const assetIdParam = Number(urlParams.get('assetid'));
         $(document).ready(function () {
             $('.btn-add-new-inspection').click(addTab);
-            if(idParam) {
-                $('.btn-add-new-inspection[attr-inspection-id='+idParam+']').trigger('click')
-            } else if(assetIdParam) {
+            if (idParam) {
+                $('.btn-add-new-inspection[attr-inspection-id=' + idParam + ']').trigger('click')
+            } else if (assetIdParam) {
                 $('.btn-add-new-inspection[attr-id=' + assetIdParam + ']').first().trigger('click')
             }
         });
@@ -228,7 +229,7 @@
             const ctr = $(el).closest('.tab-pane').attr('tab-num')
             const nativeForm = form[0]
             const formData = new FormData(nativeForm);
-            if(form.valid()) {
+            if (form.valid()) {
                 if (form.hasClass('history-form')) {
                     // update
                     $.ajax({
@@ -262,24 +263,24 @@
                                 var res = JSON.parse(result.MaintenanceData)
                                 form.addClass('history-form')
                                 // add menu to tree
-                                @* console.log(equipmentId) *@
-                                @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
-                                $('ul[equipment-id="' + equipmentId + '"]').append(`
-                                    <li class="treeview">
-                                        <a class="btn-add-new-inspection" history-button="" 
-                                        attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                        attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
-                                        attr-sidebar-level="4" 
-                                        attr-find-inspection="${res.Asset.BusinessArea}" 
-                                        attr-find-platform="${res.Asset.Platform}" 
-                                        attr-find-equipment="${res.Asset.TagNo}" 
-                                        attr-find-imr="NEW"
-                                        onclick="addTab.apply(this)"
-                                        >
-                                            ${res.MaintenanceDate}
-                                        </a>
-                                    </li>
-                                `)
+        @* console.log(equipmentId) *@
+        @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
+                                    $('ul[equipment-id="' + equipmentId + '"]').append(`
+                                        <li class="treeview">
+                                            <a class="btn-add-new-inspection" history-button="" 
+                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                            attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
+                                            attr-sidebar-level="4" 
+                                            attr-find-inspection="${res.Asset.BusinessArea}" 
+                                            attr-find-platform="${res.Asset.Platform}" 
+                                            attr-find-equipment="${res.Asset.TagNo}" 
+                                            attr-find-imr="NEW"
+                                            onclick="addTab.apply(this)"
+                                            >
+                                                ${res.MaintenanceDate}
+                                            </a>
+                                        </li>
+                                    `)
 
                                 form.find('.preview-image-gallery .single-image').remove()
                                 form.find('.preview-image-gallery input[type=file]').remove()
@@ -288,8 +289,8 @@
                                     counter: ctr
                                 })
                             }
-                            @* alert('Data successfully inserted') *@
-                        },
+        @* alert('Data successfully inserted') *@
+                            },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('error submitting the form')
@@ -326,7 +327,26 @@
             }
         }
 
-        function printForm(el){
+        function deleteFromTab(id, name) {
+            if (confirm('Are you sure you want to delete ' + name + '?')) {
+                $.ajax({
+                    url: '@urldeletemainenance',
+                    type: 'POST', // or 'GET' depending on your form method
+                    data: {
+                        Id: id
+                    },
+                    success: function (response) {
+                        alert('Data successfully deleted')
+                        $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
+                    },
+                    error: function (xhr, status, error) {
+                        alert('Error deleting data')
+                    }
+                });
+            }
+        }
+
+        function printForm(el) {
             const form = $(el).closest('form.inspection-form')
             const id = form.find('#data-id').val()
             window.open('@urlmaintenanceprint/' + id, '_blank');
@@ -368,13 +388,13 @@
                     let galleryHtml = ''
                     data.maintenanceFiles.forEach(i => {
                         galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                            <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}"">
-                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                    <i class="fa-solid fa-xmark"></i>
+                                <div class="single-image" data-identifier="gallery-${i.id}">
+                                    <img src="/${i.filePath}"">
+                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            `
+                                `
                     })
 
                     //fill image
@@ -430,22 +450,25 @@
             const equipmentId = id
             let isHistory = false
             let name = $(this).attr('attr-name');
+            let tabInspectionId = 0
             if ($(this).attr('attr-inspection-id')) {
                 isHistory = true
                 id = $(this).attr('attr-inspection-id')
-
+                tabInspectionId = id
             } else {
                 name = `New Maintenance ${name}`
             }
-            if($('.tab-pane[equipment-id="'+equipmentId+'"]').length > 0){
-                alert('This equipment already exist in the tab');
-                return;
+            if (tabInspectionId > 0) {
+                if ($('.tab-pane[tab-inspection-id="' + tabInspectionId + '"]').length > 0) {
+                    alert('This maintenance already exist in the tab');
+                    return;
+                }
             }
 
             let tabheadercontainer = $('#inspectiontabheader');
             let tabcontentcontainer = $('#tabcontentcontainer');
             tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection' + ctr + '" type="button" role="tab" tab-num="' + ctr + '">' + name + ' <button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
-            tabcontentcontainer.append('<div class="tab-pane" equipment-id="' + equipmentId + '" id="inspection' + ctr + '" tab-num="' + ctr + '">' + template_inspection_html + '</div>');
+            tabcontentcontainer.append('<div class="tab-pane" tab-inspection-id="' + tabInspectionId + '" equipment-id="' + equipmentId + '" id="inspection' + ctr + '" tab-num="' + ctr + '">' + template_inspection_html + '</div>');
             let tabcontent = tabcontentcontainer.find('.form-control');
             tabcontent.each(function () {
                 let name = $(this).attr('id') + ctr;

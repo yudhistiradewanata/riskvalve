@@ -56,7 +56,7 @@ public class HomeController : Controller
     }
 
     [HttpGet]
-    public IActionResult Detail()
+    public IActionResult _Detail_BAK()
     {
         UserModel login = new();
         if (!login.isLogin(HttpContext))
@@ -97,6 +97,34 @@ public class HomeController : Controller
 
         List<AreaModel> areaList = new AreaModel().GetAreaList();
         ViewData["AreaList"] = areaList;
+        return View();
+    }
+    public IActionResult Detail()
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect(Environment.app_path+"/Login/Index");
+        }
+        else
+        {
+            TempData["Message"] = null;
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+            if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
+            {
+                TempData["Message"] = "You are not authorized to access that page";
+                return Redirect(Environment.app_path+"/Home/Index");
+            }
+        }
+        List<AreaModel> areaList = new AreaModel().GetAreaList();
+        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentList();
+        ViewData["AreaList"] = areaList;
+        ViewData["AssessmentList"] = assessmentList;
         return View();
     }
 

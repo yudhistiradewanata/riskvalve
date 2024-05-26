@@ -92,7 +92,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-size">Size (inch)</label>
-                                <input id="field-asset-size" name="size" type="text" class="form-control" required />
+                                <input id="field-asset-size" name="size" type="number" class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
@@ -111,29 +111,46 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-replacementcost">Cost of Replacement & Repair (USD)</label>
-                                <input id="field-asset-replacementcost" name="replacementcost" type="text"
+                                <input id="field-asset-replacementcost" name="replacementcost" type="number"
                                     class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-status">Status</label>
-                                <input id="field-asset-status" name="status" type="text" class="form-control"
-                                    required />
+                                @* <input id="field-asset-status" name="status" type="text" class="form-control"
+                                    required /> *@
+                                <select id="field-asset-status" name="status" class="form-control" required>
+                                    <option value="In-service">In-service</option>
+                                    <option value="Waiting for Refurbishment">Waiting for Refurbishment</option>
+                                    <option value="Spare">Spare</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-usagetype">Usage Type</label>
-                                <input id="field-asset-usagetype" name="usagetype" type="text" class="form-control"
-                                    required />
+                                @* <input id="field-asset-usagetype" name="usagetype" type="text" class="form-control"
+                                    required /> *@
+                                <select id="field-asset-usagetype" name="usagetype" class="form-control" required>
+                                    <option value="Manual Valve">Manual Valve</option>
+                                    <option value="Auto On-Off Valve">Auto On-Off Valve</option>
+                                    <option value="Control Valve">Control Valve</option>
+                                    <option value="PSV/PRV">PSV/PRV</option>
+                                </select>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-actuation">Actuation</label>
-                                <input id="field-asset-actuation" name="actuation" type="text" class="form-control"
-                                    required />
+                                @* <input id="field-asset-actuation" name="actuation" type="text" class="form-control"
+                                    required /> *@
+                                <select id="field-asset-actuation" name="actuation" class="form-control" required>
+                                    <option value="Pneumatic">Pneumatic</option>
+                                    <option value="Hydraulic">Hydraulic</option>
+                                    <option value="Manual">Manual</option>
+                                    <option value="N/A">N/A</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -225,7 +242,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-operatingtemperature">Operating Temperature (F)</label>
-                                <input id="field-asset-operatingtemperature" name="operatingtemperature" type="text"
+                                <input id="field-asset-operatingtemperature" name="operatingtemperature" type="number"
                                     class="form-control" required />
                             </div>
                         </div>
@@ -239,7 +256,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-operatingpressure">Operating Pressure (Psig)</label>
-                                <input id="field-asset-operatingpressure" name="operatingpressure" type="text"
+                                <input id="field-asset-operatingpressure" name="operatingpressure" type="number"
                                     class="form-control" required />
                             </div>
                         </div>
@@ -258,7 +275,7 @@
                         <div class="col-md-6">
                             <div class="form-group">
                                 <label for="field-asset-flowrate">Flow Rate (m3/hr)</label>
-                                <input id="field-asset-flowrate" name="flowrate" type="text" class="form-control"
+                                <input id="field-asset-flowrate" name="flowrate" type="number" class="form-control"
                                     required />
                             </div>
                         </div>
@@ -471,14 +488,21 @@
         });
         $('#btn-asset-modal-delete').click(function () {
             var id = $('#field-asset-id').val();
-            $.ajax({
-                url: '@urldeleteasset',
-                type: 'POST',
-                data: { id: id },
-                success: function (data) {
-                    location.reload();
-                }
-            });
+            if(confirm('are you sure you want to delete this data?')) {
+                $.ajax({
+                    url: '@urldeleteasset',
+                    type: 'POST',
+                    data: { id: id },
+                    success: function (data) {
+                        console.log(data);
+                        if (data.result == 400) {
+                            alert(data.message);
+                        } else {
+                            location.reload();
+                        }
+                    }
+                });
+            }
         });
     });
 </script>

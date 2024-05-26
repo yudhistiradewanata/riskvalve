@@ -5,6 +5,7 @@ namespace Riskvalve.Models;
 
 public class PlatformContext : DbContext
 {
+    public DbSet<AssetDB> Asset { get; set; }
     public DbSet<PlatformDB> Platform { get; set; }
     public DbSet<AreaModel> Area { get; set; }
     public DbSet<UserModel> User { get; set; }
@@ -100,20 +101,47 @@ public class PlatformModel : PlatformDB
         return platformList;
     }
 
-    public void AddPlatform(PlatformDB platform)
+    public ResultModel AddPlatform(PlatformDB platform)
     {
         using (var context = new PlatformContext())
         {
+            PlatformDB plarformCheck = context.Platform
+                .Where(p => p.Platform == platform.Platform && p.AreaID == platform.AreaID && p.IsDeleted == false)
+                .FirstOrDefault();
+            if (plarformCheck != null)
+            {
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Platform already exists"
+                };
+            }
             platform.IsDeleted = false;
             context.Platform.Add(platform);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Platform added successfully"
+            };
         }
     }
 
-    public void UpdatePlatform(PlatformDB platform)
+    public ResultModel UpdatePlatform(PlatformDB platform)
     {
         using (var context = new PlatformContext())
         {
+            PlatformDB plarformCheck = context.Platform
+                .Where(p => p.Platform == platform.Platform && p.AreaID == platform.AreaID && p.IsDeleted == false)
+                .FirstOrDefault();
+            if (plarformCheck != null)
+            {
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Platform already exists"
+                };
+            }
             PlatformDB platformOld = context.Platform.Find(platform.Id);
             platformOld.IsDeleted = false;
             platformOld.AreaID = platform.AreaID;
@@ -121,19 +149,39 @@ public class PlatformModel : PlatformDB
             platformOld.Code = platform.Code;
             context.Platform.Update(platformOld);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Platform updated successfully"
+            };
         }
     }
 
-    public void DeletePlatform(PlatformDB platform)
+    public ResultModel DeletePlatform(PlatformDB platform)
     {
         using (var context = new PlatformContext())
         {
+            int assetCount = context.Asset
+                .Where(a => a.PlatformID == platform.Id && a.IsDeleted == false)
+                .Count();
+            if (assetCount > 0){
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Platform is used by " + assetCount + " asset(s)"
+                };
+            }
             PlatformDB platformOld = context.Platform.Find(platform.Id);
             platformOld.IsDeleted = true;
             platformOld.DeletedBy = platform.DeletedBy;
             platformOld.DeletedAt = platform.DeletedAt;
             context.Platform.Update(platformOld);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Platform deleted successfully"
+            };
         }
     }
 }

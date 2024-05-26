@@ -679,10 +679,6 @@ svg * {
   display: block;
 }
 
-.assessment-form.not-editable .submit-button {
-  display: none;
-}
-
 .assessment-form.not-editable .print-button {
   display: block;
 }
@@ -743,4 +739,8 @@ select.readonly {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
   }
+}
+
+.sidebar-menu-inspection-assessment .fa-trash {
+  cursor: pointer;
 }

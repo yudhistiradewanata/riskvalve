@@ -156,7 +156,12 @@
                                 code: $('#field-platform-code').val()
                             },
                             success: function (data) {
-                                location.reload();
+                                console.log(data);
+                                if (data.result == 400) {
+                                    alert(data.message);
+                                } else {
+                                    location.reload();
+                                }
                             }
                         });
                     } else if (mode == 'update') {
@@ -171,7 +176,12 @@
                                 code: $('#field-platform-code').val()
                             },
                             success: function (data) {
-                                location.reload();
+                                console.log(data);
+                                if (data.result == 400) {
+                                    alert(data.message);
+                                } else {
+                                    location.reload();
+                                }
                             }
                         });
                     }
@@ -179,17 +189,26 @@
             });
             $('#btn-platform-modal-delete').click(function () {
                 var id = $('#field-platform-id').val();
-                $.ajax({
-                    url: '@urldeleteplatform',
-                    type: 'POST',
-                    data: { id: id },
-                    success: function (data) {
-                        location.reload();
-                    }
-                });
+                if(confirm('are you sure you want to delete this data?')) {
+                    $.ajax({
+                        url: '@urldeleteplatform',
+                        type: 'POST',
+                        data: { id: id },
+                        success: function (data) {
+                            console.log(data);
+                            if (data.result == 400) {
+                                alert(data.message);
+                            } else {
+                                location.reload();
+                            }
+                        }
+                    });
+                }
             });
 
-            initDatatable()
+            initDatatable({
+                ordering: true,
+            })
         });
     </script>
 }

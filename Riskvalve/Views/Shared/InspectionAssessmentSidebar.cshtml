@@ -47,13 +47,16 @@
                                                         </li>
                                                         @foreach (var inspection in equipment.Child)
                                                         {
-                                                            <li class="treeview">
+                                                            <li class="">
                                                                 <a class="btn-add-new-inspection" history-button attr-id="@equipment.Id"
                                                                     attr-inspection-id="@inspection.Id"
                                                                     attr-name="@equipment.Name @inspection.Name" attr-sidebar-level="4"
                                                                     attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
                                                                     attr-find-equipment="@equipment.Name"
                                                                     attr-find-imr="NEW">@inspection.Name</a>
+                                                                @* <i class="fa fa-trash"
+                                                                    onclick="deleteFromTab(@inspection.Id, '@inspection.Name')" style="color: red;">
+                                                                </i> *@
                                                             </li>
                                                         }
                                                     </ul>
@@ -82,7 +85,12 @@
                 type: 'POST',
                 data: { id: id },
                 success: function (data) {
-                    location.reload();
+                    console.log(data);
+                    if (data.result == 400) {
+                        alert(data.message);
+                    } else {
+                        location.reload();
+                    }
                 }
             });
         }

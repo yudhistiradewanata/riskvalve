@@ -1,9 +1,10 @@
 @{
-    ViewData["Title"] = "Detail";
-    var assetList = ViewData["assetList"] as List<AssetModel>;
+    ViewData["Title"] = "Assessment Summary";
     var areaList = ViewData["areaList"] as List<AreaModel>;
+    var assessmentList = ViewData["assessmentList"] as List<AssessmentModel>;
+    @* var assessmentListjson = Newtonsoft.Json.JsonConvert.SerializeObject(ViewData); *@
     string urlddlbusinessarea = Url.Action("GetPlatformList", "AssetRegister");
-    string urlbtnfilter = Url.Action("GetAssetList", "AssetRegister");
+    string urlbtnfilter = Url.Action("GetAssessmentList", "Assessment");
 }
 <div class="container-fluid">
     <div class="row">
@@ -12,7 +13,7 @@
         </div>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
             <div class="subheader">
-                <b>Assessment</b>
+                <b>Export Assessment</b>
             </div>
             <div class="content-container">
                 <div class="row ">
@@ -47,87 +48,136 @@
                             </div>
                         </form>
 
-                        <table class="table table-bordered datatable datatable-custom datatable-invert"
-                            style="width: 100%;">
+                        <table class="table table-bordered datatable" style="width: 100%;">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Tag No</th>
-                                    <th>Business Area</th>
+                                    <th>Valve Tag No</th>
+                                    <th>Business Unit Area</th>
                                     <th>Platform</th>
+                                    <th>Parent Equipment No.</th>
                                     <th>Value Type</th>
-                                    <th>Size (inch)</th>
-                                    <th>Rating</th>
-                                    <th>PnID Number</th>
-                                    <th>Parent Equipment No</th>
-                                    <th>Last Inspection Date</th>
-                                    <th>Risk Status</th>
-                                    <th>Time To Action</th>
-                                    <th style="width:300px">Detail</th>
+                                    <th>Parent Equipment Description</th>
+                                    <th>Installation Date (dd/mm/yyyy)</th>
+                                    <th>PID. No.</th>
+                                    <th>Valve Type</th>
+                                    <th>Size</th>
+                                    <th>Class/Rating</th>
+                                    <th>Assessment Date (dd/mm/yyyy)</th>
+                                    <th>Last Inspection Date (dd/mm/yyyy)</th>
+                                    <th>Last Maintenance Date (dd/mm/yyyy)</th>
+                                    <th>Leakage to atmosphere TP1</th>
+                                    <th>Leakage to atmosphere TP2</th>
+                                    <th>Leakage to atmosphere TP3</th>
+                                    <th>Failure of function TP1</th>
+                                    <th>Failure of function TP2</th>
+                                    <th>Failure of function TP3</th>
+                                    <th>Passing across valve TP1</th>
+                                    <th>Passing across valve TP2</th>
+                                    <th>Passing across valve TP3</th>
+                                    <th>Risk TP1</th>
+                                    <th>Risk TP2</th>
+                                    <th>Risk TP3</th>
+                                    <th>Recommendation Action</th>
+                                    <th>Time to Action</th>
+                                    <th>LF1-Leakage to atmophere</th>
+                                    <th>LF1-Failure of function</th>
+                                    <th>LF1-Passing accross valve</th>
+                                    <th>LF2-Leakage to atmophere TP1</th>
+                                    <th>LF2-Failure of function TP1</th>
+                                    <th>LF2-Passing accross valve TP1</th>
+                                    <th>LF2-Leakage to atmophere TP2</th>
+                                    <th>LF2-Failure of function TP2</th>
+                                    <th>LF2-Passing accross valve TP2</th>
+                                    <th>LF2-Leakage to atmophere TP3</th>
+                                    <th>LF2-Failure of function TP3</th>
+                                    <th>LF2-Passing accross valve TP3</th>
+                                    <th>LF3-Inspection Effectiveness</th>
+                                    <th>LF4-Impact of Internal Fluid Impurities</th>
+                                    <th>LF5-Impact of Operating Envelopes</th>
+                                    <th>LF6-Used within OEM Specification</th>
+                                    <th>LF7-Repaired</th>
+                                    <th>CF1-Product loss definition (bbls)</th>
+                                    <th>CF2-HSSE Definision</th>
+                                    <th>LoF Score-Leakage to atmophere TP1</th>
+                                    <th>LoF Score-Failure of function TP1</th>
+                                    <th>LoF Score-Passing accross valve TP1</th>
+                                    <th>LoF Score-Leakage to atmophere TP2</th>
+                                    <th>LoF Score-Failure of function TP2</th>
+                                    <th>LoF Score-Passing accross valve TP2</th>
+                                    <th>LoF Score-Leakage to atmophere TP3</th>
+                                    <th>LoF Score-Failure of function TP3</th>
+                                    <th>LoF Score-Passing accross valve TP3</th>
+                                    <th>CoF Score</th>
                                 </tr>
                             </thead>
                             <tbody id="table-detail">
                                 @{
                                     int ctr = 0;
-                                    if (assetList != null)
+                                    if (assessmentList != null)
                                     {
-                                        foreach (var item in assetList)
+                                        foreach (var item in assessmentList)
                                         {
-                                            var assetID = item.Id;
-                                            var lastInspectionDate = "No inspection history";
-                                            var lastInspectionID = 0;
-                                            var lastMaintenanceID = 0;
-                                            var lastAssessmentID = 0;
-                                            var assessmentTimeToAction = "No assessment history";
-                                            var assessmentRisk = "";
-                                            var assessmentRiskColor = "";
-                                            if (item.lastInspection != null)
-                                            {
-                                                lastInspectionDate = @item.lastInspection.InspectionDate;
-                                                lastInspectionID = @item.lastInspection.Id;
-                                            }
-                                            if (item.lastMaintenance != null)
-                                            {
-                                                lastMaintenanceID = @item.lastMaintenance.Id;
-                                            }
-                                            if (item.lastAssessment != null)
-                                            {
-                                                lastAssessmentID = @item.lastAssessment.Id;
-                                                assessmentTimeToAction = @item.lastAssessment.TPTimeToActionRisk;
-                                                assessmentRisk = @item.lastAssessment.RiskMax;
-                                                assessmentRiskColor = "status-box " + new
-                                                AssessmentModel().GetHeatColor(assessmentRisk);
-                                            }
                                             ctr++;
                                             <tr>
                                                 <td>@ctr</td>
-                                                <td>@item.TagNo</td>
-                                                <td>@item.BusinessArea</td>
-                                                <td>@item.Platform</td>
-                                                <td>@item.ValveType</td>
-                                                <td>@item.Size</td>
-                                                <td>@item.ClassRating</td>
-                                                <td>@item.PIDNo</td>
-                                                <td>@item.ParentEquipmentNo</td>
-                                                <td>@lastInspectionDate</td>
-                                                <td>
-                                                    <div class="risk-status-item">
-                                                        <div class="@assessmentRiskColor"></div>
-                                                        <div>@assessmentRisk</div>
-                                                    </div>
-                                                </td>
-                                                <td>@assessmentTimeToAction</td>
-                                                <td class="nowrap">
-                                                    <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index"
-                                                        asp-route-assetid="@item.Id" asp-route-assessmentid="@lastAssessmentID"
-                                                        target="_blank">Assessment</a>
-                                                    <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index"
-                                                        asp-route-assetid="@item.Id" asp-route-inspectionid="@lastInspectionID"
-                                                        target="_blank">Inspection</a>
-                                                    <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index"
-                                                        asp-route-assetid="@item.Id" asp-route-maintenanceid="@lastMaintenanceID"
-                                                        target="_blank">Maintenance</a>
-                                                </td>
+                                                <td>@item.Asset.TagNo</td>
+                                                <td>@item.Asset.BusinessArea</td>
+                                                <td>@item.Asset.Platform</td>
+                                                <td>@item.Asset.ParentEquipmentNo</td>
+                                                <td>@item.Asset.ValveType</td>
+                                                <td>@item.Asset.ParentEquipmentDescription</td>
+                                                <td>@item.Asset.InstallationDate</td>
+                                                <td>@item.Asset.PIDNo</td>
+                                                <td>@item.Asset.ValveType</td>
+                                                <td>@item.Asset.Size</td>
+                                                <td>@item.Asset.ClassRating</td>
+                                                <td>@item.AssessmentDate</td>
+                                                <td>@item.LastInspectionDate</td>
+                                                <td>@item.LastMaintenanceDate</td>
+                                                <td>@item.TP1A</td>
+                                                <td>@item.TP2A</td>
+                                                <td>@item.TP3A</td>
+                                                <td>@item.TP1B</td>
+                                                <td>@item.TP2B</td>
+                                                <td>@item.TP3B</td>
+                                                <td>@item.TP1C</td>
+                                                <td>@item.TP2C</td>
+                                                <td>@item.TP3C</td>
+                                                <td>@item.TP1Risk</td>
+                                                <td>@item.TP2Risk</td>
+                                                <td>@item.TP3Risk</td>
+                                                <td>@item.RecommendationAction</td>
+                                                <td>@item.TPTimeToActionRisk</td>
+                                                <td>@item.LeakageToAtmosphere</td>
+                                                <td>@item.FailureOfFunction</td>
+                                                <td>@item.PassingAccrosValve</td>
+                                                <td>@item.LeakageToAtmosphereTP1</td>
+                                                <td>@item.LeakageToAtmosphereTP2</td>
+                                                <td>@item.LeakageToAtmosphereTP3</td>
+                                                <td>@item.FailureOfFunctionTP1</td>
+                                                <td>@item.FailureOfFunctionTP2</td>
+                                                <td>@item.FailureOfFunctionTP3</td>
+                                                <td>@item.PassingAccrosValveTP1</td>
+                                                <td>@item.PassingAccrosValveTP2</td>
+                                                <td>@item.PassingAccrosValveTP3</td>
+                                                <td>@item.InspectionEffectiveness</td>
+                                                <td>@item.ImpactOfInternalFluidImpurities</td>
+                                                <td>@item.ImpactOfOperatingEnvelopes</td>
+                                                <td>@item.UsedWithinOEMSpecification</td>
+                                                <td>@item.Repaired</td>
+                                                <td>@item.ProductLossDefinition</td>
+                                                <td>@item.HSSEDefinision</td>
+                                                <td>@item.LoFScoreLeakageToAtmophereTP1</td>
+                                                <td>@item.LoFScoreFailureOfFunctionTP1</td>
+                                                <td>@item.LoFScorePassingAccrosValveTP1</td>
+                                                <td>@item.LoFScoreLeakageToAtmophereTP2</td>
+                                                <td>@item.LoFScoreFailureOfFunctionTP2</td>
+                                                <td>@item.LoFScorePassingAccrosValveTP2</td>
+                                                <td>@item.LoFScoreLeakageToAtmophereTP3</td>
+                                                <td>@item.LoFScoreFailureOfFunctionTP3</td>
+                                                <td>@item.LoFScorePassingAccrosValveTP3</td>
+                                                <td>@item.CoFScore</td>
                                             </tr>
                                         }
                                     }
@@ -139,8 +189,6 @@
         </main>
     </div>
 </div>
-
-<partial name="ModalAsset" />
 
 @section Scripts {
     <script>
@@ -155,26 +203,8 @@
             }
         }
 
-        initDatatable(dataTableOptions)
-
-        function getHeatColor(pos) {
-            var olivePositions = ["1A", "2A", "1B"];
-            var greenPositions = ["3A", "2B", "1C"];
-            var yellowPositions = ["4A", "3B", "3C", "2C", "1D"];
-            var orangePositions = ["5A", "5B", "4B", "4C", "3D", "2D", "2E", "1E"];
-
-            if (olivePositions.includes(pos)) {
-                return "olive";
-            } else if (greenPositions.includes(pos)) {
-                return "green";
-            } else if (yellowPositions.includes(pos)) {
-                return "yellow";
-            } else if (orangePositions.includes(pos)) {
-                return "orange";
-            } else {
-                return "red";
-            }
-        }
+        @* initDatatable(dataTableOptions) *@
+        @* initDatatable() *@
 
         $(document).ready(function () {
             $('#ddlBusinessArea').on('change', function () {
@@ -204,58 +234,77 @@
                         $(".datatable").DataTable().destroy();
                         $('#table-detail').html('');
                         $.each(data, function (i, item) {
-                            var itemid = item.id;
-                            var lastInspectionDate = "No inspection history";
-                            var lastInspectionID = 0;
-                            var lastMaintenanceID = 0;
-                            var lastAssessmentID = 0;
-                            var assessmentTimeToAction = "No assessment history";
-                            var assessmentRisk = "";
-                            var assessmentRiskColor = "";
-                            if (item.lastInspection != null) {
-                                lastInspectionDate = item.lastInspection.inspectionDate;
-                                lastInspectionID = item.lastInspection.id;
-                            }
-                            if (item.lastMaintenance != null) {
-                                lastMaintenanceID = item.lastMaintenance.id;
-                            }
-                            if (item.lastAssessment != null) {
-                                lastAssessmentID = item.lastAssessment.id;
-                                assessmentTimeToAction = item.lastAssessment.tpTimeToActionRisk;
-                                assessmentRisk = item.lastAssessment.riskMax;
-                                assessmentRiskColor = "status-box " + getHeatColor(assessmentRisk);
-                            }
                             var html = `
-                                <tr>
-                                    <td>${i + 1}</td>
-                                    <td>${item.tagNo}</td>
-                                    <td>${item.businessArea}</td>
-                                    <td>${item.platform}</td>
-                                    <td>${item.valveType}</td>
-                                    <td>${item.size}</td>
-                                    <td>${item.classRating}</td>
-                                    <td>${item.pidNo}</td>
-                                    <td>${item.parentEquipmentNo}</td>
-                                    <td>${lastInspectionDate}</td>
-                                    <td>
-                                        <div class="risk-status-item">
-                                            <div class="${assessmentRiskColor}"></div>
-                                            <div>${assessmentRisk}</div>
-                                        </div>
-                                    </td>
-                                    <td>${assessmentTimeToAction}</td>
-                                    <td class="nowrap">
-                                        <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index" asp-route-assetid="${itemid}" asp-route-assessmentid="${lastAssessmentID}" target="_blank">Assessment</a>
-                                        <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index" asp-route-assetid="${itemid}" asp-route-inspectionid="${lastInspectionID}" target="_blank">Inspection</a>
-                                        <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index" asp-route-assetid="${itemid}" asp-route-maintenanceid="${lastMaintenanceID}" target="_blank">Maintenance</a>
-                                    </td>
-                                </tr>`;
+                                    <tr>
+                                        <td>${i + 1}</td>
+                                        <td>${item.asset.tagNo}</td>
+                                        <td>${item.asset.businessArea}</td>
+                                        <td>${item.asset.platform}</td>
+                                        <td>${item.asset.parentEquipmentNo}</td>
+                                        <td>${item.asset.valveType}</td>
+                                        <td>${item.asset.parentEquipmentDescription}</td>
+                                        <td>${item.asset.installationDate}</td>
+                                        <td>${item.asset.pidNo}</td>
+                                        <td>${item.asset.valveType}</td>
+                                        <td>${item.asset.size}</td>
+                                        <td>${item.asset.classRating}</td>
+                                        <td>${item.assessmentDate}</td>
+                                        <td>${item.lastInspectionDate}</td>
+                                        <td>${item.lastMaintenanceDate}</td>
+                                        <td>${item.tp1A}</td>
+                                        <td>${item.tp2A}</td>
+                                        <td>${item.tp3A}</td>
+                                        <td>${item.tp1B}</td>
+                                        <td>${item.tp2B}</td>
+                                        <td>${item.tp3B}</td>
+                                        <td>${item.tp1C}</td>
+                                        <td>${item.tp2C}</td>
+                                        <td>${item.tp3C}</td>
+                                        <td>${item.tp1Risk}</td>
+                                        <td>${item.tp2Risk}</td>
+                                        <td>${item.tp3Risk}</td>
+                                        <td>${item.recommendationAction}</td>
+                                        <td>${item.tpTimeToActionRisk}</td>
+                                        <td>${item.leakageToAtmosphere}</td>
+                                        <td>${item.failureOfFunction}</td>
+                                        <td>${item.passingAccrosValve}</td>
+                                        <td>${item.leakageToAtmosphereTP1}</td>
+                                        <td>${item.leakageToAtmosphereTP2}</td>
+                                        <td>${item.leakageToAtmosphereTP3}</td>
+                                        <td>${item.failureOfFunctionTP1}</td>
+                                        <td>${item.failureOfFunctionTP2}</td>
+                                        <td>${item.failureOfFunctionTP3}</td>
+                                        <td>${item.passingAccrosValveTP1}</td>
+                                        <td>${item.passingAccrosValveTP2}</td>
+                                        <td>${item.passingAccrosValveTP3}</td>
+                                        <td>${item.inspectionEffectiveness}</td>
+                                        <td>${item.impactOfInternalFluidImpurities}</td>
+                                        <td>${item.impactOfOperatingEnvelopes}</td>
+                                        <td>${item.usedWithinOEMSpecification}</td>
+                                        <td>${item.repaired}</td>
+                                        <td>${item.productLossDefinition}</td>
+                                        <td>${item.hsseDefinision}</td>
+                                        <td>${item.loFScoreLeakageToAtmophereTP1}</td>
+                                        <td>${item.loFScoreFailureOfFunctionTP1}</td>
+                                        <td>${item.loFScorePassingAccrosValveTP1}</td>
+                                        <td>${item.loFScoreLeakageToAtmophereTP2}</td>
+                                        <td>${item.loFScoreFailureOfFunctionTP2}</td>
+                                        <td>${item.loFScorePassingAccrosValveTP2}</td>
+                                        <td>${item.loFScoreLeakageToAtmophereTP3}</td>
+                                        <td>${item.loFScoreFailureOfFunctionTP3}</td>
+                                        <td>${item.loFScorePassingAccrosValveTP3}</td>
+                                        <td>${item.coFScore}</td>
+                                    </tr>`
                             $('#table-detail').append(html);
                         });
                         initDatatable(dataTableOptions)
                     }
                 });
             });
+
+            initDatatable({
+                ordering: true,
+            })
         });
 
         $('#btnExcel').on('click', () => {

@@ -2,15 +2,17 @@
 // for details on configuring this project to bundle and minify static web assets.
 
 // Write your JavaScript code.
-function initDatepicker () {
-  $(".datepicker").datepicker({
-    format: "dd-mm-yyyy",
-    autoclose: true,
-    todayHighlight: true,
-  }).on('changeDate', function(e){
-    $(this).removeClass('error');
-    $(this).trigger('change');
-  });;
+function initDatepicker() {
+  $(".datepicker")
+    .datepicker({
+      format: "dd-mm-yyyy",
+      autoclose: true,
+      todayHighlight: true,
+    })
+    .on("changeDate", function (e) {
+      $(this).removeClass("error");
+      $(this).trigger("change");
+    });
 }
 
 $(document).ready(function () {
@@ -18,7 +20,7 @@ $(document).ready(function () {
     console.log("clicked");
   });
 
-  initDatepicker()  
+  initDatepicker();
 });
 
 /*
@@ -32,110 +34,130 @@ function initDefaultDatatable () {
 }
 */
 
-function dataTableSearch (value) {
-  $('input[type=search].dt-input').val(value).trigger('input')
+function dataTableSearch(value) {
+  $("input[type=search].dt-input").val(value).trigger("input");
 }
 
-function refreshDatatableColumn () {
+function refreshDatatableColumn() {
   DataTable.tables({ visible: true, api: true }).columns.adjust();
 }
 
-function initDatatable (options = {}) {
+function initDatatable(options = {}) {
   const defaultLayout = {
     topStart: null,
-    topEnd: 'search',
-    bottomStart: ['paging', 'pageLength'],
-    bottomEnd: 'info'
-}
+    topEnd: "search",
+    bottomStart: ["paging", "pageLength"],
+    bottomEnd: "info",
+  };
   const {
-    selector = '.datatable',
+    selector = ".datatable",
     scrollable = true,
     layout = defaultLayout,
-    paging = true
-  } = options || {}
-  const scrollableConfig = options.scrollable? {
-    scrollCollapse: true,
-    scrollY: '60vh'
-  } : {}
+    paging = true,
+    ordering = false,
+  } = options || {};
+  const scrollableConfig = options.scrollable
+    ? {
+        scrollCollapse: true,
+        scrollY: "60vh",
+      }
+    : {};
   const table = $(selector).DataTable({
-      scrollX: scrollable,
-      scrollCollapse: scrollable,
-      ordering: false,
-      layout,
-      paging,
-      ...scrollableConfig
+    /*
+      columnDefs: [
+        { "orderable": false, "targets": 0 } // Make the sequence column non-orderable
+      ],
+      */
+    scrollX: scrollable,
+    scrollCollapse: scrollable,
+    layout,
+    paging,
+    ordering,
+    search: {
+      smart: false,
+    },
+    ...scrollableConfig,
   });
 
-  return table
+  /*
+  table.on('order.dt search.dt', function () {
+      table.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+          cell.innerHTML = i + 1;
+      });
+  }).draw();
+  */
+
+  return table;
 }
 
-function imagesPreview (input, placeToInsertImagePreview) {
-  const galleryElement = placeToInsertImagePreview || $(input).closest('.gallery-input').find('.preview-image-gallery')
+function imagesPreview(input, placeToInsertImagePreview) {
+  const galleryElement =
+    placeToInsertImagePreview ||
+    $(input).closest(".gallery-input").find(".preview-image-gallery");
   if (input.files) {
-      var filesAmount = input.files.length;
-      for (i = 0; i < filesAmount; i++) {
-          const randomIdentifier = Date.now() + i
-          var reader = new FileReader();
-          reader.onload = function(event) {
-              const imageElement = $($.parseHTML('<img>')).attr({
-                  src: event.target.result
-              })
-              const imageHtmlString = $('<div>').append(imageElement.clone()).html();
-              
-              const htmlToAppend = `
+    var filesAmount = input.files.length;
+    for (i = 0; i < filesAmount; i++) {
+      const randomIdentifier = Date.now() + i;
+      var reader = new FileReader();
+      reader.onload = function (event) {
+        const imageElement = $($.parseHTML("<img>")).attr({
+          src: event.target.result,
+        });
+        const imageHtmlString = $("<div>").append(imageElement.clone()).html();
+
+        const htmlToAppend = `
                 <div class="single-image" data-identifier="${randomIdentifier}">
                   ${imageHtmlString}
                   <div class="delete-image-btn" onclick="deleteGalleryImage(${randomIdentifier})">
                     <i class="fa-solid fa-xmark"></i>
                   </div>
                 </div>
-              `
+              `;
 
-              $(galleryElement).append(htmlToAppend)
-          }
-          reader.readAsDataURL(input.files[i]);
+        $(galleryElement).append(htmlToAppend);
+      };
+      reader.readAsDataURL(input.files[i]);
 
-          //create single input file element so that images can be deleted seperately
-          const singleInput = document.createElement('input');
-          singleInput.type = 'file';
-          singleInput.name = `inspection_image[${randomIdentifier}]`;
-          singleInput.required = true; // optional - add required attribute if needed
-          singleInput.classList.add('singlefile');
-          singleInput.setAttribute('identifier', randomIdentifier)
-          
-          // Create a DataTransfer object and add the file to it
-          const dataTransfer = new DataTransfer();
-          dataTransfer.items.add(input.files[i]);
+      //create single input file element so that images can be deleted seperately
+      const singleInput = document.createElement("input");
+      singleInput.type = "file";
+      singleInput.name = `inspection_image[${randomIdentifier}]`;
+      singleInput.required = true; // optional - add required attribute if needed
+      singleInput.classList.add("singlefile");
+      singleInput.setAttribute("identifier", randomIdentifier);
 
-          // Set the files property of the single file input to the created DataTransferItemList
-          singleInput.files = dataTransfer.files;
+      // Create a DataTransfer object and add the file to it
+      const dataTransfer = new DataTransfer();
+      dataTransfer.items.add(input.files[i]);
 
-          $(galleryElement).append(singleInput)
-      }
+      // Set the files property of the single file input to the created DataTransferItemList
+      singleInput.files = dataTransfer.files;
+
+      $(galleryElement).append(singleInput);
+    }
   }
-};
+}
 
 function deleteGalleryImage(key) {
-  if(confirm('are you sure you want to delete this image?')) {
-    $(`.gallery-input div[data-identifier=${key}]`).remove()
-    $(`input[identifier=${key}]`).remove()
-    $(`input[identifier=delete-${key}]`).val('true')
+  if (confirm("are you sure you want to delete this image?")) {
+    $(`.gallery-input div[data-identifier=${key}]`).remove();
+    $(`input[identifier=${key}]`).remove();
+    $(`input[identifier=delete-${key}]`).val("true");
   }
 }
 
 function formatDate(date) {
-  var dd = String(date.getDate()).padStart(2, '0');
-  var mm = String(date.getMonth() + 1).padStart(2, '0'); //January is 0!
+  var dd = String(date.getDate()).padStart(2, "0");
+  var mm = String(date.getMonth() + 1).padStart(2, "0"); //January is 0!
   var yyyy = date.getFullYear();
 
-  return dd + '-' + mm + '-' + yyyy;
+  return dd + "-" + mm + "-" + yyyy;
 }
-
 
 $.validator.setDefaults({
   errorClass: "error",
-  errorPlacement: function(error, element) {
-      return true; // Suppress error messages
+  errorPlacement: function (error, element) {
+    return true; // Suppress error messages
   },
-  ignore: ""
+  ignore: "",
 });

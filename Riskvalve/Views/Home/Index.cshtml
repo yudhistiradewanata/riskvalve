@@ -359,6 +359,7 @@ width="1242"></canvas>
                 },
 
                 legend: {
+                    enabled: false,
                     align: 'right',
                     layout: 'vertical',
                     margin: 0,
@@ -366,15 +367,11 @@ width="1242"></canvas>
                     y: 25,
                     symbolHeight: 320
                 },
-
                 tooltip: {
-                    /* formatter: function () {
-                        return '';
-                        '<b>' + this.series.xAxis.categories[this.point.x] + '</b> sold <br><b>' +
-                        this.point.value + '</b> items on <br><b>' + this.series.yAxis.categories[this.point.y] + '</b>';
-                        } */
+                    formatter: function () {
+                        return this.series.xAxis.categories[this.point.x] + this.series.yAxis.categories[this.point.y] + ': ' + this.point.value
+                    }
                 },
-
                 /*want to make this part dynamically populated*/
                 series: [{
                     data: structuredClone(rawHeatmapData),
@@ -434,7 +431,7 @@ width="1242"></canvas>
                             },
                             filter: {
                                 operator: '>',
-                                property: 'percentage',
+                                property: 'total',
                                 value: 10
                             }
                         }],
@@ -443,7 +440,7 @@ width="1242"></canvas>
                 },
                 series: [
                     {
-                        name: 'Percentage',
+                        name: 'Total',
                         data: pieChartData
                     }
                 ]

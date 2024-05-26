@@ -43,10 +43,11 @@
     <div class="container-fluid">
         <div class="row">
             <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
-                <b class="inspection-sidebar-title">Risk Assessment</b>
+                @* <b class="inspection-sidebar-title">Risk Assessment</b> *@
                 <partial name="InspectionAssessmentSidebar" />
             </div>
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
+            @* <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')"> *@
+            <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
                 <div>
                     <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                         <li class="nav-item">
@@ -56,8 +57,7 @@
                         </li>
                         <li class="nav-item" id="template_inspection_header">
                             <a
-                                href="#inspection1" data-bs-toggle="tab"
-                            >New Assessment Template
+                                href="#inspection1" data-bs-toggle="tab">New Assessment Template
                                 <button 
                                     type="button"
                                     class="btn-close-inspection"
@@ -65,13 +65,14 @@
                             </a>
                         </li>
                     </ul>
-                    <div class="tab-content" id="tabcontentcontainer">
+                    <div class="tab-content inspection-tab" id="tabcontentcontainer">
                         <div class="tab-pane active show" id="welcome">
-                            <div class="assessment-welcome">
-                                <div class="content">
-                                    <h3>Welcome to Assessment</h3>
-                                    <div>To start conducting assessment, please choose valve asset in the tree view.</div>
-                                </div>
+                            <div class="sub-container">
+                            @* <div class="assessment-welcome">
+                                <div class="content"> *@
+                                    <h1>Welcome to Assessment</h1>
+                                    <p>To start conducting assessment, please choose valve asset in the tree view.</p>
+                                @* </div> *@
                             </div>
                         </div>
                         <div class="tab-pane" id="template_inspection">
@@ -360,7 +361,7 @@
                                                                 <label class="col-form-label" for="field-assessment-Actuation">Actuation</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-Actuation" readonly>
+                                                                <input type="text" class="form-control form-control-sm" id="field-assessment-actuation" readonly>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -565,7 +566,7 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp1" name="LeakageToAtmosphereTP1ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-tp1" name="LeakageToAtmosphereTP1ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -573,7 +574,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp2" name="LeakageToAtmosphereTP2ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-tp2" name="LeakageToAtmosphereTP2ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -581,7 +582,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="leakage-tp3" name="LeakageToAtmosphereTP3ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-tp3" name="LeakageToAtmosphereTP3ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -600,7 +601,7 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp1" name="FailureOfFunctionTP1ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="failure-tp1" name="FailureOfFunctionTP1ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -608,7 +609,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp2" name="FailureOfFunctionTP2ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="failure-tp2" name="FailureOfFunctionTP2ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -616,7 +617,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="failure-tp3" name="FailureOfFunctionTP3ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="failure-tp3" name="FailureOfFunctionTP3ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -635,7 +636,7 @@
                                                             <div class="col-7">
                                                                 <div class="row">
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp1" name="PassingAccrosValveTP1ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="passing-tp1" name="PassingAccrosValveTP1ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -643,7 +644,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp2" name="PassingAccrosValveTP2ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="passing-tp2" name="PassingAccrosValveTP2ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -651,7 +652,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
-                                                                        <select class="form-select form-select-sm calculate-assessment" id="passing-tp3" name="PassingAccrosValveTP3ID" onchange="calculateAssessment.apply(this)">
+                                                                        <select class="form-select form-select-sm calculate-assessment readonly" id="passing-tp3" name="PassingAccrosValveTP3ID" onchange="calculateAssessment.apply(this)">
                                                                             @foreach (var item in timeToLimitStates)
                                                                             {
                                                                                 <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
@@ -1417,10 +1418,10 @@
                                             <div class="col-md-12">
                                                 <label for="field-inspection-image">Inspection Image</label>
                                                 <div class="gallery-input">
-                                                    <!-- <input type="file" class="form-control image-gallery-upload" id="field-inspection-image" onchange="imagesPreview(this)" multiple>
+                                                    <!-- <input type="file" class="form-control image-gallery-upload" id="field-inspection-image" onchange="imagesPreview(this)" multiple> -->
                                                     <div class="preview-image-gallery">
-                                                        <label class="add-image" for="field-inspection-image"><i class="fa-solid fa-file-circle-plus"></i></label>
-                                                    </div> -->
+                                                        <!-- <label class="add-image" for="field-inspection-image"><i class="fa-solid fa-file-circle-plus"></i></label> -->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -1559,10 +1560,10 @@
                                     <div class="form-group">
                                         <label for="field-maintenance-image">Maintenance Image</label>
                                         <div class="gallery-input">
-                                            <!-- <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" onchange="imagesPreview(this)" multiple>
+                                            <!-- <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" onchange="imagesPreview(this)" multiple> -->
                                             <div class="preview-image-gallery">
-                                                <label class="add-image" for="field-maintenance-image"><i class="fa-solid fa-file-circle-plus"></i></label>
-                                            </div> -->
+                                                <!-- <label class="add-image" for="field-maintenance-image"><i class="fa-solid fa-file-circle-plus"></i></label> -->
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -1710,9 +1711,20 @@
                 const formData = new FormData(nativeForm);
                 const selectedInspectionCount = form.find('input[name=selectedInspectionId]').length
                 const selectedMaintenanceCount = form.find('input[name=selectedMaintenanceId]').length
-                if(!selectedInspectionCount || !selectedMaintenanceCount) {
-                    alert('please input at least one inspection and one maintenance')
-                    return
+                var alertmessage = '';
+                if(!selectedInspectionCount){
+                    alertmessage += 'minimum 1 Inspection, ';
+                }
+                if(!selectedMaintenanceCount){
+                    if(!selectedInspectionCount){
+                        alertmessage = alertmessage.slice(0, -2);
+                        alertmessage += ' and ';
+                    }
+                    alertmessage += 'minimum 1 Maintenance, ';
+                }
+                if(alertmessage.length > 0){
+                    alert('Please select ' + alertmessage.slice(0, -2) + ' to proceed');
+                    return;
                 }
                 if(form.valid()) {
                     if(form.hasClass('history-form')) {
@@ -1808,6 +1820,25 @@
                 }
             }
 
+            function deleteFromTab(id, name) {
+                if (confirm('Are you sure you want to delete ' + name + '?')) {
+                    $.ajax({
+                        url: '@urlassessmentdelete',
+                        type: 'POST', // or 'GET' depending on your form method
+                        data: {
+                            Id: id
+                        },
+                        success: function (response) {
+                            alert('Data successfully deleted')
+                            $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
+                        },
+                        error: function (xhr, status, error) {
+                            alert('Error deleting data')
+                        }
+                    });
+                }
+            }
+
             function fetchAssetData ({id, counter}) {
                 $.ajax({
                     url: '@urlassetdetail',
@@ -1846,10 +1877,11 @@
                         // check if field editable
                         const editable = assessmentCalculatedField.some(field => data[field] === null)
                         if(!editable) {
-                            $('#inspection'+counter).find('input:not([type="hidden"]), textarea, select').attr('disabled', true)
+                            // $('#inspection'+counter).find('input:not([type="hidden"]), textarea, select').attr('disabled', true)
                             $('#inspection'+counter).find('.print-button').attr('href', '@urlassessmentprint'+'/'+id)
-                            $('#inspection'+counter+' .assessment-form').addClass('not-editable')
-                            $('.only-add').hide()
+                            // $('#inspection'+counter+' .assessment-form').addClass('not-editable')
+                            // $('.only-add').hide()
+                            $('#inspection'+counter+' .print-button').show()
                         }
 
                         // fill history data
@@ -1915,11 +1947,12 @@
             }
 
             function fillAssetInfo ({counter, data}) {
+                console.log(data)
                 $('#field-assessment-assetid' + counter).val(data.id)
                 $('#field-assessment-valvetype' + counter).val(data.valveType)
                 $('#field-assessment-tagno' + counter).val(data.tagNo)
                 $('#field-assessment-manufacturer' + counter).val(data.manufacturer)
-                $('#field-assessment-equipmentname' + counter).val('')
+                $('#field-assessment-equipmentname' + counter).val(data.assetName)
                 $('#field-assessment-bodymaterial' + counter).val(data.bodyMaterial)
                 $('#field-assessment-businessarea' + counter).val(data.businessArea)
                 $('#field-assessment-bodymodel' + counter).val(data.bodyModel)
@@ -1928,7 +1961,7 @@
                 $('#field-assessment-parentequipmentno' + counter).val(data.parentEquipmentNo)
                 $('#field-assessment-serialno' + counter).val(data.serialNo)
                 $('#field-assessment-parentequipmentdesc' + counter).val(data.parentEquipmentDescription)
-                $('#field-assessment-usagetype' + counter).val('')
+                $('#field-assessment-usagetype' + counter).val(data.usageType)
                 $('#field-assessment-installationdate' + counter).val(data.installationDate)
                 $('#field-assessment-size' + counter).val(data.size)
                 $('#field-assessment-pidno' + counter).val(data.pidNo)
@@ -1939,14 +1972,14 @@
                 $('#field-assessment-operatingtemperature' + counter).val(data.operatingTemperature)
                 $('#field-assessment-operatingpressure' + counter).val(data.operatingPressure)
                 $('#field-assessment-toxicorflamableliquid' + counter).val(data.toxicOrFlamableFluid)
-                $('#field-assessment-costofreplacement' + counter).val('')
+                $('#field-assessment-costofreplacement' + counter).val(data.costOfReplacementAndRepair)
                 $('#field-assessment-actuatormfg' + counter).val(data.actuatorMfg)
                 $('#field-assessment-actuatorserialno' + counter).val(data.actuatorSerialNo)
                 $('#field-assessment-actuatortypemodel' + counter).val(data.actuatorTypeModel)
                 $('#field-assessment-actuatorpower' + counter).val(data.actuatorPower)
                 $('#field-assessment-manualoverride' + counter).val(data.manualOverride)
-                $('#field-assessment-status' + counter).val('')
-                $('#field-assessment-actuation' + counter).val('')
+                $('#field-assessment-status' + counter).val(data.status)
+                $('#field-assessment-actuation' + counter).val(data.actuation)
             }
 
             function calculateXPos(value) {
@@ -1997,6 +2030,9 @@
             }
 
             function calculateAssessment(ctr = -1) {
+                if(gLastInspectionDate == null){
+                    return;
+                }
                 if(ctr == -1){
                     var ctr = $(this).closest('.tab-pane').attr('tab-num');
                 }
@@ -2184,6 +2220,30 @@
                         (lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting) +
                         (lf7Repaired * lf7RepairedWeighting)
                     );
+                console.log("=== START TP1A CALCULARTOR ===");
+                console.log("lf2LeakageToAtmosphereTP1", lf2LeakageToAtmosphereTP1);
+                console.log("lf2LeakageToAtmosphereTP1Weighting", lf2LeakageToAtmosphereTP1Weighting);
+                console.log("LF2", lf2LeakageToAtmosphereTP1 * lf2LeakageToAtmosphereTP1Weighting);
+                console.log("lf1LeakageToAtmosphere", lf1LeakageToAtmosphere);
+                console.log("lf1LeakageToAtmosphereWeighting", lf1LeakageToAtmosphereWeighting);
+                console.log("LF1", lf1LeakageToAtmosphere * lf1LeakageToAtmosphereWeighting);
+                console.log("lf3InspectionEffectiveness", lf3InspectionEffectiveness);
+                console.log("lf3InspectionEffectivenessWeighting", lf3InspectionEffectivenessWeighting);
+                console.log("LF3", lf3InspectionEffectiveness * lf3InspectionEffectivenessWeighting);
+                console.log("lf4ImpactOfInternalFluid", lf4ImpactOfInternalFluid);
+                console.log("lf4ImpactOfInternalFluidWeighting", lf4ImpactOfInternalFluidWeighting);
+                console.log("LF4", lf4ImpactOfInternalFluid * lf4ImpactOfInternalFluidWeighting);
+                console.log("lf5ImpactOfOperatingEnvelopes", lf5ImpactOfOperatingEnvelopes);
+                console.log("lf5ImpactOfOperatingEnvelopesWeighting", lf5ImpactOfOperatingEnvelopesWeighting);
+                console.log("LF5", lf5ImpactOfOperatingEnvelopes * lf5ImpactOfOperatingEnvelopesWeighting);
+                console.log("lf6UsedWithinOEMSpecification", lf6UsedWithinOEMSpecification);
+                console.log("lf6UsedWithinOEMSpecificationWeighting", lf6UsedWithinOEMSpecificationWeighting);
+                console.log("LF6", lf6UsedWithinOEMSpecification * lf6UsedWithinOEMSpecificationWeighting);
+                console.log("lf7Repaired", lf7Repaired);
+                console.log("lf7RepairedWeighting", lf7RepairedWeighting);
+                console.log("LF7", lf7Repaired * lf7RepairedWeighting);
+                console.log("calculator lf2 * (lf1 + lf3 + lf4 + lf5 + lf6 + lf7)", lofLeakageToAtmosphereA);
+                console.log("=== END TP1A CALCULARTOR ===");
                 var lofLeakageToAtmosphereAPos = calculateXPos(lofLeakageToAtmosphereA);
                 // TP1B
                 var lofLeakageToAtmosphereB = (lf2LeakageToAtmosphereTP2 * lf2LeakageToAtmosphereTP2Weighting) *
@@ -2532,18 +2592,21 @@
                 var loftp3aval = lf2LeakageToAtmosphereTP3Value;
                 var loftp3bval = lf2FailureOfFunctionTP3Value;
                 var loftp3cval = lf2PassingAccrossValveTP3Value;
-                var tta_year = decideTTARAC(loftp1a, loftp2a, loftp3a, timelimittp1, timelimittp2, timelimittp3, rac, loftp1aval, loftp2aval, loftp3aval);
-                var tta_days = tta_year * 365.25;
-                var ttb_year = decideTTARAC(loftp1b, loftp2b, loftp3b, timelimittp1, timelimittp2, timelimittp3, rac, loftp1bval, loftp2bval, loftp3bval);
-                var ttb_days = ttb_year * 365.25;
-                var ttc_year = decideTTARAC(loftp1c, loftp2c, loftp3c, timelimittp1, timelimittp2, timelimittp3, rac, loftp1cval, loftp2cval, loftp3cval);
-                var ttc_days = ttc_year * 365.25;
+                @* var tta_year = decideTTARAC(loftp1a, loftp2a, loftp3a, timelimittp1, timelimittp2, timelimittp3, rac, loftp1aval, loftp2aval, loftp3aval); *@
+                var tta_month = decideTTARAC(loftp1a, loftp2a, loftp3a, timelimittp1, timelimittp2, timelimittp3, rac, loftp1aval, loftp2aval, loftp3aval);
+                @* var tta_days = tta_year * 365.25; *@
+                @* var ttb_year = decideTTARAC(loftp1b, loftp2b, loftp3b, timelimittp1, timelimittp2, timelimittp3, rac, loftp1bval, loftp2bval, loftp3bval); *@
+                var ttb_month = decideTTARAC(loftp1b, loftp2b, loftp3b, timelimittp1, timelimittp2, timelimittp3, rac, loftp1bval, loftp2bval, loftp3bval);
+                @* var ttb_days = ttb_year * 365.25; *@
+                @* var ttc_year = decideTTARAC(loftp1c, loftp2c, loftp3c, timelimittp1, timelimittp2, timelimittp3, rac, loftp1cval, loftp2cval, loftp3cval); *@
+                var ttc_month = decideTTARAC(loftp1c, loftp2c, loftp3c, timelimittp1, timelimittp2, timelimittp3, rac, loftp1cval, loftp2cval, loftp3cval);
+                @* var ttc_days = ttc_year * 365.25; *@
                 var tta_date = new Date(createDateFromString(gLastInspectionDate));
-                tta_date.setDate(tta_date.getDate() + tta_days);
+                tta_date.setMonth(tta_date.getMonth() + tta_month);
                 var ttb_date = new Date(createDateFromString(gLastInspectionDate));
-                ttb_date.setDate(ttb_date.getDate() + ttb_days);
+                ttb_date.setMonth(ttb_date.getDate() + ttb_month);
                 var ttc_date = new Date(createDateFromString(gLastInspectionDate));
-                ttc_date.setDate(ttc_date.getDate() + ttc_days);
+                ttc_date.setMonth(ttc_date.getDate() + ttc_month);
                 var map_ttl = {
                     'TPA-TTA': formatDate(tta_date),
                     'TPB-TTA': formatDate(ttb_date),
@@ -2561,27 +2624,41 @@
             }
 
             function decideTTARAC(loftp1, loftp2, loftp3, timelimittp1, timelimittp2, timelimittp3, rac, loftp1val, loftp2val, loftp3val){
-                console.log("==START DECIDE TTL==");
+                @* console.log("==START DECIDE TTL==");
                 console.log("loftp1: "+loftp1);
                 console.log("loftp2: "+loftp2);
                 console.log("loftp3: "+loftp3);
+                console.log("loftp1val: "+loftp1val);
+                console.log("loftp2val: "+loftp2val);
+                console.log("loftp3val: "+loftp3val);
                 console.log("timelimittp1: "+timelimittp1);
                 console.log("timelimittp2: "+timelimittp2);
                 console.log("timelimittp3: "+timelimittp3);
-                console.log("rac: "+rac);
+                console.log("rac: "+rac); *@
                 var calculate = 0;
                 if(loftp1 > rac) {
                     calculate = 0;
                 }
                 else {
                     if (loftp3 > rac && loftp2 <= rac){
-                        calculate = ((((timelimittp3-timelimittp2)*(rac-loftp2))/(loftp3-loftp2))/12) + (timelimittp2/12);
+                        @* calculate = 0;((((timelimittp3-timelimittp2)*(rac-loftp2))/(loftp3-loftp2))/12) + (timelimittp2/12); *@
+                        calculate = (timelimittp3-timelimittp2)/12 * (rac-loftp2) / (loftp3-loftp2) + (timelimittp1/12);
+                        calculate = Math.floor(calculate*12)
                     }
                     else if(loftp2 > rac){
-                        calculate = ((((timelimittp2-timelimittp1)*(rac-loftp1))/(loftp2-loftp1))/12) + (timelimittp1/12);
+                        console.log("loftp2 > rac");
+                        console.log("timelimittp2: "+timelimittp2);
+                        console.log("timelimittp1: "+timelimittp1);
+                        console.log("rac: "+rac);
+                        console.log("loftp1: "+loftp1);
+                        console.log("loftp2: "+loftp2);
+                        calculate = (timelimittp2-timelimittp1)/12 * (rac-loftp1) / (loftp2-loftp1) + (timelimittp1/12);
+                        calculate = Math.floor(calculate*12)
+                        @* calculate = ((((timelimittp2-timelimittp1)*(rac-loftp1))/(loftp2val-loftp1val))/12) + (timelimittp1/12); *@
                     }
                     else{
-                        calculate = decideTTL(loftp1val, loftp2val, loftp3val, timelimittp1, timelimittp2, timelimittp3)/12;
+                        // LF3 && LF2 
+                        calculate = decideTTL(loftp1val, loftp2val, loftp3val, timelimittp1, timelimittp2, timelimittp3);
                     }
                 }
                 console.log("calculate: "+calculate);
@@ -2590,16 +2667,14 @@
             }
 
             function decideTTL(tp1, tp2, tp3, tp1val, tp2val, tp3val){
-                /*
-                console.log("==START DECIDE TTL==");
+                @* console.log("==START DECIDE TTL==");
                 console.log("TP1: "+tp1);
                 console.log("TP2: "+tp2);
                 console.log("TP3: "+tp3);
                 console.log("TP1VAL: "+tp1val);
                 console.log("TP2VAL: "+tp2val);
                 console.log("TP3VAL: "+tp3val);
-                console.log("==END DECIDE TTL==");
-                */
+                console.log("==END DECIDE TTL=="); *@
                 if(tp1 == 1 && tp2 == 1 && tp3 == 1) {
                     return tp3val;
                 } else if(tp1 == 1 && tp2 == 1 && tp3 == 2) {
@@ -2630,29 +2705,32 @@
             template_inspection_header.remove();
 
             let idx = 0;
-            function addTab () {
+            function addTab() {
                 let ctr = idx;
 
                 let id = $(this).attr('attr-id');
                 const equipmentId = id
                 let isHistory = false
                 let name = $(this).attr('attr-name');
+                let tabInspectionId = 0
                 if($(this).attr('attr-inspection-id')) {
                     isHistory = true
                     id = $(this).attr('attr-inspection-id')
-
+                    tabInspectionId = id
                 } else {
                     name = `New Assessment ${name}`
                 }
-                if($('.tab-pane[equipment-id="'+equipmentId+'"]').length > 0){
-                    alert('This equipment already exist in the tab');
-                    return;
+                if (tabInspectionId > 0) {
+                    if ($('.tab-pane[tab-inspection-id="' + tabInspectionId + '"]').length > 0) {
+                        alert('This assessment already exist in the tab');
+                        return;
+                    }
                 }
 
                 let tabheadercontainer = $('#inspectiontabheader');
                 let tabcontentcontainer = $('#tabcontentcontainer');
                 tabheadercontainer.append('<li id="inspectionheader' + ctr + '"><a href="#inspection' + ctr + '" data-bs-toggle="tab" class="nav-link" data-bs-target="#inspection'+ctr+'" type="button" role="tab" tab-num="'+ctr+'"><div tab-title>' + name + '</div><button type="button" class="btn-close-inspection"><i class="fa-solid fa-xmark"></i></button></a></li>');
-                tabcontentcontainer.append('<div class="tab-pane" equipment-id="'+equipmentId+'" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
+                tabcontentcontainer.append('<div class="tab-pane" tab-inspection-id="'+ tabInspectionId +'" equipment-id="'+equipmentId+'" id="inspection' + ctr + '" tab-num="'+ctr+'">' + template_inspection_html + '</div>');
                 let tabcontent = tabcontentcontainer.find('.form-control,.form-select');
                 tabcontent.each(function () {
                     let name = $(this).attr('id') + ctr;

@@ -188,10 +188,11 @@ public class InspectionModel : InspectionDB
             // check if there is already an inspection with the same assetid and inspection date
             if (
                 context
-                    .Inspection.Select(i => new { i.AssetID, i.InspectionDate })
+                    .Inspection.Select(i => new { i.AssetID, i.InspectionDate, i.IsDeleted })
                     .Where(i =>
                         i.AssetID == inspection.AssetID
                         && i.InspectionDate == inspection.InspectionDate
+                        && i.IsDeleted == false
                     )
                     .Count() > 0
             )

@@ -5,6 +5,7 @@ namespace Riskvalve.Models;
 public class AreaContext : DbContext
 {
     public DbSet<AreaDB> Area { get; set; }
+    public DbSet<PlatformDB> Platform { get; set; }
     public DbSet<UserModel> User { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder options) =>
@@ -13,7 +14,8 @@ public class AreaContext : DbContext
             .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
 }
 
-public class AreaDB {
+public class AreaDB
+{
     public int Id { get; set; }
     public string? BusinessArea { get; set; }
     public bool? IsDeleted { get; set; }
@@ -27,6 +29,7 @@ public class AreaModel : AreaDB
 {
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
+
     public AreaModel GetAreaModel(int id)
     {
         AreaModel area = new();
@@ -44,8 +47,14 @@ public class AreaModel : AreaDB
                     CreatedAt = a.CreatedAt,
                     DeletedBy = a.DeletedBy,
                     DeletedAt = a.DeletedAt,
-                    CreatedByUser = context.User.Where(u => u.Id == a.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == a.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == a.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == a.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList().FirstOrDefault();
         }
@@ -69,46 +78,99 @@ public class AreaModel : AreaDB
                     CreatedAt = a.CreatedAt,
                     DeletedBy = a.DeletedBy,
                     DeletedAt = a.DeletedAt,
-                    CreatedByUser = context.User.Where(u => u.Id == a.CreatedBy).FirstOrDefault().Username,
-                    DeletedByUser = context.User.Where(u => u.Id == a.DeletedBy).FirstOrDefault().Username
+                    CreatedByUser = context
+                        .User.Where(u => u.Id == a.CreatedBy)
+                        .FirstOrDefault()
+                        .Username,
+                    DeletedByUser = context
+                        .User.Where(u => u.Id == a.DeletedBy)
+                        .FirstOrDefault()
+                        .Username
                 }
             ).ToList();
         }
         return areaList;
     }
 
-    public void AddArea(AreaDB area)
+    public ResultModel AddArea(AreaDB area)
     {
         using (var context = new AreaContext())
         {
+            AreaDB areaCheck = context
+                .Area.Where(a => a.BusinessArea == area.BusinessArea && a.IsDeleted == false)
+                .FirstOrDefault();
+            if (areaCheck != null)
+            {
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Area already exists"
+                };
+            }
             area.IsDeleted = false;
             context.Area.Add(area);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Area added successfully"
+            };
         }
     }
 
-    public void UpdateArea(AreaDB area)
+    public ResultModel UpdateArea(AreaDB area)
     {
         using (var context = new AreaContext())
         {
+            AreaDB areaCheck = context
+                .Area.Where(a => a.BusinessArea == area.BusinessArea && a.IsDeleted == false)
+                .FirstOrDefault();
+            if (areaCheck != null)
+            {
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Area already exists"
+                };
+            }
             AreaDB areaOld = context.Area.Find(area.Id);
             areaOld.BusinessArea = area.BusinessArea;
             area.IsDeleted = false;
             context.Area.Update(areaOld);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Area updated successfully"
+            };
         }
     }
 
-    public void DeleteArea(AreaDB area)
+    public ResultModel DeleteArea(AreaDB area)
     {
         using (var context = new AreaContext())
         {
+            int platformCount = context.Platform
+                .Where(p => p.AreaID == area.Id && p.IsDeleted == false)
+                .Count();
+            if (platformCount > 0) {
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Area is used by " + platformCount + " platform(s)"
+                };
+            }
             AreaDB areaOld = context.Area.Find(area.Id);
             areaOld.IsDeleted = true;
             areaOld.DeletedBy = area.DeletedBy;
             areaOld.DeletedAt = area.DeletedAt;
             context.Area.Update(areaOld);
             context.SaveChanges();
+            return new ResultModel
+            {
+                Result = 200,
+                Message = "Area deleted successfully"
+            };
         }
     }
 }

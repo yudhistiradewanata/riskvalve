@@ -153,3 +153,7 @@ ul {
  .social-auth-links {
    margin: 10px 0;
  }
+
+ .highcharts-exporting-group {
+  display: none !important;
+ }

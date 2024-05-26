@@ -124,8 +124,11 @@ public class MaintenanceModel : MaintenanceDB
             // check if there is already an maintenance with the same assetid and maintenance date
             if (
                 context
-                    .Maintenance.Where(m => m.AssetID == maintenanceDB.AssetID)
-                    .Where(m => m.MaintenanceDate == maintenanceDB.MaintenanceDate)
+                    .Maintenance.Where(m =>
+                        m.AssetID == maintenanceDB.AssetID
+                        && m.MaintenanceDate == maintenanceDB.MaintenanceDate
+                        && m.IsDeleted == false
+                    )
                     .FirstOrDefault() != null
             )
             {
