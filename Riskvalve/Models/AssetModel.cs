@@ -76,6 +76,50 @@ public class AssetModel : AssetDB
     public MaintenanceModel? lastMaintenance { get; set; }
     public AssessmentModel? lastAssessment { get; set; }
 
+    public AssetDB GetAssetDB(int id)
+    {
+        AssetDB asset = new();
+        using (var context = new AssetContext())
+        {
+            asset = context.Asset.Where(a => a.Id == id)
+            .Select(a => new AssetDB{
+                Id = a.Id,
+                TagNo = a.TagNo,
+                AssetName = a.AssetName,
+                PlatformID = a.PlatformID,
+                ValveTypeID = a.ValveTypeID,
+                Size = a.Size,
+                ClassRating = a.ClassRating,
+                ParentEquipmentNo = a.ParentEquipmentNo,
+                ParentEquipmentDescription = a.ParentEquipmentDescription,
+                InstallationDate = a.InstallationDate,
+                PIDNo = a.PIDNo,
+                Manufacturer = a.Manufacturer,
+                BodyModel = a.BodyModel,
+                BodyMaterial = a.BodyMaterial,
+                EndConnection = a.EndConnection,
+                SerialNo = a.SerialNo,
+                ManualOverrideID = a.ManualOverrideID,
+                ActuatorMfg = a.ActuatorMfg,
+                ActuatorSerialNo = a.ActuatorSerialNo,
+                ActuatorTypeModel = a.ActuatorTypeModel,
+                ActuatorPower = a.ActuatorPower,
+                OperatingTemperature = a.OperatingTemperature,
+                OperatingPressure = a.OperatingPressure,
+                FlowRate = a.FlowRate,
+                ServiceFluid = a.ServiceFluid,
+                FluidPhaseID = a.FluidPhaseID,
+                ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
+                UsageType = a.UsageType,
+                CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
+                Actuation = a.Actuation,
+                Status = a.Status
+            })
+            .FirstOrDefault();
+        }
+        return asset;
+    }
+
     public AssetModel GetAssetModel(int id)
     {
         AssetModel asset = new();
@@ -319,9 +363,11 @@ public class AssetModel : AssetDB
 
     public void UpdateAsset(AssetDB asset)
     {
+        int id = asset.Id;
+        AssetDB oldAsset = new AssetDB() { Id = 0 };
         using (var context = new AssetContext())
         {
-            AssetDB oldAsset = context.Asset.Find(asset.Id);
+            oldAsset = GetAssetDB(id);
             oldAsset.IsDeleted = false;
             oldAsset.TagNo = asset.TagNo;
             oldAsset.PlatformID = asset.PlatformID;
@@ -360,6 +406,8 @@ public class AssetModel : AssetDB
 
     public ResultModel DeleteAsset(AssetDB asset)
     {
+        int id = asset.Id;
+        AssetDB oldAsset = new AssetDB() { Id = 0 };
         using (var context = new AssetContext())
         {
             int inspectionCount = context.Inspection
@@ -389,7 +437,7 @@ public class AssetModel : AssetDB
                     Message = message
                 };
             }
-            AssetDB oldAsset = context.Asset.Find(asset.Id);
+            oldAsset = GetAssetDB(id);
             oldAsset.IsDeleted = true;
             oldAsset.DeletedBy = asset.DeletedBy;
             oldAsset.DeletedAt = asset.DeletedAt;
