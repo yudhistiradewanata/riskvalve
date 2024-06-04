@@ -134,7 +134,7 @@ public class PlatformModel : PlatformDB
             PlatformDB plarformCheck = context.Platform
                 .Where(p => p.Platform == platform.Platform && p.AreaID == platform.AreaID && p.IsDeleted == false)
                 .FirstOrDefault();
-            if (plarformCheck != null)
+            if (plarformCheck != null && plarformCheck.Id != platform.Id)
             {
                 return new ResultModel
                 {

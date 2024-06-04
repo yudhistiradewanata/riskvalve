@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Riskvalve.Models;
@@ -188,7 +189,12 @@ public class InspectionModel : InspectionDB
             // check if there is already an inspection with the same assetid and inspection date
             if (
                 context
-                    .Inspection.Select(i => new { i.AssetID, i.InspectionDate, i.IsDeleted })
+                    .Inspection.Select(i => new
+                    {
+                        i.AssetID,
+                        i.InspectionDate,
+                        i.IsDeleted
+                    })
                     .Where(i =>
                         i.AssetID == inspection.AssetID
                         && i.InspectionDate == inspection.InspectionDate
@@ -206,28 +212,49 @@ public class InspectionModel : InspectionDB
         }
     }
 
-    public bool UpdateInspection(InspectionDB inspection)
+    public ResultModel UpdateInspection(InspectionDB inspection)
     {
         using (var context = new InspectionContext())
         {
-            InspectionDB oldInspection = context.Inspection.Find(inspection.Id);
-            oldInspection.AssetID = inspection.AssetID;
-            oldInspection.InspectionDate = inspection.InspectionDate;
-            oldInspection.InspectionMethodID = inspection.InspectionMethodID;
-            oldInspection.InspectionEffectivenessID = inspection.InspectionEffectivenessID;
-            oldInspection.InspectionDescription = inspection.InspectionDescription;
-            oldInspection.CurrentConditionLeakeageToAtmosphereID =
-                inspection.CurrentConditionLeakeageToAtmosphereID;
-            oldInspection.CurrentConditionFailureOfFunctionID =
-                inspection.CurrentConditionFailureOfFunctionID;
-            oldInspection.CurrentConditionPassingAcrossValveID =
-                inspection.CurrentConditionPassingAcrossValveID;
-            oldInspection.FunctionCondition = inspection.FunctionCondition;
-            oldInspection.TestPressureIfAny = inspection.TestPressureIfAny;
-            context.Inspection.Update(oldInspection);
-            context.SaveChanges();
+            InspectionDB checkInspection = context
+                .Inspection.Where(i =>
+                    i.InspectionDate == inspection.InspectionDate
+                    && i.AssetID == inspection.AssetID
+                    && i.Id != inspection.Id
+                )
+                .FirstOrDefault();
+            if (checkInspection != null)
+            {
+                return new ResultModel { Result = 400, Message = "Inspection date already exists" };
+            }
         }
-        return true;
+        try
+        {
+            using (var context = new InspectionContext())
+            {
+                InspectionDB oldInspection = context.Inspection.Find(inspection.Id);
+                oldInspection.AssetID = inspection.AssetID;
+                oldInspection.InspectionDate = inspection.InspectionDate;
+                oldInspection.InspectionMethodID = inspection.InspectionMethodID;
+                oldInspection.InspectionEffectivenessID = inspection.InspectionEffectivenessID;
+                oldInspection.InspectionDescription = inspection.InspectionDescription;
+                oldInspection.CurrentConditionLeakeageToAtmosphereID =
+                    inspection.CurrentConditionLeakeageToAtmosphereID;
+                oldInspection.CurrentConditionFailureOfFunctionID =
+                    inspection.CurrentConditionFailureOfFunctionID;
+                oldInspection.CurrentConditionPassingAcrossValveID =
+                    inspection.CurrentConditionPassingAcrossValveID;
+                oldInspection.FunctionCondition = inspection.FunctionCondition;
+                oldInspection.TestPressureIfAny = inspection.TestPressureIfAny;
+                context.Inspection.Update(oldInspection);
+                context.SaveChanges();
+            }
+            return new ResultModel { Result = 200, Message = "Inspection updated successfully" };
+        }
+        catch (Exception e)
+        {
+            return new ResultModel { Result = 400, Message = "Inspection date already exists" };
+        }
     }
 
     public bool DeleteInspection(InspectionDB inspection)
@@ -486,6 +513,30 @@ public class InspectionModel : InspectionDB
             inspectionData = inspecionList.FirstOrDefault();
         }
         return inspectionData;
+    }
+
+    public List<InspectionSidebarModel> GetSidebarInspection(int assetID)
+    {
+        List<InspectionSidebarModel> inspectionSidebarList = new();
+        using (var context = new InspectionContext())
+        {
+            inspectionSidebarList = (
+                from inspection in context.Inspection
+                join asset in context.Asset on inspection.AssetID equals asset.Id
+                where assetID == inspection.AssetID && inspection.IsDeleted == false
+                select new InspectionSidebarModel
+                {
+                    Id = inspection.Id,
+                    Name = inspection.InspectionDate
+                }
+            ).ToList();
+            inspectionSidebarList = inspectionSidebarList
+                .OrderByDescending(i =>
+                    DateTime.ParseExact(i.Name, "dd-MM-yyyy", CultureInfo.InvariantCulture)
+                )
+                .ToList();
+        }
+        return inspectionSidebarList;
     }
 }
 

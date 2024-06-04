@@ -186,7 +186,11 @@ public class MaintenanceController : Controller
                 MaintenanceDate = Request.Form["MaintenanceDate"],
                 MaintenanceDescription = Request.Form["MaintenanceDescription"]
             };
-        maintenance.UpdateMaintenance(maintenanceDB);
+        ResultModel resultupdate = maintenance.UpdateMaintenance(maintenanceDB);
+        if(resultupdate.Result != 200)
+        {
+            throw new Exception(resultupdate.Message);
+        }
         IWebHostEnvironment environment =
             Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>();
         string path = Path.Combine(
@@ -238,7 +242,8 @@ public class MaintenanceController : Controller
                 };
             inspectionFileModel.DeleteInspectionFile(inspectionFileDB);
         }
-        return RedirectToAction("Index");
+        MaintenanceModel maintenanceModel = maintenance.GetMaintenanceModel(maintenanceID);
+        return Json(maintenanceModel);
     }
 
     [HttpPost]
@@ -263,5 +268,23 @@ public class MaintenanceController : Controller
         MaintenanceModel maintenance = new();
         List<MaintenanceModel> maintenanceList = maintenance.GetMaintenanceList(false, AssetID);
         return maintenanceList;
+    }
+
+    [HttpGet]
+    public IActionResult GetMaintenanceSidebar(int AssetID)
+    {
+        MaintenanceModel maintenance = new();
+        List<MaintenanceModel> maintenanceList = maintenance.GetMaintenanceList(false, AssetID);
+        List<Dictionary<string, string>> maintenanceSidebar = new();
+        foreach (var item in maintenanceList)
+        {
+            Dictionary<string, string> maintenanceSidebarItem = new()
+            {
+                { "Id", item.Id.ToString() },
+                { "Name", item.MaintenanceDate },
+            };
+            maintenanceSidebar.Add(maintenanceSidebarItem);
+        }
+        return Json(maintenanceSidebar);
     }
 }

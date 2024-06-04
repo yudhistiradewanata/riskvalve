@@ -125,7 +125,7 @@ public class AreaModel : AreaDB
             AreaDB areaCheck = context
                 .Area.Where(a => a.BusinessArea == area.BusinessArea && a.IsDeleted == false)
                 .FirstOrDefault();
-            if (areaCheck != null)
+            if (areaCheck != null && areaCheck.Id != area.Id)
             {
                 return new ResultModel
                 {

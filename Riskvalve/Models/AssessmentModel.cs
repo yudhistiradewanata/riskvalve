@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -89,6 +90,7 @@ public class AssessmentDB
     public double? LoFScorePassingAccrosValveTP2 { get; set; }
     public double? LoFScorePassingAccrosValveTP3 { get; set; }
     public double? CoFScore { get; set; }
+    public string? IntegrityStatus { get; set; }
     public bool? IsDeleted { get; set; }
     public string? CreatedAt { get; set; }
     public int? CreatedBy { get; set; }
@@ -126,6 +128,8 @@ public class AssessmentModel : AssessmentDB
     public string? RiskMax { get; set; }
     public string? LastInspectionDate { get; set; }
     public string? LastMaintenanceDate { get; set; }
+    public int? LastInspectionId { get; set; }
+    public int? LastMaintenanceId { get; set; }
     public Dictionary<string, string> ColorRiskMap =
         new()
         {
@@ -237,6 +241,7 @@ public class AssessmentModel : AssessmentDB
                     LoFScorePassingAccrosValveTP1 = a.LoFScorePassingAccrosValveTP1,
                     LoFScorePassingAccrosValveTP2 = a.LoFScorePassingAccrosValveTP2,
                     LoFScorePassingAccrosValveTP3 = a.LoFScorePassingAccrosValveTP3,
+                    IntegrityStatus = a.IntegrityStatus,
                     IsDeleted = a.IsDeleted,
                     CreatedAt = a.CreatedAt,
                     CreatedBy = a.CreatedBy,
@@ -251,7 +256,9 @@ public class AssessmentModel : AssessmentDB
     public List<AssessmentModel> GetAssessmentList(
         int AreaID = 0,
         int PlatformID = 0,
-        bool IncludeDeleted = false
+        bool IncludeDeleted = false,
+        bool withHistory = true,
+        int AssetID = 0
     )
     {
         List<AssessmentModel> assessmentList = new();
@@ -261,10 +268,91 @@ public class AssessmentModel : AssessmentDB
                 from assessment in context.Assessment
                 join asset in context.Asset on assessment.AssetID equals asset.Id
                 join platform in context.Platform on asset.PlatformID equals platform.Id
+                join lta in context.CurrentConditionLimitState
+                    on assessment.LeakageToAtmosphereID equals lta.Id
+                    into ltaGroup
+                from lta in ltaGroup.DefaultIfEmpty()
+                join fta in context.CurrentConditionLimitState
+                    on assessment.FailureOfFunctionID equals fta.Id
+                    into ftaGroup
+                from fta in ftaGroup.DefaultIfEmpty()
+                join pav in context.CurrentConditionLimitState
+                    on assessment.PassingAccrosValveID equals pav.Id
+                    into pavGroup
+                from pav in pavGroup.DefaultIfEmpty()
+                join ltatp1 in context.TimeToLimitState
+                    on assessment.LeakageToAtmosphereTP1ID equals ltatp1.Id
+                    into ltatp1Group
+                from ltatp1 in ltatp1Group.DefaultIfEmpty()
+                join ltatp2 in context.TimeToLimitState
+                    on assessment.LeakageToAtmosphereTP2ID equals ltatp2.Id
+                    into ltatp2Group
+                from ltatp2 in ltatp2Group.DefaultIfEmpty()
+                join ltatp3 in context.TimeToLimitState
+                    on assessment.LeakageToAtmosphereTP3ID equals ltatp3.Id
+                    into ltatp3Group
+                from ltatp3 in ltatp3Group.DefaultIfEmpty()
+                join foftp1 in context.TimeToLimitState
+                    on assessment.FailureOfFunctionTP1ID equals foftp1.Id
+                    into foftp1Group
+                from foftp1 in foftp1Group.DefaultIfEmpty()
+                join foftp2 in context.TimeToLimitState
+                    on assessment.FailureOfFunctionTP2ID equals foftp2.Id
+                    into foftp2Group
+                from foftp2 in foftp2Group.DefaultIfEmpty()
+                join foftp3 in context.TimeToLimitState
+                    on assessment.FailureOfFunctionTP3ID equals foftp3.Id
+                    into foftp3Group
+                from foftp3 in foftp3Group.DefaultIfEmpty()
+                join pavtp1 in context.TimeToLimitState
+                    on assessment.PassingAccrosValveTP1ID equals pavtp1.Id
+                    into pavtp1Group
+                from pavtp1 in pavtp1Group.DefaultIfEmpty()
+                join pavtp2 in context.TimeToLimitState
+                    on assessment.PassingAccrosValveTP2ID equals pavtp2.Id
+                    into pavtp2Group
+                from pavtp2 in pavtp2Group.DefaultIfEmpty()
+                join pavtp3 in context.TimeToLimitState
+                    on assessment.PassingAccrosValveTP3ID equals pavtp3.Id
+                    into pavtp3Group
+                from pavtp3 in pavtp3Group.DefaultIfEmpty()
+                join ie in context.InspectionEffectiveness
+                    on assessment.InspectionEffectivenessID equals ie.Id
+                    into ieGroup
+                from ie in ieGroup.DefaultIfEmpty()
+                join iifi in context.ImpactEffect
+                    on assessment.ImpactOfInternalFluidImpuritiesID equals iifi.Id
+                    into iifiGroup
+                from iifi in iifiGroup.DefaultIfEmpty()
+                join ioe in context.ImpactEffect
+                    on assessment.ImpactOfOperatingEnvelopesID equals ioe.Id
+                    into ioeGroup
+                from ioe in ioeGroup.DefaultIfEmpty()
+                join uos in context.UsedWithinOEMSpecification
+                    on assessment.UsedWithinOEMSpecificationID equals uos.Id
+                    into uosGroup
+                from uos in uosGroup.DefaultIfEmpty()
+                join r in context.Repaired on assessment.RepairedID equals r.Id into rGroup
+                from r in rGroup.DefaultIfEmpty()
+                join hsse in context.HSSEDefinision
+                    on assessment.HSSEDefinisionID equals hsse.Id
+                    into hsseGroup
+                from hsse in hsseGroup.DefaultIfEmpty()
+                join ra in context.RecommendationAction
+                    on assessment.RecommendationActionID equals ra.Id
+                    into raGroup
+                from ra in raGroup.DefaultIfEmpty()
+                join user in context.User on assessment.CreatedBy equals user.Id into userGroup
+                from user in userGroup.DefaultIfEmpty()
+                join deletedUser in context.User
+                    on assessment.DeletedBy equals deletedUser.Id
+                    into deletedUserGroup
+                from deletedUser in deletedUserGroup.DefaultIfEmpty()
                 where
-                    (AreaID == 0 || platform.AreaID == AreaID) &&
-                    (PlatformID == 0 || asset.PlatformID == PlatformID) &&
-                    (assessment.IsDeleted == false || IncludeDeleted == true)
+                    (AreaID == 0 || platform.AreaID == AreaID)
+                    && (PlatformID == 0 || asset.PlatformID == PlatformID)
+                    && (AssetID == 0 || assessment.AssetID == AssetID)
+                    && (assessment.IsDeleted == false || IncludeDeleted == true)
                 select new AssessmentModel
                 {
                     Id = assessment.Id,
@@ -327,6 +415,7 @@ public class AssessmentModel : AssessmentDB
                     LoFScorePassingAccrosValveTP1 = assessment.LoFScorePassingAccrosValveTP1,
                     LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2,
                     LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3,
+                    IntegrityStatus = assessment.IntegrityStatus,
                     CoFScore = assessment.CoFScore,
                     IsDeleted = assessment.IsDeleted,
                     CreatedAt = assessment.CreatedAt,
@@ -334,120 +423,293 @@ public class AssessmentModel : AssessmentDB
                     DeletedAt = assessment.DeletedAt,
                     DeletedBy = assessment.DeletedBy,
                     Asset = new AssetModel().GetAssetModel(assessment.AssetID),
-                    LeakageToAtmosphere = context
-                        .CurrentConditionLimitState.Where(cc =>
-                            cc.Id == assessment.LeakageToAtmosphereID
-                        )
-                        .FirstOrDefault()
-                        .CurrentConditionLimitState,
-                    FailureOfFunction = context
-                        .CurrentConditionLimitState.Where(cc =>
-                            cc.Id == assessment.FailureOfFunctionID
-                        )
-                        .FirstOrDefault()
-                        .CurrentConditionLimitState,
-                    PassingAccrosValve = context
-                        .CurrentConditionLimitState.Where(cc =>
-                            cc.Id == assessment.PassingAccrosValveID
-                        )
-                        .FirstOrDefault()
-                        .CurrentConditionLimitState,
-                    LeakageToAtmosphereTP1 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP1ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    LeakageToAtmosphereTP2 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP2ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    LeakageToAtmosphereTP3 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.LeakageToAtmosphereTP3ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    FailureOfFunctionTP1 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.FailureOfFunctionTP1ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    FailureOfFunctionTP2 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.FailureOfFunctionTP2ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    FailureOfFunctionTP3 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.FailureOfFunctionTP3ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    PassingAccrosValveTP1 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.PassingAccrosValveTP1ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    PassingAccrosValveTP2 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.PassingAccrosValveTP2ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    PassingAccrosValveTP3 = context
-                        .TimeToLimitState.Where(tp => tp.Id == assessment.PassingAccrosValveTP3ID)
-                        .FirstOrDefault()
-                        .TimeToLimitState,
-                    InspectionEffectiveness = context
-                        .InspectionEffectiveness.Where(ie =>
-                            ie.Id == assessment.InspectionEffectivenessID
-                        )
-                        .FirstOrDefault()
-                        .Effectiveness,
-                    ImpactOfInternalFluidImpurities = context
-                        .ImpactEffect.Where(ie =>
-                            ie.Id == assessment.ImpactOfInternalFluidImpuritiesID
-                        )
-                        .FirstOrDefault()
-                        .ImpactEffect,
-                    ImpactOfOperatingEnvelopes = context
-                        .ImpactEffect.Where(ie => ie.Id == assessment.ImpactOfOperatingEnvelopesID)
-                        .FirstOrDefault()
-                        .ImpactEffect,
-                    UsedWithinOEMSpecification = context
-                        .UsedWithinOEMSpecification.Where(uos =>
-                            uos.Id == assessment.UsedWithinOEMSpecificationID
-                        )
-                        .FirstOrDefault()
-                        .UsedWithinOEMSpecification,
-                    Repaired = context
-                        .Repaired.Where(r => r.Id == assessment.RepairedID)
-                        .FirstOrDefault()
-                        .Repaired,
-                    HSSEDefinision = context
-                        .HSSEDefinision.Where(hsse => hsse.Id == assessment.HSSEDefinisionID)
-                        .FirstOrDefault()
-                        .HSSEDefinision,
-                    RecommendationAction = context
-                        .RecommendationAction.Where(ra =>
-                            ra.Id == assessment.RecommendationActionID
-                        )
-                        .FirstOrDefault()
-                        .RecommendationAction,
-                    CreatedByUser = context
-                        .User.Where(u => u.Id == assessment.CreatedBy)
-                        .FirstOrDefault()
-                        .Username,
-                    DeletedByUser = context
-                        .User.Where(u => u.Id == assessment.DeletedBy)
-                        .FirstOrDefault()
-                        .Username,
-                    InspectionHistory = new AssessmentInspectionModel().GetInspectionList(
-                        assessment.Id
-                    ),
-                    MaintenanceHistory = new AssessmentMaintenanceModel().GetMaintenanceList(
-                        assessment.Id
-                    ),
+                    LeakageToAtmosphere = lta.CurrentConditionLimitState,
+                    FailureOfFunction = fta.CurrentConditionLimitState,
+                    PassingAccrosValve = pav.CurrentConditionLimitState,
+                    LeakageToAtmosphereTP1 = ltatp1.TimeToLimitState,
+                    LeakageToAtmosphereTP2 = ltatp2.TimeToLimitState,
+                    LeakageToAtmosphereTP3 = ltatp3.TimeToLimitState,
+                    FailureOfFunctionTP1 = foftp1.TimeToLimitState,
+                    FailureOfFunctionTP2 = foftp2.TimeToLimitState,
+                    FailureOfFunctionTP3 = foftp3.TimeToLimitState,
+                    PassingAccrosValveTP1 = pavtp1.TimeToLimitState,
+                    PassingAccrosValveTP2 = pavtp2.TimeToLimitState,
+                    PassingAccrosValveTP3 = pavtp3.TimeToLimitState,
+                    InspectionEffectiveness = ie.Effectiveness,
+                    ImpactOfInternalFluidImpurities = iifi.ImpactEffect,
+                    ImpactOfOperatingEnvelopes = ioe.ImpactEffect,
+                    UsedWithinOEMSpecification = uos.UsedWithinOEMSpecification,
+                    Repaired = r.Repaired,
+                    HSSEDefinision = hsse.HSSEDefinision,
+                    RecommendationAction = ra.RecommendationAction,
+                    CreatedByUser = user.Username,
+                    DeletedByUser = deletedUser.Username,
+                    InspectionHistory = withHistory
+                        ? new AssessmentInspectionModel().GetInspectionList(assessment.Id)
+                        : null,
+                    MaintenanceHistory = withHistory
+                        ? new AssessmentMaintenanceModel().GetMaintenanceList(assessment.Id)
+                        : null,
                     LastInspectionDate = new AssessmentInspectionModel().GetLastInspectionDate(
                         assessment.Id
                     ),
+                    LastInspectionId = new AssessmentInspectionModel().GetLastInspectionId(
+                        assessment.Id
+                    ),
                     LastMaintenanceDate = new AssessmentMaintenanceModel().GetLastMaintenanceDate(
+                        assessment.Id
+                    ),
+                    LastMaintenanceId = new AssessmentMaintenanceModel().GetLastMaintenanceId(
                         assessment.Id
                     ),
                 }
             ).ToList();
         }
         return assessmentList;
+    }
+
+    public List<AssessmentModel> GetAssessmentRecapList(
+        int AreaID = 0,
+        int PlatformID = 0,
+        bool IncludeDeleted = false,
+        bool withHistory = true
+    )
+    {
+        List<AssessmentModel> assessmentList = new();
+        using (var context = new AssessmentContext())
+        {
+            assessmentList = (
+                from assessment in context.Assessment
+                join asset in context.Asset on assessment.AssetID equals asset.Id
+                join platform in context.Platform on asset.PlatformID equals platform.Id
+                join lta in context.CurrentConditionLimitState
+                    on assessment.LeakageToAtmosphereID equals lta.Id
+                    into ltaGroup
+                from lta in ltaGroup.DefaultIfEmpty()
+                join fta in context.CurrentConditionLimitState
+                    on assessment.FailureOfFunctionID equals fta.Id
+                    into ftaGroup
+                from fta in ftaGroup.DefaultIfEmpty()
+                join pav in context.CurrentConditionLimitState
+                    on assessment.PassingAccrosValveID equals pav.Id
+                    into pavGroup
+                from pav in pavGroup.DefaultIfEmpty()
+                join ltatp1 in context.TimeToLimitState
+                    on assessment.LeakageToAtmosphereTP1ID equals ltatp1.Id
+                    into ltatp1Group
+                from ltatp1 in ltatp1Group.DefaultIfEmpty()
+                join ltatp2 in context.TimeToLimitState
+                    on assessment.LeakageToAtmosphereTP2ID equals ltatp2.Id
+                    into ltatp2Group
+                from ltatp2 in ltatp2Group.DefaultIfEmpty()
+                join ltatp3 in context.TimeToLimitState
+                    on assessment.LeakageToAtmosphereTP3ID equals ltatp3.Id
+                    into ltatp3Group
+                from ltatp3 in ltatp3Group.DefaultIfEmpty()
+                join foftp1 in context.TimeToLimitState
+                    on assessment.FailureOfFunctionTP1ID equals foftp1.Id
+                    into foftp1Group
+                from foftp1 in foftp1Group.DefaultIfEmpty()
+                join foftp2 in context.TimeToLimitState
+                    on assessment.FailureOfFunctionTP2ID equals foftp2.Id
+                    into foftp2Group
+                from foftp2 in foftp2Group.DefaultIfEmpty()
+                join foftp3 in context.TimeToLimitState
+                    on assessment.FailureOfFunctionTP3ID equals foftp3.Id
+                    into foftp3Group
+                from foftp3 in foftp3Group.DefaultIfEmpty()
+                join pavtp1 in context.TimeToLimitState
+                    on assessment.PassingAccrosValveTP1ID equals pavtp1.Id
+                    into pavtp1Group
+                from pavtp1 in pavtp1Group.DefaultIfEmpty()
+                join pavtp2 in context.TimeToLimitState
+                    on assessment.PassingAccrosValveTP2ID equals pavtp2.Id
+                    into pavtp2Group
+                from pavtp2 in pavtp2Group.DefaultIfEmpty()
+                join pavtp3 in context.TimeToLimitState
+                    on assessment.PassingAccrosValveTP3ID equals pavtp3.Id
+                    into pavtp3Group
+                from pavtp3 in pavtp3Group.DefaultIfEmpty()
+                join ie in context.InspectionEffectiveness
+                    on assessment.InspectionEffectivenessID equals ie.Id
+                    into ieGroup
+                from ie in ieGroup.DefaultIfEmpty()
+                join iifi in context.ImpactEffect
+                    on assessment.ImpactOfInternalFluidImpuritiesID equals iifi.Id
+                    into iifiGroup
+                from iifi in iifiGroup.DefaultIfEmpty()
+                join ioe in context.ImpactEffect
+                    on assessment.ImpactOfOperatingEnvelopesID equals ioe.Id
+                    into ioeGroup
+                from ioe in ioeGroup.DefaultIfEmpty()
+                join uos in context.UsedWithinOEMSpecification
+                    on assessment.UsedWithinOEMSpecificationID equals uos.Id
+                    into uosGroup
+                from uos in uosGroup.DefaultIfEmpty()
+                join r in context.Repaired on assessment.RepairedID equals r.Id into rGroup
+                from r in rGroup.DefaultIfEmpty()
+                join hsse in context.HSSEDefinision
+                    on assessment.HSSEDefinisionID equals hsse.Id
+                    into hsseGroup
+                from hsse in hsseGroup.DefaultIfEmpty()
+                join ra in context.RecommendationAction
+                    on assessment.RecommendationActionID equals ra.Id
+                    into raGroup
+                from ra in raGroup.DefaultIfEmpty()
+                join user in context.User on assessment.CreatedBy equals user.Id into userGroup
+                from user in userGroup.DefaultIfEmpty()
+                join deletedUser in context.User
+                    on assessment.DeletedBy equals deletedUser.Id
+                    into deletedUserGroup
+                from deletedUser in deletedUserGroup.DefaultIfEmpty()
+                where
+                    (AreaID == 0 || platform.AreaID == AreaID)
+                    && (PlatformID == 0 || asset.PlatformID == PlatformID)
+                    && (assessment.IsDeleted == false || IncludeDeleted == true)
+                    && assessment.TP1Risk != null
+                    && assessment.TP2Risk != null
+                    && assessment.TP3Risk != null
+                select new AssessmentModel
+                {
+                    Id = assessment.Id,
+                    AssetID = assessment.AssetID,
+                    AssessmentNo = assessment.AssessmentNo,
+                    AssessmentDate = assessment.AssessmentDate,
+                    TimePeriode = assessment.TimePeriode,
+                    TimeToLimitStateLeakageToAtmosphere =
+                        assessment.TimeToLimitStateLeakageToAtmosphere,
+                    TimeToLimitStateFailureOfFunction =
+                        assessment.TimeToLimitStateFailureOfFunction,
+                    TimeToLimitStatePassingAccrosValve =
+                        assessment.TimeToLimitStatePassingAccrosValve,
+                    LeakageToAtmosphereID = assessment.LeakageToAtmosphereID,
+                    FailureOfFunctionID = assessment.FailureOfFunctionID,
+                    PassingAccrosValveID = assessment.PassingAccrosValveID,
+                    LeakageToAtmosphereTP1ID = assessment.LeakageToAtmosphereTP1ID,
+                    LeakageToAtmosphereTP2ID = assessment.LeakageToAtmosphereTP2ID,
+                    LeakageToAtmosphereTP3ID = assessment.LeakageToAtmosphereTP3ID,
+                    FailureOfFunctionTP1ID = assessment.FailureOfFunctionTP1ID,
+                    FailureOfFunctionTP2ID = assessment.FailureOfFunctionTP2ID,
+                    FailureOfFunctionTP3ID = assessment.FailureOfFunctionTP3ID,
+                    PassingAccrosValveTP1ID = assessment.PassingAccrosValveTP1ID,
+                    PassingAccrosValveTP2ID = assessment.PassingAccrosValveTP2ID,
+                    PassingAccrosValveTP3ID = assessment.PassingAccrosValveTP3ID,
+                    InspectionEffectivenessID = assessment.InspectionEffectivenessID,
+                    ImpactOfInternalFluidImpuritiesID =
+                        assessment.ImpactOfInternalFluidImpuritiesID,
+                    ImpactOfOperatingEnvelopesID = assessment.ImpactOfOperatingEnvelopesID,
+                    UsedWithinOEMSpecificationID = assessment.UsedWithinOEMSpecificationID,
+                    RepairedID = assessment.RepairedID,
+                    ProductLossDefinition = assessment.ProductLossDefinition,
+                    HSSEDefinisionID = assessment.HSSEDefinisionID,
+                    Summary = assessment.Summary,
+                    RecommendationActionID = assessment.RecommendationActionID,
+                    DetailedRecommendation = assessment.DetailedRecommendation,
+                    ConsequenceOfFailure = assessment.ConsequenceOfFailure,
+                    TP1A = assessment.TP1A,
+                    TP2A = assessment.TP2A,
+                    TP3A = assessment.TP3A,
+                    TP1B = assessment.TP1B,
+                    TP2B = assessment.TP2B,
+                    TP3B = assessment.TP3B,
+                    TP1C = assessment.TP1C,
+                    TP2C = assessment.TP2C,
+                    TP3C = assessment.TP3C,
+                    TPTimeToActionA = assessment.TPTimeToActionA,
+                    TPTimeToActionB = assessment.TPTimeToActionB,
+                    TPTimeToActionC = assessment.TPTimeToActionC,
+                    TP1Risk = assessment.TP1Risk,
+                    TP2Risk = assessment.TP2Risk,
+                    TP3Risk = assessment.TP3Risk,
+                    TPTimeToActionRisk = assessment.TPTimeToActionRisk,
+                    LoFScoreLeakageToAtmophereTP1 = assessment.LoFScoreLeakageToAtmophereTP1,
+                    LoFScoreLeakageToAtmophereTP2 = assessment.LoFScoreLeakageToAtmophereTP2,
+                    LoFScoreLeakageToAtmophereTP3 = assessment.LoFScoreLeakageToAtmophereTP3,
+                    LoFScoreFailureOfFunctionTP1 = assessment.LoFScoreFailureOfFunctionTP1,
+                    LoFScoreFailureOfFunctionTP2 = assessment.LoFScoreFailureOfFunctionTP2,
+                    LoFScoreFailureOfFunctionTP3 = assessment.LoFScoreFailureOfFunctionTP3,
+                    LoFScorePassingAccrosValveTP1 = assessment.LoFScorePassingAccrosValveTP1,
+                    LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2,
+                    LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3,
+                    IntegrityStatus = assessment.IntegrityStatus,
+                    CoFScore = assessment.CoFScore,
+                    IsDeleted = assessment.IsDeleted,
+                    CreatedAt = assessment.CreatedAt,
+                    CreatedBy = assessment.CreatedBy,
+                    DeletedAt = assessment.DeletedAt,
+                    DeletedBy = assessment.DeletedBy,
+                    Asset = new AssetModel().GetAssetModel(assessment.AssetID),
+                    LeakageToAtmosphere = lta.CurrentConditionLimitState,
+                    FailureOfFunction = fta.CurrentConditionLimitState,
+                    PassingAccrosValve = pav.CurrentConditionLimitState,
+                    LeakageToAtmosphereTP1 = ltatp1.TimeToLimitState,
+                    LeakageToAtmosphereTP2 = ltatp2.TimeToLimitState,
+                    LeakageToAtmosphereTP3 = ltatp3.TimeToLimitState,
+                    FailureOfFunctionTP1 = foftp1.TimeToLimitState,
+                    FailureOfFunctionTP2 = foftp2.TimeToLimitState,
+                    FailureOfFunctionTP3 = foftp3.TimeToLimitState,
+                    PassingAccrosValveTP1 = pavtp1.TimeToLimitState,
+                    PassingAccrosValveTP2 = pavtp2.TimeToLimitState,
+                    PassingAccrosValveTP3 = pavtp3.TimeToLimitState,
+                    InspectionEffectiveness = ie.Effectiveness,
+                    ImpactOfInternalFluidImpurities = iifi.ImpactEffect,
+                    ImpactOfOperatingEnvelopes = ioe.ImpactEffect,
+                    UsedWithinOEMSpecification = uos.UsedWithinOEMSpecification,
+                    Repaired = r.Repaired,
+                    HSSEDefinision = hsse.HSSEDefinision,
+                    RecommendationAction = ra.RecommendationAction,
+                    CreatedByUser = user.Username,
+                    DeletedByUser = deletedUser.Username,
+                    InspectionHistory = withHistory
+                        ? new AssessmentInspectionModel().GetInspectionList(assessment.Id)
+                        : null,
+                    MaintenanceHistory = withHistory
+                        ? new AssessmentMaintenanceModel().GetMaintenanceList(assessment.Id)
+                        : null,
+                    LastInspectionDate = new AssessmentInspectionModel().GetLastInspectionDate(
+                        assessment.Id
+                    ),
+                    LastInspectionId = new AssessmentInspectionModel().GetLastInspectionId(
+                        assessment.Id
+                    ),
+                    LastMaintenanceDate = new AssessmentMaintenanceModel().GetLastMaintenanceDate(
+                        assessment.Id
+                    ),
+                    LastMaintenanceId = new AssessmentMaintenanceModel().GetLastMaintenanceId(
+                        assessment.Id
+                    ),
+                }
+            ).ToList();
+        }
+        Dictionary<int, AssessmentModel> finalAssessmentList = new();
+        foreach (var assessment in assessmentList)
+        {
+            if (finalAssessmentList.ContainsKey(assessment.AssetID))
+            {
+                if (
+                    DateTime.ParseExact(
+                        assessment.AssessmentDate,
+                        "dd-MM-yyyy",
+                        CultureInfo.InvariantCulture
+                    )
+                    > DateTime.ParseExact(
+                        finalAssessmentList[assessment.AssetID].AssessmentDate,
+                        "dd-MM-yyyy",
+                        CultureInfo.InvariantCulture
+                    )
+                )
+                {
+                    finalAssessmentList[assessment.AssetID] = assessment;
+                }
+            }
+            else
+            {
+                finalAssessmentList.Add(assessment.AssetID, assessment);
+            }
+        }
+        List<AssessmentModel> finalAssessmentListValues = finalAssessmentList.Values.ToList();
+
+        return finalAssessmentListValues;
     }
 
     public AssessmentModel GetAssessmentModel(int id)
@@ -522,6 +784,7 @@ public class AssessmentModel : AssessmentDB
                     LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2,
                     LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3,
                     CoFScore = assessment.CoFScore,
+                    IntegrityStatus = assessment.IntegrityStatus,
                     IsDeleted = assessment.IsDeleted,
                     CreatedAt = assessment.CreatedAt,
                     CreatedBy = assessment.CreatedBy,
@@ -1017,6 +1280,7 @@ public class AssessmentModel : AssessmentDB
             oldAssessment.LoFScorePassingAccrosValveTP2 = assessment.LoFScorePassingAccrosValveTP2;
             oldAssessment.LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3;
             oldAssessment.CoFScore = assessment.CoFScore;
+            oldAssessment.IntegrityStatus = assessment.IntegrityStatus;
             context.Assessment.Update(oldAssessment);
             context.SaveChanges();
         }
@@ -1415,12 +1679,6 @@ public class AssessmentModel : AssessmentDB
         Dictionary<string, string> recap_piechart = new();
         Dictionary<string, Dictionary<string, string>> recap_barchart = new();
         Dictionary<string, string> recap_barchart_convert = new();
-        Dictionary<string, string> bartemplate = new();
-        bartemplate.Add("Very Low", "0");
-        bartemplate.Add("Low", "0");
-        bartemplate.Add("Medium", "0");
-        bartemplate.Add("High", "0");
-        bartemplate.Add("Very High", "0");
         using (var context = new AssessmentContext())
         {
             int a1 = 0;
@@ -1453,7 +1711,10 @@ public class AssessmentModel : AssessmentDB
             int risk_medium = 0;
             int risk_high = 0;
             int risk_veryhigh = 0;
-            List<AssessmentModel> assessmentList = GetAssessmentList();
+            List<AssessmentModel> assessmentList = GetAssessmentRecapList(0, 0, false, false);
+            Console.WriteLine("== START DEBUG ==");
+            Console.WriteLine(JsonConvert.SerializeObject(assessmentList));
+            Console.WriteLine("== END DEBUG ==");
             foreach (var assessment in assessmentList)
             {
                 if (
@@ -1575,7 +1836,17 @@ public class AssessmentModel : AssessmentDB
                 // Console.WriteLine(assessmentjson);
                 if (!recap_barchart.ContainsKey(assessment.Asset.BusinessArea))
                 {
-                    recap_barchart.Add(assessment.Asset.BusinessArea, bartemplate);
+                    recap_barchart.Add(
+                        assessment.Asset.BusinessArea,
+                        new()
+                        {
+                            { "Very Low", "0" },
+                            { "Low", "0" },
+                            { "Medium", "0" },
+                            { "High", "0" },
+                            { "Very High", "0" }
+                        }
+                    );
                 }
                 int curr_risk = int.Parse(recap_barchart[assessment.Asset.BusinessArea][risk]);
                 curr_risk++;
@@ -1934,6 +2205,30 @@ public class AssessmentModel : AssessmentDB
         );
         return assessmentModel;
     }
+
+    public List<InspectionSidebarModel> GetSidebarAssessment(int assetID)
+    {
+        List<InspectionSidebarModel> inspectionSidebarList = new();
+        using (var context = new AssessmentContext())
+        {
+            inspectionSidebarList = (
+                from assessment in context.Assessment
+                join asset in context.Asset on assessment.AssetID equals asset.Id
+                where asset.Id == assetID && assessment.IsDeleted == false
+                select new InspectionSidebarModel
+                {
+                    Id = assessment.Id,
+                    Name = assessment.AssessmentDate
+                }
+            ).ToList();
+            inspectionSidebarList = inspectionSidebarList
+                .OrderByDescending(i =>
+                    DateTime.ParseExact(i.Name, "dd-MM-yyyy", CultureInfo.InvariantCulture)
+                )
+                .ToList();
+        }
+        return inspectionSidebarList;
+    }
 }
 
 public class ImpactEffectModel
@@ -2127,6 +2422,31 @@ public class AssessmentMaintenanceModel
         catch (Exception e) { }
         return lastMaintenanceDate;
     }
+
+    public int GetLastMaintenanceId(int AssessmentID)
+    {
+        int lastMaintenanceId = 0;
+        try
+        {
+            string slastMaintenanceId = "";
+            using (var context = new AssessmentContext())
+            {
+                slastMaintenanceId = (
+                    from m in context.Maintenance
+                    join assessmentMaintenance in context.AssessmentMaintenance
+                        on m.Id equals assessmentMaintenance.MaintenanceID
+                    where assessmentMaintenance.AssessmentID == AssessmentID
+                    orderby m.MaintenanceDate descending
+                    select m.Id
+                )
+                    .FirstOrDefault()
+                    .ToString();
+            }
+            lastMaintenanceId = int.Parse(slastMaintenanceId);
+        }
+        catch (Exception e) { }
+        return lastMaintenanceId;
+    }
 }
 
 public class AssessmentInspectionModel
@@ -2247,5 +2567,30 @@ public class AssessmentInspectionModel
         }
         catch (Exception e) { }
         return lastAssessmentDate;
+    }
+
+    public int GetLastInspectionId(int AssessmentID)
+    {
+        int lastAssessmentId = 0;
+        try
+        {
+            string slastAssessmentId = "";
+            using (var context = new AssessmentContext())
+            {
+                slastAssessmentId = (
+                    from inspection in context.Inspection
+                    join assessmentInspection in context.AssessmentInspection
+                        on inspection.Id equals assessmentInspection.InspectionID
+                    where assessmentInspection.AssessmentID == AssessmentID
+                    orderby inspection.InspectionDate descending
+                    select inspection.Id
+                )
+                    .FirstOrDefault()
+                    .ToString();
+            }
+            lastAssessmentId = int.Parse(slastAssessmentId);
+        }
+        catch (Exception e) { }
+        return lastAssessmentId;
     }
 }

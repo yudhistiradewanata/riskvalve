@@ -434,9 +434,38 @@ public class AssessmentController : Controller
         assessmentModel.DeleteAssessment(assessment);
     }
 
+    [HttpGet]
     public IActionResult GetAssessmentList(int AreaID = 0, int PlatformID = 0)
     {
-        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentList(AreaID, PlatformID);
+        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentRecapList(
+            AreaID,
+            PlatformID,
+            false,
+            false
+        );
         return Json(assessmentList);
+    }
+
+    [HttpGet]
+    public IActionResult GetAssessmentSidebar(int AssetID)
+    {
+        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentList(
+            0,
+            0,
+            false,
+            false,
+            AssetID
+        );
+        List<Dictionary<string, string>> assessmentSidebar = new();
+        foreach (var assessment in assessmentList)
+        {
+            Dictionary<string, string> assessmentSidebarItem = new()
+            {
+                { "Id", assessment.Id.ToString() },
+                { "AssessmentNo", assessment.AssessmentDate }
+            };
+            assessmentSidebar.Add(assessmentSidebarItem);
+        }
+        return Json(assessmentSidebar);
     }
 }

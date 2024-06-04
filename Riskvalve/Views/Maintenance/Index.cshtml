@@ -241,10 +241,11 @@
                         success: function (response) {
                             form.addClass('history-form')
                             // Handle success response
+                            $('.btn-add-new-inspection[attr-inspection-id=' + response.id + ']').html(response.maintenanceDate)
                             alert('Data successfully updated')
                         },
                         error: function (xhr, status, error) {
-                            alert('Error submitting the form')
+                            alert('Maintenance date already exist')
                         }
                     });
                 } else {
@@ -266,21 +267,21 @@
         @* console.log(equipmentId) *@
         @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
                                     $('ul[equipment-id="' + equipmentId + '"]').append(`
-                                        <li class="treeview">
-                                            <a class="btn-add-new-inspection" history-button="" 
-                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                            attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
-                                            attr-sidebar-level="4" 
-                                            attr-find-inspection="${res.Asset.BusinessArea}" 
-                                            attr-find-platform="${res.Asset.Platform}" 
-                                            attr-find-equipment="${res.Asset.TagNo}" 
-                                            attr-find-imr="NEW"
-                                            onclick="addTab.apply(this)"
-                                            >
-                                                ${res.MaintenanceDate}
-                                            </a>
-                                        </li>
-                                    `)
+                                            <li class="treeview">
+                                                <a class="btn-add-new-inspection" history-button="" 
+                                                attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                                attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
+                                                attr-sidebar-level="4" 
+                                                attr-find-inspection="${res.Asset.BusinessArea}" 
+                                                attr-find-platform="${res.Asset.Platform}" 
+                                                attr-find-equipment="${res.Asset.TagNo}" 
+                                                attr-find-imr="NEW"
+                                                onclick="addTab.apply(this)"
+                                                >
+                                                    ${res.MaintenanceDate}
+                                                </a>
+                                            </li>
+                                        `)
 
                                 form.find('.preview-image-gallery .single-image').remove()
                                 form.find('.preview-image-gallery input[type=file]').remove()
@@ -290,7 +291,7 @@
                                 })
                             }
         @* alert('Data successfully inserted') *@
-                            },
+                                },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('error submitting the form')
@@ -388,13 +389,13 @@
                     let galleryHtml = ''
                     data.maintenanceFiles.forEach(i => {
                         galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                                <div class="single-image" data-identifier="gallery-${i.id}">
-                                    <img src="/${i.filePath}"">
-                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                        <i class="fa-solid fa-xmark"></i>
+                                    <div class="single-image" data-identifier="gallery-${i.id}">
+                                        <img src="/${i.filePath}"">
+                                        <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                            <i class="fa-solid fa-xmark"></i>
+                                        </div>
                                     </div>
-                                </div>
-                                `
+                                    `
                     })
 
                     //fill image

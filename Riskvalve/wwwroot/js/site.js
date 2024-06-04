@@ -55,6 +55,7 @@ function initDatatable(options = {}) {
     layout = defaultLayout,
     paging = true,
     ordering = false,
+    columnDefs = []
   } = options || {};
   const scrollableConfig = options.scrollable
     ? {
@@ -76,6 +77,13 @@ function initDatatable(options = {}) {
     search: {
       smart: false,
     },
+    columnDefs: [
+      {
+        targets: "noshow",
+        visible: false,
+      },
+      ...columnDefs
+    ],
     ...scrollableConfig,
   });
 

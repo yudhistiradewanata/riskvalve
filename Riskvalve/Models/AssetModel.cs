@@ -81,41 +81,45 @@ public class AssetModel : AssetDB
         AssetDB asset = new();
         using (var context = new AssetContext())
         {
-            asset = context.Asset.Where(a => a.Id == id)
-            .Select(a => new AssetDB{
-                Id = a.Id,
-                TagNo = a.TagNo,
-                AssetName = a.AssetName,
-                PlatformID = a.PlatformID,
-                ValveTypeID = a.ValveTypeID,
-                Size = a.Size,
-                ClassRating = a.ClassRating,
-                ParentEquipmentNo = a.ParentEquipmentNo,
-                ParentEquipmentDescription = a.ParentEquipmentDescription,
-                InstallationDate = a.InstallationDate,
-                PIDNo = a.PIDNo,
-                Manufacturer = a.Manufacturer,
-                BodyModel = a.BodyModel,
-                BodyMaterial = a.BodyMaterial,
-                EndConnection = a.EndConnection,
-                SerialNo = a.SerialNo,
-                ManualOverrideID = a.ManualOverrideID,
-                ActuatorMfg = a.ActuatorMfg,
-                ActuatorSerialNo = a.ActuatorSerialNo,
-                ActuatorTypeModel = a.ActuatorTypeModel,
-                ActuatorPower = a.ActuatorPower,
-                OperatingTemperature = a.OperatingTemperature,
-                OperatingPressure = a.OperatingPressure,
-                FlowRate = a.FlowRate,
-                ServiceFluid = a.ServiceFluid,
-                FluidPhaseID = a.FluidPhaseID,
-                ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
-                UsageType = a.UsageType,
-                CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
-                Actuation = a.Actuation,
-                Status = a.Status
-            })
-            .FirstOrDefault();
+            asset = context
+                .Asset.Where(a => a.Id == id)
+                .Select(a => new AssetDB
+                {
+                    Id = a.Id,
+                    TagNo = a.TagNo,
+                    AssetName = a.AssetName,
+                    PlatformID = a.PlatformID,
+                    ValveTypeID = a.ValveTypeID,
+                    Size = a.Size,
+                    ClassRating = a.ClassRating,
+                    ParentEquipmentNo = a.ParentEquipmentNo,
+                    ParentEquipmentDescription = a.ParentEquipmentDescription,
+                    InstallationDate = a.InstallationDate,
+                    PIDNo = a.PIDNo,
+                    Manufacturer = a.Manufacturer,
+                    BodyModel = a.BodyModel,
+                    BodyMaterial = a.BodyMaterial,
+                    EndConnection = a.EndConnection,
+                    SerialNo = a.SerialNo,
+                    ManualOverrideID = a.ManualOverrideID,
+                    ActuatorMfg = a.ActuatorMfg,
+                    ActuatorSerialNo = a.ActuatorSerialNo,
+                    ActuatorTypeModel = a.ActuatorTypeModel,
+                    ActuatorPower = a.ActuatorPower,
+                    OperatingTemperature = a.OperatingTemperature,
+                    OperatingPressure = a.OperatingPressure,
+                    FlowRate = a.FlowRate,
+                    ServiceFluid = a.ServiceFluid,
+                    FluidPhaseID = a.FluidPhaseID,
+                    ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
+                    UsageType = a.UsageType,
+                    CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
+                    Actuation = a.Actuation,
+                    Status = a.Status,
+                    CreatedBy = a.CreatedBy,
+                    CreatedAt = a.CreatedAt,
+                })
+                .FirstOrDefault();
         }
         return asset;
     }
@@ -127,12 +131,26 @@ public class AssetModel : AssetDB
         {
             List<AssetModel> assetList = (
                 from a in context.Asset
-                // join p in context.Platform on a.PlatformID equals p.Id
-                // join ar in context.Area on p.AreaID equals ar.Id
-                // join v in context.ValveType on a.ValveTypeID equals v.Id
-                // join m in context.ManualOverride on a.ManualOverrideID equals m.Id
-                // join f in context.FluidPhase on a.FluidPhaseID equals f.Id
-                // join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
+                join p in context.Platform on a.PlatformID equals p.Id into platformGroup
+                from p in platformGroup.DefaultIfEmpty()
+                join ar in context.Area on p.AreaID equals ar.Id into areaGroup
+                from ar in areaGroup.DefaultIfEmpty()
+                join v in context.ValveType on a.ValveTypeID equals v.Id into valveTypeGroup
+                from v in valveTypeGroup.DefaultIfEmpty()
+                join m in context.ManualOverride
+                    on a.ManualOverrideID equals m.Id
+                    into manualOverrideGroup
+                from m in manualOverrideGroup.DefaultIfEmpty()
+                join f in context.FluidPhase on a.FluidPhaseID equals f.Id into fluidPhaseGroup
+                from f in fluidPhaseGroup.DefaultIfEmpty()
+                join t in context.ToxicOrFlamableFluid
+                    on a.ToxicOrFlamableFluidID equals t.Id
+                    into toxicOrFlamableFluidGroup
+                from t in toxicOrFlamableFluidGroup.DefaultIfEmpty()
+                join u in context.User on a.CreatedBy equals u.Id into createdByUserGroup
+                from u in createdByUserGroup.DefaultIfEmpty()
+                join d in context.User on a.DeletedBy equals d.Id into deletedByUserGroup
+                from d in deletedByUserGroup.DefaultIfEmpty()
                 where a.Id == id
                 select new AssetModel
                 {
@@ -162,36 +180,12 @@ public class AssetModel : AssetDB
                     ServiceFluid = a.ServiceFluid,
                     FluidPhaseID = a.FluidPhaseID,
                     ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
-                    Platform = context
-                        .Platform.Where(p => p.Id == a.PlatformID)
-                        .FirstOrDefault()
-                        .Platform,
-                    BusinessArea = context
-                        .Area.Where(ar =>
-                            ar.Id
-                            == context
-                                .Platform.Where(p => p.Id == a.PlatformID)
-                                .FirstOrDefault()
-                                .AreaID
-                        )
-                        .FirstOrDefault()
-                        .BusinessArea,
-                    ValveType = context
-                        .ValveType.Where(v => v.Id == a.ValveTypeID)
-                        .FirstOrDefault()
-                        .ValveType,
-                    ManualOverride = context
-                        .ManualOverride.Where(m => m.Id == a.ManualOverrideID)
-                        .FirstOrDefault()
-                        .ManualOverride,
-                    FluidPhase = context
-                        .FluidPhase.Where(f => f.Id == a.FluidPhaseID)
-                        .FirstOrDefault()
-                        .FluidPhase,
-                    ToxicOrFlamableFluid = context
-                        .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
-                        .FirstOrDefault()
-                        .ToxicOrFlamableFluid,
+                    Platform = p.Platform,
+                    BusinessArea = ar.BusinessArea,
+                    ValveType = v.ValveType,
+                    ManualOverride = m.ManualOverride,
+                    FluidPhase = f.FluidPhase,
+                    ToxicOrFlamableFluid = t.ToxicOrFlamableFluid,
                     AssetName = a.AssetName,
                     CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
                     Status = a.Status,
@@ -202,14 +196,8 @@ public class AssetModel : AssetDB
                     CreatedAt = a.CreatedAt,
                     DeletedBy = a.DeletedBy,
                     DeletedAt = a.DeletedAt,
-                    CreatedByUser = context
-                        .User.Where(u => u.Id == a.CreatedBy)
-                        .FirstOrDefault()
-                        .Username,
-                    DeletedByUser = context
-                        .User.Where(u => u.Id == a.DeletedBy)
-                        .FirstOrDefault()
-                        .Username
+                    CreatedByUser = u.Username,
+                    DeletedByUser = d.Username
                 }
             ).ToList();
             asset = assetList[0];
@@ -229,11 +217,14 @@ public class AssetModel : AssetDB
             assetList = (
                 from a in context.Asset
                 join p in context.Platform on a.PlatformID equals p.Id
-                // join ar in context.Area on p.AreaID equals ar.Id
-                // join v in context.ValveType on a.ValveTypeID equals v.Id
-                // join m in context.ManualOverride on a.ManualOverrideID equals m.Id
-                // join f in context.FluidPhase on a.FluidPhaseID equals f.Id
-                // join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
+                join ar in context.Area on p.AreaID equals ar.Id
+                join v in context.ValveType on a.ValveTypeID equals v.Id
+                join m in context.ManualOverride on a.ManualOverrideID equals m.Id
+                join f in context.FluidPhase on a.FluidPhaseID equals f.Id
+                join t in context.ToxicOrFlamableFluid on a.ToxicOrFlamableFluidID equals t.Id
+                join u in context.User on a.CreatedBy equals u.Id
+                join d in context.User on a.DeletedBy equals d.Id into deletedByUserGroup
+                from d in deletedByUserGroup.DefaultIfEmpty()
                 where
                     (AreaID == 0 || p.AreaID == AreaID)
                     && (PlatformID == 0 || a.PlatformID == PlatformID)
@@ -266,57 +257,24 @@ public class AssetModel : AssetDB
                     ServiceFluid = a.ServiceFluid,
                     FluidPhaseID = a.FluidPhaseID,
                     ToxicOrFlamableFluidID = a.ToxicOrFlamableFluidID,
-                    Platform = context
-                        .Platform.Where(p => p.Id == a.PlatformID)
-                        .FirstOrDefault()
-                        .Platform,
-                    BusinessArea = context
-                        .Area.Where(ar =>
-                            ar.Id
-                            == context
-                                .Platform.Where(p => p.Id == a.PlatformID)
-                                .FirstOrDefault()
-                                .AreaID
-                        )
-                        .FirstOrDefault()
-                        .BusinessArea,
-                    ValveType = context
-                        .ValveType.Where(v => v.Id == a.ValveTypeID)
-                        .FirstOrDefault()
-                        .ValveType,
-                    ManualOverride = context
-                        .ManualOverride.Where(m => m.Id == a.ManualOverrideID)
-                        .FirstOrDefault()
-                        .ManualOverride,
-                    FluidPhase = context
-                        .FluidPhase.Where(f => f.Id == a.FluidPhaseID)
-                        .FirstOrDefault()
-                        .FluidPhase,
-                    ToxicOrFlamableFluid = context
-                        .ToxicOrFlamableFluid.Where(t => t.Id == a.ToxicOrFlamableFluidID)
-                        .FirstOrDefault()
-                        .ToxicOrFlamableFluid,
+                    Platform = p.Platform,
+                    BusinessArea = ar.BusinessArea,
+                    ValveType = v.ValveType,
+                    ManualOverride = m.ManualOverride,
+                    FluidPhase = f.FluidPhase,
+                    ToxicOrFlamableFluid = t.ToxicOrFlamableFluid,
                     AssetName = a.AssetName,
                     CostOfReplacementAndRepair = a.CostOfReplacementAndRepair,
                     Status = a.Status,
                     UsageType = a.UsageType,
                     Actuation = a.Actuation,
-                    lastInspection = new InspectionModel().GetLastAssetInspection(a.Id),
-                    lastMaintenance = new MaintenanceModel().GetLastAssetMaintenance(a.Id),
-                    lastAssessment = new AssessmentModel().GetLastAssetAssessment(a.Id),
                     IsDeleted = a.IsDeleted,
                     CreatedBy = a.CreatedBy,
                     CreatedAt = a.CreatedAt,
                     DeletedBy = a.DeletedBy,
                     DeletedAt = a.DeletedAt,
-                    CreatedByUser = context
-                        .User.Where(u => u.Id == a.CreatedBy)
-                        .FirstOrDefault()
-                        .Username,
-                    DeletedByUser = context
-                        .User.Where(u => u.Id == a.DeletedBy)
-                        .FirstOrDefault()
-                        .Username
+                    CreatedByUser = u.Username,
+                    DeletedByUser = d.Username
                 }
             ).ToList();
         }
@@ -361,46 +319,54 @@ public class AssetModel : AssetDB
         }
     }
 
-    public void UpdateAsset(AssetDB asset)
+    public ResultModel UpdateAsset(AssetDB asset)
     {
-        int id = asset.Id;
-        AssetDB oldAsset = new AssetDB() { Id = 0 };
-        using (var context = new AssetContext())
+        try
         {
-            oldAsset = GetAssetDB(id);
-            oldAsset.IsDeleted = false;
-            oldAsset.TagNo = asset.TagNo;
-            oldAsset.PlatformID = asset.PlatformID;
-            oldAsset.ValveTypeID = asset.ValveTypeID;
-            oldAsset.Size = asset.Size;
-            oldAsset.ClassRating = asset.ClassRating;
-            oldAsset.ParentEquipmentNo = asset.ParentEquipmentNo;
-            oldAsset.ParentEquipmentDescription = asset.ParentEquipmentDescription;
-            oldAsset.InstallationDate = asset.InstallationDate;
-            oldAsset.PIDNo = asset.PIDNo;
-            oldAsset.Manufacturer = asset.Manufacturer;
-            oldAsset.BodyModel = asset.BodyModel;
-            oldAsset.BodyMaterial = asset.BodyMaterial;
-            oldAsset.EndConnection = asset.EndConnection;
-            oldAsset.SerialNo = asset.SerialNo;
-            oldAsset.ManualOverrideID = asset.ManualOverrideID;
-            oldAsset.ActuatorMfg = asset.ActuatorMfg;
-            oldAsset.ActuatorSerialNo = asset.ActuatorSerialNo;
-            oldAsset.ActuatorTypeModel = asset.ActuatorTypeModel;
-            oldAsset.ActuatorPower = asset.ActuatorPower;
-            oldAsset.OperatingTemperature = asset.OperatingTemperature;
-            oldAsset.OperatingPressure = asset.OperatingPressure;
-            oldAsset.FlowRate = asset.FlowRate;
-            oldAsset.ServiceFluid = asset.ServiceFluid;
-            oldAsset.FluidPhaseID = asset.FluidPhaseID;
-            oldAsset.ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID;
-            oldAsset.AssetName = asset.AssetName;
-            oldAsset.CostOfReplacementAndRepair = asset.CostOfReplacementAndRepair;
-            oldAsset.Status = asset.Status;
-            oldAsset.UsageType = asset.UsageType;
-            oldAsset.Actuation = asset.Actuation;
-            context.Asset.Update(oldAsset);
-            context.SaveChanges();
+            int id = asset.Id;
+            AssetDB oldAsset = new AssetDB() { Id = 0 };
+            using (var context = new AssetContext())
+            {
+                oldAsset = GetAssetDB(id);
+                oldAsset.IsDeleted = false;
+                oldAsset.TagNo = asset.TagNo;
+                oldAsset.PlatformID = asset.PlatformID;
+                oldAsset.ValveTypeID = asset.ValveTypeID;
+                oldAsset.Size = asset.Size;
+                oldAsset.ClassRating = asset.ClassRating;
+                oldAsset.ParentEquipmentNo = asset.ParentEquipmentNo;
+                oldAsset.ParentEquipmentDescription = asset.ParentEquipmentDescription;
+                oldAsset.InstallationDate = asset.InstallationDate;
+                oldAsset.PIDNo = asset.PIDNo;
+                oldAsset.Manufacturer = asset.Manufacturer;
+                oldAsset.BodyModel = asset.BodyModel;
+                oldAsset.BodyMaterial = asset.BodyMaterial;
+                oldAsset.EndConnection = asset.EndConnection;
+                oldAsset.SerialNo = asset.SerialNo;
+                oldAsset.ManualOverrideID = asset.ManualOverrideID;
+                oldAsset.ActuatorMfg = asset.ActuatorMfg;
+                oldAsset.ActuatorSerialNo = asset.ActuatorSerialNo;
+                oldAsset.ActuatorTypeModel = asset.ActuatorTypeModel;
+                oldAsset.ActuatorPower = asset.ActuatorPower;
+                oldAsset.OperatingTemperature = asset.OperatingTemperature;
+                oldAsset.OperatingPressure = asset.OperatingPressure;
+                oldAsset.FlowRate = asset.FlowRate;
+                oldAsset.ServiceFluid = asset.ServiceFluid;
+                oldAsset.FluidPhaseID = asset.FluidPhaseID;
+                oldAsset.ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID;
+                oldAsset.AssetName = asset.AssetName;
+                oldAsset.CostOfReplacementAndRepair = asset.CostOfReplacementAndRepair;
+                oldAsset.Status = asset.Status;
+                oldAsset.UsageType = asset.UsageType;
+                oldAsset.Actuation = asset.Actuation;
+                context.Asset.Update(oldAsset);
+                context.SaveChanges();
+                return new ResultModel { Result = 200, Message = "Asset updated successfully" };
+            }
+        }
+        catch (Exception ex)
+        {
+            return new ResultModel { Result = 400, Message = "Tag No already exists"};
         }
     }
 
@@ -410,32 +376,32 @@ public class AssetModel : AssetDB
         AssetDB oldAsset = new AssetDB() { Id = 0 };
         using (var context = new AssetContext())
         {
-            int inspectionCount = context.Inspection
-                .Where(i => i.AssetID == asset.Id && i.IsDeleted == false)
+            int inspectionCount = context
+                .Inspection.Where(i => i.AssetID == asset.Id && i.IsDeleted == false)
                 .Count();
-            int maintenanceCount = context.Maintenance
-                .Where(m => m.AssetID == asset.Id && m.IsDeleted == false)
+            int maintenanceCount = context
+                .Maintenance.Where(m => m.AssetID == asset.Id && m.IsDeleted == false)
                 .Count();
-            int assessmentCount = context.Assessment
-                .Where(a => a.AssetID == asset.Id && a.IsDeleted == false)
+            int assessmentCount = context
+                .Assessment.Where(a => a.AssetID == asset.Id && a.IsDeleted == false)
                 .Count();
-            if (inspectionCount > 0 || maintenanceCount > 0 || assessmentCount > 0){
+            if (inspectionCount > 0 || maintenanceCount > 0 || assessmentCount > 0)
+            {
                 string message = "Asset cannot be deleted because it has ";
-                if(inspectionCount > 0){
+                if (inspectionCount > 0)
+                {
                     message += inspectionCount + " related inspection(s), ";
                 }
-                if(maintenanceCount > 0){
+                if (maintenanceCount > 0)
+                {
                     message += maintenanceCount + " related maintenance(s), ";
                 }
-                if(assessmentCount > 0){
+                if (assessmentCount > 0)
+                {
                     message += assessmentCount + " related assessment(s), ";
                 }
                 message = message.Substring(0, message.Length - 2);
-                return new ResultModel
-                {
-                    Result = 400,
-                    Message = message
-                };
+                return new ResultModel { Result = 400, Message = message };
             }
             oldAsset = GetAssetDB(id);
             oldAsset.IsDeleted = true;
@@ -443,11 +409,7 @@ public class AssetModel : AssetDB
             oldAsset.DeletedAt = asset.DeletedAt;
             context.Asset.Update(oldAsset);
             context.SaveChanges();
-            return new ResultModel
-            {
-                Result = 200,
-                Message = "Asset deleted successfully"
-            };
+            return new ResultModel { Result = 200, Message = "Asset deleted successfully" };
         }
     }
 
@@ -546,9 +508,6 @@ public class AssetModel : AssetDB
                     }
                     else if (mappedKey.Equals("InstallationDate"))
                     {
-                        // mappedValue = DateTime
-                        //     .Parse(value)
-                        //     .ToString(Environment.GetDateFormatString(false));
                         if (value.Contains("/"))
                         {
                             string date = value.Split(" ")[0];
@@ -573,15 +532,6 @@ public class AssetModel : AssetDB
                     }
                     if (mappedValue == "")
                     {
-                        // Exception e =
-                        //     new(
-                        //         "Value '"
-                        //             + record.Value
-                        //             + "' on field '"
-                        //             + key
-                        //             + "' is not match with the database value"
-                        //     );
-                        // throw e;
                         failedRecords.Add(
                             "Value '"
                                 + record.Value

@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
 namespace Riskvalve.Models;
@@ -142,8 +143,23 @@ public class MaintenanceModel : MaintenanceDB
         return maintenanceID;
     }
 
-    public void UpdateMaintenance(MaintenanceDB maintenanceDB)
+    public ResultModel UpdateMaintenance(MaintenanceDB maintenanceDB)
     {
+        using (var context = new MaintenanceContext())
+        {
+            MaintenanceDB checkMaintenance = context
+                .Maintenance.Where(m =>
+                    m.Id != maintenanceDB.Id
+                    && m.MaintenanceDate == maintenanceDB.MaintenanceDate
+                    && m.AssetID == maintenanceDB.AssetID
+                    && m.IsDeleted == false
+                )
+                .FirstOrDefault();
+            if (checkMaintenance != null)
+            {
+                return new ResultModel { Result = 400, Message = "Maintenance with the same asset and date already exist" };
+            }
+        }
         using (var context = new MaintenanceContext())
         {
             MaintenanceDB oldMaintenance = context.Maintenance.Find(maintenanceDB.Id);
@@ -154,6 +170,7 @@ public class MaintenanceModel : MaintenanceDB
             oldMaintenance.MaintenanceDescription = maintenanceDB.MaintenanceDescription;
             context.Maintenance.Update(oldMaintenance);
             context.SaveChanges();
+            return new ResultModel { Result = 200, Message = "Inspection updated successfully" };
         }
     }
 
@@ -336,6 +353,25 @@ public class MaintenanceModel : MaintenanceDB
             ).ToList().FirstOrDefault();
         }
         return maintenance;
+    }
+
+    public List<InspectionSidebarModel> GetSidebarMaintenance(int assetID)
+    {
+        List<InspectionSidebarModel> inspectionSidebar = new();
+        using (var context = new MaintenanceContext())
+        {
+            inspectionSidebar = (
+                from m in context.Maintenance
+                where m.AssetID == assetID && m.IsDeleted == false
+                select new InspectionSidebarModel { Id = m.Id, Name = m.MaintenanceDate }
+            ).ToList();
+            inspectionSidebar = inspectionSidebar
+                .OrderByDescending(i =>
+                    DateTime.ParseExact(i.Name, "dd-MM-yyyy", CultureInfo.InvariantCulture)
+                )
+                .ToList();
+        }
+        return inspectionSidebar;
     }
 }
 

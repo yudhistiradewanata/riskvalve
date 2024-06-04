@@ -151,9 +151,11 @@
             if (mode == 'create') {
                 $('#field-user-mode').val('create');
                 $('#btn-user-modal-delete').hide();
+                $('#field-password').attr('required', 'true')
                 $('#addUserModal').modal('show');
             } else if (mode == 'view') {
                 var id = $(this).attr('attr-itemid');
+                $('#field-password').removeAttr('required')
                 $.ajax({
                     url: '@urlgetuser',
                     type: 'GET',

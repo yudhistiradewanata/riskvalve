@@ -79,7 +79,7 @@
                 <td colspan="2">@maintenance.Asset.Manufacturer</td>
                 <td colspan="5">Pneumatic</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.Actuation.ToLower() == "pneumatic" ? "checked" : "")/>
                     
                 </td>
             </tr>
@@ -88,7 +88,7 @@
                 <td colspan="2">@maintenance.Asset.BodyMaterial</td>
                 <td colspan="5">Hydraulic</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.Actuation.ToLower() == "hydraulic" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
@@ -108,7 +108,7 @@
                 <td colspan="6" class="table-section">Valve Maintenance</td>
                 <td colspan="5">Manual valve</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "manual valve" ? "checked" : "")/>
                 </td>
             </tr>
             <!-- Inspection rows -->
@@ -117,7 +117,7 @@
                 <td colspan="2">@maintenance.IsValveRepaired</td>
                 <td colspan="5">Auto On-Off Valve</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "auto on-off valve" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
@@ -125,7 +125,7 @@
                 <td colspan="2">@maintenance.MaintenanceDescription</td>
                 <td colspan="5">Control Valve</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "control valve" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
@@ -133,7 +133,7 @@
                 <td colspan="2">@maintenance.MaintenanceDescription</td>
                 <td colspan="5">PSV/PRV</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "psv/prv" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
@@ -148,19 +148,19 @@
             <tr>
                 <td colspan="5">In-service</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.Status.ToLower() == "in-service" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
                 <td colspan="5">Waiting For Refurbishment</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.Status.ToLower() == "waiting for refurbishment" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
                 <td colspan="5">Spare</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" />
+                    <input type="checkbox" @(maintenance.Asset.Status.ToLower() == "spare" ? "checked" : "")/>
                 </td>
             </tr>
         </table>

@@ -2,12 +2,19 @@
     var inspectionSidebar = ViewData["InspectionSidebar"] as List<InspectionSidebarModel>;
     var pageType = ViewData["PageType"] as string;
     var urldeleteasset = Url.Action("DeleteAsset", "AssetRegister");
+
+    var urlgetassetsidebar = Url.Action("GetAssetSidebar", "AssetRegister");
+    var urlgetinspectionsidebar = Url.Action("GetInspectionSidebar", "Inspection");
+    var urlgetmaintenancesidebar = Url.Action("GetMaintenanceSidebar", "Maintenance");
+    var urlgetassessmentsidebar = Url.Action("GetAssessmentSidebar", "Assessment");
+    var urllevel4 = pageType.ToLower() == "inspection" ? urlgetinspectionsidebar : pageType.ToLower() == "maintenance" ? urlgetmaintenancesidebar : urlgetassessmentsidebar;
+    var urlassetsearch = Url.Action("GetAssetSidebarSearch", "AssetRegister");
 }
 
 <aside class="main-sidebar">
     <div class="inspection-sidebar-container">
         <section class="sidebar inspection-sidebar" id="tree-menu">
-            <form class="form-inline" role="form">
+            <!-- <form class="form-inline" role="form">
                 <div class="position-relative">
                     <input type="text" class="form-control" id="searchForm"
                         placeholder="Search Area / Platform / Asset">
@@ -15,28 +22,29 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
                 </div>
-            </form>
+            </form> -->
             <ul class="sidebar-menu-inspection-assessment">
                 @if (inspectionSidebar != null)
                 {
                     @foreach (var item in inspectionSidebar as List<InspectionSidebarModel>)
                     {
                         <li class="treeview">
-                            <a class="sidebartreea" attr-sidebar-level="1" attr-find-inspection="@item.Name">@item.Name</a>
+                            <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="1" attr-find-inspection="@item.Name">@item.Name</a>
                             <ul class="treeview-menu">
                                 @foreach (var platform in item.Child as List<InspectionSidebarModel>)
                                 {
                                     <li class="treeview">
-                                        <a class="sidebartreea" attr-sidebar-level="2" attr-find-inspection="@item.Name"
-                                            attr-find-platform="@platform.Name">@platform.Name</a>
+                                        <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="2" attr-find-inspection="@item.Name"
+                                            attr-find-platform="@platform.Name"
+                                            attr-find-platformid="@platform.Id">@platform.Name</a>
                                         <ul class="treeview-menu">
-                                            @foreach (var equipment in platform.Child)
+                                            @* @foreach (var equipment in platform.Child)
                                             {
                                                 <li class="treeview">
-                                                    <a class="sidebartreea" attr-sidebar-level="3" attr-find-inspection="@item.Name"
+                                                    <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="@item.Name"
                                                         attr-find-platform="@platform.Name"
-                                                        attr-find-equipment="@equipment.Name">@equipment.Name <i class="fa fa-trash"
-                                                            onclick="deleteAsset(@equipment.Id, '@equipment.Name')" style="color: red;"></i></a>
+                                                        attr-find-equipment="@equipment.Name">@equipment.Name
+                                                    </a>
                                                     <ul class="treeview-menu" equipment-id="@equipment.Id">
                                                         <li class="treeview">
                                                             <a class="btn-add-new-inspection" attr-id="@equipment.Id"
@@ -54,14 +62,11 @@
                                                                     attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
                                                                     attr-find-equipment="@equipment.Name"
                                                                     attr-find-imr="NEW">@inspection.Name</a>
-                                                                @* <i class="fa fa-trash"
-                                                                    onclick="deleteFromTab(@inspection.Id, '@inspection.Name')" style="color: red;">
-                                                                </i> *@
                                                             </li>
                                                         }
                                                     </ul>
                                                 </li>
-                                            }
+                                            } *@
                                         </ul>
                                     </li>
                                 }
@@ -97,7 +102,7 @@
     }
 
     function close_inspection(ctr, force) {
-        if (force || confirm('Are you sure you want to close this assessment?')) {
+        if (force || confirm('Are you sure you want to close this tab?')) {
             $('#inspectionheader' + ctr).remove();
             $('#inspection' + ctr).remove();
             moveToLastTab()
@@ -119,9 +124,177 @@
             });
         }
     }
+
+    function sidebarClick () {
+        $('.sidebartreea').removeClass('selected')
+        $(this).addClass('selected')
+        for (var i = 2; i <= 4; i++) {
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="' + i + '"]').each(function () {
+                var parent = $(this).parent();
+                parent.hide();
+
+            });
+        }
+        var level = $(this).attr('attr-sidebar-level');
+        var level_1 = $(this).attr('attr-find-inspection');
+        var level_2 = $(this).attr('attr-find-platform');
+        var level_3 = $(this).attr('attr-find-equipment');
+        let selectedEl = $(this)
+        selectedEl.toggleClass('child-open')
+        const isChildOpening = selectedEl.hasClass('child-open')
+        if (!isChildOpening) {
+            selectedEl.closest('.treeview').find('a').removeClass('child-open')
+        } else {
+            selectedEl.closest('.treeview').siblings().each(function () {
+                $(this).find('a').removeClass('child-open')
+            })
+        }
+
+        if (level == 3) {
+            $.ajax({
+                url: '@urllevel4',
+                type: 'GET',
+                data: {
+                    assetid: $(this).attr('attr-find-equipmentid')
+                },
+                success: function (data) {
+                    console.log(data);
+                    let ul_el = selectedEl.closest('.treeview').find('ul')
+                    ul_el.find('.child-data-entry').remove()
+                    data.forEach(function (item) {
+                        const newLiElement = `<li class="child-data-entry">
+                                                <a class="btn-add-new-inspection" history-button 
+                                                    attr-id="${item.Id}"
+                                                    attr-sidebar-level="4"
+                                                    attr-inspection-id="${item.Id}"
+                                                    attr-name="${item.Name}" 
+                                                    attr-find-inspection="" 
+                                                    attr-find-platform=""
+                                                    attr-find-equipment=""
+                                                    attr-find-imr="NEW"
+                                                    onclick="addTab.apply(this)"
+                                                >${item.Name}</a>
+                                            </li>` 
+                        ul_el.append(newLiElement)
+                    })
+                }
+            })
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
+                var parent = $(this).parent();
+                if ($(this).attr('attr-find-inspection') != level_1) {
+                    parent.hide();
+                }
+                else {
+                    parent.show();
+                }
+            });
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="3"]').each(function () {
+                var parent = $(this).parent();
+                if ($(this).attr('attr-find-platform') != level_2) {
+                    parent.hide();
+                }
+                else {
+                    parent.show();
+                }
+            });
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
+                // alert('level 4')
+                var parent = $(this).parent();
+                if ($(this).attr('attr-find-equipment') != level_3 || !isChildOpening) {
+                    // alert('level 3')
+                    parent.hide();
+                }
+                else {
+                    parent.show();
+                }
+            });
+        } else if (level == 2) {
+            $.ajax({
+                url: '@urlgetassetsidebar',
+                type: 'GET',
+                data: {
+                    platformid: $(this).attr('attr-find-platformid')
+                },
+                success: function (data) {
+                    console.log(data);
+                    var ul_el = selectedEl.closest('.treeview').find('ul')
+                    ul_el.empty()
+                    data.forEach(function (item) {
+                        let li_el = $('<li class="treeview"></li>')
+                        let a_el = $('<a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="' + item.businessArea + '" attr-find-platform="' + item.platform + '" attr-find-equipmentid="'+ item.id +'" attr-find-equipment="' + item.tagNo + '">' + item.tagNo + '</a>')
+                        let ul_el2 = $(`<ul class="treeview-menu" equipment-id="${item.id}">
+                            <li style="display: none" class="treeview">
+                                <a class="btn-add-new-inspection" attr-id="${item.id}"
+                                    attr-name="${item.name}" attr-sidebar-level="4"
+                                    attr-find-inspection="${item.name}" attr-find-platform="${item.platform}"
+                                    attr-find-equipment="${item.tagNo}" attr-find-imr="NEW">[Add New
+                                    @pageType]</a>
+                            </li>
+                        </ul>`)
+                        li_el.append(a_el)
+                        li_el.append(ul_el2)
+                        ul_el.append(li_el)
+                    })
+                }
+            })
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
+                var parent = $(this).parent();
+                if ($(this).attr('attr-find-inspection') != level_1) {
+                    parent.hide();
+                }
+                else {
+                    parent.show();
+                }
+            });
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="3"]').each(function () {
+                var parent = $(this).parent();
+                if ($(this).attr('attr-find-platform') != level_2 || !isChildOpening) {
+                    parent.hide();
+                }
+                else {
+                    parent.show();
+                }
+            });
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
+                var parent = $(this).parent();
+                parent.hide();
+            });
+        } else if (level == 1) {
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
+                var parent = $(this).parent();
+                if ($(this).attr('attr-find-inspection') != level_1 || !isChildOpening) {
+                    parent.hide();
+                }
+                else {
+                    parent.show();
+                }
+            });
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="3"]').each(function () {
+                var parent = $(this).parent();
+                parent.hide();
+            });
+            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
+                var parent = $(this).parent();
+                parent.hide();
+            });
+        }
+    }
+
     $(document).ready(function () {
         fold_all_sidebar_menu();
         $("#searchForm").on("keyup", function () {
+            @* if($(this).val().length > 0){
+                $.ajax({
+                    url: '@urlassetsearch',
+                    type: 'GET',
+                    data: {
+                        search: $(this).val()
+                    },
+                    success: function (data) {
+                        console.log(data);
+                    }
+                })
+            } *@
             var value = $(this).val().toLowerCase();
             if (value == '') {
                 $(".sidebar-menu-inspection-assessment li").filter(function () {
@@ -135,102 +308,7 @@
             }
         });
 
-        $('.sidebartreea').click(function () {
-            $('.sidebartreea').removeClass('selected')
-            $(this).addClass('selected')
-            for (var i = 2; i <= 4; i++) {
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="' + i + '"]').each(function () {
-                    var parent = $(this).parent();
-                    parent.hide();
-
-                });
-            }
-            var level = $(this).attr('attr-sidebar-level');
-            var level_1 = $(this).attr('attr-find-inspection');
-            var level_2 = $(this).attr('attr-find-platform');
-            var level_3 = $(this).attr('attr-find-equipment');
-            let selectedEl = $(this)
-            selectedEl.toggleClass('child-open')
-            const isChildOpening = selectedEl.hasClass('child-open')
-            if (!isChildOpening) {
-                selectedEl.closest('.treeview').find('a').removeClass('child-open')
-            } else {
-                selectedEl.closest('.treeview').siblings().each(function () {
-                    $(this).find('a').removeClass('child-open')
-                })
-            }
-
-            if (level == 3) {
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
-                    var parent = $(this).parent();
-                    if ($(this).attr('attr-find-inspection') != level_1) {
-                        parent.hide();
-                    }
-                    else {
-                        parent.show();
-                    }
-                });
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="3"]').each(function () {
-                    var parent = $(this).parent();
-                    if ($(this).attr('attr-find-platform') != level_2) {
-                        parent.hide();
-                    }
-                    else {
-                        parent.show();
-                    }
-                });
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
-                    var parent = $(this).parent();
-                    if ($(this).attr('attr-find-equipment') != level_3 || !isChildOpening) {
-                        parent.hide();
-                    }
-                    else {
-                        parent.show();
-                    }
-                });
-            } else if (level == 2) {
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
-                    var parent = $(this).parent();
-                    if ($(this).attr('attr-find-inspection') != level_1) {
-                        parent.hide();
-                    }
-                    else {
-                        parent.show();
-                    }
-                });
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="3"]').each(function () {
-                    var parent = $(this).parent();
-                    if ($(this).attr('attr-find-platform') != level_2 || !isChildOpening) {
-                        parent.hide();
-                    }
-                    else {
-                        parent.show();
-                    }
-                });
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
-                    var parent = $(this).parent();
-                    parent.hide();
-                });
-            } else if (level == 1) {
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
-                    var parent = $(this).parent();
-                    if ($(this).attr('attr-find-inspection') != level_1 || !isChildOpening) {
-                        parent.hide();
-                    }
-                    else {
-                        parent.show();
-                    }
-                });
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="3"]').each(function () {
-                    var parent = $(this).parent();
-                    parent.hide();
-                });
-                $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="4"]').each(function () {
-                    var parent = $(this).parent();
-                    parent.hide();
-                });
-            }
-        });
+        // $('.sidebartreea').click();
 
     @* fold_all_sidebar_menu(); *@
         });

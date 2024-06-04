@@ -214,9 +214,9 @@ public class AssetRegisterController : Controller
                 return Redirect(Environment.app_path + "/Home/Index");
             }
         }
-        AssetModel assetModel = new();
-        List<AssetModel> assetList = assetModel.GetAssetList();
-        ViewData["AssetList"] = assetList;
+        // AssetModel assetModel = new();
+        // List<AssetModel> assetList = assetModel.GetAssetList();
+        // ViewData["AssetList"] = assetList;
 
         List<PlatformModel> platformList = new PlatformModel().GetPlatformList();
         ViewData["PlatformList"] = platformList;
@@ -238,6 +238,138 @@ public class AssetRegisterController : Controller
     }
 
     [HttpGet]
+    public IActionResult GetAssetDatatable(
+        int draw,
+        int start,
+        int length,
+        string searchValue,
+        string sortColumn,
+        string sortColumnDirection
+    )
+    {
+        AssetModel assetModel = new();
+        List<AssetModel> assetList = assetModel.GetAssetList();
+
+        // Search
+        // Console.WriteLine("=== DEBUG MODE ===");
+        // Console.WriteLine("searchValue: " + searchValue);
+        // Console.WriteLine("sortColumn: " + sortColumn);
+        // Console.WriteLine("sortColumnDirection: " + sortColumnDirection);
+        // Console.WriteLine("=== END DEBUG ===");
+        if (!string.IsNullOrEmpty(searchValue))
+        {
+            assetList = assetList
+                .Where(x =>
+                    x.TagNo.ToLower().Contains(searchValue.ToLower())
+                    || x.AssetName.ToLower().Contains(searchValue.ToLower())
+                    || x.BusinessArea.ToLower().Contains(searchValue.ToLower())
+                    || x.Platform.ToLower().Contains(searchValue.ToLower())
+                    || x.ValveType.ToLower().Contains(searchValue.ToLower())
+                    || x.Size.ToLower().Contains(searchValue.ToLower())
+                    || x.ClassRating.ToLower().Contains(searchValue.ToLower())
+                    || x.PIDNo.ToLower().Contains(searchValue.ToLower())
+                    || x.ParentEquipmentNo.ToLower().Contains(searchValue.ToLower())
+                    || x.ParentEquipmentDescription.ToLower().Contains(searchValue.ToLower())
+                    || x.ServiceFluid.ToLower().Contains(searchValue.ToLower())
+                )
+                .ToList();
+        }
+
+        // Sorting
+        if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))
+        {
+            if (sortColumn.ToLower() == "1")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.TagNo).ToList()
+                        : assetList.OrderByDescending(x => x.TagNo).ToList();
+            }
+            else if (sortColumn.ToLower() == "2")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.BusinessArea).ToList()
+                        : assetList.OrderByDescending(x => x.BusinessArea).ToList();
+            }
+            else if (sortColumn.ToLower() == "3")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.Platform).ToList()
+                        : assetList.OrderByDescending(x => x.Platform).ToList();
+            }
+            else if (sortColumn.ToLower() == "4")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.ValveType).ToList()
+                        : assetList.OrderByDescending(x => x.ValveType).ToList();
+            }
+            else if (sortColumn.ToLower() == "5")
+            {
+                // assetList =
+                //     sortColumnDirection.ToLower() == "asc"
+                //         ? assetList.OrderBy(x => x.Size).ToList()
+                //         : assetList.OrderByDescending(x => x.Size).ToList();
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => int.Parse(x.Size)).ToList()
+                        : assetList.OrderByDescending(x => int.Parse(x.Size)).ToList();
+            }
+            else if (sortColumn.ToLower() == "6")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.ClassRating).ToList()
+                        : assetList.OrderByDescending(x => x.ClassRating).ToList();
+            }
+            else if (sortColumn.ToLower() == "7")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.PIDNo).ToList()
+                        : assetList.OrderByDescending(x => x.PIDNo).ToList();
+            }
+            else if (sortColumn.ToLower() == "8")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.ParentEquipmentNo).ToList()
+                        : assetList.OrderByDescending(x => x.ParentEquipmentNo).ToList();
+            }
+            else if (sortColumn.ToLower() == "9")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.ParentEquipmentDescription).ToList()
+                        : assetList.OrderByDescending(x => x.ParentEquipmentDescription).ToList();
+            }
+            else if (sortColumn.ToLower() == "10")
+            {
+                assetList =
+                    sortColumnDirection.ToLower() == "asc"
+                        ? assetList.OrderBy(x => x.ServiceFluid).ToList()
+                        : assetList.OrderByDescending(x => x.ServiceFluid).ToList();
+            }
+        }
+
+        // Paging
+        int recordsTotal = assetList.Count();
+        var data = assetList.Skip(start).Take(length).ToList();
+
+        return Json(
+            new
+            {
+                draw = draw,
+                recordsFiltered = recordsTotal,
+                recordsTotal = recordsTotal,
+                data = data
+            }
+        );
+    }
+
+    [HttpGet]
     public IActionResult GetAssetList(int AreaID = 0, int PlatformID = 0)
     {
         AssetModel assetModel = new();
@@ -255,7 +387,7 @@ public class AssetRegisterController : Controller
     }
 
     [HttpPost]
-    public IActionResult UpdateAsset()
+    public ResultModel UpdateAsset()
     {
         AssetModel assetModel = new();
         AssetDB assetDb =
@@ -295,8 +427,8 @@ public class AssetRegisterController : Controller
                 UsageType = Request.Form["UsageType"],
                 Actuation = Request.Form["Actuation"],
             };
-        assetModel.UpdateAsset(assetDb);
-        return RedirectToAction("Asset");
+        ResultModel result = assetModel.UpdateAsset(assetDb);
+        return result;
     }
 
     [HttpPost]
@@ -378,6 +510,38 @@ public class AssetRegisterController : Controller
             };
         ResultModel result = assetModel.DeleteAsset(assetModel);
         return result;
+    }
+
+    [HttpGet]
+    public IActionResult GetAssetSidebar(int PlatformID)
+    {
+        AssetModel assetModel = new();
+        List<AssetModel> assetList = assetModel.GetAssetList(0, PlatformID);
+        return Json(assetList);
+    }
+
+    [HttpGet]
+    public IActionResult GetAssetSidebarSearch(string search)
+    {
+        AssetModel assetModel = new();
+        List<AssetModel> asset = assetModel.GetAssetList().Where(a => a.TagNo.ToLower().Contains(search.ToLower())).ToList();
+        Dictionary<string, Dictionary<string, List<AssetModel>>> areaPlatformAssetList = new();
+        foreach (var item in asset)
+        {
+            if (!areaPlatformAssetList.ContainsKey(item.BusinessArea))
+            {
+                areaPlatformAssetList.Add(
+                    item.BusinessArea,
+                    new Dictionary<string, List<AssetModel>>()
+                );
+            }
+            if (!areaPlatformAssetList[item.BusinessArea].ContainsKey(item.Platform))
+            {
+                areaPlatformAssetList[item.BusinessArea].Add(item.Platform, new List<AssetModel>());
+            }
+            areaPlatformAssetList[item.BusinessArea][item.Platform].Add(item);
+        }
+        return Json(areaPlatformAssetList);
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

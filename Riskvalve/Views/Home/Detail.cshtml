@@ -13,7 +13,7 @@
         </div>
         <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 subheader-negative-margin">
             <div class="subheader">
-                <b>Export Assessment</b>
+                <b>Assessment Summary</b>
             </div>
             <div class="content-container">
                 <div class="row ">
@@ -52,63 +52,66 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>Valve Tag No</th>
                                     <th>Business Unit Area</th>
                                     <th>Platform</th>
-                                    <th>Parent Equipment No.</th>
-                                    <th>Value Type</th>
-                                    <th>Parent Equipment Description</th>
-                                    <th>Installation Date (dd/mm/yyyy)</th>
+                                    <th>Valve Tag No</th>
+                                    <th>Equipment Name</th>
+                                    <th class="noshow">Parent Equipment No.</th>
+                                    <th class="noshow">Parent Equipment Description</th>
                                     <th>PID. No.</th>
-                                    <th>Valve Type</th>
+                                    <th>Value Type</th>
                                     <th>Size</th>
                                     <th>Class/Rating</th>
-                                    <th>Assessment Date (dd/mm/yyyy)</th>
-                                    <th>Last Inspection Date (dd/mm/yyyy)</th>
-                                    <th>Last Maintenance Date (dd/mm/yyyy)</th>
-                                    <th>Leakage to atmosphere TP1</th>
-                                    <th>Leakage to atmosphere TP2</th>
-                                    <th>Leakage to atmosphere TP3</th>
-                                    <th>Failure of function TP1</th>
-                                    <th>Failure of function TP2</th>
-                                    <th>Failure of function TP3</th>
-                                    <th>Passing across valve TP1</th>
-                                    <th>Passing across valve TP2</th>
-                                    <th>Passing across valve TP3</th>
+                                    <th>Installation Date (dd-mm-yyyy)</th>
+                                    <th>Assessment Date (dd-mm-yyyy)</th>
+                                    <th>Last Inspection Date (dd-mm-yyyy)</th>
+                                    <th>Last Maintenance Date (dd-mm-yyyy)</th>
+                                    <th>Time Period (Month)</th>
+                                    <th class="noshow">Leakage to atmosphere TP1</th>
+                                    <th class="noshow">Leakage to atmosphere TP2</th>
+                                    <th class="noshow">Leakage to atmosphere TP3</th>
+                                    <th class="noshow">Failure of function TP1</th>
+                                    <th class="noshow">Failure of function TP2</th>
+                                    <th class="noshow">Failure of function TP3</th>
+                                    <th class="noshow">Passing across valve TP1</th>
+                                    <th class="noshow">Passing across valve TP2</th>
+                                    <th class="noshow">Passing across valve TP3</th>
                                     <th>Risk TP1</th>
                                     <th>Risk TP2</th>
                                     <th>Risk TP3</th>
+                                    <th>Ingerity Status</th>
                                     <th>Recommendation Action</th>
                                     <th>Time to Action</th>
-                                    <th>LF1-Leakage to atmophere</th>
-                                    <th>LF1-Failure of function</th>
-                                    <th>LF1-Passing accross valve</th>
-                                    <th>LF2-Leakage to atmophere TP1</th>
-                                    <th>LF2-Failure of function TP1</th>
-                                    <th>LF2-Passing accross valve TP1</th>
-                                    <th>LF2-Leakage to atmophere TP2</th>
-                                    <th>LF2-Failure of function TP2</th>
-                                    <th>LF2-Passing accross valve TP2</th>
-                                    <th>LF2-Leakage to atmophere TP3</th>
-                                    <th>LF2-Failure of function TP3</th>
-                                    <th>LF2-Passing accross valve TP3</th>
-                                    <th>LF3-Inspection Effectiveness</th>
-                                    <th>LF4-Impact of Internal Fluid Impurities</th>
-                                    <th>LF5-Impact of Operating Envelopes</th>
-                                    <th>LF6-Used within OEM Specification</th>
-                                    <th>LF7-Repaired</th>
-                                    <th>CF1-Product loss definition (bbls)</th>
-                                    <th>CF2-HSSE Definision</th>
-                                    <th>LoF Score-Leakage to atmophere TP1</th>
-                                    <th>LoF Score-Failure of function TP1</th>
-                                    <th>LoF Score-Passing accross valve TP1</th>
-                                    <th>LoF Score-Leakage to atmophere TP2</th>
-                                    <th>LoF Score-Failure of function TP2</th>
-                                    <th>LoF Score-Passing accross valve TP2</th>
-                                    <th>LoF Score-Leakage to atmophere TP3</th>
-                                    <th>LoF Score-Failure of function TP3</th>
-                                    <th>LoF Score-Passing accross valve TP3</th>
-                                    <th>CoF Score</th>
+                                    <th class="noshow">LF1-Leakage to atmophere</th>
+                                    <th class="noshow">LF1-Failure of function</th>
+                                    <th class="noshow">LF1-Passing accross valve</th>
+                                    <th class="noshow">LF2-Leakage to atmophere TP1</th>
+                                    <th class="noshow">LF2-Failure of function TP1</th>
+                                    <th class="noshow">LF2-Passing accross valve TP1</th>
+                                    <th class="noshow">LF2-Leakage to atmophere TP2</th>
+                                    <th class="noshow">LF2-Failure of function TP2</th>
+                                    <th class="noshow">LF2-Passing accross valve TP2</th>
+                                    <th class="noshow">LF2-Leakage to atmophere TP3</th>
+                                    <th class="noshow">LF2-Failure of function TP3</th>
+                                    <th class="noshow">LF2-Passing accross valve TP3</th>
+                                    <th class="noshow">LF3-Inspection Effectiveness</th>
+                                    <th class="noshow">LF4-Impact of Internal Fluid Impurities</th>
+                                    <th class="noshow">LF5-Impact of Operating Envelopes</th>
+                                    <th class="noshow">LF6-Used within OEM Specification</th>
+                                    <th class="noshow">LF7-Repaired</th>
+                                    <th class="noshow">CF1-Product loss definition (bbls)</th>
+                                    <th class="noshow">CF2-HSSE Definision</th>
+                                    <th class="noshow">LoF Score-Leakage to atmophere TP1</th>
+                                    <th class="noshow">LoF Score-Failure of function TP1</th>
+                                    <th class="noshow">LoF Score-Passing accross valve TP1</th>
+                                    <th class="noshow">LoF Score-Leakage to atmophere TP2</th>
+                                    <th class="noshow">LoF Score-Failure of function TP2</th>
+                                    <th class="noshow">LoF Score-Passing accross valve TP2</th>
+                                    <th class="noshow">LoF Score-Leakage to atmophere TP3</th>
+                                    <th class="noshow">LoF Score-Failure of function TP3</th>
+                                    <th class="noshow">LoF Score-Passing accross valve TP3</th>
+                                    <th class="noshow">CoF Score</th>
+                                    <th class="notexport" style="width:300px">Detail</th>
                                 </tr>
                             </thead>
                             <tbody id="table-detail">
@@ -118,66 +121,93 @@
                                     {
                                         foreach (var item in assessmentList)
                                         {
+                                            string installationDate = item.Asset.InstallationDate.Length >= 10 ?
+                                            item.Asset.InstallationDate.Substring(6, 4) + "-" +
+                                            item.Asset.InstallationDate.Substring(3, 2) + "-" +
+                                            item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate;
+                                            string assessmentDate = item.AssessmentDate.Length >= 10 ?
+                                            item.AssessmentDate.Substring(6, 4) +
+                                            "-" + item.AssessmentDate.Substring(3, 2) + "-" + item.AssessmentDate.Substring(0, 2) :
+                                            item.AssessmentDate;
+                                            string lastInspectionDate = item.LastInspectionDate.Length >= 10 ?
+                                            item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2)
+                                            + "-" + item.LastInspectionDate.Substring(0, 2) : item.LastInspectionDate;
+                                            string lastMaintenanceDate = item.LastInspectionDate.Length >= 10 ?
+                                            item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3,
+                                            2) + "-" + item.LastMaintenanceDate.Substring(0, 2) : item.LastMaintenanceDate;
                                             ctr++;
                                             <tr>
                                                 <td>@ctr</td>
-                                                <td>@item.Asset.TagNo</td>
                                                 <td>@item.Asset.BusinessArea</td>
                                                 <td>@item.Asset.Platform</td>
-                                                <td>@item.Asset.ParentEquipmentNo</td>
-                                                <td>@item.Asset.ValveType</td>
-                                                <td>@item.Asset.ParentEquipmentDescription</td>
-                                                <td>@item.Asset.InstallationDate</td>
+                                                <td>@item.Asset.TagNo</td>
+                                                <td>@item.Asset.AssetName</td>
+                                                <td class="noshow">@item.Asset.ParentEquipmentNo</td>
+                                                <td class="noshow">@item.Asset.ParentEquipmentDescription</td>
                                                 <td>@item.Asset.PIDNo</td>
                                                 <td>@item.Asset.ValveType</td>
                                                 <td>@item.Asset.Size</td>
                                                 <td>@item.Asset.ClassRating</td>
-                                                <td>@item.AssessmentDate</td>
-                                                <td>@item.LastInspectionDate</td>
-                                                <td>@item.LastMaintenanceDate</td>
-                                                <td>@item.TP1A</td>
-                                                <td>@item.TP2A</td>
-                                                <td>@item.TP3A</td>
-                                                <td>@item.TP1B</td>
-                                                <td>@item.TP2B</td>
-                                                <td>@item.TP3B</td>
-                                                <td>@item.TP1C</td>
-                                                <td>@item.TP2C</td>
-                                                <td>@item.TP3C</td>
+                                                <td class="export-html" real-val="@item.Asset.InstallationDate"><span style="display: none;">@installationDate</span>@item.Asset.InstallationDate</td>
+                                                <td class="export-html" real-val="@item.AssessmentDate"><span style="display: none;">@assessmentDate</span>@item.AssessmentDate</td>
+                                                <td class="export-html" real-val="@item.LastInspectionDate"><span style="display: none;">@lastInspectionDate</span>@item.LastInspectionDate</td>
+                                                <td class="export-html" real-val="@item.LastMaintenanceDate"><span style="display: none;">@lastMaintenanceDate</span>@item.LastMaintenanceDate</td>
+                                                <td>@item.TimePeriode</td>
+                                                <td class="noshow">@item.TP1A</td>
+                                                <td class="noshow">@item.TP2A</td>
+                                                <td class="noshow">@item.TP3A</td>
+                                                <td class="noshow">@item.TP1B</td>
+                                                <td class="noshow">@item.TP2B</td>
+                                                <td class="noshow">@item.TP3B</td>
+                                                <td class="noshow">@item.TP1C</td>
+                                                <td class="noshow">@item.TP2C</td>
+                                                <td class="noshow">@item.TP3C</td>
                                                 <td>@item.TP1Risk</td>
                                                 <td>@item.TP2Risk</td>
                                                 <td>@item.TP3Risk</td>
+                                                <td>@item.IntegrityStatus</td>
                                                 <td>@item.RecommendationAction</td>
                                                 <td>@item.TPTimeToActionRisk</td>
-                                                <td>@item.LeakageToAtmosphere</td>
-                                                <td>@item.FailureOfFunction</td>
-                                                <td>@item.PassingAccrosValve</td>
-                                                <td>@item.LeakageToAtmosphereTP1</td>
-                                                <td>@item.LeakageToAtmosphereTP2</td>
-                                                <td>@item.LeakageToAtmosphereTP3</td>
-                                                <td>@item.FailureOfFunctionTP1</td>
-                                                <td>@item.FailureOfFunctionTP2</td>
-                                                <td>@item.FailureOfFunctionTP3</td>
-                                                <td>@item.PassingAccrosValveTP1</td>
-                                                <td>@item.PassingAccrosValveTP2</td>
-                                                <td>@item.PassingAccrosValveTP3</td>
-                                                <td>@item.InspectionEffectiveness</td>
-                                                <td>@item.ImpactOfInternalFluidImpurities</td>
-                                                <td>@item.ImpactOfOperatingEnvelopes</td>
-                                                <td>@item.UsedWithinOEMSpecification</td>
-                                                <td>@item.Repaired</td>
-                                                <td>@item.ProductLossDefinition</td>
-                                                <td>@item.HSSEDefinision</td>
-                                                <td>@item.LoFScoreLeakageToAtmophereTP1</td>
-                                                <td>@item.LoFScoreFailureOfFunctionTP1</td>
-                                                <td>@item.LoFScorePassingAccrosValveTP1</td>
-                                                <td>@item.LoFScoreLeakageToAtmophereTP2</td>
-                                                <td>@item.LoFScoreFailureOfFunctionTP2</td>
-                                                <td>@item.LoFScorePassingAccrosValveTP2</td>
-                                                <td>@item.LoFScoreLeakageToAtmophereTP3</td>
-                                                <td>@item.LoFScoreFailureOfFunctionTP3</td>
-                                                <td>@item.LoFScorePassingAccrosValveTP3</td>
-                                                <td>@item.CoFScore</td>
+                                                <td class="noshow">@item.LeakageToAtmosphere</td>
+                                                <td class="noshow">@item.FailureOfFunction</td>
+                                                <td class="noshow">@item.PassingAccrosValve</td>
+                                                <td class="noshow">@item.LeakageToAtmosphereTP1</td>
+                                                <td class="noshow">@item.LeakageToAtmosphereTP2</td>
+                                                <td class="noshow">@item.LeakageToAtmosphereTP3</td>
+                                                <td class="noshow">@item.FailureOfFunctionTP1</td>
+                                                <td class="noshow">@item.FailureOfFunctionTP2</td>
+                                                <td class="noshow">@item.FailureOfFunctionTP3</td>
+                                                <td class="noshow">@item.PassingAccrosValveTP1</td>
+                                                <td class="noshow">@item.PassingAccrosValveTP2</td>
+                                                <td class="noshow">@item.PassingAccrosValveTP3</td>
+                                                <td class="noshow">@item.InspectionEffectiveness</td>
+                                                <td class="noshow">@item.ImpactOfInternalFluidImpurities</td>
+                                                <td class="noshow">@item.ImpactOfOperatingEnvelopes</td>
+                                                <td class="noshow">@item.UsedWithinOEMSpecification</td>
+                                                <td class="noshow">@item.Repaired</td>
+                                                <td class="noshow">@item.ProductLossDefinition</td>
+                                                <td class="noshow">@item.HSSEDefinision</td>
+                                                <td class="noshow">@item.LoFScoreLeakageToAtmophereTP1</td>
+                                                <td class="noshow">@item.LoFScoreFailureOfFunctionTP1</td>
+                                                <td class="noshow">@item.LoFScorePassingAccrosValveTP1</td>
+                                                <td class="noshow">@item.LoFScoreLeakageToAtmophereTP2</td>
+                                                <td class="noshow">@item.LoFScoreFailureOfFunctionTP2</td>
+                                                <td class="noshow">@item.LoFScorePassingAccrosValveTP2</td>
+                                                <td class="noshow">@item.LoFScoreLeakageToAtmophereTP3</td>
+                                                <td class="noshow">@item.LoFScoreFailureOfFunctionTP3</td>
+                                                <td class="noshow">@item.LoFScorePassingAccrosValveTP3</td>
+                                                <td class="noshow">@item.CoFScore</td>
+                                                <td class="nowrap">
+                                                    <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index"
+                                                        asp-route-assetid="@item.Asset.Id" asp-route-assessmentid="@item.Id"
+                                                        target="_blank">Assessment</a>
+                                                    <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index"
+                                                        asp-route-assetid="@item.Asset.Id" asp-route-inspectionid="@item.LastInspectionId"
+                                                        target="_blank">Inspection</a>
+                                                    <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index"
+                                                        asp-route-assetid="@item.Asset.Id" asp-route-maintenanceid="@item.LastMaintenanceId"
+                                                        target="_blank">Maintenance</a>
+                                                </td>
                                             </tr>
                                         }
                                     }
@@ -195,17 +225,32 @@
         const dataTableOptions = {
             layout: {
                 topStart: {
-                    buttons: ['excel']
+                    buttons: [{
+                        extend: 'excel',
+                        text: 'Excel',
+                        className: 'btn btn-default',
+                        exportOptions: {
+                            columns: ':not(.notexport)',
+                            format: {
+                                body: function(data, row, column, node) {
+                                    if ($(node).hasClass("export-html")) {
+                                        data = $(node).attr("real-val");
+                                    }
+                                    if ($(node).hasClass("export-numeric")) {
+                                        return data.replace(/([.])/g, '').replace(/([,])/g, '.');
+                                    }
+                                    return data;
+                                }
+                            }
+                        }
+                    }]
                 },
                 topEnd: 'search',
                 bottomStart: null,
                 bottomEnd: null
-            }
+            },
+            ordering: true,
         }
-
-        @* initDatatable(dataTableOptions) *@
-        @* initDatatable() *@
-
         $(document).ready(function () {
             $('#ddlBusinessArea').on('change', function () {
                 var areaId = $(this).val();
@@ -234,81 +279,110 @@
                         $(".datatable").DataTable().destroy();
                         $('#table-detail').html('');
                         $.each(data, function (i, item) {
+                            item = sanitizeNull(item);
+                            var installationDate = item.asset.installationDate.length >= 10 ?
+                                item.asset.installationDate.substring(6, 4) + "-" +
+                                item.asset.installationDate.substring(3, 2) + "-" +
+                                item.asset.installationDate.substring(0, 2) : item.asset.installationDate;
+                            var assessmentDate = item.assessmentDate.length >= 10 ?
+                                item.assessmentDate.substring(6, 4) + "-" + item.assessmentDate.substring(3, 2) + "-" +
+                                item.assessmentDate.substring(0, 2) : item.assessmentDate;
+                            var lastInspectionDate = item.lastInspectionDate.length >= 10 ?
+                                item.lastInspectionDate.substring(6, 4) + "-" + item.lastInspectionDate.substring(3, 2) + "-" +
+                                item.lastInspectionDate.substring(0, 2) : item.lastInspectionDate;
+                            var lastMaintenanceDate = item.lastInspectionDate.length >= 10 ?
+                                item.lastMaintenanceDate.substring(6, 4) + "-" + item.lastMaintenanceDate.substring(3, 2) + "-" +
+                                item.lastMaintenanceDate.substring(0, 2) : item.lastMaintenanceDate;
                             var html = `
-                                    <tr>
-                                        <td>${i + 1}</td>
-                                        <td>${item.asset.tagNo}</td>
-                                        <td>${item.asset.businessArea}</td>
-                                        <td>${item.asset.platform}</td>
-                                        <td>${item.asset.parentEquipmentNo}</td>
-                                        <td>${item.asset.valveType}</td>
-                                        <td>${item.asset.parentEquipmentDescription}</td>
-                                        <td>${item.asset.installationDate}</td>
-                                        <td>${item.asset.pidNo}</td>
-                                        <td>${item.asset.valveType}</td>
-                                        <td>${item.asset.size}</td>
-                                        <td>${item.asset.classRating}</td>
-                                        <td>${item.assessmentDate}</td>
-                                        <td>${item.lastInspectionDate}</td>
-                                        <td>${item.lastMaintenanceDate}</td>
-                                        <td>${item.tp1A}</td>
-                                        <td>${item.tp2A}</td>
-                                        <td>${item.tp3A}</td>
-                                        <td>${item.tp1B}</td>
-                                        <td>${item.tp2B}</td>
-                                        <td>${item.tp3B}</td>
-                                        <td>${item.tp1C}</td>
-                                        <td>${item.tp2C}</td>
-                                        <td>${item.tp3C}</td>
-                                        <td>${item.tp1Risk}</td>
-                                        <td>${item.tp2Risk}</td>
-                                        <td>${item.tp3Risk}</td>
-                                        <td>${item.recommendationAction}</td>
-                                        <td>${item.tpTimeToActionRisk}</td>
-                                        <td>${item.leakageToAtmosphere}</td>
-                                        <td>${item.failureOfFunction}</td>
-                                        <td>${item.passingAccrosValve}</td>
-                                        <td>${item.leakageToAtmosphereTP1}</td>
-                                        <td>${item.leakageToAtmosphereTP2}</td>
-                                        <td>${item.leakageToAtmosphereTP3}</td>
-                                        <td>${item.failureOfFunctionTP1}</td>
-                                        <td>${item.failureOfFunctionTP2}</td>
-                                        <td>${item.failureOfFunctionTP3}</td>
-                                        <td>${item.passingAccrosValveTP1}</td>
-                                        <td>${item.passingAccrosValveTP2}</td>
-                                        <td>${item.passingAccrosValveTP3}</td>
-                                        <td>${item.inspectionEffectiveness}</td>
-                                        <td>${item.impactOfInternalFluidImpurities}</td>
-                                        <td>${item.impactOfOperatingEnvelopes}</td>
-                                        <td>${item.usedWithinOEMSpecification}</td>
-                                        <td>${item.repaired}</td>
-                                        <td>${item.productLossDefinition}</td>
-                                        <td>${item.hsseDefinision}</td>
-                                        <td>${item.loFScoreLeakageToAtmophereTP1}</td>
-                                        <td>${item.loFScoreFailureOfFunctionTP1}</td>
-                                        <td>${item.loFScorePassingAccrosValveTP1}</td>
-                                        <td>${item.loFScoreLeakageToAtmophereTP2}</td>
-                                        <td>${item.loFScoreFailureOfFunctionTP2}</td>
-                                        <td>${item.loFScorePassingAccrosValveTP2}</td>
-                                        <td>${item.loFScoreLeakageToAtmophereTP3}</td>
-                                        <td>${item.loFScoreFailureOfFunctionTP3}</td>
-                                        <td>${item.loFScorePassingAccrosValveTP3}</td>
-                                        <td>${item.coFScore}</td>
-                                    </tr>`
+                                <tr>
+                                    <td>${i + 1}</td>
+                                    <td>${item.asset.businessArea}</td>
+                                    <td>${item.asset.platform}</td>
+                                    <td>${item.asset.tagNo}</td>
+                                    <td>${item.asset.assetName}</td>
+                                    <td class="noshow">${item.asset.parentEquipmentNo}</td>
+                                    <td class="noshow">${item.asset.parentEquipmentDescription}</td>
+                                    <td>${item.asset.pidNo}</td>
+                                    <td>${item.asset.valveType}</td>
+                                    <td>${item.asset.size}</td>
+                                    <td>${item.asset.classRating}</td>
+                                    <td class="export-html" real-val="${item.asset.installationDate}"><span style="display: none;">${installationDate}</span>${item.asset.installationDate}</td>
+                                    <td class="export-html" real-val="${item.assessmentDate}"><span style="display: none;">${assessmentDate}</span>${item.assessmentDate}</td>
+                                    <td class="export-html" real-val="${item.lastInspectionDate}"><span style="display: none;">${lastInspectionDate}</span>${item.lastInspectionDate}</td>
+                                    <td class="export-html" real-val="${item.lastMaintenanceDate}"><span style="display: none;">${lastMaintenanceDate}</span>${item.lastMaintenanceDate}</td>
+                                    <td>${item.timePeriode}</td>
+                                    <td class="noshow">${item.tP1A}</td>
+                                    <td class="noshow">${item.tP2A}</td>
+                                    <td class="noshow">${item.tP3A}</td>
+                                    <td class="noshow">${item.tP1B}</td>
+                                    <td class="noshow">${item.tP2B}</td>
+                                    <td class="noshow">${item.tP3B}</td>
+                                    <td class="noshow">${item.tP1C}</td>
+                                    <td class="noshow">${item.tP2C}</td>
+                                    <td class="noshow">${item.tP3C}</td>
+                                    <td>${item.tP1Risk}</td>
+                                    <td>${item.tP2Risk}</td>
+                                    <td>${item.tP3Risk}</td>
+                                    <td>${item.integrityStatus}</td>
+                                    <td>${item.recommendationAction}</td>
+                                    <td class="noshow">${item.tpTimeToActionRisk}</td>
+                                    <td class="noshow">${item.leakageToAtmosphere}</td>
+                                    <td class="noshow">${item.failureOfFunction}</td>
+                                    <td class="noshow">${item.passingAccrosValve}</td>
+                                    <td class="noshow">${item.leakageToAtmosphereTP1}</td>
+                                    <td class="noshow">${item.leakageToAtmosphereTP2}</td>
+                                    <td class="noshow">${item.leakageToAtmosphereTP3}</td>
+                                    <td class="noshow">${item.failureOfFunctionTP1}</td>
+                                    <td class="noshow">${item.failureOfFunctionTP2}</td>
+                                    <td class="noshow">${item.failureOfFunctionTP3}</td>
+                                    <td class="noshow">${item.passingAccrosValveTP1}</td>
+                                    <td class="noshow">${item.passingAccrosValveTP2}</td>
+                                    <td class="noshow">${item.passingAccrosValveTP3}</td>
+                                    <td class="noshow">${item.inspectionEffectiveness}</td>
+                                    <td class="noshow">${item.impactOfInternalFluidImpurities}</td>
+                                    <td class="noshow">${item.impactOfOperatingEnvelopes}</td>
+                                    <td class="noshow">${item.usedWithinOEMSpecification}</td>
+                                    <td class="noshow">${item.repaired}</td>
+                                    <td class="noshow">${item.productLossDefinition}</td>
+                                    <td class="noshow">${item.hsseDefinision}</td>
+                                    <td class="noshow">${item.loFScoreLeakageToAtmophereTP1}</td>
+                                    <td class="noshow">${item.loFScoreFailureOfFunctionTP1}</td>
+                                    <td class="noshow">${item.loFScorePassingAccrosValveTP1}</td>
+                                    <td class="noshow">${item.loFScoreLeakageToAtmophereTP2}</td>
+                                    <td class="noshow">${item.loFScoreFailureOfFunctionTP2}</td>
+                                    <td class="noshow">${item.loFScorePassingAccrosValveTP2}</td>
+                                    <td class="noshow">${item.loFScoreLeakageToAtmophereTP3}</td>
+                                    <td class="noshow">${item.loFScoreFailureOfFunctionTP3}</td>
+                                    <td class="noshow">${item.loFScorePassingAccrosValveTP3}</td>
+                                    <td class="noshow">${item.coFScore}</td>
+                                    <td class="nowrap">
+                                        <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index" asp-route-assetid="${item.asset.id}" asp-route-assessmentid="${item.id}" target="_blank">Assessment</a>
+                                        <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index" asp-route-assetid="${item.asset.id}" asp-route-inspectionid="${item.lastInspectionId}" target="_blank">Inspection</a>
+                                        <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index" asp-route-assetid="${item.asset.id}" asp-route-maintenanceid="${item.lastMaintenanceId}" target="_blank">Maintenance</a>
+                                    </td>
+                                </tr>`
                             $('#table-detail').append(html);
                         });
                         initDatatable(dataTableOptions)
                     }
                 });
             });
-
-            initDatatable({
-                ordering: true,
-            })
+            initDatatable(dataTableOptions)
         });
 
         $('#btnExcel').on('click', () => {
             $('.dt-button.buttons-excel').trigger('click')
         })
+
+        function sanitizeNull(obj) {
+            for (var key in obj) {
+                if (obj[key] === null) {
+                    obj[key] = "";
+                } else if (typeof obj[key] === 'object') {
+                    sanitizeNull(obj[key]);
+                }
+            }
+            return obj;
+        }
     </script>
 }

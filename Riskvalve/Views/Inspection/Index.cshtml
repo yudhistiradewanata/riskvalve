@@ -315,10 +315,11 @@
                         success: function (response) {
                             form.addClass('history-form')
                             // Handle success response
+                            $('.btn-add-new-inspection[attr-inspection-id='+response.id+']').html(response.inspectionDate)
                             alert('Data successfully updated')
                         },
                         error: function (xhr, status, error) {
-                            alert('Error submitting the form')
+                            alert('Inspection date already exist')
                         }
                     });
                 } else {

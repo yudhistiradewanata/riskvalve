@@ -1737,6 +1737,7 @@
                             processData: false,
                             success: function(res) {
                                 // Handle success response
+                                $('.btn-add-new-inspection[attr-inspection-id='+res.id+']').html(res.assessmentNo)
                                 alert('Data successfully updated')
                                 fetchHistoryData({
                                     id: res.id,

@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Riskvalve.Models;
 using Newtonsoft.Json;
+using Riskvalve.Models;
 
 namespace Riskvalve.Controllers;
 
@@ -16,6 +16,22 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect(Environment.app_path + "/Login/Index");
+        }
+        else
+        {
+            TempData["Message"] = null;
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
+
         AssessmentModel assessmentModel = new();
         Dictionary<string, string> assessmentHeatMap = new();
         Dictionary<string, string> assessmentPieChart = new();
@@ -35,23 +51,6 @@ public class HomeController : Controller
         ViewData["AssessmentHeatMap"] = assessmentHeatMap;
         ViewData["AssessmentPieChart"] = assessmentPieChart;
         ViewData["AssessmentBarChart"] = assessmentBarChartFinal;
-        // string assessmentHeatMapString = JsonConvert.SerializeObject(assessmentBarChartFinal);
-        // Console.WriteLine("AssessmentHeatMap: " + assessmentHeatMapString);
-        UserModel login = new();
-        if (!login.isLogin(HttpContext))
-        {
-            TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
-        }
-        else
-        {
-            TempData["Message"] = null;
-            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
-            foreach (var item in session)
-            {
-                ViewData[item.Key] = item.Value;
-            }
-        }
         return View();
     }
 
@@ -62,7 +61,7 @@ public class HomeController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -99,13 +98,14 @@ public class HomeController : Controller
         ViewData["AreaList"] = areaList;
         return View();
     }
+
     public IActionResult Detail()
     {
         UserModel login = new();
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -118,11 +118,16 @@ public class HomeController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         List<AreaModel> areaList = new AreaModel().GetAreaList();
-        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentList();
+        List<AssessmentModel> assessmentList = new AssessmentModel().GetAssessmentRecapList(
+            0,
+            0,
+            false,
+            false
+        );
         ViewData["AreaList"] = areaList;
         ViewData["AssessmentList"] = assessmentList;
         return View();
@@ -134,7 +139,7 @@ public class HomeController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {

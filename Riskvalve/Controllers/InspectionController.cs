@@ -218,7 +218,11 @@ public class InspectionController : Controller
                 FunctionCondition = Request.Form["FunctionCondition"],
                 TestPressureIfAny = Request.Form["TestPressureIfAny"],
             };
-        inspection.UpdateInspection(inspectionDB);
+        ResultModel resultupdate = inspection.UpdateInspection(inspectionDB);
+        if(resultupdate.Result != 200)
+        {
+            throw new Exception(resultupdate.Message);
+        }
         IWebHostEnvironment environment =
             HttpContext.RequestServices.GetService<IWebHostEnvironment>();
         string path = Path.Combine(
@@ -273,7 +277,8 @@ public class InspectionController : Controller
                 };
             inspectionFileModel.DeleteInspectionFile(inspectionFileDB);
         }
-        return RedirectToAction("Index");
+        InspectionModel result = inspection.GetInspectionModel(inspectionID);
+        return Json(result);
     }
 
     [HttpPost]
@@ -300,5 +305,23 @@ public class InspectionController : Controller
         InspectionModel inspection = new();
         List<InspectionModel> inspectionList = inspection.GetInspectionList(false, AssetID);
         return inspectionList;
+    }
+
+    [HttpGet]
+    public IActionResult GetInspectionSidebar(int AssetID)
+    {
+        InspectionModel inspection = new();
+        List<InspectionModel> inspectionSidebar = inspection.GetInspectionList(false, AssetID);
+        List<Dictionary<string, string>> inspectionSidebarList = new();
+        foreach (var item in inspectionSidebar)
+        {
+            Dictionary<string, string> inspectionSidebarItem = new()
+            {
+                { "Id", item.Id.ToString() },
+                { "Name", item.InspectionDate },
+            };
+            inspectionSidebarList.Add(inspectionSidebarItem);
+        }
+        return Json(inspectionSidebarList);
     }
 }
