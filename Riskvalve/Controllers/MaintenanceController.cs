@@ -19,7 +19,7 @@ public class MaintenanceController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -32,7 +32,7 @@ public class MaintenanceController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         InspectionSidebarHistory inspectionSidebarHistory = new();
@@ -42,13 +42,14 @@ public class MaintenanceController : Controller
         ViewData["pageType"] = "Maintenance";
         return View();
     }
+
     public IActionResult PrintMaintenance(int id)
     {
         UserModel login = new();
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -61,7 +62,7 @@ public class MaintenanceController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         MaintenanceModel maintenance = new MaintenanceModel().GetMaintenanceModel(id);
@@ -187,7 +188,7 @@ public class MaintenanceController : Controller
                 MaintenanceDescription = Request.Form["MaintenanceDescription"]
             };
         ResultModel resultupdate = maintenance.UpdateMaintenance(maintenanceDB);
-        if(resultupdate.Result != 200)
+        if (resultupdate.Result != 200)
         {
             throw new Exception(resultupdate.Message);
         }
@@ -278,11 +279,15 @@ public class MaintenanceController : Controller
         List<Dictionary<string, string>> maintenanceSidebar = new();
         foreach (var item in maintenanceList)
         {
-            Dictionary<string, string> maintenanceSidebarItem = new()
-            {
-                { "Id", item.Id.ToString() },
-                { "Name", item.MaintenanceDate },
-            };
+            Dictionary<string, string> maintenanceSidebarItem =
+                new()
+                {
+                    { "Id", item.Id.ToString() },
+                    { "Name", item.MaintenanceDate },
+                    { "Area", item.Asset.BusinessArea },
+                    { "Platform", item.Asset.Platform },
+                    { "Asset", item.Asset.TagNo }
+                };
             maintenanceSidebar.Add(maintenanceSidebarItem);
         }
         return Json(maintenanceSidebar);

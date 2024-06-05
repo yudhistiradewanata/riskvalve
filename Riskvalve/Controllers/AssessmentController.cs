@@ -459,11 +459,15 @@ public class AssessmentController : Controller
         List<Dictionary<string, string>> assessmentSidebar = new();
         foreach (var assessment in assessmentList)
         {
-            Dictionary<string, string> assessmentSidebarItem = new()
-            {
-                { "Id", assessment.Id.ToString() },
-                { "AssessmentNo", assessment.AssessmentDate }
-            };
+            Dictionary<string, string> assessmentSidebarItem =
+                new()
+                {
+                    { "Id", assessment.Id.ToString() },
+                    { "Name", assessment.AssessmentDate },
+                    { "Area", assessment.Asset.BusinessArea },
+                    { "Platform", assessment.Asset.Platform },
+                    { "Asset", assessment.Asset.TagNo }
+                };
             assessmentSidebar.Add(assessmentSidebarItem);
         }
         return Json(assessmentSidebar);
