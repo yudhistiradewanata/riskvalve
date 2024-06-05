@@ -20,7 +20,7 @@ public class InspectionController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -33,7 +33,7 @@ public class InspectionController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         InspectionSidebarHistory inspectionSidebarHistory = new();
@@ -50,7 +50,7 @@ public class InspectionController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -63,7 +63,7 @@ public class InspectionController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         InspectionModel inspection = new InspectionModel().GetInspectionModel(id);
@@ -160,7 +160,7 @@ public class InspectionController : Controller
             return Json(
                 new Dictionary<string, string>
                 {
-                    { "Status", "Success"},
+                    { "Status", "Success" },
                     { "Message", "Inspection added successfully" },
                     { "InspectionData", resultstring }
                 }
@@ -219,7 +219,7 @@ public class InspectionController : Controller
                 TestPressureIfAny = Request.Form["TestPressureIfAny"],
             };
         ResultModel resultupdate = inspection.UpdateInspection(inspectionDB);
-        if(resultupdate.Result != 200)
+        if (resultupdate.Result != 200)
         {
             throw new Exception(resultupdate.Message);
         }
@@ -315,11 +315,15 @@ public class InspectionController : Controller
         List<Dictionary<string, string>> inspectionSidebarList = new();
         foreach (var item in inspectionSidebar)
         {
-            Dictionary<string, string> inspectionSidebarItem = new()
-            {
-                { "Id", item.Id.ToString() },
-                { "Name", item.InspectionDate },
-            };
+            Dictionary<string, string> inspectionSidebarItem =
+                new()
+                {
+                    { "Id", item.Id.ToString() },
+                    { "Name", item.InspectionDate },
+                    { "Area", item.Asset.BusinessArea },
+                    { "Platform", item.Asset.Platform },
+                    { "Asset", item.Asset.TagNo }
+                };
             inspectionSidebarList.Add(inspectionSidebarItem);
         }
         return Json(inspectionSidebarList);

@@ -237,7 +237,7 @@ public class AssetRegisterController : Controller
         return View();
     }
 
-    [HttpGet]
+    [HttpPost]
     public IActionResult GetAssetDatatable(
         int draw,
         int start,

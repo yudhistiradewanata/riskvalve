@@ -167,10 +167,10 @@
                                                     attr-id="${item.Id}"
                                                     attr-sidebar-level="4"
                                                     attr-inspection-id="${item.Id}"
-                                                    attr-name="${item.Name}" 
-                                                    attr-find-inspection="" 
-                                                    attr-find-platform=""
-                                                    attr-find-equipment=""
+                                                    attr-name="${item.Asset} ${item.Name}" 
+                                                    attr-find-inspection="${item.Area}" 
+                                                    attr-find-platform="${item.Platform}"
+                                                    attr-find-equipment="${item.Asset}"
                                                     attr-find-imr="NEW"
                                                     onclick="addTab.apply(this)"
                                                 >${item.Name}</a>
@@ -225,9 +225,9 @@
                         let ul_el2 = $(`<ul class="treeview-menu" equipment-id="${item.id}">
                             <li style="display: none" class="treeview">
                                 <a class="btn-add-new-inspection" attr-id="${item.id}"
-                                    attr-name="${item.name}" attr-sidebar-level="4"
-                                    attr-find-inspection="${item.name}" attr-find-platform="${item.platform}"
-                                    attr-find-equipment="${item.tagNo}" attr-find-imr="NEW">[Add New
+                                    attr-name="${item.tagNo}" attr-sidebar-level="4"
+                                    attr-find-inspection="${item.businessArea}" attr-find-platform="${item.platform}"
+                                    attr-find-equipment="${item.tagNo}" attr-find-imr="NEW" onclick="addTab.apply(this)">[Add New
                                     @pageType]</a>
                             </li>
                         </ul>`)
