@@ -111,7 +111,7 @@
                     <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "manual valve" ? "checked" : "")/>
                 </td>
             </tr>
-            <!-- Inspection rows -->
+            <!-- Maintenance rows -->
             <tr>
                 <td colspan="4">Is Valve Repaired</td>
                 <td colspan="2">@maintenance.IsValveRepaired</td>
@@ -137,7 +137,7 @@
                 </td>
             </tr>
             <tr>
-                <td rowspan="4" colspan="4">Inspection image</td>
+                <td rowspan="4" colspan="4">Maintenance image</td>
                 <td rowspan="4" colspan="2">
                     @foreach (var image in maintenance.MaintenanceFiles) {
                         <img style="max-width: 100px;" src="/@image.FilePath"/>

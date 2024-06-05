@@ -1333,6 +1333,7 @@
                                         <select class="form-control"
                                             id="field-inspection-current-condition-limit-state-a"
                                             name="CurrentConditionLeakeageToAtmosphereID"
+                                            readonly
                                         >
                                             @foreach (var item in limitState)
                                         {
@@ -1350,6 +1351,7 @@
                                         <select class="form-control"
                                             id="field-inspection-current-condition-limit-state-b"
                                             name="CurrentConditionFailureOfFunctionID"
+                                            readonly
                                         >
                                         @foreach (var item in limitState)
                                         {
@@ -1360,7 +1362,7 @@
                                     <div class="form-group ">
                                         <label for="field-inspection-inspection-method">Inspection
                                             Method</label>
-                                        <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID">
+                                        <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID" readonly>
                                         @foreach (var item in inspectionMethods)
                                         {
                                                     <option value="@item.Id">@item.InspectionMethod</option>
@@ -1375,6 +1377,7 @@
                                         <select class="form-control"
                                             id="field-inspection-current-condition-limit-state-c"
                                             name="CurrentConditionPassingAcrossValveID"
+                                            readonly
                                         >
                                         @foreach (var item in limitState)
                                         {
@@ -1385,7 +1388,7 @@
                                     <div class="form-group ">
                                         <label for="field-inspection-effectiveness">Inspection
                                             Effectiveness</label>
-                                        <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID">
+                                        <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID" readonly>
                                         @foreach (var item in inspectionEffectivenessStates)
                                         {
                                                     <option value="@item.Id">@item.Effectiveness</option>
@@ -1398,12 +1401,13 @@
                                         <input type="text" class="form-control"
                                             id="field-inspection-function-condition"
                                             name="FunctionCondition"
+                                            readonly
                                         >
                                     </div>
                                     <div class="form-group">
                                         <label for="field-inspection-description">Inspection Description</label>
                                         <textarea class="form-control" id="field-inspection-description"
-                                            rows="12" name="InspectionDescription"></textarea>
+                                            rows="12" name="InspectionDescription" readonly></textarea>
                                     </div>
                                     <div class="form-group">
                                         <div class="row">
@@ -1413,7 +1417,8 @@
                                                 <input type="text" 
                                                     name="TestPressureIfAny"
                                                     class="form-control"
-                                                    id="field-inspection-test-pressure-if-any">
+                                                    id="field-inspection-test-pressure-if-any"
+                                                    readonly>
                                             </div>
                                             <div class="col-md-12">
                                                 <label for="field-inspection-image">Inspection Image</label>
@@ -1538,13 +1543,14 @@
                                     <div class="form-group ">
                                         <label for="field-maintenance-date">Maintenance Date</label>
                                         <input id="field-maintenance-date" type="text"
-                                            class="form-control datepicker" name="MaintenanceDate"/>
+                                            class="form-control datepicker" name="MaintenanceDate" readonly/>
                                     </div>
                                     <div class="form-group ">
                                         <label for="field-maintenance-repaired">Is Valve Repaired</label>
                                         <select class="form-control"
                                             id="field-maintenance-repaired"
                                             name="IsValveRepairedID"
+                                            readonly
                                         >
                                             <option value="1">Yes</option>
                                             <option value="2">No</option>
@@ -1555,6 +1561,7 @@
                                         <textarea class="form-control" id="field-maintenance-description"
                                             rows="8"
                                             name="MaintenanceDescription"
+                                            readonly
                                             ></textarea>
                                     </div>
                                     <div class="form-group">
@@ -3130,16 +3137,29 @@
                     }
 
                     let galleryHtml = ''
-                    data.inspectionFiles.forEach(i => {
-                        galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                        <div class="single-image" data-identifier="gallery-${i.id}">
-                            <img src="/${i.filePath}"">
-                            <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
-                                <i class="fa-solid fa-xmark"></i>
+                    if(type === 'maintenance') {
+                        data.maintenanceFiles.forEach(i => {
+                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                <img src="/${i.filePath}"">
+                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
                             </div>
-                        </div>
-                        `
-                    })
+                            `
+                        })
+                    } else {
+                    data.inspectionFiles.forEach(i => {
+                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                <img src="/${i.filePath}"">
+                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
+                            </div>
+                            `
+                        })
+                    }
 
                     //fill image
                     $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
