@@ -286,7 +286,8 @@ public class MaintenanceController : Controller
                     { "Name", item.MaintenanceDate },
                     { "Area", item.Asset.BusinessArea },
                     { "Platform", item.Asset.Platform },
-                    { "Asset", item.Asset.TagNo }
+                    { "Asset", item.Asset.TagNo },
+                    { "AssetID", item.Asset.Id.ToString() }
                 };
             maintenanceSidebar.Add(maintenanceSidebarItem);
         }

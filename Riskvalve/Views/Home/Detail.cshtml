@@ -59,7 +59,7 @@
                                     <th class="noshow">Parent Equipment No.</th>
                                     <th class="noshow">Parent Equipment Description</th>
                                     <th>PID. No.</th>
-                                    <th>Value Type</th>
+                                    <th>Valve Type</th>
                                     <th>Size</th>
                                     <th>Class/Rating</th>
                                     <th>Installation Date (dd-mm-yyyy)</th>
@@ -79,7 +79,7 @@
                                     <th>Risk TP1</th>
                                     <th>Risk TP2</th>
                                     <th>Risk TP3</th>
-                                    <th>Ingerity Status</th>
+                                    <th>Integrity Status</th>
                                     <th>Recommendation Action</th>
                                     <th>Time to Action</th>
                                     <th class="noshow">LF1-Leakage to atmophere</th>
@@ -126,15 +126,16 @@
                                             item.Asset.InstallationDate.Substring(3, 2) + "-" +
                                             item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate;
                                             string assessmentDate = item.AssessmentDate.Length >= 10 ?
-                                            item.AssessmentDate.Substring(6, 4) +
-                                            "-" + item.AssessmentDate.Substring(3, 2) + "-" + item.AssessmentDate.Substring(0, 2) :
-                                            item.AssessmentDate;
+                                                item.AssessmentDate.Substring(6, 4) + "-" + item.AssessmentDate.Substring(3, 2) + "-" + item.AssessmentDate.Substring(0, 2) :
+                                                item.AssessmentDate;
                                             string lastInspectionDate = item.LastInspectionDate.Length >= 10 ?
-                                            item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2)
-                                            + "-" + item.LastInspectionDate.Substring(0, 2) : item.LastInspectionDate;
+                                                item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2) + "-" + item.LastInspectionDate.Substring(0, 2) :
+                                                item.LastInspectionDate;
                                             string lastMaintenanceDate = item.LastInspectionDate.Length >= 10 ?
-                                            item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3,
-                                            2) + "-" + item.LastMaintenanceDate.Substring(0, 2) : item.LastMaintenanceDate;
+                                                item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3, 2) + "-" + item.LastMaintenanceDate.Substring(0, 2) :
+                                                item.LastMaintenanceDate;
+                                            @* string timeToAction = item.TPTimeToActionRisk.Length >= 10 ? *@
+                                            
                                             ctr++;
                                             <tr>
                                                 <td>@ctr</td>
@@ -246,8 +247,8 @@
                     }]
                 },
                 topEnd: 'search',
-                bottomStart: null,
-                bottomEnd: null
+                bottomStart: ["paging", "pageLength"],
+                bottomEnd: "info",
             },
             ordering: true,
         }

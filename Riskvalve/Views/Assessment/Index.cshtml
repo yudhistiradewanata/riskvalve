@@ -1183,11 +1183,11 @@
                                                                             </div>
                                                                         </span> *@
                                                                         <select id="integrity-status" class="form-select form-select-sm" name="IntegrityStatus">
-                                                                            <option value="1">Very High Priority</option>
-                                                                            <option value="2">High Priority</option>
-                                                                            <option value="3">Medium Priority</option>
-                                                                            <option value="4">Low Priority</option>
-                                                                            <option value="5">Very Low Priority</option>
+                                                                            <option value="Very High Priority">Very High Priority</option>
+                                                                            <option value="High Priority">High Priority</option>
+                                                                            <option value="Medium Priority">Medium Priority</option>
+                                                                            <option value="Low Priority">Low Priority</option>
+                                                                            <option value="Very Low Priority">Very Low Priority</option>
                                                                         </select>
                                                                     </div>
                                                                 </div>
@@ -1344,7 +1344,8 @@
                                     <div class="form-group ">
                                         <label for="field-inspection-date">Inspection Date</label>
                                         <input id="field-inspection-date" type="text"
-                                            class="form-control datepicker" name="InspectionDate"/>
+                                            class="form-control datepicker" name="InspectionDate"
+                                            readonly/>
                                     </div>
                                     <div class="form-group ">
                                         <label for="field-inspection-current-condition-limit-state-b">Current Condition Failure of Function</label>
@@ -1717,18 +1718,18 @@
                 const nativeForm = form[0]
                 const formData = new FormData(nativeForm);
                 const selectedInspectionCount = form.find('input[name=selectedInspectionId]').length
-                const selectedMaintenanceCount = form.find('input[name=selectedMaintenanceId]').length
+                @* const selectedMaintenanceCount = form.find('input[name=selectedMaintenanceId]').length *@
                 var alertmessage = '';
                 if(!selectedInspectionCount){
                     alertmessage += 'minimum 1 Inspection, ';
                 }
-                if(!selectedMaintenanceCount){
+                @* if(!selectedMaintenanceCount){
                     if(!selectedInspectionCount){
                         alertmessage = alertmessage.slice(0, -2);
                         alertmessage += ' and ';
                     }
                     alertmessage += 'minimum 1 Maintenance, ';
-                }
+                } *@
                 if(alertmessage.length > 0){
                     alert('Please select ' + alertmessage.slice(0, -2) + ' to proceed');
                     return;
@@ -1744,7 +1745,7 @@
                             processData: false,
                             success: function(res) {
                                 // Handle success response
-                                $('.btn-add-new-inspection[attr-inspection-id='+res.id+']').html(res.assessmentNo)
+                                $('.btn-add-new-inspection[attr-inspection-id='+res.id+']').html(res.assessmentDate)
                                 alert('Data successfully updated')
                                 fetchHistoryData({
                                     id: res.id,
@@ -1770,7 +1771,7 @@
                                     <li class="treeview">
                                         <a class="btn-add-new-inspection" history-button="" 
                                         attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
-                                        attr-name="${res.assessmentNo}" 
+                                        attr-name="${res.asset.tagNo} ${res.assessmentDate}" 
                                         attr-sidebar-level="4" 
                                         attr-find-inspection="${res.asset.businessArea}" 
                                         attr-find-platform="${res.asset.platform}" 
@@ -1778,11 +1779,11 @@
                                         attr-find-imr="NEW"
                                         onclick="addTab.apply(this)"
                                         >
-                                            ${res.assessmentNo}
+                                            ${res.assessmentDate}
                                         </a>
                                     </li>
                                 `)
-                                $('.nav-tab-menus').find('a[tab-num='+ctr+'] div[tab-title]').text(res.asset.tagNo + ' ' + res.assessmentNo)
+                                $('.nav-tab-menus').find('a[tab-num='+ctr+'] div[tab-title]').text(res.asset.tagNo + ' ' + res.assessmentDate)
 
                                 fetchHistoryData({
                                     id: res.id,
@@ -2034,6 +2035,20 @@
                     return 'orange';
                 } else {
                     return 'red';
+                }
+            }
+
+            function getIntegrityStatus(color) {
+                if(color == 'olive'){
+                    return 'Very Low Priority';
+                } else if(color == 'green'){
+                    return 'Low Priority';
+                } else if(color == 'yellow'){
+                    return 'Medium Priority';
+                } else if(color == 'orange'){
+                    return 'High Priority';
+                } else {
+                    return 'Very High Priority';
                 }
             }
 
@@ -2565,6 +2580,7 @@
                 }
                 console.log(map_risk, 'map_risk');
 
+                var tp1color = '';
                 // apply to matrix map_risk
                 for (const [key, item] of Object.entries(map_risk)) {
                     const dotLabel = $('.tab-pane[tab-num='+ctr+']').find('['+key+'-label]')
@@ -2574,9 +2590,13 @@
                     dotColorLabel.removeClass()
                     dotColorLabel.addClass('status-box')
                     dotColorLabel.addClass(item.color)
+                    if(key == 'TP1RISK'){
+                        tp1color = item.color;
+                    }
 
                     $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item.label)
                 }
+                $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr).val(getIntegrityStatus(tp1color));
 
                 //TTL NEW
                 var timelimittp1 = timePeriod*1;

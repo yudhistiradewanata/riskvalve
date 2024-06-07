@@ -322,7 +322,8 @@ public class InspectionController : Controller
                     { "Name", item.InspectionDate },
                     { "Area", item.Asset.BusinessArea },
                     { "Platform", item.Asset.Platform },
-                    { "Asset", item.Asset.TagNo }
+                    { "Asset", item.Asset.TagNo },
+                    { "AssetID", item.Asset.Id.ToString() }
                 };
             inspectionSidebarList.Add(inspectionSidebarItem);
         }

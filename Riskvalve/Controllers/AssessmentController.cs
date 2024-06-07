@@ -248,6 +248,7 @@ public class AssessmentController : Controller
                     Request.Form["LoFScorePassingAccrossValveTP3"]
                 ),
                 CoFScore = Environment.StringToDouble(Request.Form["CoFScore"]),
+                IntegrityStatus = Request.Form["IntegrityStatus"],
                 IsDeleted = false,
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -260,13 +261,16 @@ public class AssessmentController : Controller
             .Select(int.Parse)
             .ToList();
         assessment.AddInspectionToAssessment(assessmentID, inspectionIDs);
-        List<int> maintenanceIDs = Request
-            .Form["selectedMaintenanceId"]
-            .ToString()
-            .Split(',')
-            .Select(int.Parse)
-            .ToList();
-        assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs);
+        if(Request.Form["selectedMaintenanceId"].ToString() != "")
+        {
+            List<int> maintenanceIDs = Request
+                .Form["selectedMaintenanceId"]
+                .ToString()
+                .Split(',')
+                .Select(int.Parse)
+                .ToList();
+            assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs);
+        }
         assessment = assessment.GetAssessmentModel(assessmentID);
         return Json(assessment);
     }
@@ -392,6 +396,7 @@ public class AssessmentController : Controller
                     Request.Form["LoFScorePassingAccrossValveTP3"]
                 ),
                 CoFScore = Environment.StringToDouble(Request.Form["CoFScore"]),
+                IntegrityStatus = Request.Form["IntegrityStatus"],
                 IsDeleted = false,
                 CreatedBy = Environment.StringToInt(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
@@ -466,7 +471,8 @@ public class AssessmentController : Controller
                     { "Name", assessment.AssessmentDate },
                     { "Area", assessment.Asset.BusinessArea },
                     { "Platform", assessment.Asset.Platform },
-                    { "Asset", assessment.Asset.TagNo }
+                    { "Asset", assessment.Asset.TagNo },
+                    { "AssetID", assessment.Asset.Id.ToString() }
                 };
             assessmentSidebar.Add(assessmentSidebarItem);
         }
