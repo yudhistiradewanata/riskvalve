@@ -524,22 +524,21 @@ public class AssetRegisterController : Controller
     public IActionResult GetAssetSidebarSearch(string search)
     {
         AssetModel assetModel = new();
-        List<AssetModel> asset = assetModel.GetAssetList().Where(a => a.TagNo.ToLower().Contains(search.ToLower())).ToList();
-        Dictionary<string, Dictionary<string, List<AssetModel>>> areaPlatformAssetList = new();
+        List<AssetModel> asset = assetModel
+            .GetAssetList()
+            .Where(a => a.TagNo.ToLower().Contains(search.ToLower()))
+            .ToList();
+        Dictionary<string, List<AssetModel>> areaPlatformAssetList = new();
         foreach (var item in asset)
         {
-            if (!areaPlatformAssetList.ContainsKey(item.BusinessArea))
+            if (!areaPlatformAssetList.ContainsKey(item.BusinessArea + "-" + item.Platform))
             {
                 areaPlatformAssetList.Add(
-                    item.BusinessArea,
-                    new Dictionary<string, List<AssetModel>>()
+                    item.BusinessArea + "-" + item.Platform,
+                    new List<AssetModel>()
                 );
             }
-            if (!areaPlatformAssetList[item.BusinessArea].ContainsKey(item.Platform))
-            {
-                areaPlatformAssetList[item.BusinessArea].Add(item.Platform, new List<AssetModel>());
-            }
-            areaPlatformAssetList[item.BusinessArea][item.Platform].Add(item);
+            areaPlatformAssetList[item.BusinessArea + "-" + item.Platform].Add(item);
         }
         return Json(areaPlatformAssetList);
     }

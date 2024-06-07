@@ -14,7 +14,7 @@
 <aside class="main-sidebar">
     <div class="inspection-sidebar-container">
         <section class="sidebar inspection-sidebar" id="tree-menu">
-            <!-- <form class="form-inline" role="form">
+            <form class="form-inline" role="form">
                 <div class="position-relative">
                     <input type="text" class="form-control" id="searchForm"
                         placeholder="Search Area / Platform / Asset">
@@ -22,7 +22,7 @@
                         <i class="fa-solid fa-magnifying-glass"></i>
                     </div>
                 </div>
-            </form> -->
+            </form>
             <ul class="sidebar-menu-inspection-assessment">
                 @if (inspectionSidebar != null)
                 {
@@ -36,8 +36,9 @@
                                     <li class="treeview">
                                         <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="2" attr-find-inspection="@item.Name"
                                             attr-find-platform="@platform.Name"
-                                            attr-find-platformid="@platform.Id">@platform.Name</a>
-                                        <ul class="treeview-menu">
+                                            attr-find-platformid="@platform.Id"
+                                            >@platform.Name</a>
+                                        <ul class="treeview-menu" attr-find-forsearch="@item.Name-@platform.Name">
                                             @* @foreach (var equipment in platform.Child)
                                             {
                                                 <li class="treeview">
@@ -283,7 +284,7 @@
     $(document).ready(function () {
         fold_all_sidebar_menu();
         $("#searchForm").on("keyup", function () {
-            @* if($(this).val().length > 0){
+            if($(this).val().length > 0){
                 $.ajax({
                     url: '@urlassetsearch',
                     type: 'GET',
@@ -291,10 +292,31 @@
                         search: $(this).val()
                     },
                     success: function (data) {
-                        console.log(data);
+                        for(var i = 0; i < Object.keys(data).length; i++){
+                            var key = Object.keys(data)[i];
+                            var value = data[key];
+                            var ul_el = $('ul[attr-find-forsearch="'+key+'"]');
+                            ul_el.empty()
+                            value.forEach(function (item) {
+                                let li_el = $('<li class="treeview"></li>')
+                                let a_el = $('<a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="' + item.businessArea + '" attr-find-platform="' + item.platform + '" attr-find-equipmentid="'+ item.id +'" attr-find-equipment="' + item.tagNo + '">' + item.tagNo + '</a>')
+                                let ul_el2 = $(`<ul class="treeview-menu" equipment-id="${item.id}">
+                                    <li style="display: none" class="treeview">
+                                        <a class="btn-add-new-inspection" attr-id="${item.id}"
+                                            attr-name="${item.tagNo}" attr-sidebar-level="4"
+                                            attr-find-inspection="${item.businessArea}" attr-find-platform="${item.platform}"
+                                            attr-find-equipment="${item.tagNo}" attr-find-imr="NEW" onclick="addTab.apply(this)">[Add New
+                                            @pageType]</a>
+                                    </li>
+                                </ul>`)
+                                li_el.append(a_el)
+                                li_el.append(ul_el2)
+                                ul_el.append(li_el)
+                            })
+                        }
                     }
                 })
-            } *@
+            }
             var value = $(this).val().toLowerCase();
             if (value == '') {
                 $(".sidebar-menu-inspection-assessment li").filter(function () {
@@ -307,10 +329,6 @@
                 });
             }
         });
-
-        // $('.sidebartreea').click();
-
-    @* fold_all_sidebar_menu(); *@
-        });
+    });
 </script>
     )
