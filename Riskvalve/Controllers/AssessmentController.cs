@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Globalization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Riskvalve.Models;
@@ -261,7 +262,7 @@ public class AssessmentController : Controller
             .Select(int.Parse)
             .ToList();
         assessment.AddInspectionToAssessment(assessmentID, inspectionIDs);
-        if(Request.Form["selectedMaintenanceId"].ToString() != "")
+        if (Request.Form["selectedMaintenanceId"].ToString() != "")
         {
             List<int> maintenanceIDs = Request
                 .Form["selectedMaintenanceId"]
@@ -412,13 +413,16 @@ public class AssessmentController : Controller
             .Select(int.Parse)
             .ToList();
         assessment.AddInspectionToAssessment(assessmentID, inspectionIDs, true);
-        List<int> maintenanceIDs = Request
-            .Form["selectedMaintenanceId"]
-            .ToString()
-            .Split(',')
-            .Select(int.Parse)
-            .ToList();
-        assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs, true);
+        if (Request.Form["selectedMaintenanceId"].ToString() != "")
+        {
+            List<int> maintenanceIDs = Request
+                .Form["selectedMaintenanceId"]
+                .ToString()
+                .Split(',')
+                .Select(int.Parse)
+                .ToList();
+            assessment.AddMaintenanceToAssessment(assessmentID, maintenanceIDs, true);
+        }
         assessment = assessment.GetAssessmentModel(assessmentDB.Id);
         return Json(assessment);
     }
@@ -476,6 +480,11 @@ public class AssessmentController : Controller
                 };
             assessmentSidebar.Add(assessmentSidebarItem);
         }
+        assessmentSidebar = assessmentSidebar
+            .OrderByDescending(i =>
+                DateTime.ParseExact(i["Name"], "dd-MM-yyyy", CultureInfo.InvariantCulture)
+            )
+            .ToList();
         return Json(assessmentSidebar);
     }
 }

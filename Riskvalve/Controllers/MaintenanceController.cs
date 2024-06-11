@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Riskvalve.Models;
@@ -291,6 +292,9 @@ public class MaintenanceController : Controller
                 };
             maintenanceSidebar.Add(maintenanceSidebarItem);
         }
+        maintenanceSidebar = maintenanceSidebar
+            .OrderByDescending(i => DateTime.ParseExact(i["Name"], "dd-MM-yyyy", CultureInfo.InvariantCulture))
+            .ToList();
         return Json(maintenanceSidebar);
     }
 }

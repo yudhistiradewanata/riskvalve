@@ -121,7 +121,7 @@
                         "data": null, 
                         "orderable": false, 
                         "render": function (data, type, row, meta) { 
-                            return meta.row + 1; 
+                            return meta.row + 1;
                         }
                     },
                     { "data": "tagNo" },
@@ -142,6 +142,13 @@
                         }
                     }
                 ],
+                "createdRow": function (row, data, dataIndex) {
+                    var info = $(this).DataTable().page.info();
+                    var pageNumber = info.page;
+                    var entriesPerPage = info.length;
+                    var cell = $('td', row).eq(0);
+                    cell.html(((pageNumber) * entriesPerPage) + dataIndex + 1);
+                },
                 "layout": {
                     topStart: null,
                     topEnd: "search",

@@ -20,7 +20,7 @@ public class ToolController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -33,7 +33,7 @@ public class ToolController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         return View();
@@ -45,7 +45,7 @@ public class ToolController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -58,7 +58,7 @@ public class ToolController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         return View();
@@ -70,7 +70,7 @@ public class ToolController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -83,7 +83,7 @@ public class ToolController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         return View();
@@ -128,15 +128,67 @@ public class ToolController : Controller
             ExcelWorksheet worksheet = package.Workbook.Worksheets[0];
             int rowCount = worksheet.Dimension.Rows;
             int colCount = worksheet.Dimension.Columns;
+            // Console.WriteLine("AYAYA rowCount: " + rowCount);
+            // Console.WriteLine("AYAYA colCount: " + colCount);
+            int max_col = 0;
+            if (mode.Equals("asset"))
+            {
+                max_col = 31;
+            }
+            else if (mode.Equals("inspection"))
+            {
+                max_col = 13;
+            }
+            else if (mode.Equals("maintenance"))
+            {
+                max_col = 7;
+            }
+            else if (mode.Equals("assessment"))
+            {
+                max_col = 15;
+            }
+            if (colCount < max_col)
+            {
+                return Json(
+                    new Dictionary<string, string>
+                    {
+                        { "total", total.ToString() },
+                        { "success", success.ToString() },
+                        { "failed", failed.ToString() },
+                        { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+                        {
+                            "message",
+                            "Invalid column count, column required is "
+                                + max_col
+                                + ", but found "
+                                + colCount
+                                + "."
+                        }
+                    }
+                );
+            }
             for (int row = 3; row <= rowCount; row++)
             {
                 Dictionary<string, string> rowValues = new();
+                if(worksheet.Cells[row, 1].Value == null)
+                {
+                    failed++;
+                    total++;
+                    failedDatas.Add("Tag No is empty on row " + row);
+                    continue;
+                }
                 for (int col = 1; col <= colCount; col++)
                 {
-                    rowValues.Add(
-                        worksheet.Cells[2, col].Value.ToString().Trim(),
-                        worksheet.Cells[row, col].Value.ToString().Trim()
-                    );
+                    if (
+                        worksheet.Cells[2, col].Value != null
+                        && worksheet.Cells[row, col].Value != null
+                    )
+                    {
+                        rowValues.Add(
+                            worksheet.Cells[2, col].Value.ToString().Trim(),
+                            worksheet.Cells[row, col].Value.ToString().Trim()
+                        );
+                    }
                 }
                 data.Add(rowValues);
             }
@@ -274,7 +326,8 @@ public class ToolController : Controller
                 + " data(s)";
             if (failed > 0)
             {
-                if(failedDatas.Count > 0){
+                if (failedDatas.Count > 0)
+                {
                     string failedData = "";
                     foreach (var item in failedDatas)
                     {
@@ -500,7 +553,7 @@ public class ToolController : Controller
         if (!login.isLogin(HttpContext))
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(Environment.app_path + "/Login/Index");
         }
         else
         {
@@ -513,7 +566,7 @@ public class ToolController : Controller
             if (ViewData["IsEngineer"].ToString().ToLower().Equals("false"))
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(Environment.app_path + "/Home/Index");
             }
         }
         List<AreaModel> areaList = new AreaModel().GetAreaList();

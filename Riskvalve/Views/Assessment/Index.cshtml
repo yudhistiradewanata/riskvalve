@@ -47,7 +47,7 @@
                 <partial name="InspectionAssessmentSidebar" />
             </div>
             @* <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')"> *@
-            <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image" style="background-image:url('@baseurl/lib/images/u45.png')">
+            <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image">
                 <div>
                     <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                         <li class="nav-item">
@@ -434,7 +434,7 @@
                                                 Inspection History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
-                                                <input type="hidden" class="inspection-data-temp" id="inspectionDataTemp" name="inspectionDataTemp" />
+                                                <input type="hidden" class="inspection-data-temp form-control" id="inspectionDataTemp" name="inspectionDataTemp" />
                                                 <a class="btn btn-primary btn-maincolor mb-2 mt-4 only-add" onclick="addInspection(this)">Add Inspection Data</a>
                                                 <table class="datatable table custom-table inspection-table" style="width: 100%;">
                                                     <thead>
@@ -458,7 +458,7 @@
                                                 Maintenance History
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
-                                                <input type="hidden" class="maintenance-data-temp" id="maintenanceDataTemp" name="maintenanceDataTemp" />
+                                                <input type="hidden" class="maintenance-data-temp form-control" id="maintenanceDataTemp" name="maintenanceDataTemp" />
                                                 <a class="btn btn-primary btn-maincolor mb-2 mt-4 only-add" onclick="addMaintenance(this)">Add Maintenance Data</a>
                                                 <table class="datatable table table-bordered maintenance-table" style="width:100%">
                                                     <thead>
@@ -1604,7 +1604,7 @@
                                     <th>Inspection Description</th>
                                     <th>Function Condition</th>
                                     <th>Test Pressure  (if any)</th>
-                                    <th style="width:200px">Action</th>
+                                    <th style="width:200px">Select</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1636,7 +1636,7 @@
                                     <th>Maintenance Date</th>
                                     <th>Is Valve Repaired?</th>
                                     <th>Maintenance Description</th>
-                                    <th>Action</th>
+                                    <th>Select</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -1767,7 +1767,7 @@
                             success: function(res) {
                                 form.addClass('history-form')
                                 // add menu to tree
-                                $('ul[equipment-id="'+equipmentId+'"]').append(`
+                                @* $('ul[equipment-id="'+equipmentId+'"]').append(`
                                     <li class="treeview">
                                         <a class="btn-add-new-inspection" history-button="" 
                                         attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
@@ -1780,6 +1780,22 @@
                                         onclick="addTab.apply(this)"
                                         >
                                             ${res.assessmentDate}
+                                        </a>
+                                    </li>
+                                `) *@
+                                $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
+                                    <li class="treeview">
+                                        <a class="btn-add-new-inspection" history-button="" 
+                                        attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
+                                        attr-name="${res.asset.tagNo} ${res.assessmentDate}" 
+                                        attr-sidebar-level="4" 
+                                        attr-find-inspection="${res.asset.businessArea}" 
+                                        attr-find-platform="${res.asset.platform}" 
+                                        attr-find-equipment="${res.asset.tagNo}" 
+                                        attr-find-imr="NEW"
+                                        onclick="addTab.apply(this)"
+                                        >
+                                            ${res.assessmentDate} (NEW)
                                         </a>
                                     </li>
                                 `)
@@ -1903,6 +1919,8 @@
                         $('#field-inspection-function-condition'+counter).val(data.functionCondition)
                         $('#field-inspection-description'+counter).val(data.inspectionDescription)
                         $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
+                        $('#maintenanceDataTemp'+counter).val(JSON.stringify(data.maintenanceHistory))
+                        $('#inspectionDataTemp'+counter).val(JSON.stringify(data.inspectionHistory))
 
                         //fill assessment data
                         $('#assessment-no'+counter).val(data.assessmentNo)
@@ -2632,9 +2650,9 @@
                 var tta_date = new Date(createDateFromString(gLastInspectionDate));
                 tta_date.setMonth(tta_date.getMonth() + tta_month);
                 var ttb_date = new Date(createDateFromString(gLastInspectionDate));
-                ttb_date.setMonth(ttb_date.getDate() + ttb_month);
+                ttb_date.setMonth(ttb_date.getMonth() + ttb_month);
                 var ttc_date = new Date(createDateFromString(gLastInspectionDate));
-                ttc_date.setMonth(ttc_date.getDate() + ttc_month);
+                ttc_date.setMonth(ttc_date.getMonth() + ttc_month);
                 var map_ttl = {
                     'TPA-TTA': formatDate(tta_date),
                     'TPB-TTA': formatDate(ttb_date),
@@ -2652,7 +2670,7 @@
             }
 
             function decideTTARAC(loftp1, loftp2, loftp3, timelimittp1, timelimittp2, timelimittp3, rac, loftp1val, loftp2val, loftp3val){
-                @* console.log("==START DECIDE TTL==");
+                console.log("==START DECIDE TTL==");
                 console.log("loftp1: "+loftp1);
                 console.log("loftp2: "+loftp2);
                 console.log("loftp3: "+loftp3);
@@ -2662,7 +2680,8 @@
                 console.log("timelimittp1: "+timelimittp1);
                 console.log("timelimittp2: "+timelimittp2);
                 console.log("timelimittp3: "+timelimittp3);
-                console.log("rac: "+rac); *@
+                console.log("rac: "+rac);
+                console.log("==END DECIDE TTL==");
                 var calculate = 0;
                 if(loftp1 > rac) {
                     calculate = 0;
@@ -2670,7 +2689,8 @@
                 else {
                     if (loftp3 > rac && loftp2 <= rac){
                         @* calculate = 0;((((timelimittp3-timelimittp2)*(rac-loftp2))/(loftp3-loftp2))/12) + (timelimittp2/12); *@
-                        calculate = (timelimittp3-timelimittp2)/12 * (rac-loftp2) / (loftp3-loftp2) + (timelimittp1/12);
+                        @* 54-36 * 49-29 /290-29 + *@
+                        calculate = (timelimittp3-timelimittp2)/12 * (rac-loftp2) / (loftp3-loftp2) + (timelimittp2/12);
                         calculate = Math.floor(calculate*12)
                     }
                     else if(loftp2 > rac){
@@ -2823,7 +2843,7 @@
                                     <td>
                                         <div class="inspection-maintenance-select">
                                             <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
-                                            <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label>
+                                            <!-- <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label> -->
                                         </div>
                                     </td>
                                 </tr>
@@ -2866,7 +2886,7 @@
                                     <td>
                                         <div class="inspection-maintenance-select">
                                             <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
-                                            <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label>
+                                            <!-- <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label> -->
                                         </div>
                                     </td>
                                 </tr>
@@ -3161,7 +3181,7 @@
                         data.maintenanceFiles.forEach(i => {
                             galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
                             <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}"">
+                                <img src="/${i.filePath}">
                                 <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
                                     <i class="fa-solid fa-xmark"></i>
                                 </div>
@@ -3172,7 +3192,7 @@
                     data.inspectionFiles.forEach(i => {
                             galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
                             <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}"">
+                                <img src="/${i.filePath}">
                                 <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
                                     <i class="fa-solid fa-xmark"></i>
                                 </div>

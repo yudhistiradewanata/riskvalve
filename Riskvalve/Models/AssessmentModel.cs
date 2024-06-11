@@ -1725,11 +1725,12 @@ public class AssessmentModel : AssessmentDB
                 {
                     continue;
                 }
-                string heat_risk = decide_risk_full(
-                    assessment.TP1Risk,
-                    assessment.TP2Risk,
-                    assessment.TP3Risk
-                );
+                string heat_risk = assessment.TP1Risk;
+                // decide_risk_full(
+                //     assessment.TP1Risk,
+                //     assessment.TP2Risk,
+                //     assessment.TP3Risk
+                // );
                 switch (heat_risk)
                 {
                     case "1A":

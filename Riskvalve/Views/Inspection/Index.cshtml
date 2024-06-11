@@ -26,8 +26,9 @@
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary non-printable">
             <partial name="InspectionAssessmentSidebar" />
         </div>
-        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image"
-            style="background-image:url('@baseurl/lib/images/u45.png')">
+        @* <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image"
+            style="background-image:url('@baseurl/lib/images/u45.png')"> *@
+        <main class="col-md-9 ms-sm-auto col-lg-10 p-0 subheader-negative-margin with-bg-image">
             <div>
                 <ul class="nav nav-tabs nav-tab-menus" id="inspectiontabheader" role="tablist">
                     <li class="nav-item">
@@ -341,22 +342,38 @@
                                 // add menu to tree
         @* console.log(equipmentId) *@
         @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
-                                    $('ul[equipment-id="' + equipmentId + '"]').append(`
-                                                        <li class="treeview">
-                                                            <a class="btn-add-new-inspection" history-button="" 
-                                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                                            attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
-                                                            attr-sidebar-level="4" 
-                                                            attr-find-inspection="${res.Asset.BusinessArea}" 
-                                                            attr-find-platform="${res.Asset.Platform}" 
-                                                            attr-find-equipment="${res.Asset.TagNo}" 
-                                                            attr-find-imr="NEW"
-                                                            onclick="addTab.apply(this)"
-                                                            >
-                                                                ${res.InspectionDate}
-                                                            </a>
-                                                        </li>
-                                                    `)
+                                    @* $('ul[equipment-id="' + equipmentId + '"]').append(`
+                                        <li class="treeview">
+                                            <a class="btn-add-new-inspection" history-button="" 
+                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                            attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
+                                            attr-sidebar-level="4" 
+                                            attr-find-inspection="${res.Asset.BusinessArea}" 
+                                            attr-find-platform="${res.Asset.Platform}" 
+                                            attr-find-equipment="${res.Asset.TagNo}" 
+                                            attr-find-imr="NEW"
+                                            onclick="addTab.apply(this)"
+                                            >
+                                                ${res.InspectionDate}
+                                            </a>
+                                        </li>
+                                    `) *@
+                                    $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
+                                        <li class="treeview">
+                                            <a class="btn-add-new-inspection" history-button="" 
+                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
+                                            attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
+                                            attr-sidebar-level="4" 
+                                            attr-find-inspection="${res.Asset.BusinessArea}" 
+                                            attr-find-platform="${res.Asset.Platform}" 
+                                            attr-find-equipment="${res.Asset.TagNo}" 
+                                            attr-find-imr="NEW"
+                                            onclick="addTab.apply(this)"
+                                            >
+                                                ${res.InspectionDate} (NEW)
+                                            </a>
+                                        </li>
+                                    `)
                                 form.find('.preview-image-gallery .single-image').remove()
                                 form.find('.preview-image-gallery input[type=file]').remove()
                                 fetchHistoryData({

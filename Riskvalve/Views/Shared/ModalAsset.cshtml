@@ -11,293 +11,228 @@
 }
 
 <div class="modal fade" id="addAssetModal" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-xl">
         <div class="modal-content">
-            <form id="asset-form">
+            <form id="asset-form" class="common-form">
                 <input id="field-asset-mode" type="hidden" />
                 <input id="field-asset-id" name="assetid" type="hidden" />
-                <div class="modal-header">
-                    <h4 class="modal-title">Add/Edit Asset</h4>
-                </div>
-                <div class="modal-body add-asset-modal">
-                    <div class="subheader">
+                <div class="box">
+                    <div class="subheader m-0">
                         <b>Asset Information</b>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-id">Asset ID</label>
-                                <input id="field-asset-id-show" name="assetid" type="text" class="form-control"
-                                    readonly />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-classrating">Class Rating</label>
-                                <input id="field-asset-classrating" name="classrating" type="text" class="form-control"
-                                    required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-tagno">Tag No</label>
-                                <input id="field-asset-tagno" name="tagno" type="text" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-parentequipmentno">Parent Equipment No</label>
-                                <input id="field-asset-parentequipmentno" name="parentequipmentno" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-platform">Platform</label>
-                                <select id="field-asset-platform" name="platform" class="form-control" required>
-                                    <option value="">Select Platform</option>
-                                    @foreach (var item in platformList)
-                                    {
-                                        <option value="@item.Id">@item.BusinessArea: @item.Platform</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-parentequipmentdescription">Parent Equipment Description</label>
-                                <input id="field-asset-parentequipmentdescription" name="parentequipmentdescription"
-                                    type="text" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-valvetype">Valve Type</label>
-                                <select id="field-asset-valvetype" name="valvetype" class="form-control" required>
-                                    <option value="">Select Valve Type</option>
-                                    @foreach (var item in valveTypeList)
-                                    {
-                                        <option value="@item.Id">@item.ValveType</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-installationdate">Installation Date</label>
-                                <input id="field-asset-installationdate" name="installationdate" type="text"
-                                    class="form-control datepicker" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-size">Size (inch)</label>
-                                <input id="field-asset-size" name="size" type="number" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-pidno">PID Number</label>
-                                <input id="field-asset-pidno" name="pidno" type="text" class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-equipmentname">Equipment Name</label>
-                                <input id="field-asset-equipmentname" name="equipmentname" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-replacementcost">Cost of Replacement & Repair (USD)</label>
-                                <input id="field-asset-replacementcost" name="replacementcost" type="number"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-status">Status</label>
-                                @* <input id="field-asset-status" name="status" type="text" class="form-control"
-                                required /> *@
-                                <select id="field-asset-status" name="status" class="form-control" required>
-                                    <option value="In-service">In-service</option>
-                                    <option value="Waiting for Refurbishment">Waiting for Refurbishment</option>
-                                    <option value="Spare">Spare</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-usagetype">Usage Type</label>
-                                @* <input id="field-asset-usagetype" name="usagetype" type="text" class="form-control"
-                                required /> *@
-                                <select id="field-asset-usagetype" name="usagetype" class="form-control" required>
-                                    <option value="Manual Valve">Manual Valve</option>
-                                    <option value="Auto On-Off Valve">Auto On-Off Valve</option>
-                                    <option value="Control Valve">Control Valve</option>
-                                    <option value="PSV/PRV">PSV/PRV</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-actuation">Actuation</label>
-                                @* <input id="field-asset-actuation" name="actuation" type="text" class="form-control"
-                                required /> *@
-                                <select id="field-asset-actuation" name="actuation" class="form-control" required>
-                                    <option value="Pneumatic">Pneumatic</option>
-                                    <option value="Hydraulic">Hydraulic</option>
-                                    <option value="Manual">Manual</option>
-                                    <option value="N/A">N/A</option>
-                                </select>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <div class="form-group-inline">
+                                    <label for="field-asset-id">Asset ID</label>
+                                    <input id="field-asset-id-show" name="assetid" type="text" class="form-control"
+                                        readonly />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-classrating">Class Rating</label>
+                                    <input id="field-asset-classrating" name="classrating" type="text" class="form-control"
+                                        required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-tagno">Tag No</label>
+                                    <input id="field-asset-tagno" name="tagno" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-parentequipmentno">Parent Equipment No</label>
+                                    <input id="field-asset-parentequipmentno" name="parentequipmentno" type="text"
+                                        class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-platform">Platform</label>
+                                    <select id="field-asset-platform" name="platform" class="form-control" required>
+                                        <option value="">Select Platform</option>
+                                        @foreach (var item in platformList)
+                                        {
+                                            <option value="@item.Id">@item.BusinessArea: @item.Platform</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-parentequipmentdescription">Parent Equipment Description</label>
+                                    <input id="field-asset-parentequipmentdescription" name="parentequipmentdescription"
+                                        type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-valvetype">Valve Type</label>
+                                    <select id="field-asset-valvetype" name="valvetype" class="form-control" required>
+                                        <option value="">Select Valve Type</option>
+                                        @foreach (var item in valveTypeList)
+                                        {
+                                            <option value="@item.Id">@item.ValveType</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-installationdate">Installation Date</label>
+                                    <input id="field-asset-installationdate" name="installationdate" type="text"
+                                        class="form-control datepicker" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-size">Size (inch)</label>
+                                    <input id="field-asset-size" name="size" type="number" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-pidno">PID Number</label>
+                                    <input id="field-asset-pidno" name="pidno" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-equipmentname">Equipment Name</label>
+                                    <input id="field-asset-equipmentname" name="equipmentname" type="text"
+                                        class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-replacementcost">Cost of Replacement & Repair (USD)</label>
+                                    <input id="field-asset-replacementcost" name="replacementcost" type="number"
+                                        class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-status">Status</label>
+                                    @* <input id="field-asset-status" name="status" type="text" class="form-control"
+                                    required /> *@
+                                    <select id="field-asset-status" name="status" class="form-control" required>
+                                        <option value="In-service">In-service</option>
+                                        <option value="Waiting for Refurbishment">Waiting for Refurbishment</option>
+                                        <option value="Spare">Spare</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-usagetype">Usage Type</label>
+                                    @* <input id="field-asset-usagetype" name="usagetype" type="text" class="form-control"
+                                    required /> *@
+                                    <select id="field-asset-usagetype" name="usagetype" class="form-control" required>
+                                        <option value="Manual Valve">Manual Valve</option>
+                                        <option value="Auto On-Off Valve">Auto On-Off Valve</option>
+                                        <option value="Control Valve">Control Valve</option>
+                                        <option value="PSV/PRV">PSV/PRV</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-actuation">Actuation</label>
+                                    @* <input id="field-asset-actuation" name="actuation" type="text" class="form-control"
+                                    required /> *@
+                                    <select id="field-asset-actuation" name="actuation" class="form-control" required>
+                                        <option value="Pneumatic">Pneumatic</option>
+                                        <option value="Hydraulic">Hydraulic</option>
+                                        <option value="Manual">Manual</option>
+                                        <option value="N/A">N/A</option>
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="subheader">
                         <b>Material Value</b>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-manufacturer">Manufacturer</label>
-                                <input id="field-asset-manufacturer" name="manufacturer" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-manualoverride">Manual Override</label>
-                                <select id="field-asset-manualoverride" name="manualoverride" class="form-control"
-                                    required>
-                                    <option value="">Select Manual Override</option>
-                                    @foreach (var item in manualOverrideList)
-                                    {
-                                        <option value="@item.Id">@item.ManualOverride</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-bodymodel">Body Model</label>
-                                <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control"
-                                    required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-actuatormfg">Actuator Mfg</label>
-                                <input id="field-asset-actuatormfg" name="actuatormfg" type="text" class="form-control"
-                                    required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-bodymaterial">Body Material</label>
-                                <input id="field-asset-bodymaterial" name="bodymaterial" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-actuatorserialno">Actuator Serial No.</label>
-                                <input id="field-asset-actuatorserialno" name="actuatorserialno" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-endconnection">End Connection</label>
-                                <input id="field-asset-endconnection" name="endconnection" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-actuatortypemodel">Actuator Type/Model</label>
-                                <input id="field-asset-actuatortypemodel" name="actuatortypemodel" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-serialno">Serial No</label>
-                                <input id="field-asset-serialno" name="serialno" type="text" class="form-control"
-                                    required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-actuatorpower">Actuator Power</label>
-                                <input id="field-asset-actuatorpower" name="actuatorpower" type="text"
-                                    class="form-control" required />
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <div class="form-group-inline">
+                                    <label for="field-asset-manufacturer">Manufacturer</label>
+                                    <input id="field-asset-manufacturer" name="manufacturer" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-manualoverride">Manual Override</label>
+                                    <select id="field-asset-manualoverride" name="manualoverride" class="form-control" required>
+                                        <option value="">Select Manual Override</option> @foreach (var item in manualOverrideList) { <option value="@item.Id">@item.ManualOverride</option> }
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-bodymodel">Body Model</label>
+                                    <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-actuatormfg">Actuator Mfg</label>
+                                    <input id="field-asset-actuatormfg" name="actuatormfg" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-bodymaterial">Body Material</label>
+                                    <input id="field-asset-bodymaterial" name="bodymaterial" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-actuatorserialno">Actuator Serial No.</label>
+                                    <input id="field-asset-actuatorserialno" name="actuatorserialno" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-endconnection">End Connection</label>
+                                    <input id="field-asset-endconnection" name="endconnection" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-actuatortypemodel">Actuator Type/Model</label>
+                                    <input id="field-asset-actuatortypemodel" name="actuatortypemodel" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-serialno">Serial No</label>
+                                    <input id="field-asset-serialno" name="serialno" type="text" class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-actuatorpower">Actuator Power</label>
+                                    <input id="field-asset-actuatorpower" name="actuatorpower" type="text" class="form-control" required />
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="subheader">
                         <b>Operation & Fluid</b>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-operatingtemperature">Operating Temperature (F)</label>
-                                <input id="field-asset-operatingtemperature" name="operatingtemperature" type="number"
-                                    class="form-control" required />
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid"> 
+                                <div class="form-group-inline">
+                                    <label for="field-asset-operatingtemperature">Operating Temperature (F)</label>
+                                    <input id="field-asset-operatingtemperature" name="operatingtemperature" type="number"
+                                        class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-servicefluid">Service Fluid</label>
+                                    <input id="field-asset-servicefluid" name="servicefluid" type="text"
+                                        class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-operatingpressure">Operating Pressure (Psig)</label>
+                                    <input id="field-asset-operatingpressure" name="operatingpressure" type="number"
+                                        class="form-control" required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-fluidphase">Fluid Phase</label>
+                                    <select id="field-asset-fluidphase" name="fluidphase" class="form-control" required>
+                                        <option value="">Select Fluid Phase</option>
+                                        @foreach (var item in fluidPhaseList)
+                                        {
+                                            <option value="@item.Id">@item.FluidPhase</option>
+                                        }
+                                    </select>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-flowrate">Flow Rate (m3/hr)</label>
+                                    <input id="field-asset-flowrate" name="flowrate" type="number" class="form-control"
+                                        required />
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-asset-toxicorflamablefluid">Toxic or Flamable Fluid</label>
+                                    <select id="field-asset-toxicorflamablefluid" name="toxicorflamablefluid"
+                                        class="form-control" required>
+                                        <option value="">Select Toxic or Flamable Fluid</option>
+                                        @foreach (var item in toxicOrFlamableFluidList)
+                                        {
+                                            <option value="@item.Id">@item.ToxicOrFlamableFluid</option>
+                                        }
+                                    </select>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-servicefluid">Service Fluid</label>
-                                <input id="field-asset-servicefluid" name="servicefluid" type="text"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-operatingpressure">Operating Pressure (Psig)</label>
-                                <input id="field-asset-operatingpressure" name="operatingpressure" type="number"
-                                    class="form-control" required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-fluidphase">Fluid Phase</label>
-                                <select id="field-asset-fluidphase" name="fluidphase" class="form-control" required>
-                                    <option value="">Select Fluid Phase</option>
-                                    @foreach (var item in fluidPhaseList)
-                                    {
-                                        <option value="@item.Id">@item.FluidPhase</option>
-                                    }
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-flowrate">Flow Rate (m3/hr)</label>
-                                <input id="field-asset-flowrate" name="flowrate" type="number" class="form-control"
-                                    required />
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="field-asset-toxicorflamablefluid">Toxic or Flamable Fluid</label>
-                                <select id="field-asset-toxicorflamablefluid" name="toxicorflamablefluid"
-                                    class="form-control" required>
-                                    <option value="">Select Toxic or Flamable Fluid</option>
-                                    @foreach (var item in toxicOrFlamableFluidList)
-                                    {
-                                        <option value="@item.Id">@item.ToxicOrFlamableFluid</option>
-                                    }
-                                </select>
-                            </div>
+                        <div class="box-footer">
+                            <button type="button" id="btn-asset-modal-save" class="btn btn-primary">Save</button>
+                            <button type="button" class="btn btn-primary btn btn-secondary cancel-button" data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="btn-asset-modal-delete" class="pull-left btn btn-danger delete-button">Delete</button>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" id="btn-asset-modal-delete" class="pull-left btn btn-danger">Delete</button>
-                    <button type="button" id="btn-asset-modal-save" class="btn btn-primary">Save</button>
-                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Cancel</button>
                 </div>
             </form>
         </div>

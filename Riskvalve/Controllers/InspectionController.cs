@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Riskvalve.Models;
@@ -327,6 +328,9 @@ public class InspectionController : Controller
                 };
             inspectionSidebarList.Add(inspectionSidebarItem);
         }
+        inspectionSidebarList = inspectionSidebarList
+            .OrderByDescending(i => DateTime.ParseExact(i["Name"], "dd-MM-yyyy", CultureInfo.InvariantCulture))
+            .ToList();
         return Json(inspectionSidebarList);
     }
 }

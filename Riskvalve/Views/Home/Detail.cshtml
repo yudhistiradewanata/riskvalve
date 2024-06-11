@@ -5,6 +5,9 @@
     @* var assessmentListjson = Newtonsoft.Json.JsonConvert.SerializeObject(ViewData); *@
     string urlddlbusinessarea = Url.Action("GetPlatformList", "AssetRegister");
     string urlbtnfilter = Url.Action("GetAssessmentList", "Assessment");
+    string urlinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
+    string urlmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance");
+    string urlassessmentdetail = Url.Action("GetAssessmentDetail", "Assessment");
 }
 <div class="container-fluid">
     <div class="row">
@@ -125,17 +128,27 @@
                                             item.Asset.InstallationDate.Substring(6, 4) + "-" +
                                             item.Asset.InstallationDate.Substring(3, 2) + "-" +
                                             item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate;
+
                                             string assessmentDate = item.AssessmentDate.Length >= 10 ?
-                                                item.AssessmentDate.Substring(6, 4) + "-" + item.AssessmentDate.Substring(3, 2) + "-" + item.AssessmentDate.Substring(0, 2) :
-                                                item.AssessmentDate;
+                                            item.AssessmentDate.Substring(6, 4) + "-" + item.AssessmentDate.Substring(3, 2) + "-" +
+                                            item.AssessmentDate.Substring(0, 2) :
+                                            item.AssessmentDate;
+
                                             string lastInspectionDate = item.LastInspectionDate.Length >= 10 ?
-                                                item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2) + "-" + item.LastInspectionDate.Substring(0, 2) :
-                                                item.LastInspectionDate;
-                                            string lastMaintenanceDate = item.LastInspectionDate.Length >= 10 ?
-                                                item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3, 2) + "-" + item.LastMaintenanceDate.Substring(0, 2) :
-                                                item.LastMaintenanceDate;
-                                            @* string timeToAction = item.TPTimeToActionRisk.Length >= 10 ? *@
-                                            
+                                            item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2)
+                                            + "-" + item.LastInspectionDate.Substring(0, 2) :
+                                            item.LastInspectionDate;
+
+                                            string lastMaintenanceDate = item.LastMaintenanceDate.Length >= 10 ?
+                                            item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3, 2)
+                                            + "-" + item.LastMaintenanceDate.Substring(0, 2) :
+                                            item.LastMaintenanceDate;
+
+                                            string timeToAction = item.TPTimeToActionRisk.Length >= 10 ?
+                                            item.TPTimeToActionRisk.Substring(6, 4) + "-" + item.TPTimeToActionRisk.Substring(3, 2)
+                                            + "-" + item.TPTimeToActionRisk.Substring(0, 2) :
+                                            item.TPTimeToActionRisk;
+
                                             ctr++;
                                             <tr>
                                                 <td>@ctr</td>
@@ -149,10 +162,17 @@
                                                 <td>@item.Asset.ValveType</td>
                                                 <td>@item.Asset.Size</td>
                                                 <td>@item.Asset.ClassRating</td>
-                                                <td class="export-html" real-val="@item.Asset.InstallationDate"><span style="display: none;">@installationDate</span>@item.Asset.InstallationDate</td>
-                                                <td class="export-html" real-val="@item.AssessmentDate"><span style="display: none;">@assessmentDate</span>@item.AssessmentDate</td>
-                                                <td class="export-html" real-val="@item.LastInspectionDate"><span style="display: none;">@lastInspectionDate</span>@item.LastInspectionDate</td>
-                                                <td class="export-html" real-val="@item.LastMaintenanceDate"><span style="display: none;">@lastMaintenanceDate</span>@item.LastMaintenanceDate</td>
+                                                <td class="export-html" real-val="@item.Asset.InstallationDate"><span
+                                                        style="display: none;">@installationDate</span>@item.Asset.InstallationDate
+                                                </td>
+                                                <td class="export-html" real-val="@item.AssessmentDate"><span
+                                                        style="display: none;">@assessmentDate</span>@item.AssessmentDate</td>
+                                                <td class="export-html" real-val="@item.LastInspectionDate"><span
+                                                        style="display: none;">@lastInspectionDate</span>@item.LastInspectionDate
+                                                </td>
+                                                <td class="export-html" real-val="@item.LastMaintenanceDate"><span
+                                                        style="display: none;">@lastMaintenanceDate</span>@item.LastMaintenanceDate
+                                                </td>
                                                 <td>@item.TimePeriode</td>
                                                 <td class="noshow">@item.TP1A</td>
                                                 <td class="noshow">@item.TP2A</td>
@@ -163,12 +183,12 @@
                                                 <td class="noshow">@item.TP1C</td>
                                                 <td class="noshow">@item.TP2C</td>
                                                 <td class="noshow">@item.TP3C</td>
-                                                <td>@item.TP1Risk</td>
-                                                <td>@item.TP2Risk</td>
-                                                <td>@item.TP3Risk</td>
+                                                <td class="havebgcolor">@item.TP1Risk</td>
+                                                <td class="havebgcolor">@item.TP2Risk</td>
+                                                <td class="havebgcolor">@item.TP3Risk</td>
                                                 <td>@item.IntegrityStatus</td>
                                                 <td>@item.RecommendationAction</td>
-                                                <td>@item.TPTimeToActionRisk</td>
+                                                <td class="export-html" real-val="@item.TPTimeToActionRisk"><span style="display: none;">@timeToAction</span>@item.TPTimeToActionRisk</td>
                                                 <td class="noshow">@item.LeakageToAtmosphere</td>
                                                 <td class="noshow">@item.FailureOfFunction</td>
                                                 <td class="noshow">@item.PassingAccrosValve</td>
@@ -199,15 +219,14 @@
                                                 <td class="noshow">@item.LoFScorePassingAccrosValveTP3</td>
                                                 <td class="noshow">@item.CoFScore</td>
                                                 <td class="nowrap">
-                                                    <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index"
-                                                        asp-route-assetid="@item.Asset.Id" asp-route-assessmentid="@item.Id"
-                                                        target="_blank">Assessment</a>
-                                                    <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index"
-                                                        asp-route-assetid="@item.Asset.Id" asp-route-inspectionid="@item.LastInspectionId"
-                                                        target="_blank">Inspection</a>
-                                                    <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index"
-                                                        asp-route-assetid="@item.Asset.Id" asp-route-maintenanceid="@item.LastMaintenanceId"
-                                                        target="_blank">Maintenance</a>
+                                                    <button class="btn btn-light btn-sm" onclick="detailAssessment(@item.Id)"
+                                                        target="_blank">Assessment</button>
+                                                    <button class="btn btn-light btn-sm" onclick="detailInspection(@item.LastInspectionId)" asp-controller="Inspection" asp-action="Index"
+                                                        asp-route-assetid="@item.Asset.Id"
+                                                        asp-route-inspectionid="@item.LastInspectionId">Inspection</button>
+                                                    <button class="btn btn-light btn-sm" onclick="detailMaintenance(@item.LastMaintenanceId)" asp-controller="Maintenance" asp-action="Index"
+                                                        asp-route-assetid="@item.Asset.Id"
+                                                        asp-route-maintenanceid="@item.LastMaintenanceId">Maintenance</button>
                                                 </td>
                                             </tr>
                                         }
@@ -218,6 +237,906 @@
                 </div>
             </div>
         </main>
+    </div>
+</div>
+
+<div class="modal fade modal-xl assessment-form-modal" id="detailInspectionModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="inspection-form inspection-tab">
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Asset Information</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-assetid">Asset ID</label>
+                                    <input type="text" class="form-control" id="field-inspection-assetid" readonly name="AssetID">
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-valvetype">Valve Type</label>
+                                    <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-tagno">Tag No</label>
+                                    <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-manufacturer">Manufacturer</label>
+                                    <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                </div>
+                                <div class="form-group-inline" style="display: none;">
+                                    <label for="field-inspection-equipmentname">Equipment Name</label>
+                                    <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-bodymaterial">Body Material</label>
+                                    <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="businessarea">Business Area</label>
+                                    <input type="text" class="form-control" id="businessarea" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="bodymodel">Body Model</label>
+                                    <input type="text" class="form-control" id="bodymodel" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="platform">Platform</label>
+                                    <input type="text" class="form-control" id="platform" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="endconnection">End Connection</label>
+                                    <input type="text" class="form-control" id="endconnection" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="parentequipmentno">Parent Equipment No.</label>
+                                    <input type="text" class="form-control" id="parentequipmentno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="serialno">Serial No.</label>
+                                    <input type="text" class="form-control" id="serialno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="parentequipmentdescription">Parent Equipment Description</label>
+                                    <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                </div>
+                                <div class="form-group-inline" style="display: none;">
+                                    <label for="usagetype">Usage Type</label>
+                                    <input type="text" class="form-control" id="usagetype" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="installationdate">Installation Date</label>
+                                    <input type="text" class="form-control" id="installationdate" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="size">Size (inch)</label>
+                                    <input type="text" class="form-control" id="size" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="pidno">PID No</label>
+                                    <input type="text" class="form-control" id="pidno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="classrating">Class Rating</label>
+                                    <input type="text" class="form-control" id="classrating" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Inspection Information</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <input type="hidden" name="Id" id="data-id">
+                                <div class="form-group ">
+                                    <label for="field-inspection-valvetagno">Valve Tag No</label>
+                                    <input type="text" class="form-control" id="field-inspection-valvetagno" readonly>
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-current-condition-limit-state-a">Current Condition Leakage to Atmosphere</label>
+                                    <input class="form-control"
+                                        id="field-inspection-current-condition-limit-state-a"
+                                        name="CurrentConditionLeakeageToAtmosphereID"
+                                        readonly
+                                    >
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-date">Inspection Date</label>
+                                    <input id="field-inspection-date" type="text"
+                                        class="form-control datepicker" name="InspectionDate"
+                                        readonly/>
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-current-condition-limit-state-b">Current Condition Failure of Function</label>
+                                    <input class="form-control"
+                                        id="field-inspection-current-condition-limit-state-b"
+                                        name="CurrentConditionFailureOfFunctionID"
+                                        readonly
+                                    >
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-inspection-method">Inspection
+                                        Method</label>
+                                    <input class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID" readonly>
+                                @* <input type="text" class="form-control"
+                                    id="field-inspection-inspection-method" value="Visual Inspection"> *@
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-current-condition-limit-state-c">Current
+                                        Condition Passing Across Valve</label>
+                                    <input class="form-control"
+                                        id="field-inspection-current-condition-limit-state-c"
+                                        name="CurrentConditionPassingAcrossValveID"
+                                        readonly
+                                    >
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-effectiveness">Inspection
+                                        Effectiveness</label>
+                                    <input class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID" readonly>
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-inspection-function-condition">Function
+                                        Condition</label>
+                                    <input type="text" class="form-control"
+                                        id="field-inspection-function-condition"
+                                        name="FunctionCondition"
+                                        readonly
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="field-inspection-description">Inspection Description</label>
+                                    <textarea class="form-control" id="field-inspection-description"
+                                        rows="12" name="InspectionDescription" readonly></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="row">
+                                        <div class="form-group col-md-12 mb-2">
+                                            <label for="field-inspection-test-pressure-if-any">Test Pressure
+                                                if Any</label>
+                                            <input type="text" 
+                                                name="TestPressureIfAny"
+                                                class="form-control"
+                                                id="field-inspection-test-pressure-if-any"
+                                                readonly>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <label for="field-inspection-image">Inspection Image</label>
+                                            <div class="gallery-input">
+                                                <div class="preview-image-gallery">
+                                                    
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-xl assessment-form-modal" id="detailMaintenanceModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="inspection-form inspection-tab">
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Asset Information</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-assetid">Asset ID</label>
+                                    <input type="text" class="form-control" id="field-inspection-assetid" name="AssetID" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-valvetype">Valve Type</label>
+                                    <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-tagno">Tag No</label>
+                                    <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-manufacturer">Manufacturer</label>
+                                    <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                </div>
+                                <div class="form-group-inline" style="display: none;">
+                                    <label for="field-inspection-equipmentname">Equipment Name</label>
+                                    <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-bodymaterial">Body Material</label>
+                                    <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="businessarea">Business Area</label>
+                                    <input type="text" class="form-control" id="businessarea" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="bodymodel">Body Model</label>
+                                    <input type="text" class="form-control" id="bodymodel" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="platform">Platform</label>
+                                    <input type="text" class="form-control" id="platform" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="endconnection">End Connection</label>
+                                    <input type="text" class="form-control" id="endconnection" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="parentequipmentno">Parent Equipment No.</label>
+                                    <input type="text" class="form-control" id="parentequipmentno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="serialno">Serial No.</label>
+                                    <input type="text" class="form-control" id="serialno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="parentequipmentdescription">Parent Equipment Description</label>
+                                    <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                </div>
+                                <div class="form-group-inline" style="display: none;">
+                                    <label for="usagetype">Usage Type</label>
+                                    <input type="text" class="form-control" id="usagetype" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="installationdate">Installation Date</label>
+                                    <input type="text" class="form-control" id="installationdate" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="size">Size (inch)</label>
+                                    <input type="text" class="form-control" id="size" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="pidno">PID No</label>
+                                    <input type="text" class="form-control" id="pidno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="classrating">Class Rating</label>
+                                    <input type="text" class="form-control" id="classrating" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Maintenance Information</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <input type="hidden" name="Id" id="data-id">
+                                <div class="form-group ">
+                                    <label for="field-maintenance-date">Maintenance Date</label>
+                                    <input id="field-maintenance-date" type="text"
+                                        class="form-control datepicker" name="MaintenanceDate" readonly/>
+                                </div>
+                                <div class="form-group ">
+                                    <label for="field-maintenance-repaired">Is Valve Repaired</label>
+                                    <input class="form-control"
+                                        id="field-maintenance-repaired"
+                                        name="IsValveRepairedID"
+                                        readonly
+                                    >
+                                </div>
+                                <div class="form-group">
+                                    <label for="field-maintenance-description">Maintenance Description</label>
+                                    <textarea class="form-control" id="field-maintenance-description"
+                                        rows="8"
+                                        name="MaintenanceDescription"
+                                        readonly
+                                        ></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="field-maintenance-image">Maintenance Image</label>
+                                    <div class="gallery-input">
+                                        <!-- <input type="file" class="form-control image-gallery-upload" id="field-maintenance-image" onchange="imagesPreview(this)" multiple> -->
+                                        <div class="preview-image-gallery">
+                                            <!-- <label class="add-image" for="field-maintenance-image"><i class="fa-solid fa-file-circle-plus"></i></label> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade modal-xl assessment-form-modal" id="detailAssessmentModal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form class="inspection-form inspection-tab">
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Asset Information</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-assetid">Asset ID</label>
+                                    <input type="text" class="form-control" id="field-inspection-assetid" name="AssetID" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-valvetype">Valve Type</label>
+                                    <input type="text" class="form-control" id="field-inspection-valvetype" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-tagno">Tag No</label>
+                                    <input type="text" class="form-control" id="field-inspection-tagno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-manufacturer">Manufacturer</label>
+                                    <input type="text" class="form-control" id="field-inspection-manufacturer" readonly>
+                                </div>
+                                <div class="form-group-inline" style="display: none;">
+                                    <label for="field-inspection-equipmentname">Equipment Name</label>
+                                    <input type="text" class="form-control" id="field-inspection-equipmentname" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="field-inspection-bodymaterial">Body Material</label>
+                                    <input type="text" class="form-control" id="field-inspection-bodymaterial" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="businessarea">Business Area</label>
+                                    <input type="text" class="form-control" id="businessarea" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="bodymodel">Body Model</label>
+                                    <input type="text" class="form-control" id="bodymodel" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="platform">Platform</label>
+                                    <input type="text" class="form-control" id="platform" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="endconnection">End Connection</label>
+                                    <input type="text" class="form-control" id="endconnection" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="parentequipmentno">Parent Equipment No.</label>
+                                    <input type="text" class="form-control" id="parentequipmentno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="serialno">Serial No.</label>
+                                    <input type="text" class="form-control" id="serialno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="parentequipmentdescription">Parent Equipment Description</label>
+                                    <input type="text" class="form-control" id="parentequipmentdescription" readonly>
+                                </div>
+                                <div class="form-group-inline" style="display: none;">
+                                    <label for="usagetype">Usage Type</label>
+                                    <input type="text" class="form-control" id="usagetype" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="installationdate">Installation Date</label>
+                                    <input type="text" class="form-control" id="installationdate" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="size">Size (inch)</label>
+                                    <input type="text" class="form-control" id="size" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="pidno">PID No</label>
+                                    <input type="text" class="form-control" id="pidno" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="classrating">Class Rating</label>
+                                    <input type="text" class="form-control" id="classrating" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Assessment Information</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-container">
+                            <div class="form-grid">
+                                <div class="form-group-inline">
+                                    <label for="assessment-no">Assessment No</label>
+                                    <input type="text" class="form-control" id="assessment-no" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="time-to-limit-a">Time to Limit State Leakage to atmosphere (Month)</label>
+                                    <input type="text" class="form-control" id="time-to-limit-a" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="assessment-date">Assessment Date</label>
+                                    <input type="text" class="form-control" id="assessment-date" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="time-to-limit-b">Time to Limit State Failure of function (Month)</label>
+                                    <input type="text" class="form-control" id="time-to-limit-b" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="time-period">Time Period</label>
+                                    <input type="text" class="form-control" id="time-period" readonly>
+                                </div>
+                                <div class="form-group-inline">
+                                    <label for="time-to-limit-c">Time to Limit State Passing accros valve (Month)</label>
+                                    <input type="text" class="form-control" id="time-to-limit-c" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Inspection History</b>
+                    </div>
+                    <div class="sub-container">
+                        <table class="pop-up-history-table">
+                            <thead>
+                                <th>No</th>
+                                <th>Inspection Date</th>
+                                <th>Inspection Method</th>
+                                <th>Inspection Description</th>
+                                <th>Function Condition</th>
+                                <th>Test Pressure</th>
+                            </thead>
+                            <tbody id="inspection-history-content">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Maintenance History</b>
+                    </div>
+                    <div class="sub-container">
+                        <table class="pop-up-history-table">
+                            <thead>
+                                <th>No</th>
+                                <th>Maintenance Date</th>
+                                <th>Is Valve Repaired?</th>
+                                <th>Maintenance Description</th>
+                            </thead>
+                            <tbody id="maintenance-history-content">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Likelihood of Failure</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-grid">
+                            <div>
+                                <div class="form-section-title">
+                                    LF1 - Current Condition
+                                </div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="leakage-to-atmosphere">Leakage to atmophere</label>
+                                    <input type="text" class="form-control" id="leakage-to-atmosphere" readonly>
+                                </div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="failure-of-function">Failure of Function</label>
+                                    <input type="text" class="form-control" id="failure-of-function" readonly>
+                                </div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="passing-accross-valve">Passing accross valve</label>
+                                    <input type="text" class="form-control" id="passing-accross-valve" readonly>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-section-title mb-0">
+                            LF2 - Time To Limit State
+                        </div>
+                        <div>
+                            <table class="lf2-preview-table">
+                                <tr>
+                                    <td></td>
+                                    <td class="text-center"><label>TP1</label></td>
+                                    <td class="text-center"><label>TP2</label></td>
+                                    <td class="text-center"><label>TP3</label></td>
+                                </tr>
+                                <tr>
+                                    <td><label>Leakage to atmophere</label></td>
+                                    <td><input class="form-control" readonly id="leakage-to-atmosphere-tp1"></td>
+                                    <td><input class="form-control" readonly id="failure-of-function-tp1"></td>
+                                    <td><input class="form-control" readonly id="passing-accross-valve-tp1"></td>
+                                </tr>
+                                <tr>
+                                    <td><label>Failure of Function</label></td>
+                                    <td><input class="form-control" readonly id="leakage-to-atmosphere-tp2"></td>
+                                    <td><input class="form-control" readonly id="failure-of-function-tp2"></td>
+                                    <td><input class="form-control" readonly id="passing-accross-valve-tp2"></td>
+                                </tr>
+                                <tr>
+                                    <td><label>Passing accross valve</label></td>
+                                    <td><input class="form-control" readonly id="leakage-to-atmosphere-tp3"></td>
+                                    <td><input class="form-control" readonly id="failure-of-function-tp3"></td>
+                                    <td><input class="form-control" readonly id="passing-accross-valve-tp3"></td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="form-grid mt-5">
+                            <div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="inspection-effectiveness">LF3 - Inspection Effectiveness</label>
+                                    <input type="text" class="form-control" id="inspection-effectiveness" readonly>
+                                </div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="impact-of-internal-fluid">LF4 - Impact of Internal Fluid Impurities</label>
+                                    <input type="text" class="form-control" id="impact-of-internal-fluid" readonly>
+                                </div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="impact-of-operating-envelopes">LF5 - Impact of Operating Envelopes</label>
+                                    <input type="text" class="form-control" id="impact-of-operating-envelopes" readonly>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="used-within-oem-specification">LF6 - Used within OEM Specification</label>
+                                    <input type="text" class="form-control" id="used-within-oem-specification" readonly>
+                                </div>
+                                <div class="form-group-inline with-margin-bottom">
+                                    <label for="repaired">LF7 - Repaired</label>
+                                    <input type="text" class="form-control" id="repaired" readonly>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Consequence of Failure</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-grid">
+                            <div class="form-group-inline">
+                                <label for="product-loss-definition">Product loss definition (bbls)</label>
+                                <input type="text" class="form-control" id="product-loss-definition" readonly>
+                            </div>
+                            <div class="form-group-inline">
+                                <label for="hsse-definition">HSSE Definition</label>
+                                <input type="text" class="form-control" id="hsse-definition" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Risk</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="risk-table-container">
+                            <svg class="risk-table-legend" viewBox="0 0 550 350">
+                                <defs>
+                                    <path d="M 0 0  L 550 0  L 550 440  L 0 440  Z " fill-rule="evenodd" fill="black" id="path33" />
+                                    <clipPath id="clip34">
+                                        <use xlink:href="#path33" />
+                                    </clipPath>
+                                    <filter x="-50.00%" y="-50.00%" width="200.00%" height="200.00%" filterUnits="objectBoundingBox" id="filter35">
+                                        <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0  " in="SourceGraphic" />
+                                    </filter>
+                                </defs>
+                                <g transform="matrix(1 0 0 1 -174 -55 )">
+                                    <g transform="matrix(0.902272727272727 0 0 0.902272727272727 200.875 55 )" clip-path="url(#clip34)" filter="url(#filter35)">
+                                        <text x="125" y="275" font-size="12">A</text>
+                                        <text x="125" y="225" font-size="12">B</text>
+                                        <text x="125" y="175" font-size="12">C</text>
+                                        <text x="125" y="125" font-size="12">D</text>
+                                        <text x="125" y="75" font-size="12">E</text>
+                                        <text x="175" y="322" font-size="12">1</text>
+                                        <text x="225" y="322" font-size="12">2</text>
+                                        <text x="275" y="322" font-size="12">3</text>
+                                        <text x="325" y="322" font-size="12">4</text>
+                                        <text x="375" y="322" font-size="12">5</text>
+                                        <text x="225" y="350" font-size="12" font-weight="bold">Likelihood of Failure</text>
+                                        <g transform="translate(100,242)">
+                                            <g transform="rotate(-90)">
+                                                <text font-size="12" font-weight="bold">Consequence of Failure</text>
+                                            </g>
+                                        </g>
+                                        <g class="legend">
+                                            <polygon points="425,55 420,65 430,65" fill="white" stroke-width="2" stroke="gray"></polygon>
+                                            <text x="440" y="65" font-size="12">TP1 A</text>
+                                            <circle cx="425" cy="78" r="5" fill="white" stroke-width="2" stroke="gray"></circle>
+                                            <text x="440" y="83" font-size="12">TP2 A</text>
+                                            <rect x="420" y="91" width="10" height="10" fill="white" stroke-width="2" stroke="gray"></rect>
+                                            <text x="440" y="101" font-size="12">TP3 A</text>
+                                            <polygon points="425,110 420,120 430,120" fill="black" stroke-width="2" stroke="gray"></polygon>
+                                            <text x="440" y="120" font-size="12">TP1 B</text>
+                                            <circle cx="425" cy="134" r="5" fill="black" stroke-width="2" stroke="gray"></circle>
+                                            <text x="440" y="139" font-size="12">TP2 B</text>
+                                            <rect x="420" y="148" width="10" height="10" fill="black" stroke-width="2" stroke="gray"></rect>
+                                            <text x="440" y="158" font-size="12">TP3 B</text>
+                                            <polygon points="425,167 420,177 430,177" fill="pink" stroke-width="2" stroke="gray"></polygon>
+                                            <text x="440" y="177" font-size="12">TP1 C</text>
+                                            <circle cx="425" cy="191" r="5" fill="pink" stroke-width="2" stroke="gray"></circle>
+                                            <text x="440" y="196" font-size="12">TP2 C</text>
+                                            <rect x="420" y="205" width="10" height="10" fill="pink" stroke-width="2" stroke="gray"></rect>
+                                            <text x="440" y="215" font-size="12">TP3 C</text>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                            <div class="risk-matrix">
+                                <div class="risk-matrix-dots">
+                                    <!-- A Leakage to Atmosphere -->
+                                    <div class="dot dot-tp1 type-a" id="TP1A"></div>
+                                    <div class="dot dot-tp2 type-a" id="TP2A"></div>
+                                    <div class="dot dot-tp3 type-a" id="TP3A"></div>
+                                    <!-- B Failure -->
+                                    <div class="dot dot-tp1 type-b" id="TP1B"></div>
+                                    <div class="dot dot-tp2 type-b" id="TP2B"></div>
+                                    <div class="dot dot-tp3 type-b" id="TP3B"></div>
+                                    <!-- C Passing Accross Valve -->
+                                    <div class="dot dot-tp1 type-c" id="TP1C"></div>
+                                    <div class="dot dot-tp2 type-c" id="TP2C"></div>
+                                    <div class="dot dot-tp3 type-c" id="TP3C"></div>
+                                </div>
+                                <svg id="risk-table" width="250" height="250">
+                                    <g>
+                                        <g>
+                                            <rect x="0" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="50" y="200" width="50" height="50" fill="#81B014" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="100" y="200" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="150" y="200" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="200" y="200" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                            <rect x="200" y="200" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="0" y="150" width="50" height="50" fill="#6FA529" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="50" y="150" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="100" y="150" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="150" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                            <rect x="150" y="150" width="1" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                            <rect x="150" y="200" width="50" height="1" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="200" y="150" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="0" y="100" width="50" height="50" fill="#008001" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="50" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="100" y="100" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="150" y="100" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                            <rect x="150" y="100" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="200" y="100" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="0" y="50" width="50" height="50" fill="#FFFF00" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="50" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                            <rect x="50" y="50" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                            <rect x="50" y="100" width="50" height="1" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="100" y="50" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                            <rect x="100" y="100" width="50" height="1" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="150" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="200" y="50" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="0" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="50" y="0" width="50" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                            <rect x="50" y="0" width="1" height="50" fill="#FF6400" stroke="rgb(0,0,0)" stroke-width="5"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="100" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="150" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                        <g>
+                                            <rect x="200" y="0" width="50" height="50" fill="#FE0000" stroke="rgb(0,0,0)" stroke-width="1"></rect>
+                                        </g>
+                                    </g>
+                                </svg>
+                            </div>
+                        </div>
+                        <table id="example" class="table table-hover custom-table basic-th mt-4" style="width:100%">
+                            <tbody>
+                                <tr>
+                                    <td class="ta-center header-cell">Limit State</td>
+                                    <td class="ta-center header-cell">Risk TP1</td>
+                                    <td class="ta-center header-cell">Risk TP2</td>
+                                    <td class="ta-center header-cell">Risk TP3</td>
+                                    <td class="ta-center header-cell">Time To Action</td>
+                                </tr>
+                                <tr>
+                                    <td class="header-cell">Leakage Atmosphere</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP1A-colorlabel id="TP1A-colorlabel"></div>
+                                            <span TP1A-label id="TP1A-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP2A-colorlabel id="TP2A-colorlabel"></div>
+                                            <span TP2A-label id="TP2A-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP3A-colorlabel id="TP3A-colorlabel"></div>
+                                            <span TP3A-label id="TP3A-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span TPA-TTA id="TPTIMETOACTIONA-label"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="header-cell">Failure of function</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP1B-colorlabel id="TP1B-colorlabel"></div>
+                                            <span TP1B-label id="TP1B-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP2B-colorlabel id="TP2B-colorlabel"></div>
+                                            <span TP2B-label id="TP2B-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP3B-colorlabel id="TP3B-colorlabel"></div>
+                                            <span TP3B-label id="TP3B-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span TPB-TTA id="TPTIMETOACTIONB-label"></span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="header-cell">Passing across valve</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP1C-colorlabel id="TP1C-colorlabel"></div>
+                                            <span TP1C-label id="TP1C-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP2C-colorlabel id="TP2C-colorlabel"></div>
+                                            <span TP2C-label id="TP2C-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP3C-colorlabel id="TP3C-colorlabel"></div>
+                                            <span TP3C-label id="TP3C-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span TPC-TTA id="TPTIMETOACTIONC-label"></span>
+                                    </td>
+                                </tr>
+                            <tfoot class="bg-grey">
+                                <tr>
+                                    <td class="header-cell">Risk</td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP1RISK-colorlabel id="TP1RISK-colorlabel"></div>
+                                            <span TP1RISK-label id="TP1RISK-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP2RISK-colorlabel id="TP2RISK-colorlabel"></div>
+                                            <span TP2RISK-label id="TP2RISK-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="d-flex">
+                                            <div TP3RISK-colorlabel id="TP3RISK-colorlabel"></div>
+                                            <span TP3RISK-label id="TP3RISK-label"></span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span TPRISK-TTA id="TPTIMETOACTIONRISK-label"></span>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="box">
+                    <div class="subheader m-0">
+                        <b>Integrity plan</b>
+                    </div>
+                    <div class="sub-container">
+                        <div class="form-grid">
+                            <div class="form-group-inline">
+                                <label for="integrity-status">Integrity Status</label>
+                                <input type="text" class="form-control" id="integrity-status" readonly>
+                            </div>
+                            <div class="form-group-inline">
+                                <label for="time-to-action">Time to action</label>
+                                <input type="text" class="form-control" id="time-to-action" readonly>
+                            </div>
+                            <div class="form-group-inline">
+                                <label for="recommended-action">Recommended Action</label>
+                                <input type="text" class="form-control" id="recommended-action" readonly>
+                            </div>
+                            <div></div>
+                            <div class="form-group-inline">
+                                <label for="summary" style="align-self: start;">Summary</label>
+                                <texarea class="form-control" id="summary" readonly style="min-height: 100px;"></texarea>
+                            </div>
+                            <div class="form-group-inline">
+                                <label for="detailed-recommendation" style="align-self: start;">Detailed Recommendation</label>
+                                <texarea class="form-control" id="detailed-recommendation" readonly style="min-height: 100px;"></texarea>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="box-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -233,7 +1152,7 @@
                         exportOptions: {
                             columns: ':not(.notexport)',
                             format: {
-                                body: function(data, row, column, node) {
+                                body: function (data, row, column, node) {
                                     if ($(node).hasClass("export-html")) {
                                         data = $(node).attr("real-val");
                                     }
@@ -253,6 +1172,10 @@
             ordering: true,
         }
         $(document).ready(function () {
+            $('.havebgcolor').each(function () {
+                $(this).css('background-color', getHeatColor($(this).text(), true));
+            });
+
             $('#ddlBusinessArea').on('change', function () {
                 var areaId = $(this).val();
                 $.ajax({
@@ -295,76 +1218,79 @@
                                 item.lastMaintenanceDate.substring(6, 4) + "-" + item.lastMaintenanceDate.substring(3, 2) + "-" +
                                 item.lastMaintenanceDate.substring(0, 2) : item.lastMaintenanceDate;
                             var html = `
-                                <tr>
-                                    <td>${i + 1}</td>
-                                    <td>${item.asset.businessArea}</td>
-                                    <td>${item.asset.platform}</td>
-                                    <td>${item.asset.tagNo}</td>
-                                    <td>${item.asset.assetName}</td>
-                                    <td class="noshow">${item.asset.parentEquipmentNo}</td>
-                                    <td class="noshow">${item.asset.parentEquipmentDescription}</td>
-                                    <td>${item.asset.pidNo}</td>
-                                    <td>${item.asset.valveType}</td>
-                                    <td>${item.asset.size}</td>
-                                    <td>${item.asset.classRating}</td>
-                                    <td class="export-html" real-val="${item.asset.installationDate}"><span style="display: none;">${installationDate}</span>${item.asset.installationDate}</td>
-                                    <td class="export-html" real-val="${item.assessmentDate}"><span style="display: none;">${assessmentDate}</span>${item.assessmentDate}</td>
-                                    <td class="export-html" real-val="${item.lastInspectionDate}"><span style="display: none;">${lastInspectionDate}</span>${item.lastInspectionDate}</td>
-                                    <td class="export-html" real-val="${item.lastMaintenanceDate}"><span style="display: none;">${lastMaintenanceDate}</span>${item.lastMaintenanceDate}</td>
-                                    <td>${item.timePeriode}</td>
-                                    <td class="noshow">${item.tP1A}</td>
-                                    <td class="noshow">${item.tP2A}</td>
-                                    <td class="noshow">${item.tP3A}</td>
-                                    <td class="noshow">${item.tP1B}</td>
-                                    <td class="noshow">${item.tP2B}</td>
-                                    <td class="noshow">${item.tP3B}</td>
-                                    <td class="noshow">${item.tP1C}</td>
-                                    <td class="noshow">${item.tP2C}</td>
-                                    <td class="noshow">${item.tP3C}</td>
-                                    <td>${item.tP1Risk}</td>
-                                    <td>${item.tP2Risk}</td>
-                                    <td>${item.tP3Risk}</td>
-                                    <td>${item.integrityStatus}</td>
-                                    <td>${item.recommendationAction}</td>
-                                    <td class="noshow">${item.tpTimeToActionRisk}</td>
-                                    <td class="noshow">${item.leakageToAtmosphere}</td>
-                                    <td class="noshow">${item.failureOfFunction}</td>
-                                    <td class="noshow">${item.passingAccrosValve}</td>
-                                    <td class="noshow">${item.leakageToAtmosphereTP1}</td>
-                                    <td class="noshow">${item.leakageToAtmosphereTP2}</td>
-                                    <td class="noshow">${item.leakageToAtmosphereTP3}</td>
-                                    <td class="noshow">${item.failureOfFunctionTP1}</td>
-                                    <td class="noshow">${item.failureOfFunctionTP2}</td>
-                                    <td class="noshow">${item.failureOfFunctionTP3}</td>
-                                    <td class="noshow">${item.passingAccrosValveTP1}</td>
-                                    <td class="noshow">${item.passingAccrosValveTP2}</td>
-                                    <td class="noshow">${item.passingAccrosValveTP3}</td>
-                                    <td class="noshow">${item.inspectionEffectiveness}</td>
-                                    <td class="noshow">${item.impactOfInternalFluidImpurities}</td>
-                                    <td class="noshow">${item.impactOfOperatingEnvelopes}</td>
-                                    <td class="noshow">${item.usedWithinOEMSpecification}</td>
-                                    <td class="noshow">${item.repaired}</td>
-                                    <td class="noshow">${item.productLossDefinition}</td>
-                                    <td class="noshow">${item.hsseDefinision}</td>
-                                    <td class="noshow">${item.loFScoreLeakageToAtmophereTP1}</td>
-                                    <td class="noshow">${item.loFScoreFailureOfFunctionTP1}</td>
-                                    <td class="noshow">${item.loFScorePassingAccrosValveTP1}</td>
-                                    <td class="noshow">${item.loFScoreLeakageToAtmophereTP2}</td>
-                                    <td class="noshow">${item.loFScoreFailureOfFunctionTP2}</td>
-                                    <td class="noshow">${item.loFScorePassingAccrosValveTP2}</td>
-                                    <td class="noshow">${item.loFScoreLeakageToAtmophereTP3}</td>
-                                    <td class="noshow">${item.loFScoreFailureOfFunctionTP3}</td>
-                                    <td class="noshow">${item.loFScorePassingAccrosValveTP3}</td>
-                                    <td class="noshow">${item.coFScore}</td>
-                                    <td class="nowrap">
-                                        <a class="btn btn-light btn-sm" asp-controller="Assessment" asp-action="Index" asp-route-assetid="${item.asset.id}" asp-route-assessmentid="${item.id}" target="_blank">Assessment</a>
-                                        <a class="btn btn-light btn-sm" asp-controller="Inspection" asp-action="Index" asp-route-assetid="${item.asset.id}" asp-route-inspectionid="${item.lastInspectionId}" target="_blank">Inspection</a>
-                                        <a class="btn btn-light btn-sm" asp-controller="Maintenance" asp-action="Index" asp-route-assetid="${item.asset.id}" asp-route-maintenanceid="${item.lastMaintenanceId}" target="_blank">Maintenance</a>
-                                    </td>
-                                </tr>`
+                                    <tr>
+                                        <td>${i + 1}</td>
+                                        <td>${item.asset.businessArea}</td>
+                                        <td>${item.asset.platform}</td>
+                                        <td>${item.asset.tagNo}</td>
+                                        <td>${item.asset.assetName}</td>
+                                        <td class="noshow">${item.asset.parentEquipmentNo}</td>
+                                        <td class="noshow">${item.asset.parentEquipmentDescription}</td>
+                                        <td>${item.asset.pidNo}</td>
+                                        <td>${item.asset.valveType}</td>
+                                        <td>${item.asset.size}</td>
+                                        <td>${item.asset.classRating}</td>
+                                        <td class="export-html" real-val="${item.asset.installationDate}"><span style="display: none;">${installationDate}</span>${item.asset.installationDate}</td>
+                                        <td class="export-html" real-val="${item.assessmentDate}"><span style="display: none;">${assessmentDate}</span>${item.assessmentDate}</td>
+                                        <td class="export-html" real-val="${item.lastInspectionDate}"><span style="display: none;">${lastInspectionDate}</span>${item.lastInspectionDate}</td>
+                                        <td class="export-html" real-val="${item.lastMaintenanceDate}"><span style="display: none;">${lastMaintenanceDate}</span>${item.lastMaintenanceDate}</td>
+                                        <td>${item.timePeriode}</td>
+                                        <td class="noshow">${item.tP1A}</td>
+                                        <td class="noshow">${item.tP2A}</td>
+                                        <td class="noshow">${item.tP3A}</td>
+                                        <td class="noshow">${item.tP1B}</td>
+                                        <td class="noshow">${item.tP2B}</td>
+                                        <td class="noshow">${item.tP3B}</td>
+                                        <td class="noshow">${item.tP1C}</td>
+                                        <td class="noshow">${item.tP2C}</td>
+                                        <td class="noshow">${item.tP3C}</td>
+                                        <td class="havebgcolor">${item.tP1Risk}</td>
+                                        <td class="havebgcolor">${item.tP2Risk}</td>
+                                        <td class="havebgcolor">${item.tP3Risk}</td>
+                                        <td>${item.integrityStatus}</td>
+                                        <td>${item.recommendationAction}</td>
+                                        <td class="noshow">${item.tpTimeToActionRisk}</td>
+                                        <td class="noshow">${item.leakageToAtmosphere}</td>
+                                        <td class="noshow">${item.failureOfFunction}</td>
+                                        <td class="noshow">${item.passingAccrosValve}</td>
+                                        <td class="noshow">${item.leakageToAtmosphereTP1}</td>
+                                        <td class="noshow">${item.leakageToAtmosphereTP2}</td>
+                                        <td class="noshow">${item.leakageToAtmosphereTP3}</td>
+                                        <td class="noshow">${item.failureOfFunctionTP1}</td>
+                                        <td class="noshow">${item.failureOfFunctionTP2}</td>
+                                        <td class="noshow">${item.failureOfFunctionTP3}</td>
+                                        <td class="noshow">${item.passingAccrosValveTP1}</td>
+                                        <td class="noshow">${item.passingAccrosValveTP2}</td>
+                                        <td class="noshow">${item.passingAccrosValveTP3}</td>
+                                        <td class="noshow">${item.inspectionEffectiveness}</td>
+                                        <td class="noshow">${item.impactOfInternalFluidImpurities}</td>
+                                        <td class="noshow">${item.impactOfOperatingEnvelopes}</td>
+                                        <td class="noshow">${item.usedWithinOEMSpecification}</td>
+                                        <td class="noshow">${item.repaired}</td>
+                                        <td class="noshow">${item.productLossDefinition}</td>
+                                        <td class="noshow">${item.hsseDefinision}</td>
+                                        <td class="noshow">${item.loFScoreLeakageToAtmophereTP1}</td>
+                                        <td class="noshow">${item.loFScoreFailureOfFunctionTP1}</td>
+                                        <td class="noshow">${item.loFScorePassingAccrosValveTP1}</td>
+                                        <td class="noshow">${item.loFScoreLeakageToAtmophereTP2}</td>
+                                        <td class="noshow">${item.loFScoreFailureOfFunctionTP2}</td>
+                                        <td class="noshow">${item.loFScorePassingAccrosValveTP2}</td>
+                                        <td class="noshow">${item.loFScoreLeakageToAtmophereTP3}</td>
+                                        <td class="noshow">${item.loFScoreFailureOfFunctionTP3}</td>
+                                        <td class="noshow">${item.loFScorePassingAccrosValveTP3}</td>
+                                        <td class="noshow">${item.coFScore}</td>
+                                        <td class="nowrap">
+                                            <button class="btn btn-light btn-sm" onclick="detailAssessment(${item.Id})">Assessment</button>
+                                            <button class="btn btn-light btn-sm" onclick="detailInspection(${item.lastInspectionId})">Inspection</button>
+                                            <button class="btn btn-light btn-sm" onclick="detailMaintenance(${item.lastMaintenanceId})">Maintenance</button>
+                                        </td>
+                                    </tr>`
                             $('#table-detail').append(html);
                         });
                         initDatatable(dataTableOptions)
+                        $('.havebgcolor').each(function () {
+                            $(this).css('background-color', getHeatColor($(this).text(), true));
+                        });
                     }
                 });
             });
@@ -384,6 +1310,299 @@
                 }
             }
             return obj;
+        }
+
+        function detailInspection(id) {
+            $('#detailInspectionModal').find('input,textarea,select').val('')
+            $('#detailInspectionModal .preview-image-gallery').find('input[type=file], .single-image').remove()
+            fetchModalDetailData(id, 'inspection')
+
+            $('#detailInspectionModal').attr('data-type', 'view')
+            $('#detailInspectionModal').modal('show')
+        }
+
+        function detailMaintenance(id) {
+            $('#detailMaintenanceModal').find('input,textarea,select').val('')
+            $('#detailMaintenanceModal .preview-image-gallery').find('input[type=file], .single-image').remove()
+            fetchModalDetailData(id, 'maintenance')
+
+            $('#detailMaintenanceModal').attr('data-type', 'view')
+            $('#detailMaintenanceModal').modal('show')
+        }
+
+        function detailAssessment(id) {
+            $('#detailAssessmentModal').find('input,textarea,select').val('')
+            $('#detailAssessmentModal .preview-image-gallery').find('input[type=file], .single-image').remove()
+            fetchModalDetailData(id, 'assessment')
+
+            $('#detailAssessmentModal').attr('data-type', 'view')
+            $('#detailAssessmentModal').modal('show')
+        }
+
+        function getHeatColor(pos, hex = false) {
+            if(['1A', '2A', '1B'].includes(pos)){
+                if(hex){
+                    return '#81B014';
+                }
+                return 'olive';
+            } else if(['3A', '2B', '1C'].includes(pos)){
+                return 'green';
+            } else if(['4A', '3B', '3C', '2C','1D'].includes(pos)){
+                return 'yellow';
+            } else if(['5A', '5B', '4B', '4C', '3D', '2D', '2E', '1E'].includes(pos)){
+                return 'orange';
+            } else {
+                return 'red';
+            }
+        }
+
+        function calculateXPos(value) {
+            let gapx = 20;
+            let cat1min = 16;
+            let cat1max = 49;
+            let cat2min = cat1max + 1;
+            let cat2max = 210;
+            let cat3min = cat2max + 1;
+            let cat3max = 891;
+            let cat4min = cat3max + 1;
+            let cat4max = 3769;
+            let cat5min = cat4max + 1;
+            let cat5max = 16050;
+
+            value = value*1;
+            xpos = 0;
+            if(value <= cat1min){
+                xpos = 0;
+            } else if(value<=cat1max) {
+                xpos = ((value-cat1min)/(cat1max-cat1min) * 20) + (gapx*0);
+            } else if(value<=cat2max) {
+                xpos = ((value-cat2min)/(cat2max-cat2min) * 20) + (gapx*1);
+            } else if(value<=cat3max) {
+                xpos = ((value-cat3min)/(cat3max-cat3min) * 20) + (gapx*2);
+            } else if(value<=cat4max) {
+                xpos = ((value-cat4min)/(cat4max-cat4min) * 20) + (gapx*3);
+            } else if(value<=cat5max) {
+                xpos = ((value-cat5min)/(cat5max-cat5min) * 20) + (gapx*4);
+            } else {
+                xpos = 100;
+            }
+            return xpos;
+        }
+
+        function calculateYPos(value) {
+            var ypos = 0;
+            switch(value){
+                case 'E':
+                    ypos = 10;
+                    break;
+                case 'D':
+                    ypos = 30;
+                    break;
+                case 'C':
+                    ypos = 50;
+                    break;
+                case 'B':
+                    ypos = 70;
+                    break;
+                case 'A':
+                    ypos = 90;
+                    break;
+            }
+            return ypos;
+        }
+
+        function fetchModalDetailData (id, type) {
+            // type = maintenance or inspection
+            let endPoint = '@urlinspectiondetail'
+            let modalSelector = '#detailInspectionModal'
+            if (type === 'maintenance') {
+                modalSelector = '#detailMaintenanceModal'
+                endPoint = '@urlmaintenancedetail'
+            }
+            if (type === 'assessment') {
+                modalSelector = '#detailAssessmentModal'
+                endPoint = '@urlassessmentdetail'
+            }
+            $.ajax({
+                url: endPoint,
+                type: 'GET',
+                data: { id },
+                success: function (data) {
+                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
+                    const dataAsset = data.asset
+                    $(modalSelector+' #field-inspection-assetid').val(dataAsset.id)
+                    $(modalSelector+' #field-inspection-valvetype').val(dataAsset.valveType)
+                    $(modalSelector+' #field-inspection-tagno').val(dataAsset.tagNo)
+                    $(modalSelector+' #field-inspection-valvetagno').val(dataAsset.tagNo)
+                    $(modalSelector+' #field-inspection-manufacturer').val(dataAsset.manufacturer)
+                    $(modalSelector+' #field-inspection-equipmentname').val('')
+                    $(modalSelector+' #field-inspection-bodymaterial').val(dataAsset.bodyMaterial)
+                    $(modalSelector+' #businessarea').val(dataAsset.businessArea)
+                    $(modalSelector+' #bodymodel').val(dataAsset.bodyModel)
+                    $(modalSelector+' #platform').val(dataAsset.platform)
+                    $(modalSelector+' #endconnection').val(dataAsset.endConnection)
+                    $(modalSelector+' #parentequipmentno').val(dataAsset.parentEquipmentNo)
+                    $(modalSelector+' #serialno').val(dataAsset.serialNo)
+                    $(modalSelector+' #parentequipmentdescription').val(dataAsset.parentEquipmentDescription)
+                    $(modalSelector+' #usagetype').val('')
+                    $(modalSelector+' #installationdate').val(dataAsset.installationDate)
+                    $(modalSelector+' #size').val(dataAsset.size)
+                    $(modalSelector+' #pidno').val(dataAsset.pidNo)
+                    $(modalSelector+' #classrating').val(dataAsset.classRating)
+
+                    // fill history data
+                    if(type === 'maintenance') {
+                        $(modalSelector + ' #field-maintenance-date').val(data.maintenanceDate)
+                        $(modalSelector + ' #field-maintenance-repaired').val(data.isValveRepaired)
+                        $(modalSelector + ' #field-maintenance-description').val(data.maintenanceDescription)
+                    } else if(type === 'assessment') {
+                        $(modalSelector + ' #time-to-limit-a').val(data.timeToLimitStateLeakageToAtmosphere)
+                        $(modalSelector + ' #time-to-limit-b').val(data.timeToLimitStateFailureOfFunction)
+                        $(modalSelector + ' #time-to-limit-c').val(data.timeToLimitStatePassingAccrosValve)
+                        $(modalSelector + ' #assessment-no').val(data.assessmentNo)
+                        $(modalSelector + ' #time-period').val(data.timePeriode)
+                        $(modalSelector + ' #assessment-date').val(data.assessmentDate)
+
+                        $(modalSelector + ' #leakage-to-atmosphere').val(data.leakageToAtmosphere)
+                        $(modalSelector + ' #failure-of-function').val(data.failureOfFunction)
+                        $(modalSelector + ' #passing-accross-valve').val(data.passingAccrosValve)
+                        $(modalSelector + ' #leakage-to-atmosphere-tp1').val(data.leakageToAtmosphereTP1)
+                        $(modalSelector + ' #failure-of-function-tp1').val(data.failureOfFunctionTP1)
+                        $(modalSelector + ' #passing-accross-valve-tp1').val(data.passingAccrosValveTP1)
+                        $(modalSelector + ' #leakage-to-atmosphere-tp2').val(data.leakageToAtmosphereTP2)
+                        $(modalSelector + ' #failure-of-function-tp2').val(data.failureOfFunctionTP2)
+                        $(modalSelector + ' #passing-accross-valve-tp2').val(data.passingAccrosValveTP2)
+                        $(modalSelector + ' #leakage-to-atmosphere-tp3').val(data.leakageToAtmosphereTP3)
+                        $(modalSelector + ' #failure-of-function-tp3').val(data.failureOfFunctionTP3)
+                        $(modalSelector + ' #passing-accross-valve-tp3').val(data.passingAccrosValveTP3)
+                        $(modalSelector + ' #inspection-effectiveness').val(data.inspectionEffectiveness)
+                        $(modalSelector + ' #impact-of-internal-fluid').val(data.impactOfInternalFluidImpurities)
+                        $(modalSelector + ' #impact-of-operating-envelopes').val(data.impactOfOperatingEnvelopes)
+                        $(modalSelector + ' #used-within-oem-specification').val(data.usedWithinOEMSpecification)
+                        $(modalSelector + ' #repaired').val(data.repaired)
+
+                        $(modalSelector + ' #product-loss-definition').val(data.productLossDefinition)
+                        $(modalSelector + ' #hsse-definition').val(data.hsseDefinision)
+
+                        //integrity-plan
+                        $(modalSelector + ' #integrity-status').val(data.integrityStatus)
+                        $(modalSelector + ' #time-to-action').val(data.tpTimeToActionRisk)
+                        $(modalSelector + ' #recommended-action').val(data.recommendationAction)
+                        $(modalSelector + ' #summary').text(data.summary || 'asdasdasd')
+                        $(modalSelector + ' #detailed-recommendation').text(data.detailedRecommendation || 'adsassad')
+
+                        //fill inspection table
+                        let inspectionHtml = ''
+                        data.inspectionHistory.forEach((val, index) => {
+                            inspectionHtml += `<tr>
+                                <td>${index + 1}</td>
+                                <td>${val.inspectionDate}</td>
+                                <td>${val.inspectionMethod}</td>
+                                <td>${val.inspectionDescription}</td>
+                                <td>${val.functionCondition}</td>
+                                <td>${val.testPressureIfAny}</td>
+                            </tr>`
+                        })
+                        $(modalSelector + ' #inspection-history-content').html(inspectionHtml)
+                        
+                        //fill maintenance table
+                        let maintenanceHtml = ''
+                        data.maintenanceHistory.forEach((val, index) => {
+                            maintenanceHtml += `<tr>
+                                <td>${index + 1}</td>
+                                <td>${val.maintenanceDate}</td>
+                                <td>${val.isValveRepaired}</td>
+                                <td>${val.maintenanceDescription}</td>
+                            </tr>`
+                        })
+
+                        const riskTableApiMapping = [
+                            'tP1A', 'tP1B', 'tP1C', 'tP1Risk',
+                            'tP2A', 'tP2B', 'tP2C', 'tP2Risk',
+                            'tP3A', 'tP3B', 'tP3C', 'tP3Risk',
+                            'tpTimeToActionA', 'tpTimeToActionB', 'tpTimeToActionC', 'tpTimeToActionRisk'
+                        ]
+
+                        riskTableApiMapping.forEach(i => {
+                            const statusBox = $(`#${i.toUpperCase()}-colorlabel`)
+                            const statusLabel = $(`#${i.toUpperCase()}-label`)
+                            const risk = data[i]
+                            statusBox.removeClass()
+                            statusBox.addClass('status-box')
+                            statusBox.addClass(getHeatColor(risk))
+                            statusLabel.text(risk)
+                        })
+
+                        const riskHeatmapMapping = {
+                            TP1A: 'loFScoreLeakageToAtmophereTP1',
+                            TP1B: 'loFScoreFailureOfFunctionTP1',
+                            TP1C: 'loFScorePassingAccrosValveTP1',
+                            TP2A: 'loFScoreLeakageToAtmophereTP2',
+                            TP2B: 'loFScoreFailureOfFunctionTP2',
+                            TP2C: 'loFScorePassingAccrosValveTP2',
+                            TP3A: 'loFScoreLeakageToAtmophereTP3',
+                            TP3B: 'loFScoreFailureOfFunctionTP3',
+                            TP3C: 'loFScorePassingAccrosValveTP3',
+                        }
+
+                        Object.keys(riskHeatmapMapping).forEach(key => {
+                            const resKey = riskHeatmapMapping[key]
+                            const val = data[resKey]
+                            console.log(resKey, 'resKey')
+                            console.log(val, 'value')
+                            const xPos = calculateXPos(val)
+                            const yPos = calculateYPos(data.consequenceOfFailure)
+                            $(`#${key}`).css({
+                                left: xPos + '%',
+                                top: yPos + '%'
+                            })
+                        })
+
+                        $(modalSelector + ' #maintenance-history-content').html(maintenanceHtml)
+                    } else {
+                        $(modalSelector + ' #field-inspection-date').val(data.inspectionDate)
+                        $(modalSelector + ' #field-inspection-inspection-method').val(data.inspectionMethod)
+                        $(modalSelector + ' #field-inspection-current-condition-limit-state-a').val(data.currentConditionLeakeageToAtmosphere)
+                        $(modalSelector + ' #field-inspection-current-condition-limit-state-b').val(data.currentConditionFailureOfFunction)
+                        $(modalSelector + ' #field-inspection-current-condition-limit-state-c').val(data.currentConditionPassingAcrossValve)
+                        $(modalSelector + ' #field-inspection-effectiveness').val(data.inspectionEffectiveness)
+                        $(modalSelector + ' #field-inspection-function-condition').val(data.functionCondition)
+                        $(modalSelector + ' #field-inspection-description').val(data.inspectionDescription)
+                        $(modalSelector + ' #field-inspection-test-pressure-if-any').val(data.testPressureIfAny)
+                    }
+
+                    let galleryHtml = ''
+                    if(type === 'maintenance') {
+                        data.maintenanceFiles.forEach(i => {
+                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                <img src="/${i.filePath}">
+                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
+                            </div>
+                            `
+                        })
+                    } else if (type === 'inspection') {
+                    data.inspectionFiles.forEach(i => {
+                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                <img src="/${i.filePath}">
+                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </div>
+                            </div>
+                            `
+                        })
+                    }
+
+                    //fill image
+                    $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
+                },
+                error: function (error) {
+                    alert('History not found');
+                }
+            });
         }
     </script>
 }
