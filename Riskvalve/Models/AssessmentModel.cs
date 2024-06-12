@@ -2408,16 +2408,18 @@ public class AssessmentMaintenanceModel
         {
             using (var context = new AssessmentContext())
             {
-                lastMaintenanceDate = (
+                var lastMaintenanceDateVar = (
                     from m in context.Maintenance
                     join assessmentMaintenance in context.AssessmentMaintenance
                         on m.Id equals assessmentMaintenance.MaintenanceID
                     where assessmentMaintenance.AssessmentID == AssessmentID
                     orderby m.MaintenanceDate descending
                     select m.MaintenanceDate
-                )
-                    .FirstOrDefault()
-                    .ToString();
+                );
+                if (lastMaintenanceDateVar != null)
+                {
+                    lastMaintenanceDate = lastMaintenanceDateVar.FirstOrDefault().ToString();
+                }
             }
         }
         catch (Exception e) { }
@@ -2429,19 +2431,21 @@ public class AssessmentMaintenanceModel
         int lastMaintenanceId = 0;
         try
         {
-            string slastMaintenanceId = "";
+            string slastMaintenanceId = "0";
             using (var context = new AssessmentContext())
             {
-                slastMaintenanceId = (
+                var slastMaintenanceIdvar = (
                     from m in context.Maintenance
                     join assessmentMaintenance in context.AssessmentMaintenance
                         on m.Id equals assessmentMaintenance.MaintenanceID
                     where assessmentMaintenance.AssessmentID == AssessmentID
                     orderby m.MaintenanceDate descending
                     select m.Id
-                )
-                    .FirstOrDefault()
-                    .ToString();
+                );
+                if (slastMaintenanceIdvar != null)
+                {
+                    slastMaintenanceId = slastMaintenanceIdvar.FirstOrDefault().ToString();
+                }
             }
             lastMaintenanceId = int.Parse(slastMaintenanceId);
         }
@@ -2554,16 +2558,18 @@ public class AssessmentInspectionModel
         {
             using (var context = new AssessmentContext())
             {
-                lastAssessmentDate = (
+                var lastAssessmentDateVar = (
                     from inspection in context.Inspection
                     join assessmentInspection in context.AssessmentInspection
                         on inspection.Id equals assessmentInspection.InspectionID
                     where assessmentInspection.AssessmentID == AssessmentID
                     orderby inspection.InspectionDate descending
                     select inspection.InspectionDate
-                )
-                    .FirstOrDefault()
-                    .ToString();
+                );
+                if (lastAssessmentDateVar != null)
+                {
+                    lastAssessmentDate = lastAssessmentDateVar.FirstOrDefault().ToString();
+                }
             }
         }
         catch (Exception e) { }
@@ -2575,19 +2581,21 @@ public class AssessmentInspectionModel
         int lastAssessmentId = 0;
         try
         {
-            string slastAssessmentId = "";
+            string slastAssessmentId = "0";
             using (var context = new AssessmentContext())
             {
-                slastAssessmentId = (
+                var slastAssessmentIdvar = (
                     from inspection in context.Inspection
                     join assessmentInspection in context.AssessmentInspection
                         on inspection.Id equals assessmentInspection.InspectionID
                     where assessmentInspection.AssessmentID == AssessmentID
                     orderby inspection.InspectionDate descending
                     select inspection.Id
-                )
-                    .FirstOrDefault()
-                    .ToString();
+                );
+                if (slastAssessmentIdvar != null)
+                {
+                    slastAssessmentId = slastAssessmentIdvar.FirstOrDefault().ToString();
+                }
             }
             lastAssessmentId = int.Parse(slastAssessmentId);
         }
