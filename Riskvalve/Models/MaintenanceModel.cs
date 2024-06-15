@@ -157,7 +157,11 @@ public class MaintenanceModel : MaintenanceDB
                 .FirstOrDefault();
             if (checkMaintenance != null)
             {
-                return new ResultModel { Result = 400, Message = "Maintenance with the same asset and date already exist" };
+                return new ResultModel
+                {
+                    Result = 400,
+                    Message = "Maintenance with the same asset and date already exist"
+                };
             }
         }
         using (var context = new MaintenanceContext())
@@ -202,6 +206,7 @@ public class MaintenanceModel : MaintenanceDB
             {
                 string key = record.Key;
                 string value = record.Value.Trim().ToLower();
+                string valuereal = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -265,15 +270,6 @@ public class MaintenanceModel : MaintenanceDB
                     }
                     if (mappedValue == "")
                     {
-                        // Exception e =
-                        //     new(
-                        //         "Value '"
-                        //             + record.Value
-                        //             + "' on field '"
-                        //             + key
-                        //             + "' is not match with the database value"
-                        //     );
-                        // throw e;
                         failedRecords.Add(
                             "Value '"
                                 + record.Value
@@ -286,6 +282,10 @@ public class MaintenanceModel : MaintenanceDB
                     {
                         value = mappedValue;
                     }
+                }
+                else
+                {
+                    value = valuereal;
                 }
                 result.Add(mappedKey, value);
             }

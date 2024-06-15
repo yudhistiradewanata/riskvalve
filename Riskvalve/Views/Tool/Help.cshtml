@@ -1,0 +1,19 @@
+@{
+    ViewData["Title"] = "Help";
+    var urltemplate = Url.Content("~/Uploads/Downloads/VIMS_User_Guide_Rev.0.pdf");
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <main class="col-md-12 ms-sm-auto col-lg-12 px-md-4 subheader-negative-margin">
+            <div class="subheader">
+                <b>@ViewData["Title"]</b>
+            </div>
+            <div class="content-container">
+                <div class="row">
+                    <iframe src="@urltemplate" width="100%" height="800px"></iframe>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>

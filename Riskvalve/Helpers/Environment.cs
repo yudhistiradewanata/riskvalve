@@ -4,7 +4,7 @@ public static class Environment
     //     "Server=127.0.0.1,1433;Database=Riskvalve;User Id=SA;Password=DB_Password;Encrypt=False;TrustServerCertificate=True;Connection Timeout=30;";
 
     public static string app_path = "/vims";
-    public static string app_version = "v0.2.2";
+    public static string app_version = "v0.2.3";
     public static string GetConnectionStringDB()
     {
         IConfigurationRoot configuration = new ConfigurationBuilder()
@@ -31,6 +31,7 @@ public static class Environment
 
     public static double StringToDouble(string value)
     {
+        value = value.Replace(",", ".");
         return double.TryParse(value, out double result) ? result : 0;
     }
 }

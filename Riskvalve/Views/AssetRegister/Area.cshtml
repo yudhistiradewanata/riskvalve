@@ -35,11 +35,11 @@
                 <table class="table table-bordered datatable" style="width: 100%;">
                     <thead>
                         <tr>
-                            <th>No</th>
+                            <th class="col-md-1">No</th>
                             <th>Business Area</th>
-                            <th>Created By</th>
-                            <th>Created At</th>
-                            <th></th>
+                            @* <th>Created By</th>
+                            <th>Created At</th> *@
+                            <th class="col-md-1"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -53,8 +53,8 @@
                                     <tr style="margin: 0;padding;0;">
                                         <td>@ctr</td>
                                         <td>@item.BusinessArea</td>
-                                        <td>@item.CreatedByUser</td>
-                                        <td>@item.CreatedAt</td>
+                                        @* <td>@item.CreatedByUser</td>
+                                        <td>@item.CreatedAt</td> *@
                                         <td>
                                             <button onclick="editAction.apply(this)"
                                                 class="btn btn-custom-size btn-primary invert btn-with-icon btn-area-action"

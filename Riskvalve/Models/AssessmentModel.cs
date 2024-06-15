@@ -1326,6 +1326,7 @@ public class AssessmentModel : AssessmentDB
             {
                 string key = record.Key;
                 string value = record.Value.Trim().ToLower();
+                string valuereal = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -1459,6 +1460,10 @@ public class AssessmentModel : AssessmentDB
                     {
                         value = mappedValue;
                     }
+                }
+                else
+                {
+                    value = valuereal;
                 }
                 result.Add(mappedKey, value);
             }
@@ -1810,11 +1815,12 @@ public class AssessmentModel : AssessmentDB
                         break;
                 }
                 // calculate risk_var
-                string risk = decide_risk(
-                    assessment.TP1Risk,
-                    assessment.TP2Risk,
-                    assessment.TP3Risk
-                );
+                string risk = ColorRiskMap[GetHeatColor(assessment.TP1Risk)];
+                // decide_risk(
+                //     assessment.TP1Risk,
+                //     assessment.TP2Risk,
+                //     assessment.TP3Risk
+                // );
                 switch (risk)
                 {
                     case "Very Low":

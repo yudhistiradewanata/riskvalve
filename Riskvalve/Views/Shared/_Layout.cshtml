@@ -51,71 +51,71 @@
                 </a>
             </li>
             @if (IsEngineer.ToLower().Equals("true"))
-                {
-                    <li class="nav-item dropdown text-nowrap">
-                        <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownAsset" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Asset Register
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownAsset">
-                            <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
-                            </li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister"
-                                    asp-action="Platform">Platform</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="nav-item dropdown text-nowrap">
-                        <a class="nav-link dropdown-toggle px-3 text-white" id="navbarDropdownIMR" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false" asp-area="" asp-controller="Inspection"
-                            asp-action="Index">
-                            IMR
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownIMR">
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Inspection"
-                                    asp-action="Index">Inspection</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Maintenance"
-                                    asp-action="Index">Maintenance</a></li>
-                        </ul>
-                    </li>
-                    <li class="nav-item text-nowrap">
-                        <a class="nav-link px-3 text-white" asp-area="" asp-controller="Assessment" asp-action="Index">
-                            Assessment
-                        </a>
-                    </li>
-                    <li class="nav-item text-nowrap dropdown">
-                        <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownTool" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Tool
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownTool">
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool"
-                                    asp-action="ImportAssetRegister">Import
-                                    Asset Register</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool"
-                                    asp-action="ImportInspectionMaintenance">Import
-                                    Inspection / Maintenance</a></li>
-                            <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
-                                    Assessment</a></li>
-                            @* <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ExportAssessment">Export
-                                    Assessment</a></li> *@
-                        </ul>
-                    </li>
-                }
-                @if (IsAdmin.ToLower().Equals("true"))
-                {
-                    <li class="nav-item text-nowrap">
-                        <a asp-area="" asp-controller="User" asp-action="Index" class="nav-link px-3 text-white">
-                            User
-                        </a>
-                    </li>
-                }
-                @* <li class="nav-item text-nowrap">
-            <a class="nav-link px-3 text-white" href="#">
-            Help
-            </a>
-            </li> *@
+            {
+                <li class="nav-item dropdown text-nowrap">
+                    <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownAsset" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Asset Register
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownAsset">
+                        <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Area">Area</a>
+                        </li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister"
+                                asp-action="Platform">Platform</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="AssetRegister" asp-action="Asset">Asset</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown text-nowrap">
+                    <a class="nav-link dropdown-toggle px-3 text-white" id="navbarDropdownIMR" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false" asp-area="" asp-controller="Inspection"
+                        asp-action="Index">
+                        IMR
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownIMR">
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Inspection"
+                                asp-action="Index">Inspection</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Maintenance"
+                                asp-action="Index">Maintenance</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item text-nowrap">
+                    <a class="nav-link px-3 text-white" asp-area="" asp-controller="Assessment" asp-action="Index">
+                        Assessment
+                    </a>
+                </li>
+                <li class="nav-item text-nowrap dropdown">
+                    <a class="nav-link dropdown-toggle px-3 text-white" href="#" id="navbarDropdownTool" role="button"
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        Tool
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdownTool">
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Tool"
+                                asp-action="ImportAssetRegister">Import
+                                Asset Register</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Tool"
+                                asp-action="ImportInspectionMaintenance">Import
+                                Inspection / Maintenance</a></li>
+                        <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
+                                Assessment</a></li>
+                        @* <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ExportAssessment">Export
+                                Assessment</a></li> *@
+                    </ul>
+                </li>
+            }
+            @if (IsAdmin.ToLower().Equals("true"))
+            {
+                <li class="nav-item text-nowrap">
+                    <a asp-area="" asp-controller="User" asp-action="Index" class="nav-link px-3 text-white">
+                        User
+                    </a>
+                </li>
+            }
+            <li class="nav-item text-nowrap">
+                <a asp-area="" asp-controller="Tool" asp-action="Help" class="nav-link px-3 text-white">
+                    Help
+                </a>
+            </li>
             </ul>
             <ul class="navbar-nav flex-row mx-3">
                 <li class="nav-item text-nowrap">

@@ -575,4 +575,25 @@ public class ToolController : Controller
         ViewData["AssessmentList"] = assessmentList;
         return View();
     }
+    public IActionResult Help()
+    {
+        UserModel login = new();
+        if (!login.isLogin(HttpContext))
+        {
+            TempData["Message"] = "Please login first";
+            return Redirect(Environment.app_path + "/Login/Index");
+        }
+        else
+        {
+            TempData["Message"] = null;
+            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            foreach (var item in session)
+            {
+                ViewData[item.Key] = item.Value;
+            }
+        }
+        // string filename = "VIMS_User_Guide_Rev.0.pdf";
+        // return Redirect(Environment.app_path + "/Uploads/Downloads/" + filename);
+        return View();
+    }
 }
