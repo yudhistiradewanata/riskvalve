@@ -290,6 +290,7 @@ public class InspectionModel : InspectionDB
             {
                 string key = record.Key;
                 string value = record.Value.Trim().ToLower();
+                string valuereal = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
                 if (mappedKey.Equals(""))
@@ -408,6 +409,10 @@ public class InspectionModel : InspectionDB
                     {
                         value = mappedValue;
                     }
+                }
+                else
+                {
+                    value = valuereal;
                 }
                 result.Add(mappedKey, value);
             }
