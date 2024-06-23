@@ -20,7 +20,7 @@ public class LoginController(IUserService userService) : Controller
             string message = TempData["Message"] as string ?? "";
             ViewData["message"] = message;
             ViewData["IsLogin"] = IsLogin.ToString();
-            ViewData["AppVersion"] = Environment.GetAppVersion();
+            ViewData["AppVersion"] = SharedEnvironment.GetAppVersion();
         }
         return View();
     }
