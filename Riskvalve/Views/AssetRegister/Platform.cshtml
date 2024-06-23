@@ -1,11 +1,16 @@
+@using SharedLayer
 @{
     ViewData["Title"] = "Platform";
-    var platformList = ViewData["PlatformList"] as List<PlatformModel>;
-    var areaList = ViewData["AreaList"] as List<AreaModel>;
+    var platformList = ViewData["PlatformList"] as List<PlatformData>;
+    var areaList = ViewData["AreaList"] as List<AreaData>;
     var urlgetplatformdetail = Url.Action("GetPlatformDetail", "AssetRegister");
     var urladdplatform = Url.Action("AddPlatform", "AssetRegister");
     var urlupdateplatform = Url.Action("UpdatePlatform", "AssetRegister");
     var urldeleteplatform = Url.Action("DeletePlatform", "AssetRegister");
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <div class="container-fluid">
@@ -86,9 +91,14 @@
                                     <label for="field-plarfoem-area">Business Area</label>
                                     <select id="field-platform-area" name="businessarea" class="form-control" required>
                                         <option value="">Select Business Area</option>
-                                        @foreach (var item in areaList)
-                                        {
-                                            <option value="@item.Id">@item.BusinessArea</option>
+                                        @{
+                                            if (areaList != null)
+                                            {
+                                                foreach (var item in areaList)
+                                                {
+                                                    <option value="@item.Id">@item.BusinessArea</option>
+                                                }
+                                            }
                                         }
                                     </select>
                                 </div>
@@ -118,6 +128,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         function editAction () {
             $('.form-control').removeClass('error');
             $('#field-platform-area').val('');
@@ -134,14 +145,22 @@
                     url: '@urlgetplatformdetail',
                     type: 'GET',
                     data: { id: id },
-                    success: function (data) {
-                        $('#field-platform-mode').val('update');
-                        $('#field-platform-id').val(data.id);
-                        $('#field-platform-area').val(data.areaID);
-                        $('#field-platform-name').val(data.platform);
-                        $('#field-platform-code').val(data.code);
-                        $('#btn-platform-modal-delete').show();
-                        $('#addPlatformModal').modal('show');
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            $('#field-platform-mode').val('update');
+                            $('#field-platform-id').val(data.id);
+                            $('#field-platform-area').val(data.areaID);
+                            $('#field-platform-name').val(data.platform);
+                            $('#field-platform-code').val(data.code);
+                            $('#btn-platform-modal-delete').show();
+                            $('#addPlatformModal').modal('show');
+                        } else {
+                            alert(apiresult.message);
+                        }
                     }
                 });
             }
@@ -160,12 +179,15 @@
                                 platform: $('#field-platform-name').val(),
                                 code: $('#field-platform-code').val()
                             },
-                            success: function (data) {
-                                console.log(data);
-                                if (data.result == 400) {
-                                    alert(data.message);
-                                } else {
+                            headers: {
+                                'RequestVerificationToken': requestVerificationToken
+                            },
+                            success: function (apiresult) {
+                                if (apiresult.isSuccess) {
+                                    alert(apiresult.message);
                                     location.reload();
+                                } else {
+                                    alert(apiresult.message);
                                 }
                             }
                         });
@@ -180,12 +202,15 @@
                                 platform: $('#field-platform-name').val(),
                                 code: $('#field-platform-code').val()
                             },
-                            success: function (data) {
-                                console.log(data);
-                                if (data.result == 400) {
-                                    alert(data.message);
-                                } else {
+                            headers: {
+                                'RequestVerificationToken': requestVerificationToken
+                            },
+                            success: function (apiresult) {
+                                if (apiresult.isSuccess) {
+                                    alert(apiresult.message);
                                     location.reload();
+                                } else {
+                                    alert(apiresult.message);
                                 }
                             }
                         });
@@ -199,12 +224,15 @@
                         url: '@urldeleteplatform',
                         type: 'POST',
                         data: { id: id },
-                        success: function (data) {
-                            console.log(data);
-                            if (data.result == 400) {
-                                alert(data.message);
-                            } else {
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                alert(apiresult.message);
                                 location.reload();
+                            } else {
+                                alert(apiresult.message);
                             }
                         }
                     });

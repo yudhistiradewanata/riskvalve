@@ -1,11 +1,15 @@
 ﻿@{
-    string IsLogin = ViewData["IsLogin"] as string;
-    string Username = ViewData["Username"] as string;
-    string Role = ViewData["Role"] as string;
-    string IsAdmin = ViewData["IsAdmin"] as string;
-    string IsEngineer = ViewData["IsEngineer"] as string;
-    string IsViewer = ViewData["IsViewer"] as string;
-    string urllogout = Url.Action("Logout", "Login");
+    string IsLogin = ViewData["IsLogin"] as string ?? "false";
+    string Username = ViewData["Username"] as string ?? "";
+    string Role = ViewData["Role"] as string ?? "";
+    string IsAdmin = ViewData["IsAdmin"] as string ?? "false";
+    string IsEngineer = ViewData["IsEngineer"] as string ?? "false";
+    string IsViewer = ViewData["IsViewer"] as string ?? "false";
+    string urllogout = Url.Action("Logout", "Login") ?? "";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <!DOCTYPE html>
@@ -98,8 +102,6 @@
                                 Inspection / Maintenance</a></li>
                         <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ImportAssessment">Import
                                 Assessment</a></li>
-                        @* <li><a class="dropdown-item" asp-area="" asp-controller="Tool" asp-action="ExportAssessment">Export
-                                Assessment</a></li> *@
                     </ul>
                 </li>
             }
@@ -176,11 +178,26 @@ else
 @await RenderSectionAsync("Scripts", required: false)
 @Html.RenderPartialSectionScripts()
 <script>
+    var requestVerificationToken = '@tokens.RequestToken';
     $(document).ready(function () {
         $("#btn-signout, #btn-signout-icon").click(function () {
             if (confirm('Are you sure you want to sign out?')) {
-                var path = "@urllogout";
-                location.href = path;
+                $.ajax({
+                    url: '@urllogout',
+                    type: 'POST',
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            @* alert(apiresult.message); *@
+                            location.reload();
+                        } else {
+                            @* alert(apiresult.message); *@
+                        }
+                    },
+                });
             }
         });
     });

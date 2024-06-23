@@ -1,6 +1,7 @@
+@using SharedLayer;
 @{
     ViewData["Title"] = "Print Maintenance";
-    var maintenance = ViewData["Maintenance"] as MaintenanceModel;
+    var maintenance = ViewData["Maintenance"] as MaintenanceData;
     var jsonmaintenance = Newtonsoft.Json.JsonConvert.SerializeObject(maintenance);
 }
 <div class="container-fluid">

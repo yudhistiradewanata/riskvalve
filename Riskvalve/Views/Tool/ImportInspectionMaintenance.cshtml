@@ -4,6 +4,10 @@
     var urltemplateInspection = Url.Content("~/Uploads/Downloads/InspectionTemplate.xlsx");
     var urltemplateMaintenance = Url.Content("~/Uploads/Downloads/MaintenanceTemplate.xlsx");
 }
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
+}
 
 <div class="container-fluid">
     <div class="row">
@@ -89,6 +93,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         $(document).ready(function () {
             $("#inspection-form").submit(function (e) {
                 e.preventDefault();
@@ -99,6 +104,9 @@
                     url: "@urlimportexcel",
                     type: "POST",
                     data: formData,
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
                     contentType: false,
                     processData: false,
                     success: function (data) {
@@ -122,6 +130,9 @@
                     url: "@urlimportexcel",
                     type: "POST",
                     data: formData,
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
                     contentType: false,
                     processData: false,
                     success: function (data) {

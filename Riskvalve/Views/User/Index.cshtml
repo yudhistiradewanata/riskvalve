@@ -1,10 +1,15 @@
+@using SharedLayer;
 @{
     ViewData["Title"] = "User";
-    var userList = ViewData["UserList"] as List<UserModel>;
+    var userList = ViewData["UserList"] as List<UserData>;
     var urlgetuser = Url.Action("GetUser", "User");
     var urladduser = Url.Action("AddUser", "User");
     var urlupdateuser = Url.Action("UpdateUser", "User");
     var urldeleteuser = Url.Action("DeleteUser", "User");
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <div class="container-fluid">
@@ -56,19 +61,19 @@
                                         <td>@user.Username</td>
                                         <td>@user.Role</td>
                                         <td>
-                                            @if (user.IsAdmin)
+                                            @if (user.IsAdmin == true)
                                             {
                                                 <i class="fa fa-check"></i>
                                             }
                                         </td>
                                         <td>
-                                            @if (user.IsEngineer)
+                                            @if (user.IsEngineer == true)
                                             {
                                                 <i class="fa fa-check"></i>
                                             }
                                         </td>
                                         <td>
-                                            @if (user.IsViewer)
+                                            @if (user.IsViewer == true)
                                             {
                                                 <i class="fa fa-check"></i>
                                             }
@@ -95,7 +100,7 @@
             <form class="user-form common-form">
                 <input id="field-user-mode" type="hidden">
                 <input id="field-user-id" name="userid" type="hidden">
-                 <div class="box">
+                <div class="box">
                     <div class="subheader m-0">
                         <b>Add/Edit New user</b>
                     </div>
@@ -104,8 +109,8 @@
                             <div class="form-grid">
                                 <div class="form-group-inline">
                                     <label for="field-username">Email</label>
-                                    <input id="field-username" type="email" name="username" class="form-control" placeholder="Email"
-                                        required>
+                                    <input id="field-username" type="email" name="username" class="form-control"
+                                        placeholder="Email" required>
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-isadmin">Admin</label>
@@ -113,15 +118,17 @@
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-password">Password</label>
-                                    <input type="password" id="field-password" name="password" class="form-control" required>
+                                    <input type="password" id="field-password" name="password" class="form-control"
+                                        required>
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-isengineer">Engineer</label>
                                     <input type="checkbox" id="field-isengineer" name="isengineer" class="form-control">
-                                    </div>
+                                </div>
                                 <div class="form-group-inline">
                                     <label for="field-role">Role Name</label>
-                                    <input id="field-role" name="role" class="form-control" placeholder="Role Name" required>
+                                    <input id="field-role" name="role" class="form-control" placeholder="Role Name"
+                                        required>
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-isviewer">Viewer</label>
@@ -131,8 +138,10 @@
                         </div>
                         <div class="box-footer">
                             <button type="button" id="btn-user-modal-save" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn btn-primary btn btn-secondary cancel-button" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" id="btn-user-modal-delete" class="pull-left btn btn-danger delete-button">Delete</button>
+                            <button type="button" class="btn btn-primary btn btn-secondary cancel-button"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="btn-user-modal-delete"
+                                class="pull-left btn btn-danger delete-button">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -143,6 +152,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         function editAction() {
             $('#field-user-id').val('');
             $('#field-username').val('');
@@ -165,17 +175,25 @@
                     url: '@urlgetuser',
                     type: 'GET',
                     data: { id: id },
-                    success: function (data) {
-                        $('#field-user-id').val(data.id);
-                        $('#field-username').val(data.username);
-                        $('#field-password').attr('placeholder', 'Leave blank if you don\'t want to change the password');
-                        $('#field-role').val(data.role);
-                        $('#field-isadmin').prop('checked', data.isAdmin);
-                        $('#field-isengineer').prop('checked', data.isEngineer);
-                        $('#field-isviewer').prop('checked', data.isViewer);
-                        $('#field-user-mode').val('update');
-                        $('#btn-user-modal-delete').show();
-                        $('#addUserModal').modal('show');
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            $('#field-user-id').val(data.id);
+                            $('#field-username').val(data.username);
+                            $('#field-password').attr('placeholder', 'Leave blank if you don\'t want to change the password');
+                            $('#field-role').val(data.role);
+                            $('#field-isadmin').prop('checked', data.isAdmin);
+                            $('#field-isengineer').prop('checked', data.isEngineer);
+                            $('#field-isviewer').prop('checked', data.isViewer);
+                            $('#field-user-mode').val('update');
+                            $('#btn-user-modal-delete').show();
+                            $('#addUserModal').modal('show');
+                        } else {
+                            alert(apiresult.message);
+                        }
                     }
                 });
             }
@@ -205,12 +223,17 @@
                         $.ajax({
                             url: '@urladduser',
                             type: 'POST',
+                            headers: {
+                                'RequestVerificationToken': requestVerificationToken
+                            },
                             data: { username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
-                            success: function (data) {
-                                if (data) {
+                            success: function (apiresult) {
+                                if (apiresult.isSuccess) {
+                                    var data = apiresult.data;
+                                    alert(apiresult.message);
                                     location.reload();
                                 } else {
-                                    alert('Username already exists');
+                                    alert(apiresult.message);
                                 }
                             }
                         });
@@ -218,9 +241,18 @@
                         $.ajax({
                             url: '@urlupdateuser',
                             type: 'POST',
+                            headers: {
+                                'RequestVerificationToken': requestVerificationToken
+                            },
                             data: { id: id, username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
-                            success: function (data) {
-                                location.reload();
+                            success: function (apiresult) {
+                                if (apiresult.isSuccess) {
+                                    var data = apiresult.data;
+                                    alert(apiresult.message);
+                                    location.reload();
+                                } else {
+                                    alert(apiresult.message);
+                                }
                             }
                         });
                     }
@@ -233,8 +265,17 @@
                         url: '@urldeleteuser',
                         type: 'POST',
                         data: { id: id },
-                        success: function (data) {
-                            location.reload();
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                var data = apiresult.data;
+                                alert(apiresult.message);
+                                location.reload();
+                            } else {
+                                alert(apiresult.message);
+                            }
                         }
                     });
                 }

@@ -2,12 +2,18 @@
     ViewData["Title"] = "Login";
     var message = TempData["Message"];
     var version = ViewData["AppVersion"];
-    string baseurl = Url.Action("","");
-    string urllogin = Url.Action("Login", "Login");
+    string baseurl = Url.Action("", "") ?? "";
+    string urllogin = Url.Action("Login", "Login") ?? "";
 }
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
+}
+
 <body class="hold-transition login-page">
     <style>
-        html, body{
+        html,
+        body {
             height: 100%;
         }
     </style>
@@ -26,6 +32,7 @@
                 Valve Integrity Management System</p>
             <p class="text-center">Input your Credential (Email and Password) to enter Web Application</p>
             <form class="login-form">
+                <input type="hidden" name="RequestVerificationToken" value="@tokens.RequestToken" />
                 <input id="timezone" type="hidden" name="timezone">
                 <div class="label">
                     Email
@@ -53,34 +60,44 @@
             </div>
         </div>
     </div>
-    <div class="login-image" style="background-image: url('@baseurl/lib/images/u9.jpg')" >
+    <div class="login-image" style="background-image: url('@baseurl/lib/images/u9.jpg')">
 
     </div>
 </body>
 
 @section Scripts {
     <script>
+        $('#btn-signin').prop('disabled', true).text('Loading...');
         $(document).ready(function () {
+            $('#btn-signin').prop('disabled', false).text('Login');
             $('#btn-signin').click(function (e) {
                 e.preventDefault();
                 var username = $('input[name="username"]').val();
                 var password = $('input[name="password"]').val();
-                if($('.login-form').valid()) {
+                var token = $('input[name="__RequestVerificationToken"]').val();
+                if ($('.login-form').valid()) {
+                    $(this).prop('disabled', true).text('Loading...');
                     $.ajax({
                         url: '@urllogin',
                         type: 'POST',
+                        headers: {
+                            'RequestVerificationToken': $('input[name="RequestVerificationToken"]').val()
+                        },
                         data: {
                             username: username,
                             password: password
                         },
-                        success: function (data) {
-                            if (data == true) {
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                var data = apiresult.data;
+                                @* alert(apiresult.message); *@
                                 var path = "@baseurl" + '/Home/Index';
                                 location.href = path;
                             } else {
-                                alert('Invalid email or password');
+                                alert(apiresult.message);
+                            $('#btn-signin').prop('disabled', false).text('Login');
                             }
-                        }
+                        },
                     });
                 }
             });

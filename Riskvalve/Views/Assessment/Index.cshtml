@@ -1,44 +1,32 @@
+@using SharedLayer
 @{
     ViewData["Title"] = "Assessment";
-    var CurrentConditionLimitStateModel = new CurrentConditionLimitStateModel();
-    var limitState = CurrentConditionLimitStateModel.GetConditionLimitStates();
-
-    var InspectionEffectivenessModel = new InspectionEffectivenessModel();
-    var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
-
-    var IsValveRepairedModel = new IsValveRepairedModel();
-    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
-
-    var InspectionMethodModel = new InspectionMethodModel();
-    var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
-
-    var TimeToLimitStateModel = new TimeToLimitStateModel();
-    var timeToLimitStates = TimeToLimitStateModel.GetTimeToLimitStates();
-
-    var ImpactEffectModel = new ImpactEffectModel();
-    var impactEffectStates = ImpactEffectModel.GetImpactEffectStates();
-
-    var UsedWithinOEMSpecificationModel = new UsedWithinOEMSpecificationModel();
-    var usedWithinOEMSpecifications = UsedWithinOEMSpecificationModel.GetUsedWithinOEMSpecifications();
-
-    var RepairedModel = new RepairedModel();
-    var repairedStates = RepairedModel.GetRepairedStates();
-
-    var HSSEDefinisionModel = new HSSEDefinisionModel();
-    var hsseDefinisions = HSSEDefinisionModel.GetHSSEDefinisions();
+    var limitState = ViewData["CurrentConditionLimitStateData"] as List<CurrentConditionLimitStateData>;
+    var inspectionEffectivenessStates = ViewData["InspectionEffectivenessData"] as List<InspectionEffectivenessData>;
+    var isValveRepairedStates = ViewData["IsValveRepairedData"] as List<IsValveRepairedData>;
+    var inspectionMethods = ViewData["InspectionMethodData"] as List<InspectionMethodData>;
+    var timeToLimitStates = ViewData["TimeToLimitStateData"] as List<TimeToLimitStateData>;
+    var impactEffectStates = ViewData["ImpactEffectData"] as List<ImpactEffectData>;
+    var usedWithinOEMSpecifications = ViewData["UsedWithinOEMSpecificationData"] as List<UsedWithinOEMSpecificationData>;
+    var repairedStates = ViewData["RepairedData"] as List<RepairedData>;
+    var hsseDefinisions = ViewData["HSSEDefinisionData"] as List<HSSEDefinisionData>;
 
     var defaultDate = ViewData["date"] as string;
-    string baseurl = Url.Action("","");
-    string urlassessmentupdate = Url.Action("UpdateAssessment", "Assessment");
-    string urlassessmentdelete = Url.Action("DeleteAssessment", "Assessment");
-    string urlassessmentadd = Url.Action("AddAssessment", "Assessment");
-    string urlassessmentprint = Url.Action("PrintAssessment", "Assessment");
-    string urlassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
-    string urlassessmentdetail = Url.Action("GetAssessmentDetail", "Assessment");
-    string urlassessmentinspection = Url.Action("GetInspectionList", "Inspection");
-    string urlassessmentmaintenance = Url.Action("GetMaintenanceList", "Maintenance");
-    string urlinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
-    string urlmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance");
+    string baseurl = Url.Action("","") ?? "";
+    string urlassessmentupdate = Url.Action("UpdateAssessment", "Assessment") ?? "";
+    string urlassessmentdelete = Url.Action("DeleteAssessment", "Assessment") ?? "";
+    string urlassessmentadd = Url.Action("AddAssessment", "Assessment") ?? "";
+    string urlassessmentprint = Url.Action("PrintAssessment", "Assessment") ?? "";
+    string urlassetdetail = Url.Action("GetAssetDetail", "AssetRegister") ?? "";
+    string urlassessmentdetail = Url.Action("GetAssessmentDetail", "Assessment") ?? "";
+    string urlassessmentinspection = Url.Action("GetInspectionList", "Inspection") ?? "";
+    string urlassessmentmaintenance = Url.Action("GetMaintenanceList", "Maintenance") ?? "";
+    string urlinspectiondetail = Url.Action("GetInspectionDetail", "Inspection") ?? "";
+    string urlmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance") ?? "";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
     <div class="container-fluid">
         <div class="row">
@@ -496,9 +484,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-to-atmosphere" name="LeakageToAtmosphereID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in limitState)
+                                                                    @if (limitState != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                        foreach (var item in limitState)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -511,9 +502,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="failure-of-function" name="FailureOfFunctionID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in limitState)
+                                                                    @if(limitState != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                        foreach (var item in limitState)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -526,9 +520,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="passing-accross-valve" name="PassingAccrosValveID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in limitState)
+                                                                    @if(limitState != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                        foreach (var item in limitState)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.CurrentConditionLimitState</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -567,25 +564,34 @@
                                                                 <div class="row">
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-tp1" name="LeakageToAtmosphereTP1ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-tp2" name="LeakageToAtmosphereTP2ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-tp3" name="LeakageToAtmosphereTP3ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
@@ -602,25 +608,34 @@
                                                                 <div class="row">
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="failure-tp1" name="FailureOfFunctionTP1ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="failure-tp2" name="FailureOfFunctionTP2ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="failure-tp3" name="FailureOfFunctionTP3ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
@@ -637,25 +652,34 @@
                                                                 <div class="row">
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="passing-tp1" name="PassingAccrosValveTP1ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="passing-tp2" name="PassingAccrosValveTP2ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
                                                                     <div class="col-4">
                                                                         <select class="form-select form-select-sm calculate-assessment readonly" id="passing-tp3" name="PassingAccrosValveTP3ID" onchange="calculateAssessment.apply(this)">
-                                                                            @foreach (var item in timeToLimitStates)
+                                                                            @if (timeToLimitStates != null)
                                                                             {
-                                                                                <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                foreach (var item in timeToLimitStates)
+                                                                                {
+                                                                                    <option value="@item.Id" attr-value="@item.LimitStateValue" attr-weighting="@item.Weighting">@item.TimeToLimitState</option>
+                                                                                }
                                                                             }
                                                                         </select>
                                                                     </div>
@@ -668,9 +692,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="inspection-effectiveness" name="InspectionEffectivenessID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in inspectionEffectivenessStates)
+                                                                    @if (inspectionEffectivenessStates != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.EffectivenessValue" attr-weighting="@item.Weighting">@item.Effectiveness</option>
+                                                                        foreach (var item in inspectionEffectivenessStates)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.EffectivenessValue" attr-weighting="@item.Weighting">@item.Effectiveness</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -681,9 +708,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment" id="impact-of-internal-fluid" name="ImpactOfInternalFluidImpuritiesID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in impactEffectStates)
+                                                                    @if(impactEffectStates != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting">@item.ImpactEffect</option>
+                                                                        foreach (var item in impactEffectStates)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting">@item.ImpactEffect</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -694,9 +724,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment" id="impact-of-operating-envelopes" name="ImpactOfOperatingEnvelopesID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in impactEffectStates)
+                                                                    @if(impactEffectStates != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting2">@item.ImpactEffect</option>
+                                                                        foreach (var item in impactEffectStates)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.ImpactEffectValue" attr-weighting="@item.Weighting2">@item.ImpactEffect</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -707,9 +740,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment" id="used-within-oem-specification" name="UsedWithinOEMSpecificationID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in usedWithinOEMSpecifications)
+                                                                    @if(usedWithinOEMSpecifications != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.UsedWithinOEMSpecificationValue" attr-weighting="@item.Weighting">@item.UsedWithinOEMSpecification</option>
+                                                                        foreach (var item in usedWithinOEMSpecifications)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.UsedWithinOEMSpecificationValue" attr-weighting="@item.Weighting">@item.UsedWithinOEMSpecification</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -720,9 +756,12 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment" id="repaired" name="RepairedID" onchange="calculateAssessment.apply(this)">
-                                                                    @foreach (var item in repairedStates)
+                                                                    @if(repairedStates != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-value="@item.RepairedValue" attr-weighting="@item.Weighting">@item.Repaired</option>
+                                                                        foreach (var item in repairedStates)
+                                                                        {
+                                                                            <option value="@item.Id" attr-value="@item.RepairedValue" attr-weighting="@item.Weighting">@item.Repaired</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -752,15 +791,21 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm" id="hsse-definition-bypld" hidden>
-                                                                    @foreach (var item in hsseDefinisions)
+                                                                    @if(hsseDefinisions != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-minvalue="@item.MinBBSValue" attr-cofcategory="@item.CoFCategory" attr-score="@item.Score">@item.HSSEDefinision</option>
+                                                                        foreach (var item in hsseDefinisions)
+                                                                        {
+                                                                            <option value="@item.Id" attr-minvalue="@item.MinBBSValue" attr-cofcategory="@item.CoFCategory" attr-score="@item.Score">@item.HSSEDefinision</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                                 <select class="form-select form-select-sm" id="hsse-definition" name="HSSEDefinisionID">
-                                                                    @foreach (var item in hsseDefinisions)
+                                                                    @if(hsseDefinisions != null)
                                                                     {
-                                                                        <option value="@item.Id" attr-minvalue="@item.MinBBSValue" attr-cofcategory="@item.CoFCategory" attr-score="@item.Score">@item.HSSEDefinision</option>
+                                                                        foreach (var item in hsseDefinisions)
+                                                                        {
+                                                                            <option value="@item.Id" attr-minvalue="@item.MinBBSValue" attr-cofcategory="@item.CoFCategory" attr-score="@item.Score">@item.HSSEDefinision</option>
+                                                                        }
                                                                     }
                                                                 </select>
                                                             </div>
@@ -1028,27 +1073,6 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        @* <div class="row g-3 align-items-center single-field">
-                                                            <div class="col-3">
-                                                                <label class="col-form-label">Limit State</label>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>All</option>
-                                                                    <option>Leakage to atmosphere</option>
-                                                                    <option>Failure of Function</option>
-                                                                    <option>Passing Across Valve</option>
-                                                                </select>
-                                                            </div>
-                                                            <div class="col-4">
-                                                                <select class="form-select form-select-sm">
-                                                                    <option>All</option>
-                                                                    <option>TP1</option>
-                                                                    <option>TP2</option>
-                                                                    <option>TP3</option>
-                                                                </select>
-                                                            </div>
-                                                        </div> *@
                                                         <div class="row g-3">
                                                             <div class="col-12">
                                                                 <table id="example" class="table table-hover custom-table basic-th mt-4" style="width:100%">
@@ -1335,10 +1359,12 @@
                                             name="CurrentConditionLeakeageToAtmosphereID"
                                             readonly
                                         >
-                                            @foreach (var item in limitState)
-                                        {
+                                            @if(limitState != null){
+                                                foreach (var item in limitState)
+                                                {
                                                     <option value="@item.Id">@item.CurrentConditionLimitState</option>
-                                        }
+                                                }
+                                            }
                                         </select>
                                     </div>
                                     <div class="form-group ">
@@ -1354,23 +1380,25 @@
                                             name="CurrentConditionFailureOfFunctionID"
                                             readonly
                                         >
-                                        @foreach (var item in limitState)
-                                        {
+                                            @if(limitState != null){
+                                                foreach (var item in limitState)
+                                                {
                                                     <option value="@item.Id">@item.CurrentConditionLimitState</option>
-                                        }
+                                                }
+                                            }
                                         </select>
                                     </div>
                                     <div class="form-group ">
                                         <label for="field-inspection-inspection-method">Inspection
                                             Method</label>
                                         <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID" readonly>
-                                        @foreach (var item in inspectionMethods)
-                                        {
-                                                    <option value="@item.Id">@item.InspectionMethod</option>
+                                        @if(inspectionMethods != null){
+                                            @foreach (var item in inspectionMethods)
+                                            {
+                                                <option value="@item.Id">@item.InspectionMethod</option>
+                                            }
                                         }
                                         </select>
-                                    @* <input type="text" class="form-control"
-                                        id="field-inspection-inspection-method" value="Visual Inspection"> *@
                                     </div>
                                     <div class="form-group ">
                                         <label for="field-inspection-current-condition-limit-state-c">Current
@@ -1380,19 +1408,23 @@
                                             name="CurrentConditionPassingAcrossValveID"
                                             readonly
                                         >
-                                        @foreach (var item in limitState)
-                                        {
+                                            @if(limitState != null){
+                                                foreach (var item in limitState)
+                                                {
                                                     <option value="@item.Id">@item.CurrentConditionLimitState</option>
-                                        }
+                                                }
+                                            }
                                         </select>
                                     </div>
                                     <div class="form-group ">
                                         <label for="field-inspection-effectiveness">Inspection
                                             Effectiveness</label>
                                         <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID" readonly>
-                                        @foreach (var item in inspectionEffectivenessStates)
-                                        {
-                                                    <option value="@item.Id">@item.Effectiveness</option>
+                                        @if(inspectionEffectivenessStates != null){
+                                            foreach (var item in inspectionEffectivenessStates)
+                                            {
+                                                <option value="@item.Id">@item.Effectiveness</option>
+                                            }
                                         }
                                         </select>
                                     </div>
@@ -1656,6 +1688,7 @@
 
 @section Scripts {
         <script>
+            var requestVerificationToken = '@tokens.RequestToken';
             const urlParams = new URLSearchParams(window.location.search);
             const idParam = Number(urlParams.get('assessmentid'));
             const assetIdParam = Number(urlParams.get('assetid'));
@@ -1741,16 +1774,24 @@
                             url: '@urlassessmentupdate',
                             type: 'POST', // or 'GET' depending on your form method
                             data: formData,
+                            headers: {
+                                'RequestVerificationToken': requestVerificationToken
+                            },
                             contentType: false,
                             processData: false,
-                            success: function(res) {
-                                // Handle success response
-                                $('.btn-add-new-inspection[attr-inspection-id='+res.id+']').html(res.assessmentDate)
-                                alert('Data successfully updated')
-                                fetchHistoryData({
-                                    id: res.id,
-                                    counter: ctr
-                                })
+                            success: function(apiresult) {
+                                if(apiresult.isSuccess){
+                                    alert(apiresult.message)
+                                    var res = apiresult.data;
+                                    // Handle success response
+                                    $('.btn-add-new-inspection[attr-inspection-id='+res.id+']').html(res.assessmentDate)
+                                    fetchHistoryData({
+                                        id: res.id,
+                                        counter: ctr
+                                    })
+                                } else {
+                                    alert(apiresult.message)
+                                }
                             },
                             error: function(xhr, status, error) {
                                 alert('Error submitting the form')
@@ -1762,50 +1803,42 @@
                             url: '@urlassessmentadd',
                             type: 'POST', // or 'GET' depending on your form method
                             data: formData,
+                            headers: {
+                                'RequestVerificationToken': requestVerificationToken
+                            },
                             contentType: false,
                             processData: false,
-                            success: function(res) {
-                                form.addClass('history-form')
-                                // add menu to tree
-                                @* $('ul[equipment-id="'+equipmentId+'"]').append(`
-                                    <li class="treeview">
-                                        <a class="btn-add-new-inspection" history-button="" 
-                                        attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
-                                        attr-name="${res.asset.tagNo} ${res.assessmentDate}" 
-                                        attr-sidebar-level="4" 
-                                        attr-find-inspection="${res.asset.businessArea}" 
-                                        attr-find-platform="${res.asset.platform}" 
-                                        attr-find-equipment="${res.asset.tagNo}" 
-                                        attr-find-imr="NEW"
-                                        onclick="addTab.apply(this)"
-                                        >
-                                            ${res.assessmentDate}
-                                        </a>
-                                    </li>
-                                `) *@
-                                $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
-                                    <li class="treeview">
-                                        <a class="btn-add-new-inspection" history-button="" 
-                                        attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
-                                        attr-name="${res.asset.tagNo} ${res.assessmentDate}" 
-                                        attr-sidebar-level="4" 
-                                        attr-find-inspection="${res.asset.businessArea}" 
-                                        attr-find-platform="${res.asset.platform}" 
-                                        attr-find-equipment="${res.asset.tagNo}" 
-                                        attr-find-imr="NEW"
-                                        onclick="addTab.apply(this)"
-                                        >
-                                            ${res.assessmentDate} (NEW)
-                                        </a>
-                                    </li>
-                                `)
-                                $('.nav-tab-menus').find('a[tab-num='+ctr+'] div[tab-title]').text(res.asset.tagNo + ' ' + res.assessmentDate)
+                            success: function(apiresult) {
+                                if(apiresult.isSuccess){
+                                    alert(apiresult.message)
+                                    var res = apiresult.data;
+                                    form.addClass('history-form')
+                                    // add menu to tree
+                                    $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
+                                        <li class="treeview">
+                                            <a class="btn-add-new-inspection" history-button="" 
+                                            attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
+                                            attr-name="${res.asset.tagNo} ${res.assessmentDate}" 
+                                            attr-sidebar-level="4" 
+                                            attr-find-inspection="${res.asset.businessArea}" 
+                                            attr-find-platform="${res.asset.platform}" 
+                                            attr-find-equipment="${res.asset.tagNo}" 
+                                            attr-find-imr="NEW"
+                                            onclick="addTab.apply(this)"
+                                            >
+                                                ${res.assessmentDate} (NEW)
+                                            </a>
+                                        </li>
+                                    `)
+                                    $('.nav-tab-menus').find('a[tab-num='+ctr+'] div[tab-title]').text(res.asset.tagNo + ' ' + res.assessmentDate)
 
-                                fetchHistoryData({
-                                    id: res.id,
-                                    counter: ctr
-                                })
-                                alert('Data successfully inserted')
+                                    fetchHistoryData({
+                                        id: res.id,
+                                        counter: ctr
+                                    })
+                                } else {
+                                    alert(apiresult.message)
+                                }
                             },
                             error: function(xhr, status, error) {
                                 // Handle error
@@ -1832,11 +1865,19 @@
                         data: {
                             Id: id
                         },
-                        success: function(response) {
-                            close_inspection(ctr, true)
-                            alert('Data successfully deleted')
-                            $('.btn-add-new-inspection[attr-inspection-id='+id+']').closest('li').remove()
-                            // Handle success response
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
+                        success: function (apiresponse) {
+                            if(apiresponse.isSuccess){
+                                alert(apiresponse.message)
+                                var response = apiresponse.data;
+                                close_inspection(ctr, true)
+                                $('.btn-add-new-inspection[attr-inspection-id='+id+']').closest('li').remove()
+                                // Handle success response
+                            } else {
+                                alert(apiresponse.message)
+                            }
                         },
                         error: function(xhr, status, error) {
                             alert('Error deleting data')
@@ -1852,6 +1893,9 @@
                         type: 'POST', // or 'GET' depending on your form method
                         data: {
                             Id: id
+                        },
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
                         },
                         success: function (response) {
                             alert('Data successfully deleted')
@@ -1869,8 +1913,19 @@
                     url: '@urlassetdetail',
                     type: 'GET',
                     data: { id },
-                    success: function (data) {
-                        fillAssetInfo ({counter, data})
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            fillAssetInfo ({counter, data})
+                        } else {
+                            alert(apiresult.message);
+                            $('#inspectionheader' + counter).remove();
+                            $('#inspection' + counter).remove();
+                            moveToLastTab()
+                        }
                     },
                     error: function (error) {
                         alert('Valve Tag not found');
@@ -1886,83 +1941,104 @@
                     url: '@urlassessmentdetail',
                     type: 'GET',
                     data: { id },
-                    success: function (data) {
-                        // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
-                        fillAssetInfo({
-                            counter, data: data.asset
-                        })
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if(apiresult.isSuccess)
+                        {
+                            var data = apiresult.data;
+                            var tempinspection = [];
+                            data.inspectionHistory.forEach(function(inspection) {
+                                tempinspection.push(inspection.inspection)
+                            });
+                            data.inspectionHistory = tempinspection;
+                            var tempmaintenance = [];
+                            data.maintenanceHistory.forEach(function(maintenance) {
+                                tempmaintenance.push(maintenance.maintenance)
+                            });
+                            data.maintenanceHistory = tempmaintenance;
+                            fillAssetInfo({
+                                counter, data: data.asset
+                            })
 
-                        if(data.inspectionHistory.length > 0) {
-                            fillInspectionTable(counter, data.inspectionHistory)
+                            if(data.inspectionHistory.length > 0) {
+                                fillInspectionTable(counter, data.inspectionHistory)
+                            }
+                            if(data.maintenanceHistory.length > 0) {
+                                fillMaintenanceTable(counter, data.maintenanceHistory)
+                            }
+
+                            // check if field editable
+                            const editable = assessmentCalculatedField.some(field => data[field] === null)
+                            if(!editable) {
+                                // $('#inspection'+counter).find('input:not([type="hidden"]), textarea, select').attr('disabled', true)
+                                $('#inspection'+counter).find('.print-button').attr('href', '@urlassessmentprint'+'/'+id)
+                                // $('#inspection'+counter+' .assessment-form').addClass('not-editable')
+                                // $('.only-add').hide()
+                                $('#inspection'+counter+' .print-button').show()
+                            }
+
+                            // fill history data
+                            $('#field-inspection-date'+counter).val(data.inspectionDate)
+                            $('#field-inspection-inspection-method'+counter).val(data.inspectionMethodID)
+                            $('#field-inspection-current-condition-limit-state-a'+counter).val(data.currentConditionLeakeageToAtmosphereID)
+                            $('#field-inspection-current-condition-limit-state-b'+counter).val(data.currentConditionFailureOfFunctionID)
+                            $('#field-inspection-current-condition-limit-state-c'+counter).val(data.currentConditionPassingAcrossValveID)
+                            $('#field-inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
+                            $('#field-inspection-function-condition'+counter).val(data.functionCondition)
+                            $('#field-inspection-description'+counter).val(data.inspectionDescription)
+                            $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
+                            $('#maintenanceDataTemp'+counter).val(JSON.stringify(data.maintenanceHistory))
+                            $('#inspectionDataTemp'+counter).val(JSON.stringify(data.inspectionHistory))
+
+                            //fill assessment data
+                            $('#assessment-no'+counter).val(data.assessmentNo)
+                            $('#assessment-date'+counter).val(data.assessmentDate)
+                            $('#time-period'+counter).val(data.timePeriode)
+                            $('#time-to-limit-a'+counter).val(data.timeToLimitStateLeakageToAtmosphere)
+                            $('#time-to-limit-b'+counter).val(data.timeToLimitStateFailureOfFunction)
+                            $('#time-to-limit-c'+counter).val(data.timeToLimitStatePassingAccrosValve)
+                            $('#inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
+                            $('#impact-of-internal-fluid'+counter).val(data.impactOfInternalFluidImpuritiesID)
+                            $('#impact-of-operating-envelopes'+counter).val(data.impactOfOperatingEnvelopesID)
+                            $('#used-within-oem-specification'+counter).val(data.usedWithinOEMSpecificationID)
+                            $('#repaired'+counter).val(data.repairedID)
+                            $('#product-loss-definition'+counter).val(data.productLossDefinition)
+                            $('#hsse-definition'+counter).val(data.hsseDefinisionID)
+                            $('#assessment-summary'+counter).val(data.summary)
+                            $('#recommended-action'+counter).val(data.recommendationActionID)
+                            $('#detailed-recommendation'+counter).val(data.detailedRecommendation)
+
+                            //LF1 & LF2
+                            $('#lastInspectionDate'+counter).val(data.inspectionDate)
+                            $('#leakage-to-atmosphere'+counter).val(data.leakageToAtmosphereID)
+                            $('#failure-of-function'+counter).val(data.failureOfFunctionID)
+                            $('#passing-accross-valve'+counter).val(data.passingAccrosValveID)
+
+                            $('#leakage-tp1'+counter).val(data.leakageToAtmosphereTP1ID)
+                            $('#leakage-tp2'+counter).val(data.leakageToAtmosphereTP2ID)
+                            $('#leakage-tp3'+counter).val(data.leakageToAtmosphereTP3ID)
+
+                            $('#failure-tp1'+counter).val(data.failureOfFunctionTP1ID)
+                            $('#failure-tp2'+counter).val(data.failureOfFunctionTP2ID)
+                            $('#failure-tp3'+counter).val(data.failureOfFunctionTP3ID)
+
+                            $('#passing-tp1'+counter).val(data.passingAccrosValveTP1ID)
+                            $('#passing-tp2'+counter).val(data.passingAccrosValveTP2ID)
+                            $('#passing-tp3'+counter).val(data.passingAccrosValveTP3ID)
+
+
+                            //fill ID
+                            $('#inspection'+counter).find('#data-id').val(id)
+                            $('#inspection'+counter).find('form').addClass('history-form')
+                            $('#inspection'+counter).find('.calculate-assessment').first().trigger('change')
+                        } else {
+                            alert(apiresult.message);
+                            $('#inspectionheader' + counter).remove();
+                            $('#inspection' + counter).remove();
+                            moveToLastTab()
                         }
-                        if(data.maintenanceHistory.length > 0) {
-                            fillMaintenanceTable(counter, data.maintenanceHistory)
-                        }
-
-                        // check if field editable
-                        const editable = assessmentCalculatedField.some(field => data[field] === null)
-                        if(!editable) {
-                            // $('#inspection'+counter).find('input:not([type="hidden"]), textarea, select').attr('disabled', true)
-                            $('#inspection'+counter).find('.print-button').attr('href', '@urlassessmentprint'+'/'+id)
-                            // $('#inspection'+counter+' .assessment-form').addClass('not-editable')
-                            // $('.only-add').hide()
-                            $('#inspection'+counter+' .print-button').show()
-                        }
-
-                        // fill history data
-                        $('#field-inspection-date'+counter).val(data.inspectionDate)
-                        $('#field-inspection-inspection-method'+counter).val(data.inspectionMethodID)
-                        $('#field-inspection-current-condition-limit-state-a'+counter).val(data.currentConditionLeakeageToAtmosphereID)
-                        $('#field-inspection-current-condition-limit-state-b'+counter).val(data.currentConditionFailureOfFunctionID)
-                        $('#field-inspection-current-condition-limit-state-c'+counter).val(data.currentConditionPassingAcrossValveID)
-                        $('#field-inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
-                        $('#field-inspection-function-condition'+counter).val(data.functionCondition)
-                        $('#field-inspection-description'+counter).val(data.inspectionDescription)
-                        $('#field-inspection-test-pressure-if-any'+counter).val(data.testPressureIfAny)
-                        $('#maintenanceDataTemp'+counter).val(JSON.stringify(data.maintenanceHistory))
-                        $('#inspectionDataTemp'+counter).val(JSON.stringify(data.inspectionHistory))
-
-                        //fill assessment data
-                        $('#assessment-no'+counter).val(data.assessmentNo)
-                        $('#assessment-date'+counter).val(data.assessmentDate)
-                        $('#time-period'+counter).val(data.timePeriode)
-                        $('#time-to-limit-a'+counter).val(data.timeToLimitStateLeakageToAtmosphere)
-                        $('#time-to-limit-b'+counter).val(data.timeToLimitStateFailureOfFunction)
-                        $('#time-to-limit-c'+counter).val(data.timeToLimitStatePassingAccrosValve)
-                        $('#inspection-effectiveness'+counter).val(data.inspectionEffectivenessID)
-                        $('#impact-of-internal-fluid'+counter).val(data.impactOfInternalFluidImpuritiesID)
-                        $('#impact-of-operating-envelopes'+counter).val(data.impactOfOperatingEnvelopesID)
-                        $('#used-within-oem-specification'+counter).val(data.usedWithinOEMSpecificationID)
-                        $('#repaired'+counter).val(data.repairedID)
-                        $('#product-loss-definition'+counter).val(data.productLossDefinition)
-                        $('#hsse-definition'+counter).val(data.hsseDefinisionID)
-                        $('#assessment-summary'+counter).val(data.summary)
-                        $('#recommended-action'+counter).val(data.recommendationActionID)
-                        $('#detailed-recommendation'+counter).val(data.detailedRecommendation)
-
-                        //LF1 & LF2
-                        $('#lastInspectionDate'+counter).val(data.inspectionDate)
-                        $('#leakage-to-atmosphere'+counter).val(data.leakageToAtmosphereID)
-                        $('#failure-of-function'+counter).val(data.failureOfFunctionID)
-                        $('#passing-accross-valve'+counter).val(data.passingAccrosValveID)
-
-                        $('#leakage-tp1'+counter).val(data.leakageToAtmosphereTP1ID)
-                        $('#leakage-tp2'+counter).val(data.leakageToAtmosphereTP2ID)
-                        $('#leakage-tp3'+counter).val(data.leakageToAtmosphereTP3ID)
-
-                        $('#failure-tp1'+counter).val(data.failureOfFunctionTP1ID)
-                        $('#failure-tp2'+counter).val(data.failureOfFunctionTP2ID)
-                        $('#failure-tp3'+counter).val(data.failureOfFunctionTP3ID)
-
-                        $('#passing-tp1'+counter).val(data.passingAccrosValveTP1ID)
-                        $('#passing-tp2'+counter).val(data.passingAccrosValveTP2ID)
-                        $('#passing-tp3'+counter).val(data.passingAccrosValveTP3ID)
-
-
-                        //fill ID
-                        $('#inspection'+counter).find('#data-id').val(id)
-                        $('#inspection'+counter).find('form').addClass('history-form')
-                        $('#inspection'+counter).find('.calculate-assessment').first().trigger('change')
                     },
                     error: function (error) {
                         alert('History not found');
@@ -2828,31 +2904,41 @@
                         data: {
                             AssetID: assetId
                         },
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
                         type: 'GET',
-                        success: function (data) {
-                            let html = ''
-                            data.forEach((item, idx) => {
-                                html += `
-                                <tr>
-                                    <td>${idx+1}</td>
-                                    <td>${item.inspectionDate}</td>
-                                    <td>${item.inspectionMethod}</td>
-                                    <td>${item.inspectionDescription}</td>
-                                    <td>${item.functionCondition}</td>
-                                    <td>${item.testPressureIfAny}</td>
-                                    <td>
-                                        <div class="inspection-maintenance-select">
-                                            <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
-                                            <!-- <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label> -->
-                                        </div>
-                                    </td>
-                                </tr>
-                                `
-                            })
-                            $(modalId+' input[name=tempData]').val(JSON.stringify(data))
-                            $(modalId+' input[name=tabNum]').val(tabNum)
-                            table.append(html)
-                            res(true)
+                        success: function (apiresult) {
+                            console.log(apiresult);
+                            if(apiresult.isSuccess == true){
+                                var data = apiresult.data;
+                                let html = ''
+                                data.forEach((item, idx) => {
+                                    html += `
+                                    <tr>
+                                        <td>${idx+1}</td>
+                                        <td>${item.inspectionDate}</td>
+                                        <td>${item.inspectionMethod}</td>
+                                        <td>${item.inspectionDescription}</td>
+                                        <td>${item.functionCondition}</td>
+                                        <td>${item.testPressureIfAny}</td>
+                                        <td>
+                                            <div class="inspection-maintenance-select">
+                                                <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
+                                                <!-- <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    `
+                                })
+                                $(modalId+' input[name=tempData]').val(JSON.stringify(data))
+                                $(modalId+' input[name=tabNum]').val(tabNum)
+                                table.append(html)
+                                res(true)
+                            } else {
+                                alert(apiresult.message)
+                                rej()
+                            }
                         },
                         error: function (error) {
                             rej()
@@ -2873,32 +2959,42 @@
                         data: {
                             AssetID: assetId
                         },
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
                         type: 'GET',
-                        success: function (data) {
-                            let html = ''
-                            data.forEach((item, idx) => {
-                                html += `
-                                <tr>
-                                    <td>${idx+1}</td>
-                                    <td>${item.maintenanceDate}</td>
-                                    <td>${item.isValveRepaired}</td>
-                                    <td>${item.maintenanceDescription}</td>
-                                    <td>
-                                        <div class="inspection-maintenance-select">
-                                            <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
-                                            <!-- <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label> -->
-                                        </div>
-                                    </td>
-                                </tr>
-                                `
-                            })
-                            $(modalId+' input[name=tempData]').val(JSON.stringify(data))
-                            $(modalId+' input[name=tabNum]').val(tabNum)
-                            table.append(html)
-                            res(true)
+                        success: function (apiresult) {
+                            console.log(apiresult);
+                            if(apiresult.isSuccess == true){
+                                var data = apiresult.data;
+                                let html = ''
+                                data.forEach((item, idx) => {
+                                    html += `
+                                    <tr>
+                                        <td>${idx+1}</td>
+                                        <td>${item.maintenanceDate}</td>
+                                        <td>${item.isValveRepaired}</td>
+                                        <td>${item.maintenanceDescription}</td>
+                                        <td>
+                                            <div class="inspection-maintenance-select">
+                                                <input id="addInspectionRow${item.id}" ${selectedId.includes(String(item.id)) ? 'checked' : ''} type="checkbox" name="selectedId" value="${item.id}">
+                                                <!-- <label for="addInspectionRow${item.id}" class="btn btn-light btn-sm">Select</label> -->
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    `
+                                })
+                                $(modalId+' input[name=tempData]').val(JSON.stringify(data))
+                                $(modalId+' input[name=tabNum]').val(tabNum)
+                                table.append(html)
+                                res(true)
+                            } else {
+                                alert(apiresult.message)
+                                ref()
+                            }
                         },
                         error: function (error) {
-                            rej()
+                            ref()
                         }
                     })
                 });
@@ -3136,73 +3232,81 @@
                 url: endPoint,
                 type: 'GET',
                 data: { id },
-                success: function (data) {
-                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
-                    const dataAsset = data.asset
-                    $(modalSelector+' #field-inspection-assetid').val(dataAsset.id)
-                    $(modalSelector+' #field-inspection-valvetype').val(dataAsset.valveType)
-                    $(modalSelector+' #field-inspection-tagno').val(dataAsset.tagNo)
-                    $(modalSelector+' #field-inspection-valvetagno').val(dataAsset.tagNo)
-                    $(modalSelector+' #field-inspection-manufacturer').val(dataAsset.manufacturer)
-                    $(modalSelector+' #field-inspection-equipmentname').val('')
-                    $(modalSelector+' #field-inspection-bodymaterial').val(dataAsset.bodyMaterial)
-                    $(modalSelector+' #businessarea').val(dataAsset.businessArea)
-                    $(modalSelector+' #bodymodel').val(dataAsset.bodyModel)
-                    $(modalSelector+' #platform').val(dataAsset.platform)
-                    $(modalSelector+' #endconnection').val(dataAsset.endConnection)
-                    $(modalSelector+' #parentequipmentno').val(dataAsset.parentEquipmentNo)
-                    $(modalSelector+' #serialno').val(dataAsset.serialNo)
-                    $(modalSelector+' #parentequipmentdescription').val(dataAsset.parentEquipmentDescription)
-                    $(modalSelector+' #usagetype').val('')
-                    $(modalSelector+' #installationdate').val(dataAsset.installationDate)
-                    $(modalSelector+' #size').val(dataAsset.size)
-                    $(modalSelector+' #pidno').val(dataAsset.pidNo)
-                    $(modalSelector+' #classrating').val(dataAsset.classRating)
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if(apiresult.isSuccess){
+                        var data = apiresult.data;
+                        // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
+                        const dataAsset = data.asset
+                        $(modalSelector+' #field-inspection-assetid').val(dataAsset.id)
+                        $(modalSelector+' #field-inspection-valvetype').val(dataAsset.valveType)
+                        $(modalSelector+' #field-inspection-tagno').val(dataAsset.tagNo)
+                        $(modalSelector+' #field-inspection-valvetagno').val(dataAsset.tagNo)
+                        $(modalSelector+' #field-inspection-manufacturer').val(dataAsset.manufacturer)
+                        $(modalSelector+' #field-inspection-equipmentname').val('')
+                        $(modalSelector+' #field-inspection-bodymaterial').val(dataAsset.bodyMaterial)
+                        $(modalSelector+' #businessarea').val(dataAsset.businessArea)
+                        $(modalSelector+' #bodymodel').val(dataAsset.bodyModel)
+                        $(modalSelector+' #platform').val(dataAsset.platform)
+                        $(modalSelector+' #endconnection').val(dataAsset.endConnection)
+                        $(modalSelector+' #parentequipmentno').val(dataAsset.parentEquipmentNo)
+                        $(modalSelector+' #serialno').val(dataAsset.serialNo)
+                        $(modalSelector+' #parentequipmentdescription').val(dataAsset.parentEquipmentDescription)
+                        $(modalSelector+' #usagetype').val('')
+                        $(modalSelector+' #installationdate').val(dataAsset.installationDate)
+                        $(modalSelector+' #size').val(dataAsset.size)
+                        $(modalSelector+' #pidno').val(dataAsset.pidNo)
+                        $(modalSelector+' #classrating').val(dataAsset.classRating)
 
-                    // fill history data
-                    if(type === 'maintenance') {
-                        $(modalSelector + ' #field-maintenance-date').val(data.maintenanceDate)
-                        $(modalSelector + ' #field-maintenance-repaired').val(data.isValveRepairedID)
-                        $(modalSelector + ' #field-maintenance-description').val(data.maintenanceDescription)
-                    } else {
-                        $(modalSelector + ' #field-inspection-date').val(data.inspectionDate)
-                        $(modalSelector + ' #field-inspection-inspection-method').val(data.inspectionMethodID)
-                        $(modalSelector + ' #field-inspection-current-condition-limit-state-a').val(data.currentConditionLeakeageToAtmosphereID)
-                        $(modalSelector + ' #field-inspection-current-condition-limit-state-b').val(data.currentConditionFailureOfFunctionID)
-                        $(modalSelector + ' #field-inspection-current-condition-limit-state-c').val(data.currentConditionPassingAcrossValveID)
-                        $(modalSelector + ' #field-inspection-effectiveness').val(data.inspectionEffectivenessID)
-                        $(modalSelector + ' #field-inspection-function-condition').val(data.functionCondition)
-                        $(modalSelector + ' #field-inspection-description').val(data.inspectionDescription)
-                        $(modalSelector + ' #field-inspection-test-pressure-if-any').val(data.testPressureIfAny)
-                    }
+                        // fill history data
+                        if(type === 'maintenance') {
+                            $(modalSelector + ' #field-maintenance-date').val(data.maintenanceDate)
+                            $(modalSelector + ' #field-maintenance-repaired').val(data.isValveRepairedID)
+                            $(modalSelector + ' #field-maintenance-description').val(data.maintenanceDescription)
+                        } else {
+                            $(modalSelector + ' #field-inspection-date').val(data.inspectionDate)
+                            $(modalSelector + ' #field-inspection-inspection-method').val(data.inspectionMethodID)
+                            $(modalSelector + ' #field-inspection-current-condition-limit-state-a').val(data.currentConditionLeakeageToAtmosphereID)
+                            $(modalSelector + ' #field-inspection-current-condition-limit-state-b').val(data.currentConditionFailureOfFunctionID)
+                            $(modalSelector + ' #field-inspection-current-condition-limit-state-c').val(data.currentConditionPassingAcrossValveID)
+                            $(modalSelector + ' #field-inspection-effectiveness').val(data.inspectionEffectivenessID)
+                            $(modalSelector + ' #field-inspection-function-condition').val(data.functionCondition)
+                            $(modalSelector + ' #field-inspection-description').val(data.inspectionDescription)
+                            $(modalSelector + ' #field-inspection-test-pressure-if-any').val(data.testPressureIfAny)
+                        }
 
-                    let galleryHtml = ''
-                    if(type === 'maintenance') {
-                        data.maintenanceFiles.forEach(i => {
-                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                            <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}">
-                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
-                                    <i class="fa-solid fa-xmark"></i>
+                        let galleryHtml = ''
+                        if(type === 'maintenance') {
+                            data.maintenanceFiles.forEach(i => {
+                                galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                                <div class="single-image" data-identifier="gallery-${i.id}">
+                                    <img src="/${i.filePath}">
+                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            `
-                        })
-                    } else {
-                    data.inspectionFiles.forEach(i => {
-                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                            <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}">
-                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
-                                    <i class="fa-solid fa-xmark"></i>
+                                `
+                            })
+                        } else {
+                        data.inspectionFiles.forEach(i => {
+                                galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                                <div class="single-image" data-identifier="gallery-${i.id}">
+                                    <img src="/${i.filePath}">
+                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            `
-                        })
-                    }
+                                `
+                            })
+                        }
 
-                    //fill image
-                    $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
+                        //fill image
+                        $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
+                    } else {
+                        alert(apiresult.message)
+                    }
                 },
                 error: function (error) {
                     alert('History not found');

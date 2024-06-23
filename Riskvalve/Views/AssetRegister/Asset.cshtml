@@ -1,12 +1,10 @@
 @{
     ViewData["Title"] = "Asset";
-    @* var assetList = ViewData["assetList"] as List<AssetModel>; *@
-    var platformList = ViewData["platformList"] as List<PlatformModel>;
-    var valveTypeList = ViewData["valveTypeList"] as List<ValveTypeModel>;
-    var manualOverrideList = ViewData["manualOverrideList"] as List<ManualOverrideModel>;
-    var fluidPhaseList = ViewData["FluidPhaseList"] as List<FluidPhaseModel>;
-    var toxicOrFlamableFluidList = ViewData["ToxicOrFlamableFluidList"] as List<ToxicOrFlamableFluidModel>;
-    string urlassetdatatable = Url.Action("GetAssetDatatable", "AssetRegister");
+    string urlassetdatatable = Url.Action("GetAssetDatatable", "AssetRegister") ?? "";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <div class="container-fluid">
@@ -49,58 +47,17 @@
                             <th></th>
                         </tr>
                     </thead>
-                    @* <tbody>
-                        @{
-                            int ctr = 0;
-                            if (assetList != null)
-                            {
-                                foreach (var item in assetList)
-                                {
-                                    ctr++;
-                                    <tr style="margin: 0;padding;0;">
-                                        <td>@ctr</td>
-                                        <td>@item.TagNo</td>
-                                        <td>@item.BusinessArea</td>
-                                        <td>@item.Platform</td>
-                                        <td>@item.ValveType</td>
-                                        <td>@item.Size</td>
-                                        <td>@item.ClassRating</td>
-                                        <td>@item.PIDNo</td>
-                                        <td>@item.ParentEquipmentNo</td>
-                                        <td>@item.ParentEquipmentDescription</td>
-                                        <td>@item.ServiceFluid</td>
-                                        <td>
-                                            <button onclick="editAction.apply(this)" class="btn btn-custom-size btn-primary invert btn-with-icon btn-asset-action" attr-mode="view"
-                                                attr-itemid="@item.Id"><i class="fa-solid fa-pencil"></i>Edit</button>
-                                        </td>
-                                    </tr>
-                                }
-                            }
-                        }
-                    </tbody> *@
                 </table>
             </div>
         </div>
     </div>
 </div>
 
-
 <partial name="ModalAsset" />
 
 @section Scripts {
     <script>
-        @* initDatatable({
-            ordering: true,
-            columnDefs: [
-                {
-                    type: "num", targets: 5
-                },
-                {
-                    type: "num", targets: 6
-                }
-            ]
-        }) *@
-
+        var requestVerificationToken = '@tokens.RequestToken';
         $(document).ready(function () {
             $('#assetTable').DataTable({
                 "processing": true,
@@ -114,7 +71,10 @@
                         d.searchValue = $('#assetTable').DataTable().search();
                         d.sortColumn = $('#assetTable').DataTable().order()[0][0];
                         d.sortColumnDirection = $('#assetTable').DataTable().order()[0][1];
-                    }
+                    },
+                    "headers": {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
                 },
                 "columns": [
                     {

@@ -1,13 +1,18 @@
+@using SharedLayer
 @{
-    var platformList = ViewData["platformList"] as List<PlatformModel>;
-    var valveTypeList = ViewData["valveTypeList"] as List<ValveTypeModel>;
-    var manualOverrideList = ViewData["manualOverrideList"] as List<ManualOverrideModel>;
-    var fluidPhaseList = ViewData["FluidPhaseList"] as List<FluidPhaseModel>;
-    var toxicOrFlamableFluidList = ViewData["ToxicOrFlamableFluidList"] as List<ToxicOrFlamableFluidModel>;
+    var platformList = ViewData["platformList"] as List<PlatformData>;
+    var valveTypeList = ViewData["valveTypeList"] as List<ValveTypeData>;
+    var manualOverrideList = ViewData["manualOverrideList"] as List<ManualOverrideData>;
+    var fluidPhaseList = ViewData["FluidPhaseList"] as List<FluidPhaseData>;
+    var toxicOrFlamableFluidList = ViewData["ToxicOrFlamableFluidList"] as List<ToxicOrFlamableFluidData>;
     var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
     var urladdasset = Url.Action("AddAsset", "AssetRegister");
     var urlupdateasset = Url.Action("UpdateAsset", "AssetRegister");
     var urldeleteasset = Url.Action("DeleteAsset", "AssetRegister");
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <div class="modal fade" id="addAssetModal" role="dialog">
@@ -30,12 +35,13 @@
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-classrating">Class Rating</label>
-                                    <input id="field-asset-classrating" name="classrating" type="text" class="form-control"
-                                        required />
+                                    <input id="field-asset-classrating" name="classrating" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-tagno">Tag No</label>
-                                    <input id="field-asset-tagno" name="tagno" type="text" class="form-control" required />
+                                    <input id="field-asset-tagno" name="tagno" type="text" class="form-control"
+                                        required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-parentequipmentno">Parent Equipment No</label>
@@ -46,14 +52,19 @@
                                     <label for="field-asset-platform">Platform</label>
                                     <select id="field-asset-platform" name="platform" class="form-control" required>
                                         <option value="">Select Platform</option>
-                                        @foreach (var item in platformList)
-                                        {
-                                            <option value="@item.Id">@item.BusinessArea: @item.Platform</option>
+                                        @{
+                                            if(platformList != null){
+                                                foreach (var item in platformList)
+                                                {
+                                                    <option value="@item.Id">@item.BusinessArea: @item.Platform</option>
+                                                }
+                                            }
                                         }
                                     </select>
                                 </div>
                                 <div class="form-group-inline">
-                                    <label for="field-asset-parentequipmentdescription">Parent Equipment Description</label>
+                                    <label for="field-asset-parentequipmentdescription">Parent Equipment
+                                        Description</label>
                                     <input id="field-asset-parentequipmentdescription" name="parentequipmentdescription"
                                         type="text" class="form-control" required />
                                 </div>
@@ -61,9 +72,14 @@
                                     <label for="field-asset-valvetype">Valve Type</label>
                                     <select id="field-asset-valvetype" name="valvetype" class="form-control" required>
                                         <option value="">Select Valve Type</option>
-                                        @foreach (var item in valveTypeList)
-                                        {
-                                            <option value="@item.Id">@item.ValveType</option>
+                                        @{
+                                            if(valveTypeList != null)
+                                            {
+                                                foreach (var item in valveTypeList)
+                                                {
+                                                    <option value="@item.Id">@item.ValveType</option>
+                                                }
+                                            }
                                         }
                                     </select>
                                 </div>
@@ -74,11 +90,13 @@
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-size">Size (inch)</label>
-                                    <input id="field-asset-size" name="size" type="number" class="form-control" required />
+                                    <input id="field-asset-size" name="size" type="number" class="form-control"
+                                        required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-pidno">PID Number</label>
-                                    <input id="field-asset-pidno" name="pidno" type="text" class="form-control" required />
+                                    <input id="field-asset-pidno" name="pidno" type="text" class="form-control"
+                                        required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-equipmentname">Equipment Name</label>
@@ -92,8 +110,6 @@
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-status">Status</label>
-                                    @* <input id="field-asset-status" name="status" type="text" class="form-control"
-                                    required /> *@
                                     <select id="field-asset-status" name="status" class="form-control" required>
                                         <option value="In-service">In-service</option>
                                         <option value="Waiting for Refurbishment">Waiting for Refurbishment</option>
@@ -102,8 +118,6 @@
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-usagetype">Usage Type</label>
-                                    @* <input id="field-asset-usagetype" name="usagetype" type="text" class="form-control"
-                                    required /> *@
                                     <select id="field-asset-usagetype" name="usagetype" class="form-control" required>
                                         <option value="Manual Valve">Manual Valve</option>
                                         <option value="Auto On-Off Valve">Auto On-Off Valve</option>
@@ -113,8 +127,6 @@
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-actuation">Actuation</label>
-                                    @* <input id="field-asset-actuation" name="actuation" type="text" class="form-control"
-                                    required /> *@
                                     <select id="field-asset-actuation" name="actuation" class="form-control" required>
                                         <option value="Pneumatic">Pneumatic</option>
                                         <option value="Hydraulic">Hydraulic</option>
@@ -135,45 +147,64 @@
                             <div class="form-grid">
                                 <div class="form-group-inline">
                                     <label for="field-asset-manufacturer">Manufacturer</label>
-                                    <input id="field-asset-manufacturer" name="manufacturer" type="text" class="form-control" required />
+                                    <input id="field-asset-manufacturer" name="manufacturer" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-manualoverride">Manual Override</label>
-                                    <select id="field-asset-manualoverride" name="manualoverride" class="form-control" required>
-                                        <option value="">Select Manual Override</option> @foreach (var item in manualOverrideList) { <option value="@item.Id">@item.ManualOverride</option> }
+                                    <select id="field-asset-manualoverride" name="manualoverride" class="form-control"
+                                        required>
+                                        <option value="">Select Manual Override</option>
+                                        @{
+                                            if(manualOverrideList != null)
+                                            {
+                                                foreach (var item in manualOverrideList)
+                                                {
+                                                    <option value="@item.Id">@item.ManualOverride</option>
+                                                }
+                                            }
+                                        }
                                     </select>
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-bodymodel">Body Model</label>
-                                    <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control" required />
+                                    <input id="field-asset-bodymodel" name="bodymodel" type="text" class="form-control"
+                                        required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-actuatormfg">Actuator Mfg</label>
-                                    <input id="field-asset-actuatormfg" name="actuatormfg" type="text" class="form-control" required />
+                                    <input id="field-asset-actuatormfg" name="actuatormfg" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-bodymaterial">Body Material</label>
-                                    <input id="field-asset-bodymaterial" name="bodymaterial" type="text" class="form-control" required />
+                                    <input id="field-asset-bodymaterial" name="bodymaterial" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-actuatorserialno">Actuator Serial No.</label>
-                                    <input id="field-asset-actuatorserialno" name="actuatorserialno" type="text" class="form-control" required />
+                                    <input id="field-asset-actuatorserialno" name="actuatorserialno" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-endconnection">End Connection</label>
-                                    <input id="field-asset-endconnection" name="endconnection" type="text" class="form-control" required />
+                                    <input id="field-asset-endconnection" name="endconnection" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-actuatortypemodel">Actuator Type/Model</label>
-                                    <input id="field-asset-actuatortypemodel" name="actuatortypemodel" type="text" class="form-control" required />
+                                    <input id="field-asset-actuatortypemodel" name="actuatortypemodel" type="text"
+                                        class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-serialno">Serial No</label>
-                                    <input id="field-asset-serialno" name="serialno" type="text" class="form-control" required />
+                                    <input id="field-asset-serialno" name="serialno" type="text" class="form-control"
+                                        required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-actuatorpower">Actuator Power</label>
-                                    <input id="field-asset-actuatorpower" name="actuatorpower" type="text" class="form-control" required />
+                                    <input id="field-asset-actuatorpower" name="actuatorpower" type="text"
+                                        class="form-control" required />
                                 </div>
                             </div>
                         </div>
@@ -183,11 +214,11 @@
                     </div>
                     <div class="sub-container">
                         <div class="form-container">
-                            <div class="form-grid"> 
+                            <div class="form-grid">
                                 <div class="form-group-inline">
                                     <label for="field-asset-operatingtemperature">Operating Temperature (F)</label>
-                                    <input id="field-asset-operatingtemperature" name="operatingtemperature" type="number"
-                                        class="form-control" required />
+                                    <input id="field-asset-operatingtemperature" name="operatingtemperature"
+                                        type="number" class="form-control" required />
                                 </div>
                                 <div class="form-group-inline">
                                     <label for="field-asset-servicefluid">Service Fluid</label>
@@ -203,9 +234,14 @@
                                     <label for="field-asset-fluidphase">Fluid Phase</label>
                                     <select id="field-asset-fluidphase" name="fluidphase" class="form-control" required>
                                         <option value="">Select Fluid Phase</option>
-                                        @foreach (var item in fluidPhaseList)
-                                        {
-                                            <option value="@item.Id">@item.FluidPhase</option>
+                                        @{
+                                            if(fluidPhaseList != null)
+                                            {
+                                                foreach (var item in fluidPhaseList)
+                                                {
+                                                    <option value="@item.Id">@item.FluidPhase</option>
+                                                }
+                                            }
                                         }
                                     </select>
                                 </div>
@@ -219,9 +255,14 @@
                                     <select id="field-asset-toxicorflamablefluid" name="toxicorflamablefluid"
                                         class="form-control" required>
                                         <option value="">Select Toxic or Flamable Fluid</option>
-                                        @foreach (var item in toxicOrFlamableFluidList)
-                                        {
-                                            <option value="@item.Id">@item.ToxicOrFlamableFluid</option>
+                                        @{
+                                            if(toxicOrFlamableFluidList != null)
+                                            {
+                                                foreach (var item in toxicOrFlamableFluidList)
+                                                {
+                                                    <option value="@item.Id">@item.ToxicOrFlamableFluid</option>
+                                                }
+                                            }
                                         }
                                     </select>
                                 </div>
@@ -229,8 +270,10 @@
                         </div>
                         <div class="box-footer">
                             <button type="button" id="btn-asset-modal-save" class="btn btn-primary">Save</button>
-                            <button type="button" class="btn btn-primary btn btn-secondary cancel-button" data-bs-dismiss="modal">Cancel</button>
-                            <button type="button" id="btn-asset-modal-delete" class="pull-left btn btn-danger delete-button">Delete</button>
+                            <button type="button" class="btn btn-primary btn btn-secondary cancel-button"
+                                data-bs-dismiss="modal">Cancel</button>
+                            <button type="button" id="btn-asset-modal-delete"
+                                class="pull-left btn btn-danger delete-button">Delete</button>
                         </div>
                     </div>
                 </div>
@@ -241,6 +284,7 @@
 
 @Html.PartialSectionScripts(
 @<script>
+    var requestVerificationToken = '@tokens.RequestToken';
     function editAction() {
         $('.form-control').val('');
         $('.form-control').removeClass('error');
@@ -255,43 +299,51 @@
                 url: '@urlgetassetdetail',
                 type: 'GET',
                 data: { id: id },
-                success: function (data) {
-                    console.log(data);
-                    $('#field-asset-mode').val('update');
-                    $('#field-asset-id').val(data.id);
-                    $('#field-asset-id-show').val(data.id);
-                    $('#field-asset-classrating').val(data.classRating);
-                    $('#field-asset-tagno').val(data.tagNo);
-                    $('#field-asset-parentequipmentno').val(data.parentEquipmentNo);
-                    $('#field-asset-platform').val(data.platformID);
-                    $('#field-asset-parentequipmentdescription').val(data.parentEquipmentDescription);
-                    $('#field-asset-valvetype').val(data.valveTypeID);
-                    $('#field-asset-installationdate').val(data.installationDate);
-                    $('#field-asset-size').val(data.size);
-                    $('#field-asset-pidno').val(data.pidNo);
-                    $('#field-asset-manufacturer').val(data.manufacturer);
-                    $('#field-asset-manualoverride').val(data.manualOverrideID);
-                    $('#field-asset-bodymodel').val(data.bodyModel);
-                    $('#field-asset-actuatormfg').val(data.actuatorMfg);
-                    $('#field-asset-bodymaterial').val(data.bodyMaterial);
-                    $('#field-asset-serialno').val(data.serialNo);
-                    $('#field-asset-endconnection').val(data.endConnection);
-                    $('#field-asset-actuatortypemodel').val(data.actuatorTypeModel);
-                    $('#field-asset-actuatorserialno').val(data.actuatorSerialNo);
-                    $('#field-asset-actuatorpower').val(data.actuatorPower);
-                    $('#field-asset-operatingtemperature').val(data.operatingTemperature);
-                    $('#field-asset-servicefluid').val(data.serviceFluid);
-                    $('#field-asset-operatingpressure').val(data.operatingPressure);
-                    $('#field-asset-fluidphase').val(data.fluidPhaseID);
-                    $('#field-asset-flowrate').val(data.flowRate);
-                    $('#field-asset-toxicorflamablefluid').val(data.toxicOrFlamableFluidID);
-                    $('#field-asset-equipmentname').val(data.assetName);
-                    $('#field-asset-replacementcost').val(data.costOfReplacementAndRepair);
-                    $('#field-asset-status').val(data.status);
-                    $('#field-asset-usagetype').val(data.usageType);
-                    $('#field-asset-actuation').val(data.actuation);
-                    $('#btn-asset-modal-delete').show();
-                    $('#addAssetModal').modal('show');
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if (apiresult.isSuccess) {
+                        var data = apiresult.data;
+                        console.log(data);
+                        $('#field-asset-mode').val('update');
+                        $('#field-asset-id').val(data.id);
+                        $('#field-asset-id-show').val(data.id);
+                        $('#field-asset-classrating').val(data.classRating);
+                        $('#field-asset-tagno').val(data.tagNo);
+                        $('#field-asset-parentequipmentno').val(data.parentEquipmentNo);
+                        $('#field-asset-platform').val(data.platformID);
+                        $('#field-asset-parentequipmentdescription').val(data.parentEquipmentDescription);
+                        $('#field-asset-valvetype').val(data.valveTypeID);
+                        $('#field-asset-installationdate').val(data.installationDate);
+                        $('#field-asset-size').val(data.size);
+                        $('#field-asset-pidno').val(data.pidNo);
+                        $('#field-asset-manufacturer').val(data.manufacturer);
+                        $('#field-asset-manualoverride').val(data.manualOverrideID);
+                        $('#field-asset-bodymodel').val(data.bodyModel);
+                        $('#field-asset-actuatormfg').val(data.actuatorMfg);
+                        $('#field-asset-bodymaterial').val(data.bodyMaterial);
+                        $('#field-asset-serialno').val(data.serialNo);
+                        $('#field-asset-endconnection').val(data.endConnection);
+                        $('#field-asset-actuatortypemodel').val(data.actuatorTypeModel);
+                        $('#field-asset-actuatorserialno').val(data.actuatorSerialNo);
+                        $('#field-asset-actuatorpower').val(data.actuatorPower);
+                        $('#field-asset-operatingtemperature').val(data.operatingTemperature);
+                        $('#field-asset-servicefluid').val(data.serviceFluid);
+                        $('#field-asset-operatingpressure').val(data.operatingPressure);
+                        $('#field-asset-fluidphase').val(data.fluidPhaseID);
+                        $('#field-asset-flowrate').val(data.flowRate);
+                        $('#field-asset-toxicorflamablefluid').val(data.toxicOrFlamableFluidID);
+                        $('#field-asset-equipmentname').val(data.assetName);
+                        $('#field-asset-replacementcost').val(data.costOfReplacementAndRepair);
+                        $('#field-asset-status').val(data.status);
+                        $('#field-asset-usagetype').val(data.usageType);
+                        $('#field-asset-actuation').val(data.actuation);
+                        $('#btn-asset-modal-delete').show();
+                        $('#addAssetModal').modal('show');
+                    } else {
+                        alert(apiresult.message);
+                    }
                 }
             });
         }
@@ -368,11 +420,17 @@
                             usagetype: usagetype,
                             actuation: actuation
                         },
-                        success: function (data) {
-                            if (data.Status == 'Success') {
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                var data = apiresult.data;
+                                alert(apiresult.message);
+                                console.log(data);
                                 location.reload();
                             } else {
-                                alert(data.Message);
+                                alert(apiresult.message);
                             }
                         }
                     });
@@ -414,12 +472,17 @@
                             usagetype: usagetype,
                             actuation: actuation
                         },
-                        success: function (data) {
-                            console.log(data);
-                            if (data.result == 400) {
-                                alert(data.message);
-                            } else {
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                var data = apiresult.data;
+                                alert(apiresult.message);
+                                console.log(data);
                                 location.reload();
+                            } else {
+                                alert(apiresult.message);
                             }
                         }
                     });
@@ -433,12 +496,17 @@
                     url: '@urldeleteasset',
                     type: 'POST',
                     data: { id: id },
-                    success: function (data) {
-                        console.log(data);
-                        if (data.result == 400) {
-                            alert(data.message);
-                        } else {
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            alert(apiresult.message);
+                            console.log(data);
                             location.reload();
+                        } else {
+                            alert(apiresult.message);
                         }
                     }
                 });

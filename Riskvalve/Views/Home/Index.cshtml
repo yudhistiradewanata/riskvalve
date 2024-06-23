@@ -7,8 +7,10 @@
     var jsonAssessmentPieChart = Json.Serialize(assessmentPieChart);
     var assessmentBarChart = ViewData["AssessmentBarChart"] as Dictionary<string, Dictionary<string, string>>;
     var jsonAssessmentBarChart = Json.Serialize(assessmentBarChart);
+    var assessmentIntegrity = ViewData["AssessmentIntegrity"] as Dictionary<string, string>;
+    var jsonAssessmentIntegrity = Json.Serialize(assessmentIntegrity);
+    var assetDistribution = ViewData["AssetDistribution"] as Dictionary<string, int>;
 }
-
 <style>
     td {
         height: 30px;
@@ -39,118 +41,8 @@
         background-color: rgb(123, 163, 63);
     }
 </style>
-
-@*
 <div class="container-fluid">
-<div class="row">
-<div class="col-xs-2 no-pad">
-<partial name="HomeSidebar" />
-</div>
-<div class="col-xs-8 col-border-left">
-<div class="row no-padding">
-<div class="col-xs-6">
-<div class="box">
-<div class="box-header">
-<h3 class="box-title">Risk Distribution</h3>
-</div>
-<div class="box-body">
-<div class="row">
-<div class="col-md-12">
-<table class="table table-bordered">
-<tbody class="tbody-chart">
-<tr>
-<td style="text-align:center">E</td>
-<td class="risk-high"></td>
-<td class="risk-high"></td>
-<td class="risk-veryhigh"></td>
-<td class="risk-veryhigh"></td>
-<td class="risk-veryhigh"></td>
-</tr>
-<tr>
-<td style="text-align:center">D</td>
-<td class="risk-medium"></td>
-<td class="risk-high"></td>
-<td class="risk-high"></td>
-<td class="risk-veryhigh"></td>
-<td class="risk-veryhigh"></td>
-</tr>
-<tr>
-<td style="text-align:center">C</td>
-<td class="risk-low"></td>
-<td class="risk-medium"></td>
-<td class="risk-medium"></td>
-<td class="risk-high"></td>
-<td class="risk-veryhigh"></td>
-</tr>
-<tr>
-<td style="text-align:center">B</td>
-<td class="risk-verylow"></td>
-<td class="risk-low"></td>
-<td class="risk-medium"></td>
-<td class="risk-high"></td>
-<td class="risk-high"></td>
-</tr>
-<tr>
-<td style="text-align:center">A</td>
-<td class="risk-verylow"></td>
-<td class="risk-verylow"></td>
-<td class="risk-low"></td>
-<td class="risk-medium"></td>
-<td class="risk-high"></td>
-</tr>
-<tr>
-<td></td>
-<td style="text-align:center">1</td>
-<td style="text-align:center">2</td>
-<td style="text-align:center">3</td>
-<td style="text-align:center">4</td>
-<td style="text-align:center">5</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-xs-6">
-<div class="box">
-<div class="box-header">
-<h3 class="box-title">Risk Distribution</h3>
-</div>
-<div class="box-body">
-<div class="row">
-<div class="col-md-12">
-<div class="chart">
-<canvas id="riskDistributonDoughnut" style="height: 155px; width: 300px;"
-height="620" width="1242"></canvas>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-xs-12">
-<div class="box">
-<div class="box-header">
-<h3 class="box-title">Risk Distribution Per Area</h3>
-</div>
-<div class="box-body">
-<div class="chart">
-<canvas id="barChart" style="height: 260px; width: 621px;" height="520"
-width="1242"></canvas>
-</div>
-</div>
-
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-*@
-
-<div class="container-fluid">
+    
     <div class="row">
         <div class="sidebar border border-right col-md-3 col-lg-2 p-0 bg-body-tertiary">
             <partial name="HomeSidebar" />
@@ -163,8 +55,56 @@ width="1242"></canvas>
                         @message
                     </div>
                 }
+                <div class="card">
+                    <div class="card-header">
+                        Risk Distribution
+                    </div>
+                    <div class="card-body" style="padding: 10px 5px;">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="info-card blue">
+                                    <div class="info-card__title">
+                                        Central Business Unit
+                                    </div>
+                                    <div class="info-card__content">
+                                        @if (assetDistribution != null)
+                                        {
+                                            @assetDistribution["CBU"]
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-card orange">
+                                    <div class="info-card__title">
+                                        North Business Unit
+                                    </div>
+                                    <div class="info-card__content">
+                                        @if (assetDistribution != null)
+                                        {
+                                            @assetDistribution["NBU"]
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-card green">
+                                    <div class="info-card__title">
+                                        South Business Unit
+                                    </div>
+                                    <div class="info-card__content">
+                                        @if (assetDistribution != null)
+                                        {
+                                            @assetDistribution["SBU"]
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row">
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card">
                             <div class="card-header">
                                 Risk Distribution
@@ -174,13 +114,23 @@ width="1242"></canvas>
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-4">
                         <div class="card h-100">
                             <div class="card-header">
                                 Risk Distribution
                             </div>
                             <div class="card-body" style="aspect-ratio: 1;">
                                 <div id="risk-piechart" style="aspect-ratio: 1;"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card h-100">
+                            <div class="card-header">
+                                Bar chart
+                            </div>
+                            <div class="card-body">
+                                <div id="risk-barchart-horizontal"></div>
                             </div>
                         </div>
                     </div>
@@ -204,6 +154,46 @@ width="1242"></canvas>
 
 @section Scripts {
     <script>
+        $('#risk-barchart-horizontal').highcharts({
+                chart: {
+                    type: 'bar'
+                },
+                title: {
+                    text: 'Priority'
+                },
+                xAxis: {
+                    categories: ['Priority']
+                },
+                yAxis: {
+                    title: {
+                        text: ''
+                    }
+                },
+                series: [{
+                    name: 'Very High Priority',
+                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very High"] }],
+                }, {
+                    name: 'High Priority',
+                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["High"] }],
+                },{
+                    name: 'Medium Priority',
+                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Medium"] }],
+                },{
+                    name: 'Low Priority',
+                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Low"] }],
+                },{
+                    name: 'Very Low Priority',
+                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very Low"] }],
+                }
+                ],
+                colors: [
+                    'red',
+                    'orange',
+                    'yellow',
+                    'green',
+                    '#81B014',
+                ],
+            });
         const rawHeatmapData = [
             { x: 0, y: 0, value: '' },
             { x: 0, y: 1, value: '' },
@@ -369,7 +359,7 @@ width="1242"></canvas>
                 },
                 tooltip: {
                     formatter: function () {
-                        return this.series.xAxis.categories[this.point.x] + this.series.yAxis.categories[this.point.y] + ': ' + this.point.value
+                        return this.series.xAxis.categories[this.point.x] + this.series.yAxis.categories[this.point.y] + ': ' + Number(this.point.value)
                     }
                 },
                 /*want to make this part dynamically populated*/

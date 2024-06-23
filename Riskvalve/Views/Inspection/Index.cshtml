@@ -1,16 +1,10 @@
+@using SharedLayer
 @{
     ViewData["Title"] = "Inspection";
-    var CurrentConditionLimitStateModel = new CurrentConditionLimitStateModel();
-    var limitState = CurrentConditionLimitStateModel.GetConditionLimitStates();
-
-    var InspectionEffectivenessModel = new InspectionEffectivenessModel();
-    var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
-
-    var InspectionMethodModel = new InspectionMethodModel();
-    var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
-
-    var IsValveRepairedModel = new IsValveRepairedModel();
-    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
+    var limitState = ViewData["CurrentConditionLimitStateData"] as List<CurrentConditionLimitStateData>;
+    var inspectionEffectivenessStates = ViewData["InspectionEffectivenessData"] as List<InspectionEffectivenessData>;
+    var inspectionMethods = ViewData["InspectionMethodData"] as List<InspectionMethodData>;
+    var isValveRepairedStates = ViewData["IsValveRepairedData"] as List<IsValveRepairedData>;
     var baseurl = Url.Action("", "");
     var urlupdateinspection = Url.Action("UpdateInspection", "Inspection");
     var urladdinspection = Url.Action("AddInspection", "Inspection");
@@ -18,6 +12,10 @@
     var urlgetinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
     var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
     var urlinspectionprint = Url.Action("PrintInspection", "Inspection");
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 <link rel="stylesheet" href="~/css/print.css" asp-append-version="true" />
 
@@ -165,9 +163,12 @@
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-a"
                                                     name="CurrentConditionLeakeageToAtmosphereID">
-                                                    @foreach (var item in limitState)
+                                                    @if(limitState != null)
                                                     {
-                                                        <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        foreach (var item in limitState)
+                                                        {
+                                                            <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        }
                                                     }
                                                 </select>
                                             </div>
@@ -182,9 +183,12 @@
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-b"
                                                     name="CurrentConditionFailureOfFunctionID">
-                                                    @foreach (var item in limitState)
+                                                    @if(limitState != null)
                                                     {
-                                                        <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        foreach (var item in limitState)
+                                                        {
+                                                            <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        }
                                                     }
                                                 </select>
                                             </div>
@@ -193,13 +197,14 @@
                                                     Method</label>
                                                 <select class="form-control" id="field-inspection-inspection-method"
                                                     name="InspectionMethodID">
-                                                    @foreach (var item in inspectionMethods)
+                                                    @if(limitState != null)
                                                     {
-                                                        <option value="@item.Id">@item.InspectionMethod</option>
+                                                        foreach (var item in limitState)
+                                                        {
+                                                            <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        }
                                                     }
                                                 </select>
-                                                @* <input type="text" class="form-control"
-                                                id="field-inspection-inspection-method" value="Visual Inspection"> *@
                                             </div>
                                             <div class="form-group ">
                                                 <label for="field-inspection-current-condition-limit-state-c">Current
@@ -207,9 +212,12 @@
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-c"
                                                     name="CurrentConditionPassingAcrossValveID">
-                                                    @foreach (var item in limitState)
+                                                    @if(limitState != null)
                                                     {
-                                                        <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        foreach (var item in limitState)
+                                                        {
+                                                            <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                        }
                                                     }
                                                 </select>
                                             </div>
@@ -218,9 +226,12 @@
                                                     Effectiveness</label>
                                                 <select class="form-control" id="field-inspection-effectiveness"
                                                     name="InspectionEffectivenessID">
-                                                    @foreach (var item in inspectionEffectivenessStates)
+                                                    @if(inspectionEffectivenessStates != null)
                                                     {
-                                                        <option value="@item.Id">@item.Effectiveness</option>
+                                                        foreach (var item in inspectionEffectivenessStates)
+                                                        {
+                                                            <option value="@item.Id">@item.Effectiveness</option>
+                                                        }
                                                     }
                                                 </select>
                                             </div>
@@ -281,6 +292,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         const urlParams = new URLSearchParams(window.location.search);
         const idParam = Number(urlParams.get('inspectionid'));
         const assetIdParam = Number(urlParams.get('assetid'));
@@ -310,14 +322,22 @@
                     $.ajax({
                         url: '@urlupdateinspection',
                         type: 'POST', // or 'GET' depending on your form method
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
                         data: formData,
                         contentType: false,
                         processData: false,
-                        success: function (response) {
-                            form.addClass('history-form')
-                            // Handle success response
-                            $('.btn-add-new-inspection[attr-inspection-id='+response.id+']').html(response.inspectionDate)
-                            alert('Data successfully updated')
+                        success: function (apiresult) {
+                            if(apiresult.isSuccess){
+                                alert(apiresult.message)
+                                var response = apiresult.data;
+                                form.addClass('history-form')
+                                // Handle success response
+                                $('.btn-add-new-inspection[attr-inspection-id='+response.id+']').html(response.inspectionDate)
+                            } else {
+                                alert(apiresult.message)
+                            }
                         },
                         error: function (xhr, status, error) {
                             alert('Inspection date already exist')
@@ -328,61 +348,44 @@
                     $.ajax({
                         url: '@urladdinspection',
                         type: 'POST', // or 'GET' depending on your form method
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
                         data: formData,
                         contentType: false,
                         processData: false,
-                        success: function (result) {
-                            if (result.Status == 'Error') {
-                                alert(result.Message)
-                            } else {
-                                alert(result.Message)
-                                var res = JSON.parse(result.InspectionData)
-        @* console.log(res) *@
-                                    form.addClass('history-form')
-                                // add menu to tree
-        @* console.log(equipmentId) *@
-        @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
-                                    @* $('ul[equipment-id="' + equipmentId + '"]').append(`
-                                        <li class="treeview">
-                                            <a class="btn-add-new-inspection" history-button="" 
-                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                            attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
-                                            attr-sidebar-level="4" 
-                                            attr-find-inspection="${res.Asset.BusinessArea}" 
-                                            attr-find-platform="${res.Asset.Platform}" 
-                                            attr-find-equipment="${res.Asset.TagNo}" 
-                                            attr-find-imr="NEW"
-                                            onclick="addTab.apply(this)"
-                                            >
-                                                ${res.InspectionDate}
-                                            </a>
-                                        </li>
-                                    `) *@
-                                    $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
-                                        <li class="treeview">
-                                            <a class="btn-add-new-inspection" history-button="" 
-                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                            attr-name="${res.Asset.TagNo} ${res.InspectionDate}" 
-                                            attr-sidebar-level="4" 
-                                            attr-find-inspection="${res.Asset.BusinessArea}" 
-                                            attr-find-platform="${res.Asset.Platform}" 
-                                            attr-find-equipment="${res.Asset.TagNo}" 
-                                            attr-find-imr="NEW"
-                                            onclick="addTab.apply(this)"
-                                            >
-                                                ${res.InspectionDate} (NEW)
-                                            </a>
-                                        </li>
-                                    `)
+                        success: function (apiresult) {
+                            if(apiresult.isSuccess){
+                                alert(apiresult.message)
+                                var res = apiresult.data;
+                                form.addClass('history-form')
+                                $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
+                                    <li class="treeview">
+                                        <a class="btn-add-new-inspection" history-button="" 
+                                        attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
+                                        attr-name="${res.asset.tagNo} ${res.inspectionDate}" 
+                                        attr-sidebar-level="4" 
+                                        attr-find-inspection="${res.asset.businessArea}" 
+                                        attr-find-platform="${res.asset.platform}" 
+                                        attr-find-equipment="${res.asset.tagNo}" 
+                                        attr-find-imr="NEW"
+                                        onclick="addTab.apply(this)"
+                                        >
+                                            ${res.inspectionDate} (NEW)
+                                        </a>
+                                    </li>
+                                `)
+
                                 form.find('.preview-image-gallery .single-image').remove()
                                 form.find('.preview-image-gallery input[type=file]').remove()
                                 fetchHistoryData({
-                                    id: res.Id,
+                                    id: res.id,
                                     counter: ctr
                                 })
+                            } else {
+                                alert(apiresult.message)
                             }
-        @* alert('Data successfully inserted') *@
-                                            },
+                        },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('error submitting the form')
@@ -406,11 +409,17 @@
                     data: {
                         Id: id
                     },
-                    success: function (response) {
-                        close_inspection(ctr, true)
-                        alert('Data successfully deleted')
-                        $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
-                        // Handle success response
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresponse) {
+                        if(apiresponse.isSuccess){
+                            alert(apiresponse.message)
+                            close_inspection(ctr, true)
+                            $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
+                        } else {
+                            alert(apiresponse.message)
+                        }
                     },
                     error: function (xhr, status, error) {
                         alert('Error deleting data')
@@ -426,6 +435,9 @@
                     type: 'POST', // or 'GET' depending on your form method
                     data: {
                         Id: id
+                    },
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
                     },
                     success: function (response) {
                         alert('Data successfully deleted')
@@ -449,8 +461,19 @@
                 url: '@urlgetassetdetail',
                 type: 'GET',
                 data: { id },
-                success: function (data) {
-                    fillAssetInfo({ counter, data })
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if (apiresult.isSuccess) {
+                        var data = apiresult.data;
+                        fillAssetInfo({ counter, data })
+                    } else {
+                        alert(apiresult.message);
+                        $('#inspectionheader' + counter).remove();
+                        $('#inspection' + counter).remove();
+                        moveToLastTab()
+                    }
                 },
                 error: function (error) {
                     alert('Valve Tag not found');
@@ -466,41 +489,51 @@
                 url: '@urlgetinspectiondetail',
                 type: 'GET',
                 data: { id },
-                success: function (data) {
-                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
-                    fillAssetInfo({
-                        counter, data: data.asset
-                    })
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if(apiresult.isSuccess){
+                        var data = apiresult.data;
+                        fillAssetInfo({
+                            counter, data: data.asset
+                        })
 
-                    // fill history data
-                    $('#field-inspection-date' + counter).val(data.inspectionDate)
-                    $('#field-inspection-inspection-method' + counter).val(data.inspectionMethodID)
-                    $('#field-inspection-current-condition-limit-state-a' + counter).val(data.currentConditionLeakeageToAtmosphereID)
-                    $('#field-inspection-current-condition-limit-state-b' + counter).val(data.currentConditionFailureOfFunctionID)
-                    $('#field-inspection-current-condition-limit-state-c' + counter).val(data.currentConditionPassingAcrossValveID)
-                    $('#field-inspection-effectiveness' + counter).val(data.inspectionEffectivenessID)
-                    $('#field-inspection-function-condition' + counter).val(data.functionCondition)
-                    $('#field-inspection-description' + counter).val(data.inspectionDescription)
-                    $('#field-inspection-test-pressure-if-any' + counter).val(data.testPressureIfAny)
+                        // fill history data
+                        $('#field-inspection-date' + counter).val(data.inspectionDate)
+                        $('#field-inspection-inspection-method' + counter).val(data.inspectionMethodID)
+                        $('#field-inspection-current-condition-limit-state-a' + counter).val(data.currentConditionLeakeageToAtmosphereID)
+                        $('#field-inspection-current-condition-limit-state-b' + counter).val(data.currentConditionFailureOfFunctionID)
+                        $('#field-inspection-current-condition-limit-state-c' + counter).val(data.currentConditionPassingAcrossValveID)
+                        $('#field-inspection-effectiveness' + counter).val(data.inspectionEffectivenessID)
+                        $('#field-inspection-function-condition' + counter).val(data.functionCondition)
+                        $('#field-inspection-description' + counter).val(data.inspectionDescription)
+                        $('#field-inspection-test-pressure-if-any' + counter).val(data.testPressureIfAny)
 
-                    let galleryHtml = ''
-                    data.inspectionFiles.forEach(i => {
-                        galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                                                <div class="single-image" data-identifier="gallery-${i.id}">
-                                                    <img src="/${i.filePath}"">
-                                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                                        <i class="fa-solid fa-xmark"></i>
+                        let galleryHtml = ''
+                        data.inspectionFiles.forEach(i => {
+                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                                                    <div class="single-image" data-identifier="gallery-${i.id}">
+                                                        <img src="/${i.filePath}"">
+                                                        <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                                            <i class="fa-solid fa-xmark"></i>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                `
-                    })
+                                                    `
+                        })
 
-                    //fill image
-                    $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
-                    $('#inspection' + counter).find('form').addClass('history-form')
+                        //fill image
+                        $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
+                        $('#inspection' + counter).find('form').addClass('history-form')
 
-                    //fill ID
-                    $('#inspection' + counter).find('#data-id').val(id)
+                        //fill ID
+                        $('#inspection' + counter).find('#data-id').val(id)
+                    } else {
+                        alert(apiresult.message);
+                        $('#inspectionheader' + counter).remove();
+                        $('#inspection' + counter).remove();
+                        moveToLastTab()
+                    }
                 },
                 error: function (error) {
                     alert('History not found');

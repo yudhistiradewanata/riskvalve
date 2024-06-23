@@ -1,6 +1,7 @@
+@using SharedLayer
 @{
-    var inspectionSidebar = ViewData["InspectionSidebar"] as List<InspectionSidebarModel>;
-    var pageType = ViewData["PageType"] as string;
+    var inspectionSidebar = ViewData["InspectionSidebar"] as List<SidebarData>;
+    var pageType = ViewData["PageType"] as string ?? "";
     var urldeleteasset = Url.Action("DeleteAsset", "AssetRegister");
 
     var urlgetassetsidebar = Url.Action("GetAssetSidebar", "AssetRegister");
@@ -10,8 +11,15 @@
     var urllevel4 = pageType.ToLower() == "inspection" ? urlgetinspectionsidebar : pageType.ToLower() == "maintenance" ? urlgetmaintenancesidebar : urlgetassessmentsidebar;
     var urlassetsearch = Url.Action("GetAssetSidebarSearch", "AssetRegister");
 }
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
+}
 
 <aside class="main-sidebar">
+    <div class="loader">
+        <div class="lds-dual-ring"></div>
+    </div>
     <div class="inspection-sidebar-container">
         <section class="sidebar inspection-sidebar" id="tree-menu">
             <form class="form-inline" role="form">
@@ -26,50 +34,27 @@
             <ul class="sidebar-menu-inspection-assessment">
                 @if (inspectionSidebar != null)
                 {
-                    @foreach (var item in inspectionSidebar as List<InspectionSidebarModel>)
+                    @foreach (var item in inspectionSidebar as List<SidebarData>)
                     {
                         <li class="treeview">
                             <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="1" attr-find-inspection="@item.Name">@item.Name</a>
                             <ul class="treeview-menu">
-                                @foreach (var platform in item.Child as List<InspectionSidebarModel>)
-                                {
-                                    <li class="treeview">
-                                        <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="2" attr-find-inspection="@item.Name"
-                                            attr-find-platform="@platform.Name"
-                                            attr-find-platformid="@platform.Id"
-                                            >@platform.Name</a>
-                                        <ul class="treeview-menu" attr-find-forsearch="@item.Name-@platform.Name">
-                                            @* @foreach (var equipment in platform.Child)
-                                            {
-                                                <li class="treeview">
-                                                    <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="@item.Name"
-                                                        attr-find-platform="@platform.Name"
-                                                        attr-find-equipment="@equipment.Name">@equipment.Name
-                                                    </a>
-                                                    <ul class="treeview-menu" equipment-id="@equipment.Id">
-                                                        <li class="treeview">
-                                                            <a class="btn-add-new-inspection" attr-id="@equipment.Id"
-                                                                attr-name="@equipment.Name" attr-sidebar-level="4"
-                                                                attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
-                                                                attr-find-equipment="@equipment.Name" attr-find-imr="NEW">[Add New
-                                                                @pageType]</a>
-                                                        </li>
-                                                        @foreach (var inspection in equipment.Child)
-                                                        {
-                                                            <li class="">
-                                                                <a class="btn-add-new-inspection" history-button attr-id="@equipment.Id"
-                                                                    attr-inspection-id="@inspection.Id"
-                                                                    attr-name="@equipment.Name @inspection.Name" attr-sidebar-level="4"
-                                                                    attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
-                                                                    attr-find-equipment="@equipment.Name"
-                                                                    attr-find-imr="NEW">@inspection.Name</a>
-                                                            </li>
-                                                        }
-                                                    </ul>
-                                                </li>
-                                            } *@
-                                        </ul>
-                                    </li>
+                                @{
+                                    var platforms = item.Child as List<SidebarData>;
+                                    if(platforms != null)
+                                    {
+                                        foreach (var platform in platforms)
+                                        {
+                                            <li class="treeview">
+                                                <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="2" attr-find-inspection="@item.Name"
+                                                    attr-find-platform="@platform.Name"
+                                                    attr-find-platformid="@platform.Id"
+                                                    >@platform.Name</a>
+                                                <ul class="treeview-menu" attr-find-forsearch="@item.Name-@platform.Name">
+                                                </ul>
+                                            </li>
+                                        }
+                                    }
                                 }
                             </ul>
                         </li>
@@ -83,6 +68,13 @@
 
 @Html.PartialSectionScripts(
 @<script>
+    var requestVerificationToken = '@tokens.RequestToken';
+    function showLoader () {
+        $('.loader').addClass('show')
+    }
+    function hideLoader () {
+        $('.loader').removeClass('show')
+    }
     function deleteAsset(idx, name) {
         var id = idx;
         if (confirm('Are you sure you want to delete this asset  ' + name + '?')) {
@@ -90,8 +82,10 @@
                 url: '@urldeleteasset',
                 type: 'POST',
                 data: { id: id },
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
                 success: function (data) {
-                    console.log(data);
                     if (data.result == 400) {
                         alert(data.message);
                     } else {
@@ -127,15 +121,17 @@
     }
 
     function sidebarClick () {
+        if($(this).hasClass('child-open')) return
         $('.sidebartreea').removeClass('selected')
         $(this).addClass('selected')
-        for (var i = 2; i <= 4; i++) {
-            $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="' + i + '"]').each(function () {
-                var parent = $(this).parent();
-                parent.hide();
+        // for (var i = 2; i <= 4; i++) {
+        //     $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="' + i + '"]').each(function () {
+        //         console.log('asd')
+        //         var parent = $(this).parent();
+        //         parent.hide();
 
-            });
-        }
+        //     });
+        // }
         var level = $(this).attr('attr-sidebar-level');
         var level_1 = $(this).attr('attr-find-inspection');
         var level_2 = $(this).attr('attr-find-platform');
@@ -152,18 +148,22 @@
         }
 
         if (level == 3) {
+            let ul_el = selectedEl.closest('.treeview').find('ul')
+            ul_el.find('.child-data-entry').remove()
+            showLoader()
             $.ajax({
                 url: '@urllevel4',
                 type: 'GET',
                 data: {
                     assetid: $(this).attr('attr-find-equipmentid')
                 },
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
                 success: function (data) {
-                    console.log(data);
-                    let ul_el = selectedEl.closest('.treeview').find('ul')
-                    ul_el.find('.child-data-entry').remove()
+                    let newLiElement = ''
                     data.forEach(function (item) {
-                        const newLiElement = `<li class="child-data-entry">
+                        newLiElement += `<li class="child-data-entry">
                                                 <a class="btn-add-new-inspection" history-button 
                                                     attr-id="${item.AssetID}"
                                                     attr-sidebar-level="4"
@@ -176,9 +176,10 @@
                                                     onclick="addTab.apply(this)"
                                                 >${item.Name}</a>
                                             </li>` 
-                        ul_el.append(newLiElement)
                     })
-                }
+                    ul_el.append(newLiElement)
+                },
+                complete: hideLoader
             })
             $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
                 var parent = $(this).parent();
@@ -210,33 +211,46 @@
                 }
             });
         } else if (level == 2) {
+            const ul_el = selectedEl.closest('.treeview').find('ul')
+            ul_el.empty()
+            showLoader()
             $.ajax({
                 url: '@urlgetassetsidebar',
                 type: 'GET',
                 data: {
                     platformid: $(this).attr('attr-find-platformid')
                 },
-                success: function (data) {
-                    console.log(data);
-                    var ul_el = selectedEl.closest('.treeview').find('ul')
-                    ul_el.empty()
-                    data.forEach(function (item) {
-                        let li_el = $('<li class="treeview"></li>')
-                        let a_el = $('<a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="' + item.businessArea + '" attr-find-platform="' + item.platform + '" attr-find-equipmentid="'+ item.id +'" attr-find-equipment="' + item.tagNo + '">' + item.tagNo + '</a>')
-                        let ul_el2 = $(`<ul class="treeview-menu" equipment-id="${item.id}">
-                            <li style="display: none" class="treeview">
-                                <a class="btn-add-new-inspection" attr-id="${item.id}"
-                                    attr-name="${item.tagNo}" attr-sidebar-level="4"
-                                    attr-find-inspection="${item.businessArea}" attr-find-platform="${item.platform}"
-                                    attr-find-equipment="${item.tagNo}" attr-find-imr="NEW" onclick="addTab.apply(this)">[Add New
-                                    @pageType]</a>
-                            </li>
-                        </ul>`)
-                        li_el.append(a_el)
-                        li_el.append(ul_el2)
-                        ul_el.append(li_el)
-                    })
-                }
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if (apiresult.isSuccess) {
+                        const data = apiresult.data;
+                        let newLiElement = ''
+                        let counter = 0
+                        data.forEach(function (item) {
+                            counter++
+                            if(counter > 10 && window.allowSkip) return
+                            const newLi = '<li class="treeview">'
+                                + '<a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="' + item.businessArea + '" attr-find-platform="' + item.platform + '" attr-find-equipmentid="'+ item.id +'" attr-find-equipment="' + item.tagNo + '">' + item.tagNo + '</a>'
+                                + `<ul class="treeview-menu" equipment-id="${item.id}">
+                                        <li style="display: none" class="treeview">
+                                            <a class="btn-add-new-inspection" attr-id="${item.id}"
+                                                attr-name="${item.tagNo}" attr-sidebar-level="4"
+                                                attr-find-inspection="${item.businessArea}" attr-find-platform="${item.platform}"
+                                                attr-find-equipment="${item.tagNo}" attr-find-imr="NEW" onclick="addTab.apply(this)">[Add New
+                                                @pageType]</a>
+                                        </li>
+                                    </ul>`
+                            +'</li>'
+                            newLiElement += newLi
+                        });
+                        ul_el.html(newLiElement)
+                    } else {
+                        alert(apiresult.message);
+                    }
+                },
+                complete: hideLoader
             })
             $('.sidebar-menu-inspection-assessment').find('a[attr-sidebar-level="2"]').each(function () {
                 var parent = $(this).parent();
@@ -283,38 +297,48 @@
 
     $(document).ready(function () {
         fold_all_sidebar_menu();
-        $("#searchForm").on("keyup", function () {
+        $("#searchForm").on("keyup", debounce(function () {
             if($(this).val().length > 0){
+                showLoader()
                 $.ajax({
                     url: '@urlassetsearch',
                     type: 'GET',
                     data: {
                         search: $(this).val()
                     },
-                    success: function (data) {
-                        for(var i = 0; i < Object.keys(data).length; i++){
-                            var key = Object.keys(data)[i];
-                            var value = data[key];
-                            var ul_el = $('ul[attr-find-forsearch="'+key+'"]');
-                            ul_el.empty()
-                            value.forEach(function (item) {
-                                let li_el = $('<li class="treeview"></li>')
-                                let a_el = $('<a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="' + item.businessArea + '" attr-find-platform="' + item.platform + '" attr-find-equipmentid="'+ item.id +'" attr-find-equipment="' + item.tagNo + '">' + item.tagNo + '</a>')
-                                let ul_el2 = $(`<ul class="treeview-menu" equipment-id="${item.id}">
-                                    <li style="display: none" class="treeview">
-                                        <a class="btn-add-new-inspection" attr-id="${item.id}"
-                                            attr-name="${item.tagNo}" attr-sidebar-level="4"
-                                            attr-find-inspection="${item.businessArea}" attr-find-platform="${item.platform}"
-                                            attr-find-equipment="${item.tagNo}" attr-find-imr="NEW" onclick="addTab.apply(this)">[Add New
-                                            @pageType]</a>
-                                    </li>
-                                </ul>`)
-                                li_el.append(a_el)
-                                li_el.append(ul_el2)
-                                ul_el.append(li_el)
-                            })
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            for(var i = 0; i < Object.keys(data).length; i++){
+                                var key = Object.keys(data)[i];
+                                var value = data[key];
+                                var ul_el = $('ul[attr-find-forsearch="'+key+'"]');
+                                ul_el.empty()
+                                value.forEach(function (item) {
+                                    let li_el = $('<li class="treeview"></li>')
+                                    let a_el = $('<a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="3" attr-find-inspection="' + item.businessArea + '" attr-find-platform="' + item.platform + '" attr-find-equipmentid="'+ item.id +'" attr-find-equipment="' + item.tagNo + '">' + item.tagNo + '</a>')
+                                    let ul_el2 = $(`<ul class="treeview-menu" equipment-id="${item.id}">
+                                        <li style="display: none" class="treeview">
+                                            <a class="btn-add-new-inspection" attr-id="${item.id}"
+                                                attr-name="${item.tagNo}" attr-sidebar-level="4"
+                                                attr-find-inspection="${item.businessArea}" attr-find-platform="${item.platform}"
+                                                attr-find-equipment="${item.tagNo}" attr-find-imr="NEW" onclick="addTab.apply(this)">[Add New
+                                                @pageType]</a>
+                                        </li>
+                                    </ul>`)
+                                    li_el.append(a_el)
+                                    li_el.append(ul_el2)
+                                    ul_el.append(li_el)
+                                })
+                            }
+                        } else {
+                            alert(apiresult.message);
                         }
-                    }
+                    },
+                    complete: hideLoader
                 })
             }
             var value = $(this).val().toLowerCase();
@@ -328,7 +352,7 @@
                     $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
                 });
             }
-        });
+        },500));
     });
 </script>
     )

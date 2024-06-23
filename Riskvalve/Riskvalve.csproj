@@ -22,5 +22,11 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <!-- Models -->
+    <ProjectReference Include="..\SharedLayer\SharedLayer.csproj" />
+    <!-- DAL -->
+    <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj"/>
+    <!-- BLL -->
+    <ProjectReference Include="..\BusinessLogicLayer\BusinessLogicLayer.csproj" />
   </ItemGroup>
 </Project>

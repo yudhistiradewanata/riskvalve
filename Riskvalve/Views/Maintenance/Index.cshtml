@@ -1,16 +1,10 @@
+@using SharedLayer
 @{
     ViewData["Title"] = "Maintenance";
-    var CurrentConditionLimitStateModel = new CurrentConditionLimitStateModel();
-    var limitState = CurrentConditionLimitStateModel.GetConditionLimitStates();
-
-    var InspectionEffectivenessModel = new InspectionEffectivenessModel();
-    var inspectionEffectivenessStates = InspectionEffectivenessModel.GetInspectionEffectivenessStates();
-
-    var InspectionMethodModel = new InspectionMethodModel();
-    var inspectionMethods = InspectionMethodModel.GetInspectionMethods();
-
-    var IsValveRepairedModel = new IsValveRepairedModel();
-    var isValveRepairedStates = IsValveRepairedModel.GetIsValveRepairedList();
+    var limitState = ViewData["CurrentConditionLimitStateData"] as List<CurrentConditionLimitStateData>;
+    var inspectionEffectivenessStates = ViewData["InspectionEffectivenessData"] as List<InspectionEffectivenessData>;
+    var inspectionMethods = ViewData["InspectionMethodData"] as List<InspectionMethodData>;
+    var isValveRepairedStates = ViewData["IsValveRepairedData"] as List<IsValveRepairedData>;
     var baseurl = Url.Action("", "");
     var urlupdatemainenance = Url.Action("UpdateMaintenance", "Maintenance");
     var urladdmainenance = Url.Action("AddMaintenance", "Maintenance");
@@ -18,6 +12,10 @@
     var urlgetassetdetail = Url.Action("GetAssetDetail", "AssetRegister");
     var urlgetmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance");
     var urlmaintenanceprint = Url.Action("PrintMaintenance", "Maintenance");
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <div class="container-fluid">
@@ -207,6 +205,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         const urlParams = new URLSearchParams(window.location.search);
         const idParam = Number(urlParams.get('maintenanceid'));
         const assetIdParam = Number(urlParams.get('assetid'));
@@ -237,13 +236,21 @@
                         url: '@urlupdatemainenance',
                         type: 'POST',
                         data: formData,
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
                         contentType: false,
                         processData: false,
-                        success: function (response) {
-                            form.addClass('history-form')
-                            // Handle success response
-                            $('.btn-add-new-inspection[attr-inspection-id=' + response.id + ']').html(response.maintenanceDate)
-                            alert('Data successfully updated')
+                        success: function (apiresult) {
+                            if(apiresult.isSuccess){
+                                alert(apiresult.message)
+                                var response = apiresult.data;
+                                form.addClass('history-form')
+                                // Handle success response
+                                $('.btn-add-new-inspection[attr-inspection-id=' + response.id + ']').html(response.maintenanceDate)
+                            } else {
+                                alert(apiresult.message)
+                            }
                         },
                         error: function (xhr, status, error) {
                             alert('Maintenance date already exist')
@@ -255,60 +262,43 @@
                         url: '@urladdmainenance',
                         type: 'POST',
                         data: formData,
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
                         contentType: false,
                         processData: false,
-                        success: function (result) {
-                            if (result.Status == 'Error') {
-                                alert(result.Message)
-                            } else {
-                                alert(result.Message)
-                                var res = JSON.parse(result.MaintenanceData)
+                        success: function (apiresult) {
+                            if(apiresult.isSuccess){
+                                alert(apiresult.message)
+                                var res = apiresult.data;
                                 form.addClass('history-form')
-                                // add menu to tree
-        @* console.log(equipmentId) *@
-        @* console.log($('ul[equipment-id=' + equipmentId + ']')) *@
-                                    @* $('ul[equipment-id="' + equipmentId + '"]').prepend(`
-                                            <li class="treeview">
-                                                <a class="btn-add-new-inspection" history-button="" 
-                                                attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                                attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
-                                                attr-sidebar-level="4" 
-                                                attr-find-inspection="${res.Asset.BusinessArea}" 
-                                                attr-find-platform="${res.Asset.Platform}" 
-                                                attr-find-equipment="${res.Asset.TagNo}" 
-                                                attr-find-imr="NEW"
-                                                onclick="addTab.apply(this)"
-                                                >
-                                                    ${res.MaintenanceDate}
-                                                </a>
-                                            </li>
-                                        `) *@
-                                    $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
-                                        <li class="treeview">
-                                            <a class="btn-add-new-inspection" history-button="" 
-                                            attr-id="${res.Asset.Id}" attr-inspection-id="${res.Id}" 
-                                            attr-name="${res.Asset.TagNo} ${res.MaintenanceDate}" 
-                                            attr-sidebar-level="4" 
-                                            attr-find-inspection="${res.Asset.BusinessArea}" 
-                                            attr-find-platform="${res.Asset.Platform}" 
-                                            attr-find-equipment="${res.Asset.TagNo}" 
-                                            attr-find-imr="NEW"
-                                            onclick="addTab.apply(this)"
-                                            >
-                                                ${res.MaintenanceDate} (NEW)
-                                            </a>
-                                        </li>
-                                    `)
+                                $('ul[equipment-id="' + equipmentId + '"] li').eq(0).after(`
+                                    <li class="treeview">
+                                        <a class="btn-add-new-inspection" history-button="" 
+                                        attr-id="${res.asset.id}" attr-inspection-id="${res.id}" 
+                                        attr-name="${res.asset.tagNo} ${res.maintenanceDate}" 
+                                        attr-sidebar-level="4" 
+                                        attr-find-inspection="${res.asset.businessArea}" 
+                                        attr-find-platform="${res.asset.platform}" 
+                                        attr-find-equipment="${res.asset.tagNo}" 
+                                        attr-find-imr="NEW"
+                                        onclick="addTab.apply(this)"
+                                        >
+                                            ${res.maintenanceDate} (NEW)
+                                        </a>
+                                    </li>
+                                `)
 
                                 form.find('.preview-image-gallery .single-image').remove()
                                 form.find('.preview-image-gallery input[type=file]').remove()
                                 fetchHistoryData({
-                                    id: res.Id,
+                                    id: res.id,
                                     counter: ctr
                                 })
+                            } else {
+                                alert(apiresult.message)
                             }
-        @* alert('Data successfully inserted') *@
-                                },
+                        },
                         error: function (xhr, status, error) {
                             // Handle error
                             alert('error submitting the form')
@@ -332,11 +322,17 @@
                     data: {
                         Id: id
                     },
-                    success: function (response) {
-                        close_inspection(ctr, true)
-                        alert('Data successfully deleted')
-                        $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
-                        // Handle success response
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresponse) {
+                        if(apiresponse.isSuccess){
+                            alert(apiresponse.message)
+                            close_inspection(ctr, true)
+                            $('.btn-add-new-inspection[attr-inspection-id=' + id + ']').closest('li').remove()
+                        } else {
+                            alert(apiresponse.message)
+                        }
                     },
                     error: function (xhr, status, error) {
                         alert('Error deleting data')
@@ -352,6 +348,9 @@
                     type: 'POST', // or 'GET' depending on your form method
                     data: {
                         Id: id
+                    },
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
                     },
                     success: function (response) {
                         alert('Data successfully deleted')
@@ -375,8 +374,19 @@
                 url: '@urlgetassetdetail',
                 type: 'GET',
                 data: { id },
-                success: function (data) {
-                    fillAssetInfo({ counter, data })
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if (apiresult.isSuccess) {
+                        var data = apiresult.data;
+                        fillAssetInfo({ counter, data })
+                    } else {
+                        alert(apiresult.message);
+                        $('#inspectionheader' + counter).remove();
+                        $('#inspection' + counter).remove();
+                        moveToLastTab()
+                    }
                 },
                 error: function (error) {
                     alert('Valve Tag not found');
@@ -392,35 +402,46 @@
                 url: '@urlgetmaintenancedetail',
                 type: 'GET',
                 data: { id },
-                success: function (data) {
-                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
-                    fillAssetInfo({
-                        counter, data: data.asset
-                    })
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if (apiresult.isSuccess) {
+                        var data = apiresult.data;
+                        // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
+                        fillAssetInfo({
+                            counter, data: data.asset
+                        })
 
-                    // fill history data
-                    $('#field-maintenance-date' + counter).val(data.maintenanceDate)
-                    $('#field-maintenance-repaired' + counter).val(data.isValveRepairedID)
-                    $('#field-maintenance-description' + counter).val(data.maintenanceDescription)
+                        // fill history data
+                        $('#field-maintenance-date' + counter).val(data.maintenanceDate)
+                        $('#field-maintenance-repaired' + counter).val(data.isValveRepairedID)
+                        $('#field-maintenance-description' + counter).val(data.maintenanceDescription)
 
-                    let galleryHtml = ''
-                    data.maintenanceFiles.forEach(i => {
-                        galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                                    <div class="single-image" data-identifier="gallery-${i.id}">
-                                        <img src="/${i.filePath}"">
-                                        <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
-                                            <i class="fa-solid fa-xmark"></i>
-                                        </div>
-                                    </div>
-                                    `
-                    })
+                        let galleryHtml = ''
+                        data.maintenanceFiles.forEach(i => {
+                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                                            <div class="single-image" data-identifier="gallery-${i.id}">
+                                                <img src="/${i.filePath}"">
+                                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')">
+                                                    <i class="fa-solid fa-xmark"></i>
+                                                </div>
+                                            </div>
+                                            `
+                        })
 
-                    //fill image
-                    $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
-                    $('#inspection' + counter).find('form').addClass('history-form')
+                        //fill image
+                        $('#inspection' + counter).find('.preview-image-gallery').append(galleryHtml)
+                        $('#inspection' + counter).find('form').addClass('history-form')
 
-                    //fill ID
-                    $('#inspection' + counter).find('#data-id').val(id)
+                        //fill ID
+                        $('#inspection' + counter).find('#data-id').val(id)
+                    } else {
+                        alert(apiresult.message);
+                        $('#inspectionheader' + counter).remove();
+                        $('#inspection' + counter).remove();
+                        moveToLastTab()
+                    }
                 },
                 error: function (error) {
                     alert('History not found');

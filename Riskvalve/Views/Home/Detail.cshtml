@@ -1,13 +1,17 @@
+@using SharedLayer
 @{
     ViewData["Title"] = "Assessment Summary";
-    var areaList = ViewData["areaList"] as List<AreaModel>;
-    var assessmentList = ViewData["assessmentList"] as List<AssessmentModel>;
-    @* var assessmentListjson = Newtonsoft.Json.JsonConvert.SerializeObject(ViewData); *@
-    string urlddlbusinessarea = Url.Action("GetPlatformList", "AssetRegister");
-    string urlbtnfilter = Url.Action("GetAssessmentList", "Assessment");
-    string urlinspectiondetail = Url.Action("GetInspectionDetail", "Inspection");
-    string urlmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance");
-    string urlassessmentdetail = Url.Action("GetAssessmentDetail", "Assessment");
+    var areaList = ViewData["areaList"] as List<AreaData>;
+    var assessmentList = ViewData["assessmentList"] as List<AssessmentData>;
+    string urlddlbusinessarea = Url.Action("GetPlatformList", "AssetRegister") ?? "";
+    string urlbtnfilter = Url.Action("GetAssessmentList", "Assessment") ?? "";
+    string urlinspectiondetail = Url.Action("GetInspectionDetail", "Inspection") ?? "";
+    string urlmaintenancedetail = Url.Action("GetMaintenanceDetail", "Maintenance") ?? "";
+    string urlassessmentdetail = Url.Action("GetAssessmentDetail", "Assessment") ?? "";
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 <div class="container-fluid">
     <div class="row">
@@ -124,110 +128,119 @@
                                     {
                                         foreach (var item in assessmentList)
                                         {
-                                            string installationDate = item.Asset.InstallationDate.Length >= 10 ?
+                                            string installationDate = "";
+                                            string assessmentDate = "";
+                                            string lastInspectionDate = "";
+                                            string lastMaintenanceDate = "";
+                                            string timeToAction = "";
+                                            @* string installationDate = item.Asset.InstallationDate.Length >= 10 ?
                                             item.Asset.InstallationDate.Substring(6, 4) + "-" +
                                             item.Asset.InstallationDate.Substring(3, 2) + "-" +
-                                            item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate;
+                                            item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate; *@
 
-                                            string assessmentDate = item.AssessmentDate.Length >= 10 ?
+                                            @* string assessmentDate = item.AssessmentDate.Length >= 10 ?
                                             item.AssessmentDate.Substring(6, 4) + "-" + item.AssessmentDate.Substring(3, 2) + "-" +
                                             item.AssessmentDate.Substring(0, 2) :
-                                            item.AssessmentDate;
+                                            item.AssessmentDate; *@
 
-                                            string lastInspectionDate = item.LastInspectionDate.Length >= 10 ?
+                                            @* string lastInspectionDate = item.LastInspectionDate.Length >= 10 ?
                                             item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2)
                                             + "-" + item.LastInspectionDate.Substring(0, 2) :
-                                            item.LastInspectionDate;
+                                            item.LastInspectionDate; *@
 
-                                            string lastMaintenanceDate = item.LastMaintenanceDate.Length >= 10 ?
+                                            @* string lastMaintenanceDate = item.LastMaintenanceDate.Length >= 10 ?
                                             item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3, 2)
                                             + "-" + item.LastMaintenanceDate.Substring(0, 2) :
-                                            item.LastMaintenanceDate;
+                                            item.LastMaintenanceDate; *@
 
-                                            string timeToAction = item.TPTimeToActionRisk.Length >= 10 ?
+                                            @* string timeToAction = item.TPTimeToActionRisk.Length >= 10 ?
                                             item.TPTimeToActionRisk.Substring(6, 4) + "-" + item.TPTimeToActionRisk.Substring(3, 2)
                                             + "-" + item.TPTimeToActionRisk.Substring(0, 2) :
-                                            item.TPTimeToActionRisk;
+                                            item.TPTimeToActionRisk; *@
 
                                             ctr++;
                                             <tr>
-                                                <td>@ctr</td>
-                                                <td>@item.Asset.BusinessArea</td>
-                                                <td>@item.Asset.Platform</td>
-                                                <td>@item.Asset.TagNo</td>
-                                                <td>@item.Asset.AssetName</td>
-                                                <td class="noshow">@item.Asset.ParentEquipmentNo</td>
-                                                <td class="noshow">@item.Asset.ParentEquipmentDescription</td>
-                                                <td>@item.Asset.PIDNo</td>
-                                                <td>@item.Asset.ValveType</td>
-                                                <td>@item.Asset.Size</td>
-                                                <td>@item.Asset.ClassRating</td>
-                                                <td class="export-html" real-val="@item.Asset.InstallationDate"><span
-                                                        style="display: none;">@installationDate</span>@item.Asset.InstallationDate
-                                                </td>
-                                                <td class="export-html" real-val="@item.AssessmentDate"><span
-                                                        style="display: none;">@assessmentDate</span>@item.AssessmentDate</td>
-                                                <td class="export-html" real-val="@item.LastInspectionDate"><span
-                                                        style="display: none;">@lastInspectionDate</span>@item.LastInspectionDate
-                                                </td>
-                                                <td class="export-html" real-val="@item.LastMaintenanceDate"><span
-                                                        style="display: none;">@lastMaintenanceDate</span>@item.LastMaintenanceDate
-                                                </td>
-                                                <td>@item.TimePeriode</td>
-                                                <td class="noshow">@item.TP1A</td>
-                                                <td class="noshow">@item.TP2A</td>
-                                                <td class="noshow">@item.TP3A</td>
-                                                <td class="noshow">@item.TP1B</td>
-                                                <td class="noshow">@item.TP2B</td>
-                                                <td class="noshow">@item.TP3B</td>
-                                                <td class="noshow">@item.TP1C</td>
-                                                <td class="noshow">@item.TP2C</td>
-                                                <td class="noshow">@item.TP3C</td>
-                                                <td class="havebgcolor">@item.TP1Risk</td>
-                                                <td class="havebgcolor">@item.TP2Risk</td>
-                                                <td class="havebgcolor">@item.TP3Risk</td>
-                                                <td>@item.IntegrityStatus</td>
-                                                <td>@item.RecommendationAction</td>
-                                                <td class="export-html" real-val="@item.TPTimeToActionRisk"><span style="display: none;">@timeToAction</span>@item.TPTimeToActionRisk</td>
-                                                <td class="noshow">@item.LeakageToAtmosphere</td>
-                                                <td class="noshow">@item.FailureOfFunction</td>
-                                                <td class="noshow">@item.PassingAccrosValve</td>
-                                                <td class="noshow">@item.LeakageToAtmosphereTP1</td>
-                                                <td class="noshow">@item.LeakageToAtmosphereTP2</td>
-                                                <td class="noshow">@item.LeakageToAtmosphereTP3</td>
-                                                <td class="noshow">@item.FailureOfFunctionTP1</td>
-                                                <td class="noshow">@item.FailureOfFunctionTP2</td>
-                                                <td class="noshow">@item.FailureOfFunctionTP3</td>
-                                                <td class="noshow">@item.PassingAccrosValveTP1</td>
-                                                <td class="noshow">@item.PassingAccrosValveTP2</td>
-                                                <td class="noshow">@item.PassingAccrosValveTP3</td>
-                                                <td class="noshow">@item.InspectionEffectiveness</td>
-                                                <td class="noshow">@item.ImpactOfInternalFluidImpurities</td>
-                                                <td class="noshow">@item.ImpactOfOperatingEnvelopes</td>
-                                                <td class="noshow">@item.UsedWithinOEMSpecification</td>
-                                                <td class="noshow">@item.Repaired</td>
-                                                <td class="noshow">@item.ProductLossDefinition</td>
-                                                <td class="noshow">@item.HSSEDefinision</td>
-                                                <td class="noshow">@item.LoFScoreLeakageToAtmophereTP1</td>
-                                                <td class="noshow">@item.LoFScoreFailureOfFunctionTP1</td>
-                                                <td class="noshow">@item.LoFScorePassingAccrosValveTP1</td>
-                                                <td class="noshow">@item.LoFScoreLeakageToAtmophereTP2</td>
-                                                <td class="noshow">@item.LoFScoreFailureOfFunctionTP2</td>
-                                                <td class="noshow">@item.LoFScorePassingAccrosValveTP2</td>
-                                                <td class="noshow">@item.LoFScoreLeakageToAtmophereTP3</td>
-                                                <td class="noshow">@item.LoFScoreFailureOfFunctionTP3</td>
-                                                <td class="noshow">@item.LoFScorePassingAccrosValveTP3</td>
-                                                <td class="noshow">@item.CoFScore</td>
-                                                <td class="nowrap">
-                                                    <button class="btn btn-light btn-sm" onclick="detailAssessment(@item.Id)"
-                                                        target="_blank">Assessment</button>
-                                                    <button class="btn btn-light btn-sm" onclick="detailInspection(@item.LastInspectionId)" asp-controller="Inspection" asp-action="Index"
-                                                        asp-route-assetid="@item.Asset.Id"
-                                                        asp-route-inspectionid="@item.LastInspectionId">Inspection</button>
-                                                    <button class="btn btn-light btn-sm" onclick="detailMaintenance(@item.LastMaintenanceId)" asp-controller="Maintenance" asp-action="Index"
-                                                        asp-route-assetid="@item.Asset.Id"
-                                                        asp-route-maintenanceid="@item.LastMaintenanceId">Maintenance</button>
-                                                </td>
+                                                @{
+                                                    if(item.Asset != null){
+                                                        <td>@ctr</td>
+                                                        <td>@item.Asset.BusinessArea</td>
+                                                        <td>@item.Asset.Platform</td>
+                                                        <td>@item.Asset.TagNo</td>
+                                                        <td>@item.Asset.AssetName</td>
+                                                        <td class="noshow">@item.Asset.ParentEquipmentNo</td>
+                                                        <td class="noshow">@item.Asset.ParentEquipmentDescription</td>
+                                                        <td>@item.Asset.PIDNo</td>
+                                                        <td>@item.Asset.ValveType</td>
+                                                        <td>@item.Asset.Size</td>
+                                                        <td>@item.Asset.ClassRating</td>
+                                                        <td class="export-html" real-val="@item.Asset.InstallationDate"><span
+                                                                style="display: none;">@installationDate</span>@item.Asset.InstallationDate
+                                                        </td>
+                                                        <td class="export-html" real-val="@item.AssessmentDate"><span
+                                                                style="display: none;">@assessmentDate</span>@item.AssessmentDate</td>
+                                                        <td class="export-html" real-val="@item.LastInspectionDate"><span
+                                                                style="display: none;">@lastInspectionDate</span>@item.LastInspectionDate
+                                                        </td>
+                                                        <td class="export-html" real-val="@item.LastMaintenanceDate"><span
+                                                                style="display: none;">@lastMaintenanceDate</span>@item.LastMaintenanceDate
+                                                        </td>
+                                                        <td>@item.TimePeriode</td>
+                                                        <td class="noshow">@item.TP1A</td>
+                                                        <td class="noshow">@item.TP2A</td>
+                                                        <td class="noshow">@item.TP3A</td>
+                                                        <td class="noshow">@item.TP1B</td>
+                                                        <td class="noshow">@item.TP2B</td>
+                                                        <td class="noshow">@item.TP3B</td>
+                                                        <td class="noshow">@item.TP1C</td>
+                                                        <td class="noshow">@item.TP2C</td>
+                                                        <td class="noshow">@item.TP3C</td>
+                                                        <td class="havebgcolor">@item.TP1Risk</td>
+                                                        <td class="havebgcolor">@item.TP2Risk</td>
+                                                        <td class="havebgcolor">@item.TP3Risk</td>
+                                                        <td>@item.IntegrityStatus</td>
+                                                        <td>@item.RecommendationAction</td>
+                                                        <td class="export-html" real-val="@item.TPTimeToActionRisk"><span style="display: none;">@timeToAction</span>@item.TPTimeToActionRisk</td>
+                                                        <td class="noshow">@item.LeakageToAtmosphere</td>
+                                                        <td class="noshow">@item.FailureOfFunction</td>
+                                                        <td class="noshow">@item.PassingAccrosValve</td>
+                                                        <td class="noshow">@item.LeakageToAtmosphereTP1</td>
+                                                        <td class="noshow">@item.LeakageToAtmosphereTP2</td>
+                                                        <td class="noshow">@item.LeakageToAtmosphereTP3</td>
+                                                        <td class="noshow">@item.FailureOfFunctionTP1</td>
+                                                        <td class="noshow">@item.FailureOfFunctionTP2</td>
+                                                        <td class="noshow">@item.FailureOfFunctionTP3</td>
+                                                        <td class="noshow">@item.PassingAccrosValveTP1</td>
+                                                        <td class="noshow">@item.PassingAccrosValveTP2</td>
+                                                        <td class="noshow">@item.PassingAccrosValveTP3</td>
+                                                        <td class="noshow">@item.InspectionEffectiveness</td>
+                                                        <td class="noshow">@item.ImpactOfInternalFluidImpurities</td>
+                                                        <td class="noshow">@item.ImpactOfOperatingEnvelopes</td>
+                                                        <td class="noshow">@item.UsedWithinOEMSpecification</td>
+                                                        <td class="noshow">@item.Repaired</td>
+                                                        <td class="noshow">@item.ProductLossDefinition</td>
+                                                        <td class="noshow">@item.HSSEDefinision</td>
+                                                        <td class="noshow">@item.LoFScoreLeakageToAtmophereTP1</td>
+                                                        <td class="noshow">@item.LoFScoreFailureOfFunctionTP1</td>
+                                                        <td class="noshow">@item.LoFScorePassingAccrosValveTP1</td>
+                                                        <td class="noshow">@item.LoFScoreLeakageToAtmophereTP2</td>
+                                                        <td class="noshow">@item.LoFScoreFailureOfFunctionTP2</td>
+                                                        <td class="noshow">@item.LoFScorePassingAccrosValveTP2</td>
+                                                        <td class="noshow">@item.LoFScoreLeakageToAtmophereTP3</td>
+                                                        <td class="noshow">@item.LoFScoreFailureOfFunctionTP3</td>
+                                                        <td class="noshow">@item.LoFScorePassingAccrosValveTP3</td>
+                                                        <td class="noshow">@item.CoFScore</td>
+                                                        <td class="nowrap">
+                                                            <button class="btn btn-light btn-sm" onclick="detailAssessment(@item.Id)"
+                                                                target="_blank">Assessment</button>
+                                                            <button class="btn btn-light btn-sm" onclick="detailInspection(@item.LastInspectionId)" asp-controller="Inspection" asp-action="Index"
+                                                                asp-route-assetid="@item.Asset.Id"
+                                                                asp-route-inspectionid="@item.LastInspectionId">Inspection</button>
+                                                            <button class="btn btn-light btn-sm" onclick="detailMaintenance(@item.LastMaintenanceId)" asp-controller="Maintenance" asp-action="Index"
+                                                                asp-route-assetid="@item.Asset.Id"
+                                                                asp-route-maintenanceid="@item.LastMaintenanceId">Maintenance</button>
+                                                        </td>
+                                                    }
+                                                }
                                             </tr>
                                         }
                                     }
@@ -1142,6 +1155,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         const dataTableOptions = {
             layout: {
                 topStart: {
@@ -1181,6 +1195,9 @@
                 $.ajax({
                     url: '@urlddlbusinessarea',
                     type: 'GET',
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
                     data: { areaId: areaId },
                     success: function (data) {
                         $('#ddlPlatform').empty();
@@ -1199,6 +1216,9 @@
                     url: '@urlbtnfilter',
                     type: 'GET',
                     data: { areaId: areaId, platformId: platformId },
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
                     success: function (data) {
                         $(".datatable").DataTable().destroy();
                         $('#table-detail').html('');
@@ -1427,6 +1447,9 @@
                 url: endPoint,
                 type: 'GET',
                 data: { id },
+                headers: {
+                    'RequestVerificationToken': requestVerificationToken
+                },
                 success: function (data) {
                     // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
                     const dataAsset = data.asset

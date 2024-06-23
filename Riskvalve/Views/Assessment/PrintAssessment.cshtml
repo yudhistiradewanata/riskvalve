@@ -1,6 +1,7 @@
+@using SharedLayer;
 @{
     ViewData["Title"] = "Print Assessment";
-    var assessment = ViewData["Assessment"] as AssessmentModel;
+    var assessment = ViewData["Assessment"] as AssessmentData;
     var jsonassessment = Newtonsoft.Json.JsonConvert.SerializeObject(assessment);
     var assessmentHeatMap = ViewData["AssessmentHeatMap"] as Dictionary<string, Dictionary<string,string>>;
     var jsonassessmentHeatMap = Newtonsoft.Json.JsonConvert.SerializeObject(assessmentHeatMap);
@@ -22,7 +23,14 @@
             </tr>
             <tr>
                 <td colspan="4" style="width: 30%;">Tag Number</td>
-                <td colspan="2" style="width: 25%;">@assessment.Asset.TagNo</td>
+                <td colspan="2" style="width: 25%;">
+                @{
+                    if(assessment.Asset.TagNo != null){
+                        @assessment.Asset.TagNo
+                    }
+                }
+                </td>
+                </td>
                 <td colspan="2" style="width: 20%;">Date</td>
                 <td colspan="2" style="width: 20%;">@assessment.AssessmentDate</td>
             </tr>
@@ -167,9 +175,9 @@
             </tr>
             <tr>
                 <td class="table-section no-transform">Tag Number</td>
-                <td class="table-section no-transform">TP1</td>
-                <td class="table-section no-transform">TP2</td>
-                <td class="table-section no-transform">TP3</td>
+                <td width="60px" class="table-section no-transform">TP1</td>
+                <td width="60px" class="table-section no-transform">TP2</td>
+                <td width="60px" class="table-section no-transform">TP3</td>
                 <td class="table-section no-transform">Inspection Due Date</td>
                 <td class="table-section no-transform">Remarks</td>
                 <td colspan="5">Waiting For Refurbishment</td>
@@ -179,9 +187,9 @@
             </tr>
             <tr>
                 <td>@assessment.Asset.TagNo</td>
-                <td style="background-color: @assessmentHeatMap["TP1"]["color"];">@assessmentHeatMap["TP1"]["value"]</td>
-                <td style="background-color: @assessmentHeatMap["TP2"]["color"];">@assessmentHeatMap["TP2"]["value"]</td>
-                <td style="background-color: @assessmentHeatMap["TP3"]["color"];">@assessmentHeatMap["TP3"]["value"]</td>
+                <td class="text-center" style="background-color: @assessmentHeatMap["TP1"]["color"];">@assessmentHeatMap["TP1"]["value"]</td>
+                <td class="text-center" style="background-color: @assessmentHeatMap["TP2"]["color"];">@assessmentHeatMap["TP2"]["value"]</td>
+                <td class="text-center" style="background-color: @assessmentHeatMap["TP3"]["color"];">@assessmentHeatMap["TP3"]["value"]</td>
                 <td class="nowrap">@assessment.AssessmentDate</td>
                 <td></td>
                 <td colspan="5">Spare</td>
@@ -208,12 +216,12 @@
                 for(int i = 0; i < assessment.InspectionHistory.Count; i++)
                 {
                     <tr class="inspection-maintenance-row">
-                        <td colspan="2">@assessment.InspectionHistory[i].InspectionDate</td>
-                        <td colspan="2">@assessment.InspectionHistory[i].InspectionMethod</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDate</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionMethod</td>
                         @* <td>assessment.InspectionHistory[i].VisualCondition</td> *@
-                        <td colspan="2">@assessment.InspectionHistory[i].FunctionCondition</td>
-                        <td colspan="2">@assessment.InspectionHistory[i].TestPressureIfAny</td>
-                        <td colspan="4">@foreach (var image in assessment.InspectionHistory[i].InspectionFiles) {
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.FunctionCondition</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.TestPressureIfAny</td>
+                        <td colspan="4">@foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
                             <img src="/@image.FilePath"/>
                         }</td>
                     </tr>
@@ -232,10 +240,10 @@
                 for(int i = 0; i < assessment.MaintenanceHistory.Count; i++)
                 {
                     <tr class="inspection-maintenance-row">
-                        <td colspan="3">@assessment.MaintenanceHistory[0].MaintenanceDate</td>
-                        <td colspan="2">@assessment.MaintenanceHistory[0].IsValveRepaired</td>
-                        <td colspan="3">@assessment.MaintenanceHistory[0].MaintenanceDescription</td>
-                        <td colspan="4">@foreach (var image in assessment.MaintenanceHistory[0].MaintenanceFiles) {
+                        <td colspan="3">@assessment.MaintenanceHistory[0].Maintenance.MaintenanceDate</td>
+                        <td colspan="2">@assessment.MaintenanceHistory[0].Maintenance.IsValveRepaired</td>
+                        <td colspan="3">@assessment.MaintenanceHistory[0].Maintenance.MaintenanceDescription</td>
+                        <td colspan="4">@foreach (var image in assessment.MaintenanceHistory[0].Maintenance.MaintenanceFiles) {
                             <img src="/@image.FilePath"/>
                         }</td>
                     </tr>
@@ -339,6 +347,10 @@
     </script>
 }
 <style>
+    tbody {
+        font-size: 10px !important;
+    }
+
     input {
         pointer-events: none
     }
@@ -424,8 +436,9 @@
     }
 
     .assessment-print .logo{
-        width: 160px;
-        height: 160px;
+        min-width: 150px;
+        aspect-ratio: 1;
+        max-width: 100%;
         background-color: grey;
     }
     .assessment-print .heading{

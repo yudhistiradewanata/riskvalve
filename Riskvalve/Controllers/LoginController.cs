@@ -1,51 +1,76 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Riskvalve.Models;
+using Newtonsoft.Json;
+using SharedLayer;
+using BusinessLogicLayer;
 
-namespace Riskvalve.Controllers
+namespace Riskvalve.Controllers;
+public class LoginController(IUserService userService) : Controller
 {
-    public class LoginController : Controller
+    private readonly IUserService _userService = userService;
+
+    public IActionResult Index()
     {
-        private readonly ILogger<LoginController> _logger;
-
-        public LoginController(ILogger<LoginController> logger)
+        bool IsLogin = Session.IsLogin(HttpContext);
+        if (IsLogin)
         {
-            _logger = logger;
+            return Redirect(SharedEnvironment.app_path + "/Home/Index");
         }
-
-        public IActionResult Index()
+        else
         {
-            UserModel user = new();
-            bool isLogin = user.isLogin(HttpContext);
-            if (isLogin)
-            {
-                return Redirect(Environment.app_path+"/Home/Index");
-            }
             string message = TempData["Message"] as string ?? "";
             ViewData["message"] = message;
-            ViewData["IsLogin"] = isLogin.ToString();
+            ViewData["IsLogin"] = IsLogin.ToString();
             ViewData["AppVersion"] = Environment.GetAppVersion();
-            // ViewData["AppPath"] = Environment.app_path;
-            return View();
         }
+        return View();
+    }
 
-        [HttpPost]
-        public bool Login(string username, string password)
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Login(string username, string password)
+    {
+        ResultClass result = new();
+        try
         {
-            UserModel user = new();
-            bool loginSuccess = user.doLogin(HttpContext, username, password);
-            if (loginSuccess)
+            var user = _userService.GetUser(username);
+            if (!BCrypt.Net.BCrypt.Verify(password, user.Password))
             {
-                return true;
+                throw new Exception("Password is incorrect");
             }
-            return false;
+            string loginUsername = user.Username ?? "";
+            string loginRole = user.Role ?? "";
+            string loginId = user.Id.ToString() ?? "";
+            string loginIsAdmin = user.IsAdmin.ToString() ?? "";
+            string loginIsEngineer = user.IsEngineer.ToString() ?? "";
+            string loginIsViewer = user.IsViewer.ToString() ?? "";
+            HttpContext.Session.SetString("IsLogin", "true");
+            HttpContext.Session.SetString("Username", loginUsername);
+            HttpContext.Session.SetString("Role", loginRole);
+            HttpContext.Session.SetString("Id", loginId);
+            HttpContext.Session.SetString("IsAdmin", loginIsAdmin);
+            HttpContext.Session.SetString("IsEngineer", loginIsEngineer);
+            HttpContext.Session.SetString("IsViewer", loginIsViewer);
+            result.IsSuccess = true;
+            result.Message = "Login Success";
+            result.Data = user;
+            return Json(result);
         }
-
-        public IActionResult Logout()
+        catch (Exception e)
         {
-            UserModel user = new();
-            user.doLogout(HttpContext);
-            return Redirect(Environment.app_path+"/Login/Index");
+            result.IsSuccess = false;
+            result.Message = e.Message;
+            return Json(result);
         }
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public IActionResult Logout()
+    {
+        ResultClass result = new();
+        HttpContext.Session.Clear();
+        result.IsSuccess = true;
+        result.Message = "Logout Success";
+        return Json(result);
     }
 }

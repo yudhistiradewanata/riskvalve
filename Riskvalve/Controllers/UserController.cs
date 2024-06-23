@@ -1,71 +1,180 @@
-using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
-using Riskvalve.Models;
+using Newtonsoft.Json;
+using SharedLayer;
+using BusinessLogicLayer;
 
 namespace Riskvalve.Controllers;
 
-public class UserController : Controller
+public class UserController(IUserService userService) : Controller
 {
-    private readonly ILogger<UserController> _logger;
-
-    public UserController(ILogger<UserController> logger)
-    {
-        _logger = logger;
-    }
+    private readonly IUserService _userService = userService;
 
     public IActionResult Index()
     {
-        UserModel login = new();
-        if (!login.isLogin(HttpContext))
+        bool IsLogin = Session.IsLogin(HttpContext);
+        if (!IsLogin)
         {
             TempData["Message"] = "Please login first";
-            return Redirect(Environment.app_path+"/Login/Index");
+            return Redirect(SharedEnvironment.app_path + "/Login/Index");
         }
         else
         {
             TempData["Message"] = null;
-            Dictionary<string, string> session = login.GetLoginSession(HttpContext);
+            Dictionary<string, string> session = Session.GetLoginSession(HttpContext);
             foreach (var item in session)
             {
                 ViewData[item.Key] = item.Value;
             }
-            if (ViewData["IsAdmin"].ToString().ToLower().Equals("false"))
+            if (ViewData.ContainsKey("IsAdmin") && ViewData["IsAdmin"]?.ToString()?.ToLower().Equals("false") == true)
             {
                 TempData["Message"] = "You are not authorized to access that page";
-                return Redirect(Environment.app_path+"/Home/Index");
+                return Redirect(SharedEnvironment.app_path + "/Home/Index");
             }
         }
-        List<UserModel> userList = new UserModel().GetUserList();
+        List<UserData> userList = _userService.GetUserList();
         ViewData["UserList"] = userList;
         return View();
     }
 
     [HttpGet]
+    [ValidateAntiForgeryToken]
     public IActionResult GetUser(int id)
     {
-        UserModel user = new();
-        user = new UserModel().GetUserModel(id);
-        return Json(user);
+        ResultClass result = new();
+        try
+        {
+            var user = _userService.GetUser(id);
+            result.IsSuccess = true;
+            result.Message = "User found";
+            result.Data = user;
+            return Json(result);
+        }
+        catch (Exception e)
+        {
+            result.IsSuccess = false;
+            result.Message = e.Message;
+            return Json(result);
+        }
     }
 
     [HttpPost]
-    public bool AddUser(UserModel user)
+    [ValidateAntiForgeryToken]
+    public IActionResult AddUser()
     {
-        bool result = new UserModel().AddUser(user);
-        return result;
+        ResultClass result = new();
+        try
+        {
+            int createdBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out createdBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
+            UserClass user =
+                new()
+                {
+                    Username = Request.Form["Username"],
+                    Password = Request.Form["Password"],
+                    Role = Request.Form["Role"],
+                    IsAdmin = Request.Form["IsAdmin"].ToString().ToLower().Equals("true"),
+                    IsEngineer = Request.Form["IsEngineer"].ToString().ToLower().Equals("true"),
+                    IsViewer = Request.Form["IsViewer"].ToString().ToLower().Equals("true"),
+                    IsDeleted = false,
+                    CreatedBy = createdBy,
+                    CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                };
+            UserData userresult = _userService.AddUser(user);
+            result.IsSuccess = true;
+            result.Message = "User added";
+            result.Data = userresult;
+            return Json(result);
+        }
+        catch (Exception e)
+        {
+            result.IsSuccess = false;
+            result.Message = e.Message;
+            return Json(result);
+        }
     }
 
     [HttpPost]
-    public IActionResult UpdateUser(UserModel user)
+    [ValidateAntiForgeryToken]
+    public IActionResult UpdateUser()
     {
-        new UserModel().UpdateUser(user);
-        return Redirect(Environment.app_path+"/User/Index");
+        ResultClass result = new();
+        try
+        {
+            if (!int.TryParse(Request.Form["Id"], out int id))
+            {
+                throw new Exception("Invalid Id");
+            }
+            UserClass user =
+                new()
+                {
+                    Id = id,
+                    Username = Request.Form["Username"],
+                    Password = Request.Form["Password"],
+                    Role = Request.Form["Role"],
+                    IsAdmin = Request.Form["IsAdmin"].ToString().ToLower().Equals("true"),
+                    IsEngineer = Request.Form["IsEngineer"].ToString().ToLower().Equals("true"),
+                    IsViewer = Request.Form["IsViewer"].ToString().ToLower().Equals("true"),
+                    IsDeleted = false,
+                };
+            UserData userresult = _userService.UpdateUser(user);
+            result.IsSuccess = true;
+            result.Message = "User updated";
+            result.Data = userresult;
+            return Json(result);
+        }
+        catch (Exception e)
+        {
+            result.IsSuccess = false;
+            result.Message = e.Message;
+            return Json(result);
+        }
     }
 
     [HttpPost]
-    public IActionResult DeleteUser(int id)
+    [ValidateAntiForgeryToken]
+    public IActionResult DeleteUser()
     {
-        new UserModel().DeleteUser(id);
-        return Redirect(Environment.app_path+"/User/Index");
+        ResultClass result = new();
+        try
+        {
+            if (!int.TryParse(Request.Form["Id"], out int id))
+            {
+                throw new Exception("Invalid Id");
+            }
+
+            int deletedBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out deletedBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
+            UserClass user =
+                new()
+                {
+                    Id = id,
+                    IsDeleted = true,
+                    DeletedBy = deletedBy,
+                    DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
+                };
+            UserData userresult = _userService.DeleteUser(user);
+            result.IsSuccess = true;
+            result.Message = "User deleted";
+            result.Data = userresult;
+            return Json(result);
+        }
+        catch (Exception e)
+        {
+            result.IsSuccess = false;
+            result.Message = e.Message;
+            return Json(result);
+        }
     }
 }

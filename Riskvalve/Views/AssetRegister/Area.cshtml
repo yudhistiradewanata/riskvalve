@@ -1,10 +1,15 @@
+@using SharedLayer
 @{
     ViewData["Title"] = "Area";
-    var areaList = ViewData["areaList"] as List<AreaModel>;
+    var areaList = ViewData["areaList"] as List<AreaData>;
     var urlgetareadetail = Url.Action("GetAreaDetail", "AssetRegister");
     var urladdarea = Url.Action("AddArea", "AssetRegister");
     var urlupdatearea = Url.Action("UpdateArea", "AssetRegister");
     var urldeletearea = Url.Action("DeleteArea", "AssetRegister");
+}
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
+@{
+    var tokens = Xsrf.GetAndStoreTokens(Context);
 }
 
 <div class="container-fluid">
@@ -105,6 +110,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         function editAction() {
             $('#field-business-area-name').val('');
             var mode = $(this).attr('attr-mode');
@@ -118,12 +124,20 @@
                     url: '@urlgetareadetail',
                     type: 'GET',
                     data: { id: id },
-                    success: function (data) {
-                        $('#field-business-area-mode').val('update');
-                        $('#field-business-area-id').val(data.id);
-                        $('#field-business-area-name').val(data.businessArea);
-                        $('#btn-area-modal-delete').show();
-                        $('#addAreaModal').modal('show');
+                    headers: {
+                        'RequestVerificationToken': requestVerificationToken
+                    },
+                    success: function (apiresult) {
+                        if (apiresult.isSuccess) {
+                            var data = apiresult.data;
+                            $('#field-business-area-mode').val('update');
+                            $('#field-business-area-id').val(data.id);
+                            $('#field-business-area-name').val(data.businessArea);
+                            $('#btn-area-modal-delete').show();
+                            $('#addAreaModal').modal('show');
+                        } else {
+                            alert(apiresult.message);
+                        }
                     }
                 });
             }
@@ -143,12 +157,15 @@
                                 url: '@urladdarea',
                                 type: 'POST',
                                 data: { businessArea: name },
-                                success: function (data) {
-                                    console.log(data);
-                                    if (data.result == 400) {
-                                        alert(data.message);
-                                    } else {
+                                headers: {
+                                    'RequestVerificationToken': requestVerificationToken
+                                },
+                                success: function (apiresult) {
+                                    if (apiresult.isSuccess) {
+                                        alert(apiresult.message);
                                         location.reload();
+                                    } else {
+                                        alert(apiresult.message);
                                     }
                                 }
                             });
@@ -158,12 +175,15 @@
                                 url: '@urlupdatearea',
                                 type: 'POST',
                                 data: { id: id, businessArea: name },
-                                success: function (data) {
-                                    console.log(data);
-                                    if (data.result == 400) {
-                                        alert(data.message);
-                                    } else {
+                                headers: {
+                                    'RequestVerificationToken': requestVerificationToken
+                                },
+                                success: function (apiresult) {
+                                    if (apiresult.isSuccess) {
+                                        alert(apiresult.message);
                                         location.reload();
+                                    } else {
+                                        alert(apiresult.message);
                                     }
                                 }
                             });
@@ -178,12 +198,15 @@
                         url: '@urldeletearea',
                         type: 'POST',
                         data: { id: id },
-                        success: function (data) {
-                            console.log(data);
-                            if (data.result == 400) {
-                                alert(data.message);
-                            } else {
+                        headers: {
+                            'RequestVerificationToken': requestVerificationToken
+                        },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                alert(apiresult.message);
                                 location.reload();
+                            } else {
+                                alert(apiresult.message);
                             }
                         }
                     });

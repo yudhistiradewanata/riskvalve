@@ -1,11 +1,17 @@
+@using SharedLayer;
 @{
     ViewData["Title"] = "Print Inspection";
-    var inspection = ViewData["Inspection"] as InspectionModel;
+    var inspection = ViewData["Inspection"] as InspectionData;
     var jsoninspection = Newtonsoft.Json.JsonConvert.SerializeObject(inspection);
+    var inspectionAssetActuation = inspection.Asset.Actuation.ToLower() ?? "";
+}
+@if(inspection == null || inspection.Asset == null) {
+    <div class="text-center">
+        <h1>Inspection not found</h1>
+    </div>
+    return;
 }
 <div class="container-fluid">
-    @* @jsoninspection *@
-
     <!-- <div class="text-center" style="margin: 15px;">
         <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="saveImage()"><i class="bi bi-save"></i> Save as Image</button>
     </div> -->
@@ -21,6 +27,7 @@
             <tr>
                 <td colspan="4" style="width: 30%;">Tag Number</td>
                 <td colspan="2" style="width: 25%;">@inspection.Asset.TagNo</td>
+                </td>
                 <td colspan="2" style="width: 20%;">Date</td>
                 <td colspan="2" style="width: 20%;">@inspection.InspectionDate</td>
             </tr>
@@ -79,8 +86,7 @@
                 <td colspan="2">@inspection.Asset.Manufacturer</td>
                 <td colspan="5">Pneumatic</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" @(inspection.Asset.Actuation.ToLower() == "pneumatic" ? "checked" : "")/>
-                    
+                    <input type="checkbox" @(inspectionAssetActuation == "pneumatic" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
@@ -88,7 +94,7 @@
                 <td colspan="2">@inspection.Asset.BodyMaterial</td>
                 <td colspan="5">Hydraulic</td>
                 <td colspan="1" class="checkbox">
-                    <input type="checkbox" @(inspection.Asset.Actuation.ToLower() == "hydraulic" ? "checked" : "")/> 
+                    <input type="checkbox" @(inspectionAssetActuation == "hydraulic" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>

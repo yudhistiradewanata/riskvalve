@@ -798,3 +798,91 @@ select.readonly {
 .sidebar-menu-inspection-assessment .fa-trash {
   cursor: pointer;
 }
+
+#risk-barchart-horizontal svg *{
+  transform-box: inherit;
+}
+
+.main-sidebar {
+  position: relative;
+}
+
+.main-sidebar .loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999;
+  background-color: rgba(255,255,255,0.3);
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.main-sidebar .loader.show{
+  display: flex;
+}
+
+.lds-dual-ring,
+.lds-dual-ring:after {
+  box-sizing: border-box;
+}
+.lds-dual-ring {
+  display: inline-block;
+  width: 80px;
+  height: 80px;
+}
+.lds-dual-ring:after {
+  content: " ";
+  display: block;
+  width: 64px;
+  height: 64px;
+  margin: 8px;
+  border-radius: 50%;
+  border: 6.4px solid currentColor;
+  border-color: currentColor transparent currentColor transparent;
+  animation: lds-dual-ring 1.2s linear infinite;
+}
+@keyframes lds-dual-ring {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.info-card{
+  border: solid 5px;
+  border-bottom-width: 10px;
+  border-color: var(--info-color);
+}
+
+.info-card__title {
+  font-size: 20px;
+  font-weight: bold;
+  padding: 7px 15px;
+}
+
+.info-card__content {
+  font-size: 24px;
+  text-align: center;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: var(--info-color);
+}
+
+.info-card.blue{
+  --info-color: #01afee;
+}
+
+.info-card.orange{
+  --info-color: #ffbe2b;
+}
+
+.info-card.green {
+  --info-color: #90d053;
+}
