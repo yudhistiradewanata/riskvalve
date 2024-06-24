@@ -415,7 +415,6 @@ public class AssetRegisterController(
                     || (x.ParentEquipmentNo != null && x.ParentEquipmentNo.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
                     || (x.ParentEquipmentDescription != null && x.ParentEquipmentDescription.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
                     || (x.ServiceFluid != null && x.ServiceFluid.Contains(searchValue, StringComparison.CurrentCultureIgnoreCase))
-
                 )
                 .ToList();
         }

@@ -155,45 +155,46 @@
 @section Scripts {
     <script>
         $('#risk-barchart-horizontal').highcharts({
-                chart: {
-                    type: 'bar'
-                },
+            chart: {
+                type: 'bar'
+            },
+            title: {
+                text: 'Priority'
+            },
+            xAxis: {
+                categories: ['Priority']
+            },
+            yAxis: {
                 title: {
-                    text: 'Priority'
+                    text: ''
                 },
-                xAxis: {
-                    categories: ['Priority']
-                },
-                yAxis: {
-                    title: {
-                        text: ''
-                    }
-                },
-                series: [{
-                    name: 'Very High Priority',
-                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very High"] }],
-                }, {
-                    name: 'High Priority',
-                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["High"] }],
-                },{
-                    name: 'Medium Priority',
-                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Medium"] }],
-                },{
-                    name: 'Low Priority',
-                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Low"] }],
-                },{
-                    name: 'Very Low Priority',
-                    data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very Low"] }],
-                }
-                ],
-                colors: [
-                    'red',
-                    'orange',
-                    'yellow',
-                    'green',
-                    '#81B014',
-                ],
-            });
+                tickInterval: 1
+            },
+            series: [{
+                name: 'Very High Priority',
+                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very High"] }],
+            }, {
+                name: 'High Priority',
+                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["High"] }],
+            },{
+                name: 'Medium Priority',
+                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Medium"] }],
+            },{
+                name: 'Low Priority',
+                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Low"] }],
+            },{
+                name: 'Very Low Priority',
+                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very Low"] }],
+            }
+            ],
+            colors: [
+                'red',
+                'orange',
+                'yellow',
+                'green',
+                '#81B014',
+            ],
+        });
         const rawHeatmapData = [
             { x: 0, y: 0, value: '' },
             { x: 0, y: 1, value: '' },

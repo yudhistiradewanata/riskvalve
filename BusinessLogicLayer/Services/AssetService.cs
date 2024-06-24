@@ -33,6 +33,7 @@ public class AssetService(
 ) : IAssetService
 {
     private readonly IAssetRepository _assetRepository = assetRepository;
+
     // private readonly IInspectionRepository _inspectionRepository = inspectionRepository;
     // private readonly IMaintenanceRepository _maintenanceRepository = maintenanceRepository;
     // private readonly IAssessmentRepository _assessmentRepository = assessmentRepository;
@@ -67,8 +68,12 @@ public class AssetService(
         bool IncludeDeleted = false
     )
     {
-        List<AssetData> assetDatas = _assetRepository.GetAssetList(AreaID, PlatformID, IncludeDeleted);
-        foreach(var assetData in assetDatas)
+        List<AssetData> assetDatas = _assetRepository.GetAssetList(
+            AreaID,
+            PlatformID,
+            IncludeDeleted
+        );
+        foreach (var assetData in assetDatas)
         {
             // assetData.PlatformData = _platformRepository.GetPlatform(assetData.PlatformID ?? 0);
             // assetData.LastInspection = _inspectionRepository.GetLastInspection(assetData.Id);
@@ -126,6 +131,7 @@ public class AssetService(
     {
         ToolImportClass toolImport = new();
         List<string> failedRecords = [];
+        List<string> otherFailedRecords = [];
         List<PlatformData> platformList = _platformRepository.GetPlatformList();
         List<ValveTypeData> valveTypeList = _valveTypeRepository.GetValveTypeList();
         List<ManualOverrideData> manualOverrideList =
@@ -144,6 +150,8 @@ public class AssetService(
                 string valuereal = record.Value.Trim();
                 string mappedKey = MapHeader(key);
                 string mappedValue = "";
+                string? mappedAreaValue = null;
+                string? mappedPlatformName = null;
                 if (mappedKey == "")
                 {
                     continue;
@@ -167,6 +175,8 @@ public class AssetService(
                             if (platform.Platform.ToLower().Equals(value))
                             {
                                 mappedValue = platform.Id.ToString();
+                                mappedAreaValue = platform.BusinessArea ?? "";
+                                mappedPlatformName = platform.Platform ?? "";
                                 break;
                             }
                         }
@@ -274,12 +284,39 @@ public class AssetService(
                 {
                     value = valuereal;
                 }
+                if (mappedAreaValue != null && mappedPlatformName != null)
+                {
+                    result.Add("AreaNameData", mappedAreaValue);
+                    result.Add("PlatformName", mappedPlatformName);
+                    mappedAreaValue = null;
+                    mappedPlatformName = null;
+                }
                 result.Add(mappedKey, value);
             }
-            finalresult.Add(result);
+            if (result["AreaNameData"] == result["AreaName"])
+            {
+                result.Remove("AreaNameData");
+                result.Remove("PlatformName");
+                finalresult.Add(result);
+            }
+            else
+            {
+                otherFailedRecords.Add(
+                    "Value "
+                        + result["TagNo"] + "'s platform is "
+                        + result["PlatformName"]
+                        + ", Area Name from File is "
+                        + result["AreaNameData"]
+                        + " but the Area Name from Database is "
+                        + result["AreaName"]
+                );
+                result.Remove("AreaNameData");
+                result.Remove("PlatformName");
+            }
         }
         toolImport.MappedRecords = finalresult;
         toolImport.FailedRecords = failedRecords;
+        toolImport.OtherFailedRecords = otherFailedRecords;
         return toolImport;
     }
 
@@ -293,6 +330,9 @@ public class AssetService(
                 break;
             case "equipment name":
                 result = "AssetName";
+                break;
+            case "bussines unit area":
+                result = "AreaName";
                 break;
             case "platform":
                 result = "PlatformID";
@@ -402,46 +442,78 @@ public class AssetService(
         return _toxicOrFlamableFluidRepository.GetToxicOrFlamableFluidList();
     }
 
-    public Dictionary<string, string> ImportAsset(List<Dictionary<string, string>> data, int CreatedBy)
+    public Dictionary<string, string> ImportAsset(
+        List<Dictionary<string, string>> data,
+        int CreatedBy
+    )
     {
         ToolImportClass toolImport = MapAssetRegister(data);
-        if(toolImport.MappedRecords == null || toolImport.MappedRecords.Count == 0)
-        {
-            throw new Exception("Failed to import asset data");
-        }
-        List<Dictionary<string, string>> result = toolImport.MappedRecords;
         int total = 0;
         int success = 0;
         int failed = 0;
+        if (toolImport.MappedRecords == null || toolImport.MappedRecords.Count == 0)
+        {
+            throw new Exception("Failed to import data.");
+        }
+        List<Dictionary<string, string>> result = toolImport.MappedRecords;
         List<string> failedDatas = [];
 
-        foreach(var item in result){
-            if(item == null) continue;
+        foreach (var item in result)
+        {
+            if (item == null)
+                continue;
             total++;
             AssetClass? asset = null;
-            try{
+            try
+            {
                 string json = JsonConvert.SerializeObject(item);
                 asset = JsonConvert.DeserializeObject<AssetClass>(json);
-                if(asset == null) continue;
+                if (asset == null)
+                    continue;
                 asset.IsDeleted = false;
                 asset.CreatedBy = CreatedBy;
                 asset.CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString());
                 AssetData? assetData = _assetRepository.AddAsset(asset);
             }
-            catch(Exception e){
-                LogData log = new(){
-                    Module = "Import Asset",
-                    CreatedBy = CreatedBy,
-                    CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
-                    Message = e.Message,
-                    Data = JsonConvert.SerializeObject(item)
-                };
+            catch (Exception e)
+            {
+                LogData log =
+                    new()
+                    {
+                        Module = "Import Asset",
+                        CreatedBy = CreatedBy,
+                        CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                        Message = e.Message,
+                        Data = JsonConvert.SerializeObject(item)
+                    };
                 _logRepository.AddLog(log);
                 failed++;
                 failedDatas.Add(asset?.TagNo ?? "");
             }
         }
         success = total - failed;
+
+        string otherMessageFailed = "";
+        if (toolImport.OtherFailedRecords != null && toolImport.OtherFailedRecords.Count > 0)
+        {
+            int ctrerror = 1;
+            foreach (var _failed in toolImport.OtherFailedRecords)
+            {
+                total++;
+                failed++;
+                otherMessageFailed += ctrerror + ") " + _failed + ".<br/>";
+                ctrerror++;
+                // if (_failed.Equals(toolImport.OtherFailedRecords.Last()))
+                // {
+                //     otherMessageFailed = otherMessageFailed.Substring(
+                //         0,
+                //         otherMessageFailed.Length - 2
+                //     );
+                //     otherMessageFailed += ".";
+                // }
+            }
+        }
+
         string message =
             "Success import "
             + success
@@ -472,7 +544,8 @@ public class AssetService(
             message += ".";
         }
         string messageFailed = "";
-        if(toolImport.FailedRecords != null && toolImport.FailedRecords.Count > 0){
+        if (toolImport.FailedRecords != null && toolImport.FailedRecords.Count > 0)
+        {
             foreach (var _failed in toolImport.FailedRecords)
             {
                 total++;
@@ -481,20 +554,24 @@ public class AssetService(
                 if (_failed.Equals(toolImport.FailedRecords.Last()))
                 {
                     messageFailed = messageFailed.Substring(0, messageFailed.Length - 2);
-                    message += " Exception Error: " + messageFailed + ".";
+                    message += "<br/>Exception Error: " + messageFailed + ".";
                 }
             }
         }
-        return 
-            new Dictionary<string, string>
-            {
-                { "total", total.ToString() },
-                { "success", success.ToString() },
-                { "failed", failed.ToString() },
-                { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
-                { "message", message }
-            };
+        if (otherMessageFailed != "")
+        {
+            message += "<br/><br/>Area Error:<br/>" + otherMessageFailed;
+        }
+        return new Dictionary<string, string>
+        {
+            { "total", total.ToString() },
+            { "success", success.ToString() },
+            { "failed", failed.ToString() },
+            { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+            { "message", message }
+        };
     }
+
     public Dictionary<string, int> GetAssetDistribution()
     {
         List<AssetData> assetList = GetAssetList();

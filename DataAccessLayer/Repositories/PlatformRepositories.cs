@@ -86,14 +86,14 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
         PlatformClass? searchplatform = _context
             .Platform.Where(p =>
                 p.Platform == platform.Platform
-                && p.AreaID == platform.AreaID
+                // && p.AreaID == platform.AreaID
                 && p.IsDeleted == false
             )
             .FirstOrDefault();
         if (searchplatform != null)
         {
             throw new Exception(
-                "Platform named " + platform.Platform + " already exists in the selected area."
+                "Platform named " + platform.Platform + " already exists."
             );
         }
         _context.Platform.Add(platform);
@@ -110,7 +110,7 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
         PlatformClass? searchplatform = _context
             .Platform.Where(p =>
                 p.Platform == platform.Platform
-                && p.AreaID == platform.AreaID
+                // && p.AreaID == platform.AreaID
                 && p.IsDeleted == false
                 && p.Id != platform.Id
             )
@@ -118,7 +118,7 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
         if (searchplatform != null)
         {
             throw new Exception(
-                "Platform named " + platform.Platform + " already exists in the selected area."
+                "Platform named " + platform.Platform + " already exists."
             );
         }
         oldPlatform.AreaID = platform.AreaID;
