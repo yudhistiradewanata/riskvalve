@@ -202,36 +202,31 @@
             ],
         });
         const rawHeatmapData = [
-            { x: 0, y: 0, value: '' },
-            { x: 0, y: 1, value: '' },
-            { x: 0, y: 2, value: '' },
-            { x: 0, y: 3, value: '' },
-            { x: 0, y: 4, value: '' },
-            { x: 0, y: 0, value: '' },
-
-            { x: 1, y: 0, value: '' },
-            { x: 2, y: 0, value: '' },
-            { x: 3, y: 0, value: '' },
-            { x: 4, y: 0, value: '' },
-            { x: 1, y: 1, value: '' },
-            { x: 1, y: 2, value: '' },
-            { x: 2, y: 1, value: '' },
-
-            { x: 1, y: 3, value: '' },
-            { x: 1, y: 4, value: '' },
-            { x: 2, y: 2, value: '' },
-            { x: 2, y: 3, value: '' },
-            { x: 1, y: 4, value: '' },
-            { x: 3, y: 1, value: '' },
-            { x: 3, y: 2, value: '' },
-            { x: 4, y: 1, value: '' },
-            { x: 3, y: 3, value: '' },
-            { x: 3, y: 4, value: '' },
-            { x: 4, y: 4, value: '' },
-            { x: 3, y: 3, value: '' },
-            { x: 4, y: 3, value: '' },
-            { x: 4, y: 2, value: '' },
-            { x: 2, y: 4, value: '' }
+            { x: 0, y: 0, value: @assessmentMap["1A"] },
+            { x: 0, y: 1, value: @assessmentMap["1B"] },
+            { x: 0, y: 2, value: @assessmentMap["1C"] },
+            { x: 0, y: 3, value: @assessmentMap["1D"] },
+            { x: 0, y: 4, value: @assessmentMap["1E"] },
+            { x: 1, y: 0, value: @assessmentMap["2A"] },
+            { x: 1, y: 1, value: @assessmentMap["2B"] },
+            { x: 1, y: 2, value: @assessmentMap["2C"] },
+            { x: 1, y: 3, value: @assessmentMap["2D"] },
+            { x: 1, y: 4, value: @assessmentMap["2E"] },
+            { x: 2, y: 0, value: @assessmentMap["3A"] },
+            { x: 2, y: 1, value: @assessmentMap["3B"] },
+            { x: 2, y: 2, value: @assessmentMap["3C"] },
+            { x: 2, y: 3, value: @assessmentMap["3D"] },
+            { x: 2, y: 4, value: @assessmentMap["3E"] },
+            { x: 3, y: 0, value: @assessmentMap["4A"] },
+            { x: 3, y: 1, value: @assessmentMap["4B"] },
+            { x: 3, y: 2, value: @assessmentMap["4C"] },
+            { x: 3, y: 3, value: @assessmentMap["4D"] },
+            { x: 3, y: 4, value: @assessmentMap["4E"] },
+            { x: 4, y: 0, value: @assessmentMap["5A"] },
+            { x: 4, y: 1, value: @assessmentMap["5B"] },
+            { x: 4, y: 2, value: @assessmentMap["5C"] },
+            { x: 4, y: 3, value: @assessmentMap["5D"] },
+            { x: 4, y: 4, value: @assessmentMap["5E"] },
         ]
 
         const heatmapYMap = {
@@ -242,7 +237,7 @@
             E: 4
         }
 
-        function fillHeatmapData(data) {
+        @* function fillHeatmapData(data) {
             Object.entries(data).forEach((dataItem) => {
                 const item = dataItem[1]
                 const key = dataItem[0]
@@ -256,11 +251,11 @@
                 })
                 rawHeatmapData[idx]['value'] = Number(item)
             })
-        }
+        } *@
 
         $(function () {
             var assessmentMap = JSON.parse('@Html.Raw(jsonAssessmentMap)');
-            fillHeatmapData(assessmentMap)
+            @* fillHeatmapData(assessmentMap) *@
             $('#risk-heatmap').highcharts({
                 chart: {
                     type: 'heatmap',
