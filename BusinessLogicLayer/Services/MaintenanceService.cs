@@ -41,6 +41,13 @@ public class MaintenanceService(
             MaintenanceData? maintenanceData = _maintenanceRepository.GetMaintenance(id) ?? throw new Exception("Maintenance not found");
             maintenanceData.Asset = _assetRepository.GetAsset(maintenanceData.AssetID);
             maintenanceData.MaintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(id);
+            if(maintenanceData.MaintenanceFiles != null)
+            {
+                foreach (var item in maintenanceData.MaintenanceFiles)
+                {
+                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                }
+            }
             return maintenanceData;
         }
         catch (Exception e)
@@ -58,6 +65,13 @@ public class MaintenanceService(
             {
                 maintenance.Asset = _assetRepository.GetAsset(maintenance.AssetID);
                 maintenance.MaintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(maintenance.Id);
+                if(maintenance.MaintenanceFiles != null)
+                {
+                    foreach (var item in maintenance.MaintenanceFiles)
+                    {
+                        item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                    }
+                }
             }
             return maintenanceList;
         }
@@ -74,6 +88,13 @@ public class MaintenanceService(
             MaintenanceData maintenanceData =_maintenanceRepository.AddMaintenance(maintenance);
             maintenanceData.Asset = _assetRepository.GetAsset(maintenanceData.AssetID);
             maintenanceData.MaintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(maintenanceData.Id);
+            if(maintenanceData.MaintenanceFiles != null)
+            {
+                foreach (var item in maintenanceData.MaintenanceFiles)
+                {
+                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                }
+            }
             return maintenanceData;
         }
         catch (Exception e)
@@ -89,6 +110,13 @@ public class MaintenanceService(
             MaintenanceData maintenanceData =_maintenanceRepository.UpdateMaintenance(maintenance);
             maintenanceData.Asset = _assetRepository.GetAsset(maintenanceData.AssetID);
             maintenanceData.MaintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(maintenanceData.Id);
+            if(maintenanceData.MaintenanceFiles != null)
+            {
+                foreach (var item in maintenanceData.MaintenanceFiles)
+                {
+                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                }
+            }
             return maintenanceData;
         }
         catch (Exception e)
@@ -157,7 +185,8 @@ public class MaintenanceService(
                         if (value.Contains("/"))
                         {
                             string date = value.Split(" ")[0];
-                            List<string> dateParts = [.. date.Split("/")];
+                            List<string> dateParts = date.Split("/").ToList();
+                            string newDate = "";
                             if (dateParts[0].Length == 1)
                             {
                                 dateParts[0] = "0" + dateParts[0];
@@ -166,7 +195,24 @@ public class MaintenanceService(
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                            date = string.Join("/", dateParts);
+                            string[] formats = ["dd/MM/yyyy", "MM/dd/yyyy"];
+                            if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                            {
+                                if (parsedDate.Day == int.Parse(date.Split('/')[0]))
+                                {
+                                    newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                                }
+                                else
+                                {
+                                    newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                                }
+                            }
+                            else
+                            {
+                                newDate = "01-01-1900";
+                            }
+                            Console.WriteLine("Mapped Value: " + string.Join(", ", dateParts));
                             mappedValue = newDate;
                         }
                         else
@@ -175,6 +221,8 @@ public class MaintenanceService(
                                 .FromOADate(Convert.ToDouble(value))
                                 .ToString(SharedEnvironment.GetDateFormatString(false));
                         }
+                        Console.WriteLine("Mapped Value: " + value);
+                        Console.WriteLine("Mapped Value: " + mappedValue);
                     }
                     else if (mappedKey.Equals("IsValveRepairedID"))
                     {
@@ -251,7 +299,12 @@ public class MaintenanceService(
     public List<InspectionFileData> GetMaintenanceFiles(int maintenanceID)
     {
         try {
-            return _inspectionFileRepository.GetMaintenanceFiles(maintenanceID);
+            List<InspectionFileData> maintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(maintenanceID);
+            foreach (var item in maintenanceFiles)
+            {
+                item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+            }
+            return maintenanceFiles;
         }
         catch (Exception e)
         {

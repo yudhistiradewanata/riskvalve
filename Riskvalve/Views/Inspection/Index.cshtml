@@ -197,11 +197,11 @@
                                                     Method</label>
                                                 <select class="form-control" id="field-inspection-inspection-method"
                                                     name="InspectionMethodID">
-                                                    @if(limitState != null)
+                                                    @if(inspectionMethods != null)
                                                     {
-                                                        foreach (var item in limitState)
+                                                        foreach (var item in inspectionMethods)
                                                         {
-                                                            <option value="@item.Id">@item.CurrentConditionLimitState</option>
+                                                            <option value="@item.Id">@item.InspectionMethod</option>
                                                         }
                                                     }
                                                 </select>

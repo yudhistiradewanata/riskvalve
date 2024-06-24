@@ -86,12 +86,24 @@ public class AssessmentService(
             {
                 inspection.Inspection = _inspectionRepository.GetInspection(inspection.InspectionID ?? 0);
                 inspection.Inspection.InspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspection.InspectionID ?? 0);
+                if(inspection.Inspection.InspectionFiles != null) {
+                    foreach (var file in inspection.Inspection.InspectionFiles)
+                    {
+                        file.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + file.FilePath;
+                    }
+                }
             }
             assessmentData.MaintenanceHistory = _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
             foreach (var maintenance in assessmentData.MaintenanceHistory)
             {
                 maintenance.Maintenance = _maintenanceRepository.GetMaintenance(maintenance.MaintenanceID ?? 0);
                 maintenance.Maintenance.MaintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(maintenance.MaintenanceID ?? 0);
+                if(maintenance.Maintenance.MaintenanceFiles != null) {
+                    foreach (var file in maintenance.Maintenance.MaintenanceFiles)
+                    {
+                        file.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + file.FilePath;
+                    }
+                }
             }
             return assessmentData;
         } catch (Exception ex) {
@@ -247,7 +259,8 @@ public class AssessmentService(
                         if (value.Contains("/"))
                         {
                             string date = value.Split(" ")[0];
-                            List<string> dateParts = [.. date.Split("/")];
+                            List<string> dateParts = date.Split("/").ToList();
+                            string newDate = "";
                             if (dateParts[0].Length == 1)
                             {
                                 dateParts[0] = "0" + dateParts[0];
@@ -256,7 +269,24 @@ public class AssessmentService(
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                            date = string.Join("/", dateParts);
+                            string[] formats = ["dd/MM/yyyy", "MM/dd/yyyy"];
+                            if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                            {
+                                if (parsedDate.Day == int.Parse(date.Split('/')[0]))
+                                {
+                                    newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                                }
+                                else
+                                {
+                                    newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                                }
+                            }
+                            else
+                            {
+                                newDate = "01-01-1900";
+                            }
+                            Console.WriteLine("Mapped Value: " + string.Join(", ", dateParts));
                             mappedValue = newDate;
                         }
                         else
@@ -265,6 +295,8 @@ public class AssessmentService(
                                 .FromOADate(Convert.ToDouble(value))
                                 .ToString(SharedEnvironment.GetDateFormatString(false));
                         }
+                        Console.WriteLine("Mapped Value: " + value);
+                        Console.WriteLine("Mapped Value: " + mappedValue);
                     }
                     else if (
                         mappedKey.Equals("ImpactOfInternalFluidImpuritiesID")

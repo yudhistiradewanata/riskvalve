@@ -43,6 +43,13 @@ public class InspectionService(
             InspectionData? inspectionData = _inspectionRepository.GetInspection(id) ?? throw new Exception("Inspection not found");
             inspectionData.Asset = _assetRepository.GetAsset(inspectionData.AssetID);
             inspectionData.InspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspectionData.Id);
+            if(inspectionData.InspectionFiles != null)
+            {
+                foreach (var item in inspectionData.InspectionFiles)
+                {
+                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                }
+            }
             return inspectionData;
         } catch (Exception e) {
             throw new Exception(e.Message);
@@ -56,6 +63,13 @@ public class InspectionService(
             {
                 inspection.Asset = _assetRepository.GetAsset(inspection.AssetID);
                 inspection.InspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspection.Id);
+                if(inspection.InspectionFiles != null)
+                {
+                    foreach (var item in inspection.InspectionFiles)
+                    {
+                        item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                    }
+                }
             }
             return inspectionList;
         }
@@ -70,6 +84,13 @@ public class InspectionService(
             InspectionData inspectionData = _inspectionRepository.AddInspection(inspection);
             inspectionData.Asset = _assetRepository.GetAsset(inspectionData.AssetID);
             inspectionData.InspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspectionData.Id);
+            if(inspectionData.InspectionFiles != null)
+            {
+                foreach (var item in inspectionData.InspectionFiles)
+                {
+                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                }
+            }
             return inspectionData;
         }
         catch (Exception e)
@@ -83,6 +104,13 @@ public class InspectionService(
             InspectionData inspectionData = _inspectionRepository.UpdateInspection(inspection);
             inspectionData.Asset = _assetRepository.GetAsset(inspectionData.AssetID);
             inspectionData.InspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspectionData.Id);
+            if(inspectionData.InspectionFiles != null)
+            {
+                foreach (var item in inspectionData.InspectionFiles)
+                {
+                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+                }
+            }
             return inspectionData;
         }
         catch (Exception e)
@@ -167,7 +195,8 @@ public class InspectionService(
                         if (value.Contains("/"))
                         {
                             string date = value.Split(" ")[0];
-                            List<string> dateParts = [.. date.Split("/")];
+                            List<string> dateParts = date.Split("/").ToList();
+                            string newDate = "";
                             if (dateParts[0].Length == 1)
                             {
                                 dateParts[0] = "0" + dateParts[0];
@@ -176,7 +205,24 @@ public class InspectionService(
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                            date = string.Join("/", dateParts);
+                            string[] formats = ["dd/MM/yyyy", "MM/dd/yyyy"];
+                            if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                            {
+                                if (parsedDate.Day == int.Parse(date.Split('/')[0]))
+                                {
+                                    newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                                }
+                                else
+                                {
+                                    newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                                }
+                            }
+                            else
+                            {
+                                newDate = "01-01-1900";
+                            }
+                            Console.WriteLine("Mapped Value: " + string.Join(", ", dateParts));
                             mappedValue = newDate;
                         }
                         else
@@ -185,6 +231,8 @@ public class InspectionService(
                                 .FromOADate(Convert.ToDouble(value))
                                 .ToString(SharedEnvironment.GetDateFormatString(false));
                         }
+                        Console.WriteLine("Mapped Value: " + value);
+                        Console.WriteLine("Mapped Value: " + mappedValue);
                     }
                     else if (mappedKey.Equals("InspectionEffectivenessID"))
                     {
@@ -308,7 +356,12 @@ public class InspectionService(
     public List<InspectionFileData> GetInspectionFiles(int inspectionId)
     {
         try{
-            return _inspectionFileRepository.GetInspectionFiles(inspectionId);
+            List<InspectionFileData> inspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspectionId);
+            foreach (var item in inspectionFiles)
+            {
+                item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
+            }
+            return inspectionFiles;
         }
         catch (Exception e)
         {

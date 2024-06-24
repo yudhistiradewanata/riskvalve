@@ -75,13 +75,6 @@ public class InspectionController(
             }
         }
         InspectionData inspection = _inspectionService.GetInspection(id);
-        if(inspection.InspectionFiles != null)
-        {
-            foreach (var item in inspection.InspectionFiles)
-            {
-                item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
-            }
-        }
         ViewData["Inspection"] = inspection;
         return View();
     }
@@ -94,13 +87,6 @@ public class InspectionController(
         try {
             int id = Convert.ToInt32(Request.Query["id"]);
             var inspection = _inspectionService.GetInspection(id);
-            if(inspection.InspectionFiles != null)
-            {
-                foreach (var item in inspection.InspectionFiles)
-                {
-                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
-                }
-            }
             result.IsSuccess = true;
             result.Message = "Success";
             result.Data = inspection;

@@ -76,13 +76,6 @@ public class MaintenanceController(
             }
         }
         MaintenanceData maintenance = _maintenanceService.GetMaintenance(id);
-        if (maintenance.MaintenanceFiles != null)
-        {
-            foreach (var item in maintenance.MaintenanceFiles)
-            {
-                item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
-            }
-        }
         ViewData["maintenance"] = maintenance;
         return View();
     }
@@ -96,13 +89,6 @@ public class MaintenanceController(
         {
             int id = Convert.ToInt32(Request.Query["id"]);
             var maintenance = _maintenanceService.GetMaintenance(id);
-            if (maintenance.MaintenanceFiles != null)
-            {
-                foreach (var item in maintenance.MaintenanceFiles)
-                {
-                    item.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + item.FilePath;
-                }
-            }
             result.IsSuccess = true;
             result.Message = "Success";
             result.Data = maintenance;

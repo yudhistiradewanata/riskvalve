@@ -81,7 +81,6 @@ public class AssessmentController(
             }
         }
         AssessmentData assessmentData = _assessmentService.GetAssessment(id);
-        ViewData["Assessment"] = assessmentData;
         string tp1 = assessmentData.TP1Risk ?? "";
         string tp2 = assessmentData.TP2Risk ?? "";
         string tp3 = assessmentData.TP3Risk ?? "";
@@ -130,6 +129,7 @@ public class AssessmentController(
             }
             }
         };
+        ViewData["Assessment"] = assessmentData;
         ViewData["AssessmentHeatMap"] = assessmentHeatMap;
         return View();
     }
