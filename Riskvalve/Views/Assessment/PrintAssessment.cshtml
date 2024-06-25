@@ -205,10 +205,11 @@
             <tr>
                 <td colspan="2" class="table-section no-transform">Inspection Date</td>
                 <td colspan="2" class="table-section no-transform">Inspection Method</td>
+                <td colspan="2" class="table-section no-transform">Inspection Description</td>
                 @* <td class="table-section no-transform">Visual Condition</td> *@
                 <td colspan="2" class="table-section no-transform">Function Condition</td>
                 <td colspan="2" class="table-section no-transform">Test Pressure</td>
-                <td colspan="4" class="table-section no-transform" colspan="2">Inspection Image</td>
+                <td colspan="2" class="table-section no-transform">Inspection Image</td>
                 
             </tr>
             @if(assessment.InspectionHistory.Count > 0)
@@ -218,10 +219,11 @@
                     <tr class="inspection-maintenance-row">
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDate</td>
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionMethod</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDescription</td>
                         @* <td>assessment.InspectionHistory[i].VisualCondition</td> *@
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.FunctionCondition</td>
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.TestPressureIfAny</td>
-                        <td colspan="4">@foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
+                        <td colspan="2">@foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
                             <img src="/@image.FilePath"/>
                         }</td>
                     </tr>
@@ -240,10 +242,10 @@
                 for(int i = 0; i < assessment.MaintenanceHistory.Count; i++)
                 {
                     <tr class="inspection-maintenance-row">
-                        <td colspan="3">@assessment.MaintenanceHistory[0].Maintenance.MaintenanceDate</td>
-                        <td colspan="2">@assessment.MaintenanceHistory[0].Maintenance.IsValveRepaired</td>
-                        <td colspan="3">@assessment.MaintenanceHistory[0].Maintenance.MaintenanceDescription</td>
-                        <td colspan="4">@foreach (var image in assessment.MaintenanceHistory[0].Maintenance.MaintenanceFiles) {
+                        <td colspan="3">@assessment.MaintenanceHistory[i].Maintenance.MaintenanceDate</td>
+                        <td colspan="2">@assessment.MaintenanceHistory[i].Maintenance.IsValveRepaired</td>
+                        <td colspan="3">@assessment.MaintenanceHistory[i].Maintenance.MaintenanceDescription</td>
+                        <td colspan="4">@foreach (var image in assessment.MaintenanceHistory[i].Maintenance.MaintenanceFiles) {
                             <img src="/@image.FilePath"/>
                         }</td>
                     </tr>

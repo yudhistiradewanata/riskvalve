@@ -382,9 +382,13 @@
             var jsonAssessmentPieChart = JSON.parse('@Html.Raw(jsonAssessmentPieChart)');
             const pieChartData = []
             Object.keys(jsonAssessmentPieChart).forEach(key => {
+                var value = parseInt(jsonAssessmentPieChart[key]);
+                if (isNaN(value)) {
+                    value = 0; // or any other default integer value
+                }
                 pieChartData.push({
                     name: key,
-                    y: parseFloat(jsonAssessmentPieChart[key])
+                    y: value
                 })
             })
             $('#risk-piechart').highcharts({
@@ -417,7 +421,7 @@
                         }, {
                             enabled: true,
                             distance: -40,
-                            format: '{point.y:.1f}',
+                            format: '{point.y}',
                             style: {
                                 fontSize: '1.2em',
                                 textOutline: 'none',
@@ -485,6 +489,7 @@
                 },
                 yAxis: {
                     min: 0,
+                    tickInterval: 1
                 },
                 tooltip: {
                 },

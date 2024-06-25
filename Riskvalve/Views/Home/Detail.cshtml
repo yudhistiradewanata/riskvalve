@@ -1337,8 +1337,8 @@
             $('#detailInspectionModal .preview-image-gallery').find('input[type=file], .single-image').remove()
             fetchModalDetailData(id, 'inspection')
 
-            $('#detailInspectionModal').attr('data-type', 'view')
-            $('#detailInspectionModal').modal('show')
+            @* $('#detailInspectionModal').attr('data-type', 'view')
+            $('#detailInspectionModal').modal('show') *@
         }
 
         function detailMaintenance(id) {
@@ -1346,8 +1346,8 @@
             $('#detailMaintenanceModal .preview-image-gallery').find('input[type=file], .single-image').remove()
             fetchModalDetailData(id, 'maintenance')
 
-            $('#detailMaintenanceModal').attr('data-type', 'view')
-            $('#detailMaintenanceModal').modal('show')
+            @* $('#detailMaintenanceModal').attr('data-type', 'view')
+            $('#detailMaintenanceModal').modal('show') *@
         }
 
         function detailAssessment(id) {
@@ -1355,8 +1355,8 @@
             $('#detailAssessmentModal .preview-image-gallery').find('input[type=file], .single-image').remove()
             fetchModalDetailData(id, 'assessment')
 
-            $('#detailAssessmentModal').attr('data-type', 'view')
-            $('#detailAssessmentModal').modal('show')
+            @* $('#detailAssessmentModal').attr('data-type', 'view')
+            $('#detailAssessmentModal').modal('show') *@
         }
 
         function getHeatColor(pos, hex = false) {
@@ -1450,177 +1450,194 @@
                 headers: {
                     'RequestVerificationToken': requestVerificationToken
                 },
-                success: function (data) {
-                    // $('#field-inspection-valvetagno' + counter).val(data.tagNo);
-                    const dataAsset = data.asset
-                    $(modalSelector+' #field-inspection-assetid').val(dataAsset.id)
-                    $(modalSelector+' #field-inspection-valvetype').val(dataAsset.valveType)
-                    $(modalSelector+' #field-inspection-tagno').val(dataAsset.tagNo)
-                    $(modalSelector+' #field-inspection-valvetagno').val(dataAsset.tagNo)
-                    $(modalSelector+' #field-inspection-manufacturer').val(dataAsset.manufacturer)
-                    $(modalSelector+' #field-inspection-equipmentname').val('')
-                    $(modalSelector+' #field-inspection-bodymaterial').val(dataAsset.bodyMaterial)
-                    $(modalSelector+' #businessarea').val(dataAsset.businessArea)
-                    $(modalSelector+' #bodymodel').val(dataAsset.bodyModel)
-                    $(modalSelector+' #platform').val(dataAsset.platform)
-                    $(modalSelector+' #endconnection').val(dataAsset.endConnection)
-                    $(modalSelector+' #parentequipmentno').val(dataAsset.parentEquipmentNo)
-                    $(modalSelector+' #serialno').val(dataAsset.serialNo)
-                    $(modalSelector+' #parentequipmentdescription').val(dataAsset.parentEquipmentDescription)
-                    $(modalSelector+' #usagetype').val('')
-                    $(modalSelector+' #installationdate').val(dataAsset.installationDate)
-                    $(modalSelector+' #size').val(dataAsset.size)
-                    $(modalSelector+' #pidno').val(dataAsset.pidNo)
-                    $(modalSelector+' #classrating').val(dataAsset.classRating)
+                success: function (apiresult) {
+                    if(apiresult.isSuccess === false) {
+                        alert(apiresult.message)
+                        return false;
+                    } else {
+                        const data = apiresult.data
+                        const dataAsset = data.asset
+                        $(modalSelector+' #field-inspection-assetid').val(dataAsset.id)
+                        $(modalSelector+' #field-inspection-valvetype').val(dataAsset.valveType)
+                        $(modalSelector+' #field-inspection-tagno').val(dataAsset.tagNo)
+                        $(modalSelector+' #field-inspection-valvetagno').val(dataAsset.tagNo)
+                        $(modalSelector+' #field-inspection-manufacturer').val(dataAsset.manufacturer)
+                        $(modalSelector+' #field-inspection-equipmentname').val('')
+                        $(modalSelector+' #field-inspection-bodymaterial').val(dataAsset.bodyMaterial)
+                        $(modalSelector+' #businessarea').val(dataAsset.businessArea)
+                        $(modalSelector+' #bodymodel').val(dataAsset.bodyModel)
+                        $(modalSelector+' #platform').val(dataAsset.platform)
+                        $(modalSelector+' #endconnection').val(dataAsset.endConnection)
+                        $(modalSelector+' #parentequipmentno').val(dataAsset.parentEquipmentNo)
+                        $(modalSelector+' #serialno').val(dataAsset.serialNo)
+                        $(modalSelector+' #parentequipmentdescription').val(dataAsset.parentEquipmentDescription)
+                        $(modalSelector+' #usagetype').val('')
+                        $(modalSelector+' #installationdate').val(dataAsset.installationDate)
+                        $(modalSelector+' #size').val(dataAsset.size)
+                        $(modalSelector+' #pidno').val(dataAsset.pidNo)
+                        $(modalSelector+' #classrating').val(dataAsset.classRating)
 
-                    // fill history data
-                    if(type === 'maintenance') {
-                        $(modalSelector + ' #field-maintenance-date').val(data.maintenanceDate)
-                        $(modalSelector + ' #field-maintenance-repaired').val(data.isValveRepaired)
-                        $(modalSelector + ' #field-maintenance-description').val(data.maintenanceDescription)
-                    } else if(type === 'assessment') {
-                        $(modalSelector + ' #time-to-limit-a').val(data.timeToLimitStateLeakageToAtmosphere)
-                        $(modalSelector + ' #time-to-limit-b').val(data.timeToLimitStateFailureOfFunction)
-                        $(modalSelector + ' #time-to-limit-c').val(data.timeToLimitStatePassingAccrosValve)
-                        $(modalSelector + ' #assessment-no').val(data.assessmentNo)
-                        $(modalSelector + ' #time-period').val(data.timePeriode)
-                        $(modalSelector + ' #assessment-date').val(data.assessmentDate)
+                        // fill history data
+                        if(type === 'maintenance') {
+                            $(modalSelector + ' #field-maintenance-date').val(data.maintenanceDate)
+                            $(modalSelector + ' #field-maintenance-repaired').val(data.isValveRepaired)
+                            $(modalSelector + ' #field-maintenance-description').val(data.maintenanceDescription)
+                        } else if(type === 'assessment') {
+                            $(modalSelector + ' #time-to-limit-a').val(data.timeToLimitStateLeakageToAtmosphere)
+                            $(modalSelector + ' #time-to-limit-b').val(data.timeToLimitStateFailureOfFunction)
+                            $(modalSelector + ' #time-to-limit-c').val(data.timeToLimitStatePassingAccrosValve)
+                            $(modalSelector + ' #assessment-no').val(data.assessmentNo)
+                            $(modalSelector + ' #time-period').val(data.timePeriode)
+                            $(modalSelector + ' #assessment-date').val(data.assessmentDate)
 
-                        $(modalSelector + ' #leakage-to-atmosphere').val(data.leakageToAtmosphere)
-                        $(modalSelector + ' #failure-of-function').val(data.failureOfFunction)
-                        $(modalSelector + ' #passing-accross-valve').val(data.passingAccrosValve)
-                        $(modalSelector + ' #leakage-to-atmosphere-tp1').val(data.leakageToAtmosphereTP1)
-                        $(modalSelector + ' #failure-of-function-tp1').val(data.failureOfFunctionTP1)
-                        $(modalSelector + ' #passing-accross-valve-tp1').val(data.passingAccrosValveTP1)
-                        $(modalSelector + ' #leakage-to-atmosphere-tp2').val(data.leakageToAtmosphereTP2)
-                        $(modalSelector + ' #failure-of-function-tp2').val(data.failureOfFunctionTP2)
-                        $(modalSelector + ' #passing-accross-valve-tp2').val(data.passingAccrosValveTP2)
-                        $(modalSelector + ' #leakage-to-atmosphere-tp3').val(data.leakageToAtmosphereTP3)
-                        $(modalSelector + ' #failure-of-function-tp3').val(data.failureOfFunctionTP3)
-                        $(modalSelector + ' #passing-accross-valve-tp3').val(data.passingAccrosValveTP3)
-                        $(modalSelector + ' #inspection-effectiveness').val(data.inspectionEffectiveness)
-                        $(modalSelector + ' #impact-of-internal-fluid').val(data.impactOfInternalFluidImpurities)
-                        $(modalSelector + ' #impact-of-operating-envelopes').val(data.impactOfOperatingEnvelopes)
-                        $(modalSelector + ' #used-within-oem-specification').val(data.usedWithinOEMSpecification)
-                        $(modalSelector + ' #repaired').val(data.repaired)
+                            $(modalSelector + ' #leakage-to-atmosphere').val(data.leakageToAtmosphere)
+                            $(modalSelector + ' #failure-of-function').val(data.failureOfFunction)
+                            $(modalSelector + ' #passing-accross-valve').val(data.passingAccrosValve)
+                            $(modalSelector + ' #leakage-to-atmosphere-tp1').val(data.leakageToAtmosphereTP1)
+                            $(modalSelector + ' #failure-of-function-tp1').val(data.failureOfFunctionTP1)
+                            $(modalSelector + ' #passing-accross-valve-tp1').val(data.passingAccrosValveTP1)
+                            $(modalSelector + ' #leakage-to-atmosphere-tp2').val(data.leakageToAtmosphereTP2)
+                            $(modalSelector + ' #failure-of-function-tp2').val(data.failureOfFunctionTP2)
+                            $(modalSelector + ' #passing-accross-valve-tp2').val(data.passingAccrosValveTP2)
+                            $(modalSelector + ' #leakage-to-atmosphere-tp3').val(data.leakageToAtmosphereTP3)
+                            $(modalSelector + ' #failure-of-function-tp3').val(data.failureOfFunctionTP3)
+                            $(modalSelector + ' #passing-accross-valve-tp3').val(data.passingAccrosValveTP3)
+                            $(modalSelector + ' #inspection-effectiveness').val(data.inspectionEffectiveness)
+                            $(modalSelector + ' #impact-of-internal-fluid').val(data.impactOfInternalFluidImpurities)
+                            $(modalSelector + ' #impact-of-operating-envelopes').val(data.impactOfOperatingEnvelopes)
+                            $(modalSelector + ' #used-within-oem-specification').val(data.usedWithinOEMSpecification)
+                            $(modalSelector + ' #repaired').val(data.repaired)
 
-                        $(modalSelector + ' #product-loss-definition').val(data.productLossDefinition)
-                        $(modalSelector + ' #hsse-definition').val(data.hsseDefinision)
+                            $(modalSelector + ' #product-loss-definition').val(data.productLossDefinition)
+                            $(modalSelector + ' #hsse-definition').val(data.hsseDefinision)
 
-                        //integrity-plan
-                        $(modalSelector + ' #integrity-status').val(data.integrityStatus)
-                        $(modalSelector + ' #time-to-action').val(data.tpTimeToActionRisk)
-                        $(modalSelector + ' #recommended-action').val(data.recommendationAction)
-                        $(modalSelector + ' #summary').text(data.summary || 'asdasdasd')
-                        $(modalSelector + ' #detailed-recommendation').text(data.detailedRecommendation || 'adsassad')
+                            //integrity-plan
+                            $(modalSelector + ' #integrity-status').val(data.integrityStatus)
+                            $(modalSelector + ' #time-to-action').val(data.tpTimeToActionRisk)
+                            $(modalSelector + ' #recommended-action').val(data.recommendationAction)
+                            $(modalSelector + ' #summary').text(data.summary || 'asdasdasd')
+                            $(modalSelector + ' #detailed-recommendation').text(data.detailedRecommendation || 'adsassad')
 
-                        //fill inspection table
-                        let inspectionHtml = ''
-                        data.inspectionHistory.forEach((val, index) => {
-                            inspectionHtml += `<tr>
-                                <td>${index + 1}</td>
-                                <td>${val.inspectionDate}</td>
-                                <td>${val.inspectionMethod}</td>
-                                <td>${val.inspectionDescription}</td>
-                                <td>${val.functionCondition}</td>
-                                <td>${val.testPressureIfAny}</td>
-                            </tr>`
-                        })
-                        $(modalSelector + ' #inspection-history-content').html(inspectionHtml)
-                        
-                        //fill maintenance table
-                        let maintenanceHtml = ''
-                        data.maintenanceHistory.forEach((val, index) => {
-                            maintenanceHtml += `<tr>
-                                <td>${index + 1}</td>
-                                <td>${val.maintenanceDate}</td>
-                                <td>${val.isValveRepaired}</td>
-                                <td>${val.maintenanceDescription}</td>
-                            </tr>`
-                        })
+                            //fill inspection table
+                            let inspectionHtml = ''
+                            data.inspectionHistory.forEach((inspection, index) => {
+                                var val = inspection.inspection
+                                inspectionHtml += `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>${val.inspectionDate}</td>
+                                    <td>${val.inspectionMethod}</td>
+                                    <td>${val.inspectionDescription}</td>
+                                    <td>${val.functionCondition}</td>
+                                    <td>${val.testPressureIfAny}</td>
+                                </tr>`
+                            })
+                            $(modalSelector + ' #inspection-history-content').html(inspectionHtml)
+                            
+                            //fill maintenance table
+                            let maintenanceHtml = ''
+                            data.maintenanceHistory.forEach((maintenance, index) => {
+                                var val = maintenance.maintenance
+                                maintenanceHtml += `<tr>
+                                    <td>${index + 1}</td>
+                                    <td>${val.maintenanceDate}</td>
+                                    <td>${val.isValveRepaired}</td>
+                                    <td>${val.maintenanceDescription}</td>
+                                </tr>`
+                            })
 
-                        const riskTableApiMapping = [
-                            'tP1A', 'tP1B', 'tP1C', 'tP1Risk',
-                            'tP2A', 'tP2B', 'tP2C', 'tP2Risk',
-                            'tP3A', 'tP3B', 'tP3C', 'tP3Risk',
-                            'tpTimeToActionA', 'tpTimeToActionB', 'tpTimeToActionC', 'tpTimeToActionRisk'
-                        ]
+                            const riskTableApiMapping = [
+                                'tP1A', 'tP1B', 'tP1C', 'tP1Risk',
+                                'tP2A', 'tP2B', 'tP2C', 'tP2Risk',
+                                'tP3A', 'tP3B', 'tP3C', 'tP3Risk',
+                                'tpTimeToActionA', 'tpTimeToActionB', 'tpTimeToActionC', 'tpTimeToActionRisk'
+                            ]
 
-                        riskTableApiMapping.forEach(i => {
-                            const statusBox = $(`#${i.toUpperCase()}-colorlabel`)
-                            const statusLabel = $(`#${i.toUpperCase()}-label`)
-                            const risk = data[i]
-                            statusBox.removeClass()
-                            statusBox.addClass('status-box')
-                            statusBox.addClass(getHeatColor(risk))
-                            statusLabel.text(risk)
-                        })
+                            riskTableApiMapping.forEach(i => {
+                                const statusBox = $(`#${i.toUpperCase()}-colorlabel`)
+                                const statusLabel = $(`#${i.toUpperCase()}-label`)
+                                const risk = data[i]
+                                statusBox.removeClass()
+                                statusBox.addClass('status-box')
+                                statusBox.addClass(getHeatColor(risk))
+                                statusLabel.text(risk)
+                            })
 
-                        const riskHeatmapMapping = {
-                            TP1A: 'loFScoreLeakageToAtmophereTP1',
-                            TP1B: 'loFScoreFailureOfFunctionTP1',
-                            TP1C: 'loFScorePassingAccrosValveTP1',
-                            TP2A: 'loFScoreLeakageToAtmophereTP2',
-                            TP2B: 'loFScoreFailureOfFunctionTP2',
-                            TP2C: 'loFScorePassingAccrosValveTP2',
-                            TP3A: 'loFScoreLeakageToAtmophereTP3',
-                            TP3B: 'loFScoreFailureOfFunctionTP3',
-                            TP3C: 'loFScorePassingAccrosValveTP3',
+                            const riskHeatmapMapping = {
+                                TP1A: 'loFScoreLeakageToAtmophereTP1',
+                                TP1B: 'loFScoreFailureOfFunctionTP1',
+                                TP1C: 'loFScorePassingAccrosValveTP1',
+                                TP2A: 'loFScoreLeakageToAtmophereTP2',
+                                TP2B: 'loFScoreFailureOfFunctionTP2',
+                                TP2C: 'loFScorePassingAccrosValveTP2',
+                                TP3A: 'loFScoreLeakageToAtmophereTP3',
+                                TP3B: 'loFScoreFailureOfFunctionTP3',
+                                TP3C: 'loFScorePassingAccrosValveTP3',
+                            }
+
+                            Object.keys(riskHeatmapMapping).forEach(key => {
+                                const resKey = riskHeatmapMapping[key]
+                                const val = data[resKey]
+                                console.log(resKey, 'resKey')
+                                console.log(val, 'value')
+                                const xPos = calculateXPos(val)
+                                const yPos = calculateYPos(data.consequenceOfFailure)
+                                $(`#${key}`).css({
+                                    left: xPos + '%',
+                                    top: yPos + '%'
+                                })
+                            })
+
+                            $(modalSelector + ' #maintenance-history-content').html(maintenanceHtml)
+                        } else {
+                            $(modalSelector + ' #field-inspection-date').val(data.inspectionDate)
+                            $(modalSelector + ' #field-inspection-inspection-method').val(data.inspectionMethod)
+                            $(modalSelector + ' #field-inspection-current-condition-limit-state-a').val(data.currentConditionLeakeageToAtmosphere)
+                            $(modalSelector + ' #field-inspection-current-condition-limit-state-b').val(data.currentConditionFailureOfFunction)
+                            $(modalSelector + ' #field-inspection-current-condition-limit-state-c').val(data.currentConditionPassingAcrossValve)
+                            $(modalSelector + ' #field-inspection-effectiveness').val(data.inspectionEffectiveness)
+                            $(modalSelector + ' #field-inspection-function-condition').val(data.functionCondition)
+                            $(modalSelector + ' #field-inspection-description').val(data.inspectionDescription)
+                            $(modalSelector + ' #field-inspection-test-pressure-if-any').val(data.testPressureIfAny)
                         }
 
-                        Object.keys(riskHeatmapMapping).forEach(key => {
-                            const resKey = riskHeatmapMapping[key]
-                            const val = data[resKey]
-                            console.log(resKey, 'resKey')
-                            console.log(val, 'value')
-                            const xPos = calculateXPos(val)
-                            const yPos = calculateYPos(data.consequenceOfFailure)
-                            $(`#${key}`).css({
-                                left: xPos + '%',
-                                top: yPos + '%'
+                        let galleryHtml = ''
+                        if(type === 'maintenance') {
+                            data.maintenanceFiles.forEach(i => {
+                                galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                                <div class="single-image" data-identifier="gallery-${i.id}">
+                                    <img src="/${i.filePath}">
+                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </div>
+                                </div>
+                                `
                             })
-                        })
-
-                        $(modalSelector + ' #maintenance-history-content').html(maintenanceHtml)
-                    } else {
-                        $(modalSelector + ' #field-inspection-date').val(data.inspectionDate)
-                        $(modalSelector + ' #field-inspection-inspection-method').val(data.inspectionMethod)
-                        $(modalSelector + ' #field-inspection-current-condition-limit-state-a').val(data.currentConditionLeakeageToAtmosphere)
-                        $(modalSelector + ' #field-inspection-current-condition-limit-state-b').val(data.currentConditionFailureOfFunction)
-                        $(modalSelector + ' #field-inspection-current-condition-limit-state-c').val(data.currentConditionPassingAcrossValve)
-                        $(modalSelector + ' #field-inspection-effectiveness').val(data.inspectionEffectiveness)
-                        $(modalSelector + ' #field-inspection-function-condition').val(data.functionCondition)
-                        $(modalSelector + ' #field-inspection-description').val(data.inspectionDescription)
-                        $(modalSelector + ' #field-inspection-test-pressure-if-any').val(data.testPressureIfAny)
-                    }
-
-                    let galleryHtml = ''
-                    if(type === 'maintenance') {
-                        data.maintenanceFiles.forEach(i => {
-                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                            <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}">
-                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
-                                    <i class="fa-solid fa-xmark"></i>
+                        } else if (type === 'inspection') {
+                        data.inspectionFiles.forEach(i => {
+                                galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
+                                <div class="single-image" data-identifier="gallery-${i.id}">
+                                    <img src="/${i.filePath}">
+                                    <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
+                                        <i class="fa-solid fa-xmark"></i>
+                                    </div>
                                 </div>
-                            </div>
-                            `
-                        })
-                    } else if (type === 'inspection') {
-                    data.inspectionFiles.forEach(i => {
-                            galleryHtml += `<input type="hidden" identifier="delete-gallery-${i.id}" name="deletedImageIDs[${i.id}]" value="0">
-                            <div class="single-image" data-identifier="gallery-${i.id}">
-                                <img src="/${i.filePath}">
-                                <div class="delete-image-btn" onclick="deleteGalleryImage('gallery-${i.id}')" style="display: none">
-                                    <i class="fa-solid fa-xmark"></i>
-                                </div>
-                            </div>
-                            `
-                        })
-                    }
+                                `
+                            })
+                        }
 
-                    //fill image
-                    $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
+                        //fill image
+                        $(modalSelector).find('.preview-image-gallery').append(galleryHtml)
+                        if(type === 'maintenance') {
+                            $('#detailMaintenanceModal').attr('data-type', 'view')
+                            $('#detailMaintenanceModal').modal('show')
+                        } else if (type === 'inspection') {
+                            $('#detailInspectionModal').attr('data-type', 'view')
+                            $('#detailInspectionModal').modal('show')
+                        } else if (type === 'assessment') {
+                            $('#detailAssessmentModal').attr('data-type', 'view')
+                            $('#detailAssessmentModal').modal('show')
+                        }
+                    }
                 },
                 error: function (error) {
                     alert('History not found');

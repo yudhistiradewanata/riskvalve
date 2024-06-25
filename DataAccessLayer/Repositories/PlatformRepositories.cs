@@ -62,7 +62,7 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             from subdeleteby in dc.DefaultIfEmpty()
             where
                 (platform.AreaID == AreaID || AreaID == 0)
-                && (IncludeDeleted == true || subarea.IsDeleted == false)
+                && (IncludeDeleted == true || platform.IsDeleted == false)
             select new PlatformData
             {
                 Id = platform.Id,
