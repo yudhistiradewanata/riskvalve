@@ -255,12 +255,15 @@ public class AssessmentController(
                 .Select(int.Parse)
                 .ToList();
             _assessmentService.AddInspectionToAssessment(assessmentData.Id, inspectionIDs);
-            List<int> maintenanceIDs = Request
-                .Form["selectedMaintenanceId"]
-                .ToString()
-                .Split(',')
-                .Select(int.Parse)
-                .ToList();
+            List<int> maintenanceIDs = [];
+            if (!StringValues.IsNullOrEmpty(Request.Form["selectedMaintenanceId"]))
+            {
+                maintenanceIDs = Request.Form["selectedMaintenanceId"]
+                    .ToString()
+                    .Split(',')
+                    .Select(int.Parse)
+                    .ToList();
+            }
             _assessmentService.AddMaintenanceToAssessment(assessmentData.Id, maintenanceIDs);
             assessmentData = _assessmentService.GetAssessment(assessmentData.Id);
             result.IsSuccess = true;
