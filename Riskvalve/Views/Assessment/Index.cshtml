@@ -423,7 +423,7 @@
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
                                                 <input type="hidden" class="inspection-data-temp form-control" id="inspectionDataTemp" name="inspectionDataTemp" />
-                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4 only-add" onclick="addInspection(this)">Add Inspection Data</a>
+                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4 only-add addInspectionData">Add Inspection Data</a>
                                                 <table class="datatable table custom-table inspection-table" style="width: 100%;">
                                                     <thead>
                                                         <tr>
@@ -447,7 +447,7 @@
                                             </div>
                                             <div class="card-content" style="min-height: 500px;">
                                                 <input type="hidden" class="maintenance-data-temp form-control" id="maintenanceDataTemp" name="maintenanceDataTemp" />
-                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4 only-add" onclick="addMaintenance(this)">Add Maintenance Data</a>
+                                                <a class="btn btn-primary btn-maincolor mb-2 mt-4 only-add addMaintenanceData">Add Maintenance Data</a>
                                                 <table class="datatable table table-bordered maintenance-table" style="width:100%">
                                                     <thead>
                                                         <tr>
@@ -2887,6 +2887,22 @@
                     counter: ctr
                 })
 
+                $('.addInspectionData').click(function(){
+                    var disabled = $(this).attr('disabled');
+                    if(!disabled){
+                        $(this).attr('disabled', true)
+                        addInspection($(this))
+                    }
+                })
+
+                $('.addMaintenanceData').click(function(){
+                    var disabled = $(this).attr('disabled');
+                    if(!disabled){
+                        $(this).attr('disabled', true)
+                        addMaintenance($(this))
+                    }
+                })
+
                 initDatepicker()
                 moveToLastTab()
                 idx++;
@@ -3050,6 +3066,7 @@
                     $('#addInspectionModal').modal('show')
                     setTimeout(() => {
                         refreshDatatableColumn()
+                        $(el).removeAttr('disabled')
                     }, 180);
                 })
             }
@@ -3142,6 +3159,7 @@
                     $('#addMaintenanceModal').modal('show')
                     setTimeout(() => {
                         refreshDatatableColumn()
+                        $(el).removeAttr('disabled')
                     }, 180);
                 })
             }
