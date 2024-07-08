@@ -22,7 +22,7 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("ServerConnection2")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 // Add services
 builder.Services.AddScoped<IUserService, UserService>();

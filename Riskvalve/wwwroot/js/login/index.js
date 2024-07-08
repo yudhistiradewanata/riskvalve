@@ -11,7 +11,6 @@ $(document).ready(function () {
     var password = $('input[name="password"]').val();
     if ($(".login-form").valid()) {
       $(this).prop("disabled", true).text("Loading...");
-      console.log("username: ", requestVerificationToken);
       $.ajax({
         url: urllogin,
         type: "POST",
