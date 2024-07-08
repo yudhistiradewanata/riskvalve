@@ -29,6 +29,9 @@ function submitForm(el) {
     const ctr = $(el).closest('.tab-pane').attr('tab-num')
     const nativeForm = form[0]
     const formData = new FormData(nativeForm);
+    const submitbutton = $(el);
+    const buttontext = submitbutton.text();
+    submitbutton.prop("disabled", true).text("Loading...");
     if (form.valid()) {
         if (form.hasClass('history-form')) {
             // update
@@ -57,9 +60,11 @@ function submitForm(el) {
                     } else {
                         alert(apiresult.message)
                     }
+                    submitbutton.removeAttr("disabled").text(buttontext);
                 },
                 error: function (xhr, status, error) {
                     alert('Maintenance date already exist')
+                    submitbutton.removeAttr("disabled").text(buttontext);
                 }
             });
         } else {
@@ -104,10 +109,12 @@ function submitForm(el) {
                     } else {
                         alert(apiresult.message)
                     }
+                    submitbutton.removeAttr("disabled").text(buttontext);
                 },
                 error: function (xhr, status, error) {
                     // Handle error
                     alert('error submitting the form')
+                    submitbutton.removeAttr("disabled").text(buttontext);
                 }
             });
         }
