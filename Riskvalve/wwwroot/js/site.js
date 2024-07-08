@@ -183,3 +183,29 @@ function debounce(func, wait) {
     }, wait);
   };
 }
+var urllogout = $('#urllogout').val();
+var requestVerificationToken = $('#verification-token').val();
+
+$(document).ready(function () {
+    $("#btn-signout, #btn-signout-icon").click(function () {
+        if (confirm('Are you sure you want to sign out?')) {
+            $.ajax({
+                url: urllogout,
+                type: 'POST',
+                headers: {
+                    '__RequestVerificationToken': requestVerificationToken
+                },
+                success: function (apiresult) {
+                    if (apiresult.isSuccess) {
+                        var data = apiresult.data;
+                        location.reload();
+                    }
+                },
+            });
+        }
+    });
+});
+
+function getInputVal(id) {
+  return $(id).val()
+}

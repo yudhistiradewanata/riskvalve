@@ -8,9 +8,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+builder.Services.AddAntiforgery(options => 
+{
+    options.HeaderName = "__RequestVerificationToken";
+});
+
+// Add services to the container.
+builder.Services.Configure<CookiePolicyOptions>(options =>
+{
+    options.MinimumSameSitePolicy = SameSiteMode.Strict;
+    options.Secure = CookieSecurePolicy.Always;
+});
+
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("ServerConnection2")));
 
 // Add services
 builder.Services.AddScoped<IUserService, UserService>();
@@ -61,7 +73,11 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
+app.UseMiddleware<SuppressHeadersMiddleware>();
+
 app.UsePathBase(SharedEnvironment.app_path);
+app.UseStatusCodePagesWithReExecute("/Error/{0}");
+app.UseCookiePolicy(); // Use the cookie policy
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())

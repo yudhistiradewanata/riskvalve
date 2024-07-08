@@ -32,7 +32,6 @@
                 Valve Integrity Management System</p>
             <p class="text-center">Input your Credential (Email and Password) to enter Web Application</p>
             <form class="login-form">
-                <input type="hidden" name="RequestVerificationToken" value="@tokens.RequestToken" />
                 <input id="timezone" type="hidden" name="timezone">
                 <div class="label">
                     Email
@@ -67,6 +66,7 @@
 
 @section Scripts {
     <script>
+        var requestVerificationToken = '@tokens.RequestToken';
         $('#btn-signin').prop('disabled', true).text('Loading...');
         $(document).ready(function () {
             $('#btn-signin').prop('disabled', false).text('Login');
@@ -74,14 +74,13 @@
                 e.preventDefault();
                 var username = $('input[name="username"]').val();
                 var password = $('input[name="password"]').val();
-                var token = $('input[name="__RequestVerificationToken"]').val();
                 if ($('.login-form').valid()) {
                     $(this).prop('disabled', true).text('Loading...');
                     $.ajax({
                         url: '@urllogin',
                         type: 'POST',
                         headers: {
-                            'RequestVerificationToken': $('input[name="RequestVerificationToken"]').val()
+                            '__RequestVerificationToken': requestVerificationToken
                         },
                         data: {
                             username: username,
@@ -90,12 +89,11 @@
                         success: function (apiresult) {
                             if (apiresult.isSuccess) {
                                 var data = apiresult.data;
-                                @* alert(apiresult.message); *@
-                                var path = "@baseurl" + '/Home/Index';
+                                    var path = "@baseurl" + '/Home/Index';
                                 location.href = path;
                             } else {
                                 alert(apiresult.message);
-                            $('#btn-signin').prop('disabled', false).text('Login');
+                                $('#btn-signin').prop('disabled', false).text('Login');
                             }
                         },
                     });

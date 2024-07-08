@@ -128,35 +128,36 @@
                                     {
                                         foreach (var item in assessmentList)
                                         {
-                                            string installationDate = "";
+                                            @* string installationDate = "";
                                             string assessmentDate = "";
                                             string lastInspectionDate = "";
                                             string lastMaintenanceDate = "";
-                                            string timeToAction = "";
-                                            @* string installationDate = item.Asset.InstallationDate.Length >= 10 ?
+                                            string timeToAction = ""; *@
+
+                                            string installationDate = item.Asset.InstallationDate.Length >= 10 ?
                                             item.Asset.InstallationDate.Substring(6, 4) + "-" +
                                             item.Asset.InstallationDate.Substring(3, 2) + "-" +
-                                            item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate; *@
+                                            item.Asset.InstallationDate.Substring(0, 2) : item.Asset.InstallationDate;
 
-                                            @* string assessmentDate = item.AssessmentDate.Length >= 10 ?
+                                            string assessmentDate = item.AssessmentDate.Length >= 10 ?
                                             item.AssessmentDate.Substring(6, 4) + "-" + item.AssessmentDate.Substring(3, 2) + "-" +
                                             item.AssessmentDate.Substring(0, 2) :
-                                            item.AssessmentDate; *@
+                                            item.AssessmentDate;
 
-                                            @* string lastInspectionDate = item.LastInspectionDate.Length >= 10 ?
+                                            string lastInspectionDate = item.LastInspectionDate?.Length >= 10 ?
                                             item.LastInspectionDate.Substring(6, 4) + "-" + item.LastInspectionDate.Substring(3, 2)
                                             + "-" + item.LastInspectionDate.Substring(0, 2) :
-                                            item.LastInspectionDate; *@
+                                            item.LastInspectionDate;
 
-                                            @* string lastMaintenanceDate = item.LastMaintenanceDate.Length >= 10 ?
+                                            string lastMaintenanceDate = item.LastMaintenanceDate?.Length >= 10 ?
                                             item.LastMaintenanceDate.Substring(6, 4) + "-" + item.LastMaintenanceDate.Substring(3, 2)
                                             + "-" + item.LastMaintenanceDate.Substring(0, 2) :
-                                            item.LastMaintenanceDate; *@
+                                            item.LastMaintenanceDate;
 
-                                            @* string timeToAction = item.TPTimeToActionRisk.Length >= 10 ?
+                                            string timeToAction = item.TPTimeToActionRisk.Length >= 10 ?
                                             item.TPTimeToActionRisk.Substring(6, 4) + "-" + item.TPTimeToActionRisk.Substring(3, 2)
                                             + "-" + item.TPTimeToActionRisk.Substring(0, 2) :
-                                            item.TPTimeToActionRisk; *@
+                                            item.TPTimeToActionRisk;
 
                                             ctr++;
                                             <tr>
@@ -1196,7 +1197,7 @@
                     url: '@urlddlbusinessarea',
                     type: 'GET',
                     headers: {
-                        'RequestVerificationToken': requestVerificationToken
+                        '__RequestVerificationToken': requestVerificationToken
                     },
                     data: { areaId: areaId },
                     success: function (data) {
@@ -1217,7 +1218,7 @@
                     type: 'GET',
                     data: { areaId: areaId, platformId: platformId },
                     headers: {
-                        'RequestVerificationToken': requestVerificationToken
+                        '__RequestVerificationToken': requestVerificationToken
                     },
                     success: function (data) {
                         $(".datatable").DataTable().destroy();
@@ -1448,7 +1449,7 @@
                 type: 'GET',
                 data: { id },
                 headers: {
-                    'RequestVerificationToken': requestVerificationToken
+                    '__RequestVerificationToken': requestVerificationToken
                 },
                 success: function (apiresult) {
                     if(apiresult.isSuccess === false) {

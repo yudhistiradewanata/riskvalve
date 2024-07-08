@@ -5,7 +5,7 @@ namespace SharedLayer;
 public static class SharedEnvironment
 {
     public const string app_path = "/vims";
-    public const string app_version = "v0.2.11";
+    public const string app_version = "v0.3.1";
     public static string GetDateFormatString(bool withTime = true)
     {
         return withTime ? "dd-MM-yyyy HH:mm:ss" : "dd-MM-yyyy";

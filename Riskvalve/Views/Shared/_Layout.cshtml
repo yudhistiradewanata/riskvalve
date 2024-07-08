@@ -19,25 +19,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Riskvalve</title>
-    <link rel="stylesheet" href="~/lib/css/bootstrap.min.css" />
-    <link href="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-html5-3.0.1/datatables.min.css"
-        rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="~/lib/css/bootstrap.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/css/datatables.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/lib/css/font/bootstrap-icons.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/global.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/custom.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Riskvalve.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/lib/css/datepicker.css" asp-append-version="true" />
-    @*<link rel="stylesheet" href="~/lib/treejs/tree.css" asp-append-version="true" />*@
     <link rel="stylesheet" href="~/lib/fontawesome/css/all.min.css" asp-append-version="true" />
-    <style>
-        html,
-        body {
-            width: 100%;
-            margin: 0px;
-            padding: 0px;
-        }
-    </style>
 </head>
 
 @if (IsLogin.ToLower().Equals("true"))
@@ -151,6 +141,7 @@
             <main role="main" class="pb-3">
                 @RenderBody()
             </main>
+            <input type="hidden" id="verification-token" value="@tokens.RequestToken">
         </div>
     </body>
 }
@@ -161,46 +152,18 @@ else
     @RenderBody()
 </body>
 }
-<script src="~/lib/js/bootstrap.bundle.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.3.2/dist/chart.umd.js"
-    integrity="sha384-eI7PSr3L1XLISH8JdDII5YN/njoSsxfbrkCTnJrzXt+ENP5MOVBxD+l6sEG4zoLp"
-    crossorigin="anonymous"></script>
-<script src="https://cdn-script.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-<script src="https://github.com/makeusabrew/bootbox/releases/download/v6.0.0/bootbox.all.min.js"></script>
-<script src="https://cdn.datatables.net/v/dt/jszip-3.10.1/dt-2.0.3/b-3.0.1/b-html5-3.0.1/datatables.min.js"></script>
-@*<link rel="stylesheet" href="~/lib/treejs/tree.css" asp-append-version="true" />*@
-<script src="https://code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/heatmap.js"></script>
-<script src="https://code.highcharts.com/modules/exporting.js"></script>
+<input type="hidden" id="urllogout" value="@urllogout">
+<script src="~/lib/js/bootstrap.bundle.min.js" asp-append-version="true"></script>
+<script src="~/lib/js/chart.umd.js" asp-append-version="true"></script>
+<script src="~/lib/js/jquery.min.js" asp-append-version="true"></script>
+<script src="~/lib/js/bootbox.all.min.js" asp-append-version="true"></script>
+<script src="~/lib/js/datatables.min.js" asp-append-version="true"></script>
+<script src="~/lib/js/highcharts.js" asp-append-version="true"></script>
+<script src="~/lib/js/highchart-heatmap.js" asp-append-version="true"></script>
+<script src="~/lib/js/highchart-exporting.js" asp-append-version="true"></script>
 <script src="~/lib/js/datepicker.js" asp-append-version="true"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
+<script src="~/lib/js/jquery.validate.min.js" asp-append-version="true"></script>
 <script src="~/js/site.js" asp-append-version="true"></script>
 @await RenderSectionAsync("Scripts", required: false)
 @Html.RenderPartialSectionScripts()
-<script>
-    var requestVerificationToken = '@tokens.RequestToken';
-    $(document).ready(function () {
-        $("#btn-signout, #btn-signout-icon").click(function () {
-            if (confirm('Are you sure you want to sign out?')) {
-                $.ajax({
-                    url: '@urllogout',
-                    type: 'POST',
-                    headers: {
-                        'RequestVerificationToken': requestVerificationToken
-                    },
-                    success: function (apiresult) {
-                        if (apiresult.isSuccess) {
-                            var data = apiresult.data;
-                            @* alert(apiresult.message); *@
-                            location.reload();
-                        } else {
-                            @* alert(apiresult.message); *@
-                        }
-                    },
-                });
-            }
-        });
-    });
-</script>
-
 </html>

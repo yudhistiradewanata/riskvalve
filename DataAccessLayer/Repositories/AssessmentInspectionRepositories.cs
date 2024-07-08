@@ -5,6 +5,7 @@ namespace DataAccessLayer;
 public interface IAssessmentInspectionRepository
 {
     List<AssessmentInspectionData> GetAssessmentInspectionList(int assessmentId);
+    List<AssessmentInspectionData> GetAssessmentInspectionListByInspectionID(int inspectionId);
     void DeleteAssessmentInspection(int assessmentId);
     void AddInspectionToAssessment(int assessmentId, List<int> inspectionIds);
 }
@@ -19,6 +20,23 @@ public class AssessmentInspectionRepository(ApplicationDbContext context) : IAss
         var result =
             from assessmentInspection in _context.AssessmentInspection
             where assessmentInspection.AssessmentID == assessmentId
+            select new AssessmentInspectionData
+            {
+                Id = assessmentInspection.Id,
+                AssessmentID = assessmentInspection.AssessmentID,
+                InspectionID = assessmentInspection.InspectionID,
+            };
+        assessmentInspectionList = [.. result];
+        return assessmentInspectionList;
+    }
+
+    public List<AssessmentInspectionData> GetAssessmentInspectionListByInspectionID(int inspectionId)
+    {
+        List<AssessmentInspectionData> assessmentInspectionList = [];
+        var result =
+            from assessmentInspection in _context.AssessmentInspection
+            join assessment in _context.Assessment on assessmentInspection.AssessmentID equals assessment.Id
+            where assessmentInspection.InspectionID == inspectionId && assessment.IsDeleted == false
             select new AssessmentInspectionData
             {
                 Id = assessmentInspection.Id,

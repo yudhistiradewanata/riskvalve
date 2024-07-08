@@ -300,7 +300,7 @@
                 type: 'GET',
                 data: { id: id },
                 headers: {
-                    'RequestVerificationToken': requestVerificationToken
+                    '__RequestVerificationToken': requestVerificationToken
                 },
                 success: function (apiresult) {
                     if (apiresult.isSuccess) {
@@ -421,7 +421,7 @@
                             actuation: actuation
                         },
                         headers: {
-                            'RequestVerificationToken': requestVerificationToken
+                            '__RequestVerificationToken': requestVerificationToken
                         },
                         success: function (apiresult) {
                             if (apiresult.isSuccess) {
@@ -473,7 +473,7 @@
                             actuation: actuation
                         },
                         headers: {
-                            'RequestVerificationToken': requestVerificationToken
+                            '__RequestVerificationToken': requestVerificationToken
                         },
                         success: function (apiresult) {
                             if (apiresult.isSuccess) {
@@ -497,7 +497,7 @@
                     type: 'POST',
                     data: { id: id },
                     headers: {
-                        'RequestVerificationToken': requestVerificationToken
+                        '__RequestVerificationToken': requestVerificationToken
                     },
                     success: function (apiresult) {
                         if (apiresult.isSuccess) {

@@ -51,37 +51,8 @@
         </main>
     </div>
 </div>
+<input type="hidden" id="urlimportexcel" value="@urlimportexcel">
 
 @section Scripts {
-    <script>
-        var requestVerificationToken = '@tokens.RequestToken';
-        $(document).ready(function () {
-            $("form").submit(function (e) {
-                e.preventDefault();
-                var formData = new FormData();
-                formData.append("file", $("#fileUpload")[0].files[0]);
-                formData.append("mode", $("#mode").val());
-                $.ajax({
-                    url: '@urlimportexcel',
-                    type: "POST",
-                    data: formData,
-                    headers: {
-                        'RequestVerificationToken': requestVerificationToken
-                    },
-                    contentType: false,
-                    processData: false,
-                    success: function (data) {
-                        bootbox.alert(data.message, function () {
-                            $("#fileUpload").val('');
-                            location.reload();
-                        });
-                    },
-                    error: function (xhr, status, error) {
-                        console.log(xhr.responseText)
-                        alert('Error submitting the form')
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="~/js/tool/import-asset-register.js"></script>
 }

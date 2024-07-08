@@ -1,0 +1,109 @@
+input {
+  pointer-events: none
+}
+
+#inspection-print-table td {
+  /* background-color: red; */
+  background-color: white;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.inspection-maintenance-row td {
+  /* min-height: 80px; */
+  height: 150px;
+}
+
+.inspection-maintenance-row img {
+  width: 160px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 10px;
+}
+
+.inspection-maintenance-row img:last-child {
+  margin-bottom: 0;
+}
+
+.risk-chart {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  max-width: 400px;
+}
+
+.risk-matrix-legend {
+  width: 100%;
+}
+
+.print-risk-table {
+  width: 60%;
+  position: absolute;
+  top: 12%;
+  left: calc(50%);
+  transform: translateX(-50%);
+}
+
+.print-risk-table img {
+  width: 100%;
+}
+
+.checkbox {
+  width: 50%;
+  text-align: center;
+}
+
+.inspection-print {
+  width: 100%;
+}
+
+.table-section {
+  font-weight: bold;
+  background-color: #ccc !important;
+  padding: 8px;
+  text-align: center;
+  text-transform: uppercase;
+  height: 50px;
+}
+
+.table-section.no-transform {
+  text-transform: none;
+  font-weight: normal;
+}
+
+.table-section.sub-section {
+  text-transform: none;
+  height: 36px;
+}
+
+.inspection-print td.no-padding {
+  padding: 0;
+}
+
+.inspection-print td.spacing {
+  border: none !important;
+  border-bottom-width: 0px;
+  border-top-width: 0px;
+  border-right: solid 1px #000000 !important;
+}
+
+.inspection-print td {
+  border: solid 1px #000000;
+  padding: 5px;
+}
+
+.inspection-print .logo {
+  width: 160px;
+  height: 160px;
+  background-color: grey;
+}
+
+.inspection-print .heading {
+  color: white;
+  background-color: #1f487c !important;
+  font-size: 32px;
+  padding: 15px;
+  text-align: center;
+}

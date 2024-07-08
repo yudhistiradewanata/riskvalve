@@ -13,14 +13,30 @@ public interface IAssessmentService
         int PlatformID = 0,
         bool IncludeDeleted = false,
         bool withHistory = true,
-        int AssetID = 0);
+        int AssetID = 0
+    );
     AssessmentData AddAssessment(AssessmentClass assessment);
+    AssessmentData CalculateAssessment(int assessmentID);
     AssessmentData UpdateAssessment(AssessmentClass assessment);
     AssessmentData DeleteAssessment(AssessmentClass assessment);
-    void AddMaintenanceToAssessment(int assessmentId, List<int> maintenanceIds, bool update = false);
+    void AddMaintenanceToAssessment(
+        int assessmentId,
+        List<int> maintenanceIds,
+        bool update = false
+    );
+    List<AssessmentMaintenanceData> GetAssessmentMaintenanceDatas(int maintenanceid);
     void AddInspectionToAssessment(int assessmentId, List<int> inspectionIds, bool update = false);
-    Dictionary<string, string> ImportAssessment(List<Dictionary<string, string>> data, int CreatedBy);
-    List<AssessmentData> GetAssessmentRecapList(int AreaID = 0, int PlatformID = 0, bool IncludeDeleted = false, bool withHistory = true);
+    List<AssessmentInspectionData> GetAssessmentInspectionDatas(int inspectionid);
+    Dictionary<string, string> ImportAssessment(
+        List<Dictionary<string, string>> data,
+        int CreatedBy
+    );
+    List<AssessmentData> GetAssessmentRecapList(
+        int AreaID = 0,
+        int PlatformID = 0,
+        bool IncludeDeleted = false,
+        bool withHistory = true
+    );
     Dictionary<string, Dictionary<string, string>> GetAssessmentRecap();
     List<CurrentConditionLimitStateData> CurrentConditionLimitStateDatas();
     List<InspectionEffectivenessData> InspectionEffectivenessDatas();
@@ -62,159 +78,844 @@ public class AssessmentService(
     private readonly IInspectionFileRepository _inspectionFileRepository = inspectionFileRepository;
     private readonly IInspectionRepository _inspectionRepository = inspectionRepository;
     private readonly IMaintenanceRepository _maintenanceRepository = maintenanceRepository;
-    private readonly IAssessmentInspectionRepository _assessmentInspectionRepository = assessmentInspectionRepository;
-    private readonly IAssessmentMaintenanceRepository _assessmentMaintenanceRepository = assessmentMaintenanceRepository;
-    private readonly ICurrentConditionLimitStateRepository _currentConditionLimitStateRepository = currentConditionLimitStateRepository;
+    private readonly IAssessmentInspectionRepository _assessmentInspectionRepository =
+        assessmentInspectionRepository;
+    private readonly IAssessmentMaintenanceRepository _assessmentMaintenanceRepository =
+        assessmentMaintenanceRepository;
+    private readonly ICurrentConditionLimitStateRepository _currentConditionLimitStateRepository =
+        currentConditionLimitStateRepository;
     private readonly IHSSEDefinisionRepository _hSSEDefinisionRepository = hSSEDefinisionRepository;
-    private readonly IInspectionEffectivenessRepository _inspectionEffectivenessRepository = inspectionEffectivenessRepository;
-    private readonly IIsValveRepairedRepository _isValveRepairedRepository = isValveRepairedRepository;
-    private readonly IInspectionMethodRepository _inspectionMethodRepository = inspectionMethodRepository;
+    private readonly IInspectionEffectivenessRepository _inspectionEffectivenessRepository =
+        inspectionEffectivenessRepository;
+    private readonly IIsValveRepairedRepository _isValveRepairedRepository =
+        isValveRepairedRepository;
+    private readonly IInspectionMethodRepository _inspectionMethodRepository =
+        inspectionMethodRepository;
     private readonly IImpactEffectRepository _impactEffectRepository = impactEffectRepository;
-    private readonly IRecomendationActionRepository _recomendationActionRepository = recomendationActionRepository;
+    private readonly IRecomendationActionRepository _recomendationActionRepository =
+        recomendationActionRepository;
     private readonly IRepairedRepository _repairedRepository = repairedRepository;
-    private readonly ITimeToLimitStateRepository _timeToLimitStateRepository = timeToLimitStateRepository;
-    private readonly IUsedWithinOEMSpecificationRepository _usedWithinOEMSpecificationRepository = usedWithinOEMSpecificationRepository;
+    private readonly ITimeToLimitStateRepository _timeToLimitStateRepository =
+        timeToLimitStateRepository;
+    private readonly IUsedWithinOEMSpecificationRepository _usedWithinOEMSpecificationRepository =
+        usedWithinOEMSpecificationRepository;
     private readonly ILogRepository _logRepository = logRepository;
 
     public AssessmentData GetAssessment(int assessmentId)
     {
-        try{
-            AssessmentData? assessmentData = _assessmentRepository.GetAssessment(assessmentId) ?? throw new Exception("Assessment not found");
+        try
+        {
+            AssessmentData? assessmentData =
+                _assessmentRepository.GetAssessment(assessmentId)
+                ?? throw new Exception("Assessment not found");
             assessmentData.Asset = _assetRepository.GetAsset(assessmentData.AssetID);
-            assessmentData.InspectionHistory = _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
+            assessmentData.InspectionHistory =
+                _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
             foreach (var inspection in assessmentData.InspectionHistory)
             {
-                inspection.Inspection = _inspectionRepository.GetInspection(inspection.InspectionID ?? 0);
-                inspection.Inspection.InspectionFiles = _inspectionFileRepository.GetInspectionFiles(inspection.InspectionID ?? 0);
-                if(inspection.Inspection.InspectionFiles != null) {
+                inspection.Inspection = _inspectionRepository.GetInspection(
+                    inspection.InspectionID ?? 0
+                );
+                inspection.Inspection.InspectionFiles =
+                    _inspectionFileRepository.GetInspectionFiles(inspection.InspectionID ?? 0);
+                if (inspection.Inspection.InspectionFiles != null)
+                {
                     foreach (var file in inspection.Inspection.InspectionFiles)
                     {
-                        file.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + file.FilePath;
+                        file.FilePath =
+                            SharedEnvironment.app_path.Replace("/", "") + "/" + file.FilePath;
                     }
                 }
             }
-            assessmentData.MaintenanceHistory = _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
+            assessmentData.MaintenanceHistory =
+                _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
             foreach (var maintenance in assessmentData.MaintenanceHistory)
             {
-                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(maintenance.MaintenanceID ?? 0);
-                maintenance.Maintenance.MaintenanceFiles = _inspectionFileRepository.GetMaintenanceFiles(maintenance.MaintenanceID ?? 0);
-                if(maintenance.Maintenance.MaintenanceFiles != null) {
+                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(
+                    maintenance.MaintenanceID ?? 0
+                );
+                maintenance.Maintenance.MaintenanceFiles =
+                    _inspectionFileRepository.GetMaintenanceFiles(maintenance.MaintenanceID ?? 0);
+                if (maintenance.Maintenance.MaintenanceFiles != null)
+                {
                     foreach (var file in maintenance.Maintenance.MaintenanceFiles)
                     {
-                        file.FilePath = SharedEnvironment.app_path.Replace("/", "") + "/" + file.FilePath;
+                        file.FilePath =
+                            SharedEnvironment.app_path.Replace("/", "") + "/" + file.FilePath;
                     }
                 }
             }
             return assessmentData;
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             throw new Exception(ex.Message);
         }
     }
+
     public List<AssessmentData> GetAssessmentList(
         int AreaID = 0,
         int PlatformID = 0,
         bool IncludeDeleted = false,
         bool withHistory = true,
-        int AssetID = 0)
+        int AssetID = 0
+    )
     {
-        try {
-            List<AssessmentData> assessmentDataList = _assessmentRepository.GetAssessmentList(false, AssetID);
+        try
+        {
+            List<AssessmentData> assessmentDataList = _assessmentRepository.GetAssessmentList(
+                false,
+                AssetID
+            );
             foreach (var assessmentData in assessmentDataList)
             {
                 assessmentData.Asset = _assetRepository.GetAsset(assessmentData.AssetID);
                 if (withHistory)
                 {
-                    assessmentData.InspectionHistory = _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
+                    assessmentData.InspectionHistory =
+                        _assessmentInspectionRepository.GetAssessmentInspectionList(
+                            assessmentData.Id
+                        );
                     foreach (var inspection in assessmentData.InspectionHistory)
                     {
-                        inspection.Inspection = _inspectionRepository.GetInspection(inspection.InspectionID ?? 0);
+                        inspection.Inspection = _inspectionRepository.GetInspection(
+                            inspection.InspectionID ?? 0
+                        );
                     }
-                    assessmentData.MaintenanceHistory = _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
+                    assessmentData.MaintenanceHistory =
+                        _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(
+                            assessmentData.Id
+                        );
                     foreach (var maintenance in assessmentData.MaintenanceHistory)
                     {
-                        maintenance.Maintenance = _maintenanceRepository.GetMaintenance(maintenance.MaintenanceID ?? 0);
+                        maintenance.Maintenance = _maintenanceRepository.GetMaintenance(
+                            maintenance.MaintenanceID ?? 0
+                        );
                     }
                 }
             }
-            var newlist = assessmentDataList.Where(
-                x =>
-                x.Asset != null &&
-                x.Asset.PlatformData != null &&
-                x.Asset.PlatformData.AreaID == AreaID &&
-                x.Asset.PlatformID == PlatformID
-            ).ToList();
+            var newlist = assessmentDataList
+                .Where(x =>
+                    x.Asset != null
+                    && x.Asset.PlatformData != null
+                    && x.Asset.PlatformData.AreaID == AreaID
+                    && x.Asset.PlatformID == PlatformID
+                )
+                .ToList();
             return assessmentDataList;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             throw new Exception(ex.Message);
         }
     }
+
     public AssessmentData AddAssessment(AssessmentClass assessment)
     {
-        try {
-            AssessmentData? assessmentData = _assessmentRepository.AddAssessment(assessment) ?? throw new Exception("Assessment not found");
+        try
+        {
+            AssessmentData? assessmentData =
+                _assessmentRepository.AddAssessment(assessment)
+                ?? throw new Exception("Assessment not found");
             assessmentData.Asset = _assetRepository.GetAsset(assessmentData.AssetID);
-            assessmentData.InspectionHistory = _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
+            assessmentData.InspectionHistory =
+                _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
             foreach (var inspection in assessmentData.InspectionHistory)
             {
-                inspection.Inspection = _inspectionRepository.GetInspection(inspection.InspectionID ?? 0);
+                inspection.Inspection = _inspectionRepository.GetInspection(
+                    inspection.InspectionID ?? 0
+                );
             }
-            assessmentData.MaintenanceHistory = _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
+            assessmentData.MaintenanceHistory =
+                _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
             foreach (var maintenance in assessmentData.MaintenanceHistory)
             {
-                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(maintenance.MaintenanceID ?? 0);
+                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(
+                    maintenance.MaintenanceID ?? 0
+                );
             }
             return assessmentData;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             throw new Exception(ex.Message);
+        }
+    }
+
+    public AssessmentData CalculateAssessment(int assessmentID)
+    {
+        AssessmentData oldAssessmentData = GetAssessment(assessmentID);
+        AssessmentClass newAssessmentData = new()
+        {
+            Id = oldAssessmentData.Id,
+            AssetID = oldAssessmentData.AssetID,
+            AssessmentNo = oldAssessmentData.AssessmentNo,
+            AssessmentDate = oldAssessmentData.AssessmentDate,
+            TimePeriode = oldAssessmentData.TimePeriode,
+            TimeToLimitStateLeakageToAtmosphere =
+            oldAssessmentData.TimeToLimitStateLeakageToAtmosphere,
+            TimeToLimitStateFailureOfFunction =
+            oldAssessmentData.TimeToLimitStateFailureOfFunction,
+            TimeToLimitStatePassingAccrosValve =
+            oldAssessmentData.TimeToLimitStatePassingAccrosValve,
+            ImpactOfInternalFluidImpuritiesID =
+            oldAssessmentData.ImpactOfInternalFluidImpuritiesID,
+            ImpactOfOperatingEnvelopesID =
+            oldAssessmentData.ImpactOfOperatingEnvelopesID,
+            UsedWithinOEMSpecificationID =
+            oldAssessmentData.UsedWithinOEMSpecificationID,
+            RepairedID = oldAssessmentData.RepairedID,
+            ProductLossDefinition = oldAssessmentData.ProductLossDefinition,
+            HSSEDefinisionID = oldAssessmentData.HSSEDefinisionID,
+            Summary = oldAssessmentData.Summary,
+            RecommendationActionID = oldAssessmentData.RecommendationActionID,
+            DetailedRecommendation = oldAssessmentData.DetailedRecommendation,
+            CoFScore = oldAssessmentData.CoFScore,
+            IntegrityStatus = oldAssessmentData.IntegrityStatus
+        };
+        // GET LAST INSPECTION
+        List<AssessmentInspectionData>? inspectionDatas = oldAssessmentData.InspectionHistory;
+        if (inspectionDatas == null || inspectionDatas.Count == 0)
+        {
+            throw new Exception("Inspection Data not found");
+        }
+        List<InspectionData>? inspectionData = [];
+        foreach (var inspection in inspectionDatas)
+        {
+            if (inspection.Inspection == null || inspection.Inspection.InspectionDate == null)
+            {
+                continue;
+            }
+            inspectionData.Add(inspection.Inspection);
+        }
+        InspectionData latestInspection = inspectionData
+            .OrderByDescending(x =>
+                DateTime.ParseExact(
+                    x.InspectionDate ?? "01-01-1900",
+                    "dd-MM-yyyy",
+                    CultureInfo.InvariantCulture
+                )
+            )
+            .First();
+        /**
+        LF 1 Contains
+        - Leakage To Atmosphere
+        - Failure Of Function
+        - Passing Accros Valve
+        Data is from Latest Inspection
+        */
+        List<CurrentConditionLimitStateData> currentConditionLimitStateList =
+            _currentConditionLimitStateRepository.GetCurrentConditionLimitStateList();
+        double LeakageToAtmosphereV =
+            currentConditionLimitStateList
+                .First(x => x.Id == latestInspection.CurrentConditionLeakeageToAtmosphereID)
+                .LimitStateValue ?? 0;
+        double LeakageToAtmosphereW =
+            currentConditionLimitStateList
+                .First(x => x.Id == latestInspection.CurrentConditionLeakeageToAtmosphereID)
+                .Weighting ?? 0;
+        double FailureOfFunctionV =
+            currentConditionLimitStateList
+                .First(x => x.Id == latestInspection.CurrentConditionFailureOfFunctionID)
+                .LimitStateValue ?? 0;
+        double FailureOfFunctionW =
+            currentConditionLimitStateList
+                .First(x => x.Id == latestInspection.CurrentConditionFailureOfFunctionID)
+                .Weighting ?? 0;
+        double PassingAccrosValveV =
+            currentConditionLimitStateList
+                .First(x => x.Id == latestInspection.CurrentConditionPassingAcrossValveID)
+                .LimitStateValue ?? 0;
+        double PassingAccrosValveW =
+            currentConditionLimitStateList
+                .First(x => x.Id == latestInspection.CurrentConditionPassingAcrossValveID)
+                .Weighting ?? 0;
+        newAssessmentData.LeakageToAtmosphereID =
+            latestInspection.CurrentConditionLeakeageToAtmosphereID;
+        newAssessmentData.FailureOfFunctionID =
+            latestInspection.CurrentConditionFailureOfFunctionID;
+        newAssessmentData.PassingAccrosValveID =
+            latestInspection.CurrentConditionPassingAcrossValveID;
+        /**
+        LF 2 Contains
+        - Leakage To Atmosphere TP 1
+        - Leakage To Atmosphere TP 2
+        - Leakage To Atmosphere TP 3
+        - Failure Of Function TP 1
+        - Failure Of Function TP 2
+        - Failure Of Function TP 3
+        - Passing Accros Valve TP 1
+        - Passing Accros Valve TP 2
+        - Passing Accros Valve TP 3
+        */
+        DateTime lastInspectionDate = DateTime.ParseExact(
+            latestInspection.InspectionDate ?? "01-01-1900",
+            "dd-MM-yyyy",
+            CultureInfo.InvariantCulture
+        );
+        int timePeriod = int.Parse(oldAssessmentData.TimePeriode ?? "0");
+        int timeToLimitStateLeakageToAtmosphere = int.Parse(
+            oldAssessmentData.TimeToLimitStateLeakageToAtmosphere ?? "0"
+        );
+        int timeToLimitStateFailureOfFunction = int.Parse(
+            oldAssessmentData.TimeToLimitStateFailureOfFunction ?? "0"
+        );
+        int timeToLimitStatePassingAccrosValve = int.Parse(
+            oldAssessmentData.TimeToLimitStatePassingAccrosValve ?? "0"
+        );
+        int idImprobable = 1;
+        int idDoubtful = 2;
+        int idExpected = 3;
+        int tp_limit_1 = timePeriod;
+        int tp_limit_2 = 2 * timePeriod;
+        int tp_limit_3 = 3 * timePeriod;
+        List<TimeToLimitStateData> timeToLimitStateList =
+            _timeToLimitStateRepository.GetTimeToLimitStateList();
+        // Leakage To Atmosphere
+        int LeakageToAtmosphereTP1ID =
+            timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_1
+                ? idImprobable
+                : timeToLimitStateLeakageToAtmosphere > tp_limit_1
+                    ? idDoubtful
+                    : idExpected;
+        double LeakageToAtmosphereTP1IDV =
+            timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP1ID).LimitStateValue ?? 0;
+        double LeakageToAtmosphereTP1IDW =
+            timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP1ID).Weighting ?? 0;
+        int LeakageToAtmosphereTP2ID =
+            timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_2
+                ? idImprobable
+                : timeToLimitStateLeakageToAtmosphere > tp_limit_2
+                    ? idDoubtful
+                    : idExpected;
+        double LeakageToAtmosphereTP2IDV =
+            timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP2ID).LimitStateValue ?? 0;
+        double LeakageToAtmosphereTP2IDW =
+            timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP2ID).Weighting ?? 0;
+        int LeakageToAtmosphereTP3ID =
+            timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_3
+                ? idImprobable
+                : timeToLimitStateLeakageToAtmosphere > tp_limit_3
+                    ? idDoubtful
+                    : idExpected;
+        double LeakageToAtmosphereTP3IDV =
+            timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP3ID).LimitStateValue ?? 0;
+        double LeakageToAtmosphereTP3IDW =
+            timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP3ID).Weighting ?? 0;
+        // Failure Of Function
+        int FailureOfFunctionTP1ID =
+            timeToLimitStateFailureOfFunction >= 2 * tp_limit_1
+                ? idImprobable
+                : timeToLimitStateFailureOfFunction > tp_limit_1
+                    ? idDoubtful
+                    : idExpected;
+        double FailureOfFunctionTP1IDV =
+            timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP1ID).LimitStateValue ?? 0;
+        double FailureOfFunctionTP1IDW =
+            timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP1ID).Weighting ?? 0;
+        int FailureOfFunctionTP2ID =
+            timeToLimitStateFailureOfFunction >= 2 * tp_limit_2
+                ? idImprobable
+                : timeToLimitStateFailureOfFunction > tp_limit_2
+                    ? idDoubtful
+                    : idExpected;
+        double FailureOfFunctionTP2IDV =
+            timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP2ID).LimitStateValue ?? 0;
+        double FailureOfFunctionTP2IDW =
+            timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP2ID).Weighting ?? 0;
+        int FailureOfFunctionTP3ID =
+            timeToLimitStateFailureOfFunction >= 2 * tp_limit_3
+                ? idImprobable
+                : timeToLimitStateFailureOfFunction > tp_limit_3
+                    ? idDoubtful
+                    : idExpected;
+        double FailureOfFunctionTP3IDV =
+            timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP3ID).LimitStateValue ?? 0;
+        double FailureOfFunctionTP3IDW =
+            timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP3ID).Weighting ?? 0;
+        // Passing Accros Valve
+        int PassingAccrosValveTP1ID =
+            timeToLimitStatePassingAccrosValve >= 2 * tp_limit_1
+                ? idImprobable
+                : timeToLimitStatePassingAccrosValve > tp_limit_1
+                    ? idDoubtful
+                    : idExpected;
+        double PassingAccrosValveTP1IDV =
+            timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP1ID).LimitStateValue ?? 0;
+        double PassingAccrosValveTP1IDW =
+            timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP1ID).Weighting ?? 0;
+        int PassingAccrosValveTP2ID =
+            timeToLimitStatePassingAccrosValve >= 2 * tp_limit_2
+                ? idImprobable
+                : timeToLimitStatePassingAccrosValve > tp_limit_2
+                    ? idDoubtful
+                    : idExpected;
+        double PassingAccrosValveTP2IDV =
+            timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP2ID).LimitStateValue ?? 0;
+        double PassingAccrosValveTP2IDW =
+            timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP2ID).Weighting ?? 0;
+        int PassingAccrosValveTP3ID =
+            timeToLimitStatePassingAccrosValve >= 2 * tp_limit_3
+                ? idImprobable
+                : timeToLimitStatePassingAccrosValve > tp_limit_3
+                    ? idDoubtful
+                    : idExpected;
+        double PassingAccrosValveTP3IDV =
+            timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP3ID).LimitStateValue ?? 0;
+        double PassingAccrosValveTP3IDW =
+            timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP3ID).Weighting ?? 0;
+        // Fill the newAssessmentData
+        newAssessmentData.LeakageToAtmosphereTP1ID = LeakageToAtmosphereTP1ID;
+        newAssessmentData.LeakageToAtmosphereTP2ID = LeakageToAtmosphereTP2ID;
+        newAssessmentData.LeakageToAtmosphereTP3ID = LeakageToAtmosphereTP3ID;
+        newAssessmentData.FailureOfFunctionTP1ID = FailureOfFunctionTP1ID;
+        newAssessmentData.FailureOfFunctionTP2ID = FailureOfFunctionTP2ID;
+        newAssessmentData.FailureOfFunctionTP3ID = FailureOfFunctionTP3ID;
+        newAssessmentData.PassingAccrosValveTP1ID = PassingAccrosValveTP1ID;
+        newAssessmentData.PassingAccrosValveTP2ID = PassingAccrosValveTP2ID;
+        newAssessmentData.PassingAccrosValveTP3ID = PassingAccrosValveTP3ID;
+        /**
+        LF 3 Contains
+        - Inspection Effectiveness
+        */
+        List<InspectionEffectivenessData> inspectionEffectivenessList =
+            _inspectionEffectivenessRepository.GetInspectionEffectivenessList();
+        double InspectionEffectivenessV =
+            inspectionEffectivenessList
+                .First(x => x.Id == latestInspection.InspectionEffectivenessID)
+                .EffectivenessValue ?? 0;
+        double InspectionEffectivenessW =
+            inspectionEffectivenessList
+                .First(x => x.Id == latestInspection.InspectionEffectivenessID)
+                .Weighting ?? 0;
+        newAssessmentData.InspectionEffectivenessID = latestInspection.InspectionEffectivenessID;
+        /**
+        LF 4 - 7 Contains
+        4: Impact Of Internal Fluid Impurities
+        5: Impact Of Operating Envelopes
+        6: Used Within OEM Specification
+        7: Repaired
+        */
+        List<ImpactEffectData> impactEffectList = _impactEffectRepository.GetImpactEffectList();
+        double ImpactOfInternalFluidImpuritiesV =
+            impactEffectList
+                .First(x => x.Id == oldAssessmentData.ImpactOfInternalFluidImpuritiesID)
+                .ImpactEffectValue ?? 0;
+        double ImpactOfInternalFluidImpuritiesW =
+            impactEffectList
+                .First(x => x.Id == oldAssessmentData.ImpactOfInternalFluidImpuritiesID)
+                .Weighting ?? 0;
+        double ImpactOfOperatingEnvelopesV =
+            impactEffectList
+                .First(x => x.Id == oldAssessmentData.ImpactOfOperatingEnvelopesID)
+                .ImpactEffectValue ?? 0;
+        double ImpactOfOperatingEnvelopesW =
+            impactEffectList
+                .First(x => x.Id == oldAssessmentData.ImpactOfOperatingEnvelopesID)
+                .Weighting2 ?? 0;
+        // newAssessmentData.ImpactOfInternalFluidImpuritiesID =
+        //     oldAssessmentData.ImpactOfInternalFluidImpuritiesID;
+        // newAssessmentData.ImpactOfOperatingEnvelopesID =
+        //     oldAssessmentData.ImpactOfOperatingEnvelopesID;
+
+        List<UsedWithinOEMSpecificationData> usedWithinOEMSpecificationList =
+            _usedWithinOEMSpecificationRepository.GetUsedWithinOEMSpecificationList();
+        double UsedWithinOEMSpecificationV =
+            usedWithinOEMSpecificationList
+                .First(x => x.Id == oldAssessmentData.UsedWithinOEMSpecificationID)
+                .UsedWithinOEMSpecificationValue ?? 0;
+        double UsedWithinOEMSpecificationW =
+            usedWithinOEMSpecificationList
+                .First(x => x.Id == oldAssessmentData.UsedWithinOEMSpecificationID)
+                .Weighting ?? 0;
+        // newAssessmentData.UsedWithinOEMSpecificationID =
+        //     oldAssessmentData.UsedWithinOEMSpecificationID;
+
+        List<RepairedData> repairedList = _repairedRepository.GetRepairedList();
+        double RepairedV =
+            repairedList.First(x => x.Id == oldAssessmentData.RepairedID).RepairedValue ?? 0;
+        double RepairedW =
+            repairedList.First(x => x.Id == oldAssessmentData.RepairedID).Weighting ?? 0;
+        // newAssessmentData.RepairedID = oldAssessmentData.RepairedID;
+        // START CALCULATE
+        double LoFScoreLeakageToAtmophereTP1 =
+            (LeakageToAtmosphereTP1IDV * LeakageToAtmosphereTP1IDW)
+            * (
+                (LeakageToAtmosphereV * LeakageToAtmosphereW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScoreLeakageToAtmophereTP1 = LoFScoreLeakageToAtmophereTP1;
+        double LoFScoreLeakageToAtmophereTP1XPos = CalculateXPos(LoFScoreLeakageToAtmophereTP1);
+        double LoFScoreLeakageToAtmophereTP2 =
+            (LeakageToAtmosphereTP2IDV * LeakageToAtmosphereTP2IDW)
+            * (
+                (LeakageToAtmosphereV * LeakageToAtmosphereW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScoreLeakageToAtmophereTP2 = LoFScoreLeakageToAtmophereTP2;
+        double LoFScoreLeakageToAtmophereTP2XPos = CalculateXPos(LoFScoreLeakageToAtmophereTP2);
+        double LoFScoreLeakageToAtmophereTP3 =
+            (LeakageToAtmosphereTP3IDV * LeakageToAtmosphereTP3IDW)
+            * (
+                (LeakageToAtmosphereV * LeakageToAtmosphereW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScoreLeakageToAtmophereTP3 = LoFScoreLeakageToAtmophereTP3;
+        double LoFScoreLeakageToAtmophereTP3XPos = CalculateXPos(LoFScoreLeakageToAtmophereTP3);
+        double LoFScoreFailureOfFunctionTP1 =
+            (FailureOfFunctionTP1IDV * FailureOfFunctionTP1IDW)
+            * (
+                (FailureOfFunctionV * FailureOfFunctionW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScoreFailureOfFunctionTP1 = LoFScoreFailureOfFunctionTP1;
+        double LoFScoreFailureOfFunctionTP1XPos = CalculateXPos(LoFScoreFailureOfFunctionTP1);
+        double LoFScoreFailureOfFunctionTP2 =
+            (FailureOfFunctionTP2IDV * FailureOfFunctionTP2IDW)
+            * (
+                (FailureOfFunctionV * FailureOfFunctionW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScoreFailureOfFunctionTP2 = LoFScoreFailureOfFunctionTP2;
+        double LoFScoreFailureOfFunctionTP2XPos = CalculateXPos(LoFScoreFailureOfFunctionTP2);
+        double LoFScoreFailureOfFunctionTP3 =
+            (FailureOfFunctionTP3IDV * FailureOfFunctionTP3IDW)
+            * (
+                (FailureOfFunctionV * FailureOfFunctionW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScoreFailureOfFunctionTP3 = LoFScoreFailureOfFunctionTP3;
+        double LoFScoreFailureOfFunctionTP3XPos = CalculateXPos(LoFScoreFailureOfFunctionTP3);
+        double LoFScorePassingAccrosValveTP1 =
+            (PassingAccrosValveTP1IDV * PassingAccrosValveTP1IDW)
+            * (
+                (PassingAccrosValveV * PassingAccrosValveW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScorePassingAccrosValveTP1 = LoFScorePassingAccrosValveTP1;
+        double LoFScorePassingAccrosValveTP1XPos = CalculateXPos(LoFScorePassingAccrosValveTP1);
+        double LoFScorePassingAccrosValveTP2 =
+            (PassingAccrosValveTP2IDV * PassingAccrosValveTP2IDW)
+            * (
+                (PassingAccrosValveV * PassingAccrosValveW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScorePassingAccrosValveTP2 = LoFScorePassingAccrosValveTP2;
+        double LoFScorePassingAccrosValveTP2XPos = CalculateXPos(LoFScorePassingAccrosValveTP2);
+        double LoFScorePassingAccrosValveTP3 =
+            (PassingAccrosValveTP3IDV * PassingAccrosValveTP3IDW)
+            * (
+                (PassingAccrosValveV * PassingAccrosValveW)
+                + (InspectionEffectivenessV * InspectionEffectivenessW)
+                + (ImpactOfInternalFluidImpuritiesV * ImpactOfInternalFluidImpuritiesW)
+                + (ImpactOfOperatingEnvelopesV * ImpactOfOperatingEnvelopesW)
+                + (UsedWithinOEMSpecificationV * UsedWithinOEMSpecificationW)
+                + (RepairedV * RepairedW)
+            );
+        newAssessmentData.LoFScorePassingAccrosValveTP3 = LoFScorePassingAccrosValveTP3;
+        double LoFScorePassingAccrosValveTP3XPos = CalculateXPos(LoFScorePassingAccrosValveTP3);
+        // Calculate COF
+        List<HSSEDefinisionData> hSSEDefinisionList =
+            _hSSEDefinisionRepository.GetHSSEDefinisionList();
+        double COFByPLD = double.Parse(oldAssessmentData.ProductLossDefinition ?? "0");
+        HSSEDefinisionData hssebypld = hSSEDefinisionList
+            .Where(x => x.MinBBSValue >= COFByPLD)
+            .OrderBy(x => x.MinBBSValue)
+            .First();
+        int COFByHSSE = oldAssessmentData.HSSEDefinisionID ?? 0;
+        HSSEDefinisionData hssebyhsse = hSSEDefinisionList.Where(x => x.Id == COFByHSSE).First();
+        string cof =
+            (
+                string.Compare(hssebypld.CoFCategory, hssebyhsse.CoFCategory) > 0
+                    ? hssebypld.CoFCategory
+                    : hssebyhsse.CoFCategory
+            ) ?? "A";
+        newAssessmentData.ConsequenceOfFailure = cof;
+        Dictionary<string, int> cof_rac = new()
+        {
+            { "A", 3769 },
+            { "B", 891 },
+            { "C", 891 },
+            { "D", 49 },
+            { "E", 49 }
+        };
+        int rac = cof_rac[cof];
+        var cofToYpos = new Dictionary<string, double>
+            {
+                {"E", 10},
+                {"D", 30},
+                {"C", 50},
+                {"B", 70},
+                {"A", 90}
+            };
+        double ypos = cofToYpos.TryGetValue(cof, out double value) ? value : 0;
+        string TP1A = Math.Min(Math.Floor((LoFScoreLeakageToAtmophereTP1XPos/20))+1, 5).ToString() + cof;
+        string TP2A = Math.Min(Math.Floor((LoFScoreLeakageToAtmophereTP2XPos/20))+1, 5).ToString() + cof;
+        string TP3A = Math.Min(Math.Floor((LoFScoreLeakageToAtmophereTP3XPos/20))+1, 5).ToString() + cof;
+        string TP1B = Math.Min(Math.Floor((LoFScoreFailureOfFunctionTP1XPos/20) )+1 , 5).ToString() + cof;
+        string TP2B = Math.Min(Math.Floor((LoFScoreFailureOfFunctionTP2XPos/20) )+1 , 5).ToString() + cof;
+        string TP3B = Math.Min(Math.Floor((LoFScoreFailureOfFunctionTP3XPos/20) )+1 , 5).ToString() + cof;
+        string TP1C = Math.Min(Math.Floor((LoFScorePassingAccrosValveTP1XPos/20))+1, 5).ToString() + cof;
+        string TP2C = Math.Min(Math.Floor((LoFScorePassingAccrosValveTP2XPos/20))+1, 5).ToString() + cof;
+        string TP3C = Math.Min(Math.Floor((LoFScorePassingAccrosValveTP3XPos/20))+1, 5).ToString() + cof;
+        int TP1Riskv = Math.Max(Math.Max(int.Parse(TP1A[..1]), int.Parse(TP1B[..1])), int.Parse(TP1C[..1]));
+        string TP1Risk = TP1Riskv.ToString() + TP1A[1..];
+        int TP2Riskv = Math.Max(Math.Max(int.Parse(TP2A[..1]), int.Parse(TP2B[..1])), int.Parse(TP2C[..1]));
+        string TP2Risk = TP2Riskv.ToString() + TP1B[1..];
+        int TP3Riskv = Math.Max(Math.Max(int.Parse(TP3A[..1]), int.Parse(TP3B[..1])), int.Parse(TP3C[..1]));
+        string TP3Risk = TP3Riskv.ToString() + TP1C[1..];
+        newAssessmentData.TP1A = TP1A;
+        newAssessmentData.TP2A = TP2A;
+        newAssessmentData.TP3A = TP3A;
+        newAssessmentData.TP1B = TP1B;
+        newAssessmentData.TP2B = TP2B;
+        newAssessmentData.TP3B = TP3B;
+        newAssessmentData.TP1C = TP1C;
+        newAssessmentData.TP2C = TP2C;
+        newAssessmentData.TP3C = TP3C;
+        newAssessmentData.TP1Risk = TP1Risk;
+        newAssessmentData.TP2Risk = TP2Risk;
+        newAssessmentData.TP3Risk = TP3Risk;
+        double loftp1aval = DecideTTARAC(
+            LoFScoreLeakageToAtmophereTP1,
+            LoFScoreLeakageToAtmophereTP2,
+            LoFScoreLeakageToAtmophereTP3,
+            tp_limit_1,
+            tp_limit_2,
+            tp_limit_3,
+            rac,
+            LeakageToAtmosphereTP1ID,
+            LeakageToAtmosphereTP2ID,
+            LeakageToAtmosphereTP3ID
+        );
+        DateTime loftp1adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp1aval));
+        newAssessmentData.TPTimeToActionA = loftp1adate.ToString("dd-MM-yyyy");
+        double loftp2aval = DecideTTARAC(
+            LoFScoreFailureOfFunctionTP1,
+            LoFScoreFailureOfFunctionTP2,
+            LoFScoreFailureOfFunctionTP3,
+            tp_limit_1,
+            tp_limit_2,
+            tp_limit_3,
+            rac,
+            FailureOfFunctionTP1ID,
+            FailureOfFunctionTP2ID,
+            FailureOfFunctionTP3ID
+        );
+        DateTime loftp2adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp2aval));
+        newAssessmentData.TPTimeToActionB = loftp2adate.ToString("dd-MM-yyyy");
+        double loftp3aval = DecideTTARAC(
+            LoFScorePassingAccrosValveTP1,
+            LoFScorePassingAccrosValveTP2,
+            LoFScorePassingAccrosValveTP3,
+            tp_limit_1,
+            tp_limit_2,
+            tp_limit_3,
+            rac,
+            PassingAccrosValveTP1ID,
+            PassingAccrosValveTP2ID,
+            PassingAccrosValveTP3ID
+        );
+        DateTime loftp3adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp3aval));
+        newAssessmentData.TPTimeToActionC = loftp3adate.ToString("dd-MM-yyyy");
+        DateTime tptimetoactionrisk = new[] { loftp1adate, loftp2adate, loftp3adate }.Min();
+        newAssessmentData.TPTimeToActionRisk = tptimetoactionrisk.ToString("dd-MM-yyyy");
+        AssessmentData finalAssessmentData = UpdateAssessment(newAssessmentData);
+        return finalAssessmentData;
+    }
+
+    private static double CalculateXPos(double value)
+    {
+        double gapx = 20;
+        double cat1min = 16;
+        double cat1max = 49;
+        double cat2min = cat1max + 1;
+        double cat2max = 210;
+        double cat3min = cat2max + 1;
+        double cat3max = 891;
+        double cat4min = cat3max + 1;
+        double cat4max = 3769;
+        double cat5min = cat4max + 1;
+        double cat5max = 16050;
+
+        double xpos = 0;
+        if (value <= cat1min)
+        {
+            xpos = 0;
+        }
+        else if (value <= cat1max)
+        {
+            xpos = ((value - cat1min) / (cat1max - cat1min) * 20) + (gapx * 0);
+        }
+        else if (value <= cat2max)
+        {
+            xpos = ((value - cat2min) / (cat2max - cat2min) * 20) + (gapx * 1);
+        }
+        else if (value <= cat3max)
+        {
+            xpos = ((value - cat3min) / (cat3max - cat3min) * 20) + (gapx * 2);
+        }
+        else if (value <= cat4max)
+        {
+            xpos = ((value - cat4min) / (cat4max - cat4min) * 20) + (gapx * 3);
+        }
+        else if (value <= cat5max)
+        {
+            xpos = ((value - cat5min) / (cat5max - cat5min) * 20) + (gapx * 4);
+        }
+        else
+        {
+            xpos = 100;
+        }
+        return xpos;
+    }
+
+    public static double DecideTTARAC(double loftp1, double loftp2, double loftp3, double timelimittp1, double timelimittp2, double timelimittp3, double rac, double loftp1val, double loftp2val, double loftp3val)
+    {
+        double calculate;
+        if (loftp1 > rac)
+        {
+            calculate = 0;
+        }
+        else
+        {
+            if (loftp3 > rac && loftp2 <= rac)
+            {
+                calculate = (int)Math.Floor(((timelimittp3 - timelimittp2) / 12.0 * (rac - loftp2) / (loftp3 - loftp2) + (timelimittp2 / 12.0)) * 12);
+            }
+            else if (loftp2 > rac)
+            {
+                calculate = (int)Math.Floor(((timelimittp2 - timelimittp1) / 12.0 * (rac - loftp1) / (loftp2 - loftp1) + (timelimittp1 / 12.0)) * 12);
+            }
+            else
+            {
+                calculate = DecideTTL(loftp1val, loftp2val, loftp3val, timelimittp1, timelimittp2, timelimittp3);
+            }
+        }
+        return calculate;
+    }
+    public static double DecideTTL(double tp1, double tp2, double tp3, double tp1val, double tp2val, double tp3val)
+    {
+        if (tp1 == 1 && tp2 == 1 && tp3 == 1)
+        {
+            return tp3val;
+        }
+        else if (tp1 == 1 && tp2 == 1 && tp3 == 2)
+        {
+            return tp3val;
+        }
+        else if (tp1 == 1 && tp2 == 2 && tp3 == 2)
+        {
+            return tp2val;
+        }
+        else if (tp1 == 2 && tp2 == 2 && tp3 == 2)
+        {
+            return (tp2val + tp3val) / 2;
+        }
+        else if (tp1 == 2 && tp2 == 2 && tp3 == 3)
+        {
+            return (tp1val + tp2val) / 2;
+        }
+        else if (tp1 == 2 && tp2 == 3 && tp3 == 3)
+        {
+            return tp1val;
+        }
+        else
+        {
+            return 0;
         }
     }
     public AssessmentData UpdateAssessment(AssessmentClass assessment)
     {
-        try {
+        try
+        {
             AssessmentData assessmentData = _assessmentRepository.UpdateAssessment(assessment);
             assessmentData.Asset = _assetRepository.GetAsset(assessmentData.AssetID);
-            assessmentData.InspectionHistory = _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
+            assessmentData.InspectionHistory =
+                _assessmentInspectionRepository.GetAssessmentInspectionList(assessmentData.Id);
             foreach (var inspection in assessmentData.InspectionHistory)
             {
-                inspection.Inspection = _inspectionRepository.GetInspection(inspection.InspectionID ?? 0);
+                inspection.Inspection = _inspectionRepository.GetInspection(
+                    inspection.InspectionID ?? 0
+                );
             }
-            assessmentData.MaintenanceHistory = _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
+            assessmentData.MaintenanceHistory =
+                _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
             foreach (var maintenance in assessmentData.MaintenanceHistory)
             {
-                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(maintenance.MaintenanceID ?? 0);
+                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(
+                    maintenance.MaintenanceID ?? 0
+                );
             }
             return assessmentData;
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             throw new Exception(ex.Message);
         }
     }
+
     public AssessmentData DeleteAssessment(AssessmentClass assessment)
     {
-        try {
+        try
+        {
             return _assessmentRepository.DeleteAssessment(assessment);
         }
-        catch (Exception ex) {
+        catch (Exception ex)
+        {
             throw new Exception(ex.Message);
         }
     }
+
     private ToolImportClass MapAssessmentRegister(List<Dictionary<string, string>> datas)
     {
         ToolImportClass toolImport = new();
         List<string> failedRecords = [];
         List<AssetData> assetList = _assetRepository.GetAssetList();
         List<ImpactEffectData> impactEffectList = _impactEffectRepository.GetImpactEffectList();
-        List<UsedWithinOEMSpecificationData> usedWithinOEMSpecificationList = _usedWithinOEMSpecificationRepository.GetUsedWithinOEMSpecificationList();
+        List<UsedWithinOEMSpecificationData> usedWithinOEMSpecificationList =
+            _usedWithinOEMSpecificationRepository.GetUsedWithinOEMSpecificationList();
         List<RepairedData> repairedList = _repairedRepository.GetRepairedList();
-        List<HSSEDefinisionData> hSSEDefinisionList = _hSSEDefinisionRepository.GetHSSEDefinisionList();
+        List<HSSEDefinisionData> hSSEDefinisionList =
+            _hSSEDefinisionRepository.GetHSSEDefinisionList();
         List<Dictionary<string, string>> finalresult = [];
         foreach (var records in datas)
         {
             int timeperiod = 0;
             Dictionary<string, string> result = [];
-            foreach(var record in records)
+            foreach (var record in records)
             {
                 string key = record.Key;
                 string value = record.Value.Trim().ToLower();
@@ -271,15 +972,25 @@ public class AssessmentService(
                             }
                             date = string.Join("/", dateParts);
                             string[] formats = ["dd/MM/yyyy", "MM/dd/yyyy"];
-                            if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                            if (
+                                DateTime.TryParseExact(
+                                    date,
+                                    formats,
+                                    CultureInfo.InvariantCulture,
+                                    DateTimeStyles.None,
+                                    out DateTime parsedDate
+                                )
+                            )
                             {
                                 if (parsedDate.Day == int.Parse(date.Split('/')[0]))
                                 {
-                                    newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                                    newDate =
+                                        dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
                                 }
                                 else
                                 {
-                                    newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                                    newDate =
+                                        dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
                                 }
                             }
                             else
@@ -305,7 +1016,7 @@ public class AssessmentService(
                     {
                         foreach (var impactEffect in impactEffectList)
                         {
-                            if(impactEffect.ImpactEffect == null)
+                            if (impactEffect.ImpactEffect == null)
                             {
                                 continue;
                             }
@@ -320,9 +1031,7 @@ public class AssessmentService(
                     {
                         foreach (var usedWithinOEMSpecification in usedWithinOEMSpecificationList)
                         {
-                            if (
-                                usedWithinOEMSpecification.UsedWithinOEMSpecification == null
-                            )
+                            if (usedWithinOEMSpecification.UsedWithinOEMSpecification == null)
                             {
                                 continue;
                             }
@@ -561,6 +1270,7 @@ public class AssessmentService(
         toolImport.FailedRecords = failedRecords;
         return toolImport;
     }
+
     private static string MapHeader(string name)
     {
         string result = name.ToLower() switch
@@ -568,9 +1278,12 @@ public class AssessmentService(
             "valve tag no." => "AssetID",
             "assessment date\n(dd/mm/yyyy)" => "AssessmentDate",
             "time periode\n(month)" => "TimePeriode",
-            "lf2 - time to limit state leakage to atmosphere \n(month)" => "TimeToLimitStateLeakageToAtmosphere",
-            "lf2 - time to limit state failure of function (month)" => "TimeToLimitStateFailureOfFunction",
-            "lf2 - time to limit state passing accros valve (month)" => "TimeToLimitStatePassingAccrosValve",
+            "lf2 - time to limit state leakage to atmosphere \n(month)"
+                => "TimeToLimitStateLeakageToAtmosphere",
+            "lf2 - time to limit state failure of function (month)"
+                => "TimeToLimitStateFailureOfFunction",
+            "lf2 - time to limit state passing accros valve (month)"
+                => "TimeToLimitStatePassingAccrosValve",
             "lf4 - impact of internal fluid impurities" => "ImpactOfInternalFluidImpuritiesID",
             "lf5 - impact of operating envelopes" => "ImpactOfOperatingEnvelopesID",
             "lf6 - used within oem specification" => "UsedWithinOEMSpecificationID",
@@ -581,26 +1294,54 @@ public class AssessmentService(
         };
         return result;
     }
-    public void AddMaintenanceToAssessment(int assessmentId, List<int> maintenanceIds, bool update = false)
+
+    public void AddMaintenanceToAssessment(
+        int assessmentId,
+        List<int> maintenanceIds,
+        bool update = false
+    )
     {
-        if(update)
+        if (update)
         {
             _assessmentMaintenanceRepository.DeleteAssessmentMaintenance(assessmentId);
         }
         _assessmentMaintenanceRepository.AddMaintenanceToAssessment(assessmentId, maintenanceIds);
     }
-    public void AddInspectionToAssessment(int assessmentId, List<int> inspectionIds, bool update = false)
+
+    public List<AssessmentMaintenanceData> GetAssessmentMaintenanceDatas(int maintenanceid)
     {
-        if(update)
+        return _assessmentMaintenanceRepository.GetAssessmentMaintenanceListByMaintenanceID(
+            maintenanceid
+        );
+    }
+
+    public void AddInspectionToAssessment(
+        int assessmentId,
+        List<int> inspectionIds,
+        bool update = false
+    )
+    {
+        if (update)
         {
             _assessmentInspectionRepository.DeleteAssessmentInspection(assessmentId);
         }
         _assessmentInspectionRepository.AddInspectionToAssessment(assessmentId, inspectionIds);
     }
-    public Dictionary<string, string> ImportAssessment(List<Dictionary<string, string>> data, int CreatedBy)
+
+    public List<AssessmentInspectionData> GetAssessmentInspectionDatas(int inspectionid)
+    {
+        return _assessmentInspectionRepository.GetAssessmentInspectionListByInspectionID(
+            inspectionid
+        );
+    }
+
+    public Dictionary<string, string> ImportAssessment(
+        List<Dictionary<string, string>> data,
+        int CreatedBy
+    )
     {
         ToolImportClass toolImport = MapAssessmentRegister(data);
-        if(toolImport.MappedRecords == null || toolImport.MappedRecords.Count == 0)
+        if (toolImport.MappedRecords == null || toolImport.MappedRecords.Count == 0)
         {
             throw new Exception("Failed to import assessment data");
         }
@@ -610,27 +1351,36 @@ public class AssessmentService(
         int failed = 0;
         List<string> failedDatas = [];
 
-        foreach(var item in result){
-            if(item == null) continue;
+        foreach (var item in result)
+        {
+            if (item == null)
+                continue;
             total++;
             AssessmentClass? assessment = null;
-            try{
+            try
+            {
                 string json = JsonConvert.SerializeObject(item);
                 assessment = JsonConvert.DeserializeObject<AssessmentClass>(json);
-                if(assessment == null) continue;
+                if (assessment == null)
+                    continue;
                 assessment.IsDeleted = false;
                 assessment.CreatedBy = CreatedBy;
-                assessment.CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString());
+                assessment.CreatedAt = DateTime.Now.ToString(
+                    SharedEnvironment.GetDateFormatString()
+                );
                 AssessmentData? assessmentData = _assessmentRepository.AddAssessment(assessment);
             }
-            catch(Exception e){
-                LogData log = new(){
-                    Module = "Import Inspection",
-                    CreatedBy = CreatedBy,
-                    CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
-                    Message = e.Message,
-                    Data = JsonConvert.SerializeObject(item)
-                };
+            catch (Exception e)
+            {
+                LogData log =
+                    new()
+                    {
+                        Module = "Import Inspection",
+                        CreatedBy = CreatedBy,
+                        CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                        Message = e.Message,
+                        Data = JsonConvert.SerializeObject(item)
+                    };
                 _logRepository.AddLog(log);
                 failed++;
                 failedDatas.Add(assessment?.AssessmentDate ?? "");
@@ -667,7 +1417,8 @@ public class AssessmentService(
             message += ".";
         }
         string messageFailed = "";
-        if(toolImport.FailedRecords != null && toolImport.FailedRecords.Count > 0){
+        if (toolImport.FailedRecords != null && toolImport.FailedRecords.Count > 0)
+        {
             foreach (var _failed in toolImport.FailedRecords)
             {
                 total++;
@@ -680,52 +1431,95 @@ public class AssessmentService(
                 }
             }
         }
-        return 
-            new Dictionary<string, string>
-            {
-                { "total", total.ToString() },
-                { "success", success.ToString() },
-                { "failed", failed.ToString() },
-                { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
-                { "message", message }
-            };
+        return new Dictionary<string, string>
+        {
+            { "total", total.ToString() },
+            { "success", success.ToString() },
+            { "failed", failed.ToString() },
+            { "failedDatas", JsonConvert.SerializeObject(failedDatas) },
+            { "message", message }
+        };
     }
+
     public List<AssessmentData> GetAssessmentRecapList(
         int AreaID = 0,
         int PlatformID = 0,
         bool IncludeDeleted = false,
         bool withHistory = true
-    ){
-        List<AssessmentData> assessmentDataList =
-            _assessmentRepository.GetAssessmentList(false)
+    )
+    {
+        List<AssessmentData> assessmentDataList = _assessmentRepository
+            .GetAssessmentList(false)
             .Where(x => x.IsDeleted == IncludeDeleted)
+            .Where(x => x.TP1Risk != null)
             .GroupBy(x => x.AssetID)
-            .Select(x => x.OrderByDescending(a => DateTime.ParseExact(a.AssessmentDate ?? "01-01-1900", "dd-MM-yyyy", CultureInfo.InvariantCulture)).First())
+            .Select(x =>
+                x.OrderByDescending(a =>
+                        DateTime.ParseExact(
+                            a.AssessmentDate ?? "01-01-1900",
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture
+                        )
+                    )
+                    .First()
+            )
             .ToList();
-        foreach(var assessment in assessmentDataList)
+        foreach (var assessment in assessmentDataList)
         {
             assessment.Asset = _assetRepository.GetAsset(assessment.AssetID);
-            assessment.Asset.PlatformData = _platformRepository.GetPlatform(assessment.Asset.PlatformID ?? 0);
-            assessment.InspectionHistory = _assessmentInspectionRepository.GetAssessmentInspectionList(assessment.Id);
-            foreach(var inspection in assessment.InspectionHistory)
+            assessment.Asset.PlatformData = _platformRepository.GetPlatform(
+                assessment.Asset.PlatformID ?? 0
+            );
+            assessment.InspectionHistory =
+                _assessmentInspectionRepository.GetAssessmentInspectionList(assessment.Id);
+            foreach (var inspection in assessment.InspectionHistory)
             {
-                inspection.Inspection = _inspectionRepository.GetInspection(inspection.InspectionID ?? 0);
+                inspection.Inspection = _inspectionRepository.GetInspection(
+                    inspection.InspectionID ?? 0
+                );
             }
-            if(assessment.InspectionHistory != null && assessment.InspectionHistory.Any()){
-                var lastInspection = assessment.InspectionHistory.Last().Inspection;
-                if(lastInspection != null){
+            if (assessment.InspectionHistory != null && assessment.InspectionHistory.Any())
+            {
+                // var lastInspection = assessment.InspectionHistory.Last().Inspection;
+                var lastInspection = assessment
+                    .InspectionHistory.OrderByDescending(i =>
+                        DateTime.ParseExact(
+                            i.Inspection?.InspectionDate ?? "01-01-1900",
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture
+                        )
+                    )
+                    .First()
+                    .Inspection;
+                if (lastInspection != null)
+                {
                     assessment.LastInspectionId = lastInspection.Id;
                     assessment.LastInspectionDate = lastInspection.InspectionDate;
                 }
             }
-            assessment.MaintenanceHistory = _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessment.Id);
-            foreach(var maintenance in assessment.MaintenanceHistory)
+            assessment.MaintenanceHistory =
+                _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessment.Id);
+            foreach (var maintenance in assessment.MaintenanceHistory)
             {
-                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(maintenance.MaintenanceID ?? 0);
+                maintenance.Maintenance = _maintenanceRepository.GetMaintenance(
+                    maintenance.MaintenanceID ?? 0
+                );
             }
-            if(assessment.MaintenanceHistory != null && assessment.MaintenanceHistory.Any()){
-                var lastMaintenance = assessment.MaintenanceHistory.Last().Maintenance;
-                if(lastMaintenance != null){
+            if (assessment.MaintenanceHistory != null && assessment.MaintenanceHistory.Any())
+            {
+                // var lastMaintenance = assessment.MaintenanceHistory.Last().Maintenance;
+                var lastMaintenance = assessment
+                    .MaintenanceHistory.OrderByDescending(m =>
+                        DateTime.ParseExact(
+                            m.Maintenance?.MaintenanceDate ?? "01-01-1900",
+                            "dd-MM-yyyy",
+                            CultureInfo.InvariantCulture
+                        )
+                    )
+                    .First()
+                    .Maintenance;
+                if (lastMaintenance != null)
+                {
                     assessment.LastMaintenanceId = lastMaintenance.Id;
                     assessment.LastMaintenanceDate = lastMaintenance.MaintenanceDate;
                 }
@@ -738,12 +1532,14 @@ public class AssessmentService(
             .ToList();
         return assessmentDataList;
     }
-    public Dictionary<string, Dictionary<string, string>> GetAssessmentRecap(){
+
+    public Dictionary<string, Dictionary<string, string>> GetAssessmentRecap()
+    {
         Dictionary<string, Dictionary<string, string>> recap_final = [];
         Dictionary<string, string> recap_heatmap = [];
         Dictionary<string, string> recap_piechart = [];
         Dictionary<string, Dictionary<string, string>> recap_barchart = [];
-        Dictionary<string, string> recap_barchart_integritystatus= [];
+        Dictionary<string, string> recap_barchart_integritystatus = [];
         Dictionary<string, string> recap_barchart_convert = [];
         int a1 = 0;
         int a2 = 0;
@@ -871,7 +1667,9 @@ public class AssessmentService(
                     break;
             }
             // calculate risk_var
-            string risk = AssessmentStaticClass.ColorRiskMap[AssessmentStaticClass.GetHeatColor(assessment.TP1Risk)];
+            string risk = AssessmentStaticClass.ColorRiskMap[
+                AssessmentStaticClass.GetHeatColor(assessment.TP1Risk)
+            ];
             switch (risk)
             {
                 case "Very Low":
@@ -890,7 +1688,8 @@ public class AssessmentService(
                     risk_veryhigh++;
                     break;
             }
-            if(assessment.Asset!=null){
+            if (assessment.Asset != null)
+            {
                 if (!recap_barchart.ContainsKey(assessment.Asset.BusinessArea ?? ""))
                 {
                     recap_barchart.Add(
@@ -905,10 +1704,13 @@ public class AssessmentService(
                         }
                     );
                 }
-                int curr_risk = int.Parse(recap_barchart[assessment.Asset.BusinessArea ?? ""][risk]);
+                int curr_risk = int.Parse(
+                    recap_barchart[assessment.Asset.BusinessArea ?? ""][risk]
+                );
                 curr_risk++;
                 recap_barchart[assessment.Asset.BusinessArea ?? ""][risk] = curr_risk.ToString();
-                switch(assessment.IntegrityStatus){
+                switch (assessment.IntegrityStatus)
+                {
                     case "Very Low Priority":
                         integrity_verylow++;
                         break;
@@ -972,42 +1774,52 @@ public class AssessmentService(
         recap_final.Add("integritystatus", recap_barchart_integritystatus);
         return recap_final;
     }
+
     public List<CurrentConditionLimitStateData> CurrentConditionLimitStateDatas()
     {
         return _currentConditionLimitStateRepository.GetCurrentConditionLimitStateList();
     }
+
     public List<InspectionEffectivenessData> InspectionEffectivenessDatas()
     {
         return _inspectionEffectivenessRepository.GetInspectionEffectivenessList();
     }
+
     public List<IsValveRepairedData> IsValveRepairedDatas()
     {
         return _isValveRepairedRepository.GetIsValveRepairedList();
     }
+
     public List<InspectionMethodData> InspectionMethodDatas()
     {
         return _inspectionMethodRepository.GetInspectionMethodList();
     }
+
     public List<TimeToLimitStateData> TimeToLimitStateDatas()
     {
         return _timeToLimitStateRepository.GetTimeToLimitStateList();
     }
+
     public List<ImpactEffectData> ImpactEffectDatas()
     {
         return _impactEffectRepository.GetImpactEffectList();
     }
+
     public List<UsedWithinOEMSpecificationData> UsedWithinOEMSpecificationDatas()
     {
         return _usedWithinOEMSpecificationRepository.GetUsedWithinOEMSpecificationList();
     }
+
     public List<RepairedData> RepairedDatas()
     {
         return _repairedRepository.GetRepairedList();
     }
+
     public List<HSSEDefinisionData> HSSEDefinisionDatas()
     {
         return _hSSEDefinisionRepository.GetHSSEDefinisionList();
     }
+
     public List<RecommendationActionData> RecomendationActionDatas()
     {
         return _recomendationActionRepository.GetRecomendationActionList();

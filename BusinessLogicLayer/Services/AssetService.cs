@@ -1,3 +1,4 @@
+using System.Globalization;
 using DataAccessLayer;
 using Newtonsoft.Json;
 using SharedLayer;
@@ -162,6 +163,7 @@ public class AssetService(
                     || mappedKey.Equals("ManualOverrideID")
                     || mappedKey.Equals("FluidPhaseID")
                     || mappedKey.Equals("ToxicOrFlamableFluidID")
+                    || mappedKey.Equals("InstallationDate")
                 )
                 {
                     if (mappedKey.Equals("PlatformID"))
@@ -247,6 +249,7 @@ public class AssetService(
                         {
                             string date = value.Split(" ")[0];
                             List<string> dateParts = date.Split("/").ToList();
+                            string newDate = "";
                             if (dateParts[0].Length == 1)
                             {
                                 dateParts[0] = "0" + dateParts[0];
@@ -255,7 +258,24 @@ public class AssetService(
                             {
                                 dateParts[1] = "0" + dateParts[1];
                             }
-                            string newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                            date = string.Join("/", dateParts);
+                            string[] formats = ["dd/MM/yyyy", "MM/dd/yyyy"];
+                            if (DateTime.TryParseExact(date, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime parsedDate))
+                            {
+                                if (parsedDate.Day == int.Parse(date.Split('/')[0]))
+                                {
+                                    newDate = dateParts[0] + "-" + dateParts[1] + "-" + dateParts[2];
+                                }
+                                else
+                                {
+                                    newDate = dateParts[1] + "-" + dateParts[0] + "-" + dateParts[2];
+                                }
+                            }
+                            else
+                            {
+                                newDate = "01-01-1900";
+                            }
+                            Console.WriteLine("Mapped Value: " + string.Join(", ", dateParts));
                             mappedValue = newDate;
                         }
                         else

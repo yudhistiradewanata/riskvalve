@@ -52,7 +52,7 @@ public class LoginController(IUserService userService) : Controller
             HttpContext.Session.SetString("IsViewer", loginIsViewer);
             result.IsSuccess = true;
             result.Message = "Login Success";
-            result.Data = user;
+            result.Data = null;
             return Json(result);
         }
         catch (Exception e)

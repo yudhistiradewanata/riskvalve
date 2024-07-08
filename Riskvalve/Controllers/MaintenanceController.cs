@@ -41,7 +41,8 @@ public class MaintenanceController(
                 return Redirect(SharedEnvironment.app_path + "/Home/Index");
             }
         }
-        ViewData["CurrentConditionLimitStateData"] = _assessmentService.CurrentConditionLimitStateDatas();
+        ViewData["CurrentConditionLimitStateData"] =
+            _assessmentService.CurrentConditionLimitStateDatas();
         ViewData["InspectionEffectivenessData"] = _assessmentService.InspectionEffectivenessDatas();
         ViewData["IsValveRepairedData"] = _assessmentService.IsValveRepairedDatas();
         ViewData["InspectionMethodData"] = _assessmentService.InspectionMethodDatas();
@@ -124,7 +125,8 @@ public class MaintenanceController(
         {
             MaintenanceData maintenance = _maintenanceService.AddMaintenance(maintenanceClass);
             IWebHostEnvironment environment =
-                Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>() ?? throw new Exception("Environment not found");
+                Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>()
+                ?? throw new Exception("Environment not found");
             string path = Path.Combine(
                 environment.WebRootPath,
                 "Uploads",
@@ -196,7 +198,9 @@ public class MaintenanceController(
                             {
                                 Id = delete,
                                 DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-                                DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
+                                DeletedAt = DateTime.Now.ToString(
+                                    SharedEnvironment.GetDateFormatString()
+                                )
                             }
                         );
                     }
@@ -219,7 +223,8 @@ public class MaintenanceController(
             Console.WriteLine("==APP AYAYA==");
             Console.WriteLine(JsonSerializer.Serialize(maintenance));
             IWebHostEnvironment environment =
-                Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>() ?? throw new Exception("Environment not found");
+                Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>()
+                ?? throw new Exception("Environment not found");
             string path = Path.Combine(
                 environment.WebRootPath,
                 "Uploads",
@@ -288,17 +293,29 @@ public class MaintenanceController(
                     throw new Exception("Invalid session Id");
                 }
             }
-            MaintenanceClass maintenance =
-                new()
-                {
-                    Id = id,
-                    DeletedBy = deletedBy,
-                    DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
-                };
-            MaintenanceData maintenanceData = _maintenanceService.DeleteMaintenance(maintenance);
-            result.IsSuccess = true;
-            result.Message = "Maintenance deleted successfully";
-            result.Data = maintenanceData;
+            List<AssessmentMaintenanceData> assessmentMaintenanceDatas =
+                _assessmentService.GetAssessmentMaintenanceDatas(id);
+            if (assessmentMaintenanceDatas.Count > 0)
+            {
+                result.IsSuccess = false;
+                result.Message = "This maintenance is associated with assessment";
+            }
+            else
+            {
+                MaintenanceClass maintenance =
+                    new()
+                    {
+                        Id = id,
+                        DeletedBy = deletedBy,
+                        DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
+                    };
+                MaintenanceData maintenanceData = _maintenanceService.DeleteMaintenance(
+                    maintenance
+                );
+                result.IsSuccess = true;
+                result.Message = "Maintenance deleted successfully";
+                result.Data = maintenanceData;
+            }
             return Json(result);
         }
         catch (Exception ex)
@@ -338,11 +355,14 @@ public class MaintenanceController(
     [ValidateAntiForgeryToken]
     public IActionResult GetMaintenanceSidebar(int AssetID)
     {
-        List<MaintenanceData> maintenanceList = _maintenanceService.GetMaintenanceList(false, AssetID);
+        List<MaintenanceData> maintenanceList = _maintenanceService.GetMaintenanceList(
+            false,
+            AssetID
+        );
         List<Dictionary<string, string>> maintenanceSidebar = [];
         foreach (var item in maintenanceList)
         {
-            if(
+            if (
                 item.Asset == null
                 || item.Asset.BusinessArea == null
                 || item.Asset.Platform == null
@@ -356,10 +376,10 @@ public class MaintenanceController(
                 new()
                 {
                     { "Id", item.Id.ToString() },
-                    { "Name", item.MaintenanceDate},
-                    { "Area", item.Asset.BusinessArea},
-                    { "Platform", item.Asset.Platform},
-                    { "Asset", item.Asset.TagNo},
+                    { "Name", item.MaintenanceDate },
+                    { "Area", item.Asset.BusinessArea },
+                    { "Platform", item.Asset.Platform },
+                    { "Asset", item.Asset.TagNo },
                     { "AssetID", item.Asset.Id.ToString() }
                 };
             maintenanceSidebar.Add(maintenanceSidebarItem);

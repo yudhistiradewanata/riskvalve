@@ -15,6 +15,7 @@ public class InspectionController(
     private readonly IAreaService _areaService = areaService;
     private readonly IInspectionService _inspectionService = inspectionService;
     private readonly IAssessmentService _assessmentService = assessmentService;
+
     public IActionResult Index()
     {
         bool IsLogin = Session.IsLogin(HttpContext);
@@ -40,7 +41,8 @@ public class InspectionController(
                 return Redirect(SharedEnvironment.app_path + "/Home/Index");
             }
         }
-        ViewData["CurrentConditionLimitStateData"] = _assessmentService.CurrentConditionLimitStateDatas();
+        ViewData["CurrentConditionLimitStateData"] =
+            _assessmentService.CurrentConditionLimitStateDatas();
         ViewData["InspectionEffectivenessData"] = _assessmentService.InspectionEffectivenessDatas();
         ViewData["InspectionMethodData"] = _assessmentService.InspectionMethodDatas();
         ViewData["IsValveRepairedData"] = _assessmentService.IsValveRepairedDatas();
@@ -84,7 +86,8 @@ public class InspectionController(
     public IActionResult GetInspectionDetail()
     {
         ResultClass result = new();
-        try {
+        try
+        {
             int id = Convert.ToInt32(Request.Query["id"]);
             var inspection = _inspectionService.GetInspection(id);
             result.IsSuccess = true;
@@ -106,27 +109,37 @@ public class InspectionController(
     public IActionResult AddInspection()
     {
         List<IFormFile> files = [.. Request.Form.Files];
-        InspectionClass inspection = new()
-        {
-            AssetID = Convert.ToInt32(Request.Form["AssetID"]),
-            InspectionDate = Request.Form["InspectionDate"],
-            InspectionMethodID = Convert.ToInt32(Request.Form["InspectionMethodID"]),
-            InspectionEffectivenessID = Convert.ToInt32(Request.Form["InspectionEffectivenessID"]),
-            InspectionDescription = Request.Form["InspectionDescription"],
-            CurrentConditionLeakeageToAtmosphereID = Convert.ToInt32(Request.Form["CurrentConditionLeakeageToAtmosphereID"]),
-            CurrentConditionFailureOfFunctionID = Convert.ToInt32(Request.Form["CurrentConditionFailureOfFunctionID"]),
-            CurrentConditionPassingAcrossValveID = Convert.ToInt32(Request.Form["CurrentConditionPassingAcrossValveID"]),
-            FunctionCondition = Request.Form["FunctionCondition"],
-            TestPressureIfAny = Request.Form["TestPressureIfAny"],
-            CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
-            CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-        };
+        InspectionClass inspection =
+            new()
+            {
+                AssetID = Convert.ToInt32(Request.Form["AssetID"]),
+                InspectionDate = Request.Form["InspectionDate"],
+                InspectionMethodID = Convert.ToInt32(Request.Form["InspectionMethodID"]),
+                InspectionEffectivenessID = Convert.ToInt32(
+                    Request.Form["InspectionEffectivenessID"]
+                ),
+                InspectionDescription = Request.Form["InspectionDescription"],
+                CurrentConditionLeakeageToAtmosphereID = Convert.ToInt32(
+                    Request.Form["CurrentConditionLeakeageToAtmosphereID"]
+                ),
+                CurrentConditionFailureOfFunctionID = Convert.ToInt32(
+                    Request.Form["CurrentConditionFailureOfFunctionID"]
+                ),
+                CurrentConditionPassingAcrossValveID = Convert.ToInt32(
+                    Request.Form["CurrentConditionPassingAcrossValveID"]
+                ),
+                FunctionCondition = Request.Form["FunctionCondition"],
+                TestPressureIfAny = Request.Form["TestPressureIfAny"],
+                CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+            };
         ResultClass result = new();
         try
         {
             InspectionData inspectionData = _inspectionService.AddInspection(inspection);
             IWebHostEnvironment environment =
-                HttpContext.RequestServices.GetService<IWebHostEnvironment>() ?? throw new Exception("Environment not found");
+                HttpContext.RequestServices.GetService<IWebHostEnvironment>()
+                ?? throw new Exception("Environment not found");
             string path = Path.Combine(
                 environment.WebRootPath,
                 "Uploads",
@@ -204,33 +217,45 @@ public class InspectionController(
                             {
                                 Id = delete,
                                 DeletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-                                DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
+                                DeletedAt = DateTime.Now.ToString(
+                                    SharedEnvironment.GetDateFormatString()
+                                )
                             }
                         );
                     }
                 }
             }
-            if(inspectionFileClass != null && inspectionFileClass.Count > 0)
+            if (inspectionFileClass != null && inspectionFileClass.Count > 0)
             {
                 _inspectionService.DeleteInspectionFiles(inspectionFileClass);
             }
             int inspectionID = Convert.ToInt32(Request.Form["Id"]);
-            InspectionClass inspection = new()
-            {
-                Id = inspectionID,
-                AssetID = Convert.ToInt32(Request.Form["AssetID"]),
-                InspectionDate = Request.Form["InspectionDate"],
-                InspectionMethodID = Convert.ToInt32(Request.Form["InspectionMethodID"]),
-                InspectionEffectivenessID = Convert.ToInt32(Request.Form["InspectionEffectivenessID"]),
-                InspectionDescription = Request.Form["InspectionDescription"],
-                CurrentConditionLeakeageToAtmosphereID = Convert.ToInt32(Request.Form["CurrentConditionLeakeageToAtmosphereID"]),
-                CurrentConditionFailureOfFunctionID = Convert.ToInt32(Request.Form["CurrentConditionFailureOfFunctionID"]),
-                CurrentConditionPassingAcrossValveID = Convert.ToInt32(Request.Form["CurrentConditionPassingAcrossValveID"]),
-                FunctionCondition = Request.Form["FunctionCondition"],
-                TestPressureIfAny = Request.Form["TestPressureIfAny"],
-            };
+            InspectionClass inspection =
+                new()
+                {
+                    Id = inspectionID,
+                    AssetID = Convert.ToInt32(Request.Form["AssetID"]),
+                    InspectionDate = Request.Form["InspectionDate"],
+                    InspectionMethodID = Convert.ToInt32(Request.Form["InspectionMethodID"]),
+                    InspectionEffectivenessID = Convert.ToInt32(
+                        Request.Form["InspectionEffectivenessID"]
+                    ),
+                    InspectionDescription = Request.Form["InspectionDescription"],
+                    CurrentConditionLeakeageToAtmosphereID = Convert.ToInt32(
+                        Request.Form["CurrentConditionLeakeageToAtmosphereID"]
+                    ),
+                    CurrentConditionFailureOfFunctionID = Convert.ToInt32(
+                        Request.Form["CurrentConditionFailureOfFunctionID"]
+                    ),
+                    CurrentConditionPassingAcrossValveID = Convert.ToInt32(
+                        Request.Form["CurrentConditionPassingAcrossValveID"]
+                    ),
+                    FunctionCondition = Request.Form["FunctionCondition"],
+                    TestPressureIfAny = Request.Form["TestPressureIfAny"],
+                };
             IWebHostEnvironment environment =
-                HttpContext.RequestServices.GetService<IWebHostEnvironment>() ?? throw new Exception("Environment not found");
+                HttpContext.RequestServices.GetService<IWebHostEnvironment>()
+                ?? throw new Exception("Environment not found");
             string path = Path.Combine(
                 environment.WebRootPath,
                 "Uploads",
@@ -262,13 +287,32 @@ public class InspectionController(
                                 inspectionID.ToString(),
                                 fileName
                             ),
-                            CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                            CreatedAt = DateTime.Now.ToString(
+                                SharedEnvironment.GetDateFormatString()
+                            ),
                             CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                         };
                     _inspectionService.AddInspectionFile(inspectionFile);
                 }
             }
             InspectionData resultupdate = _inspectionService.UpdateInspection(inspection);
+            // Update Assessment if Any
+            List<AssessmentInspectionData> assessmentInspectionDatas =
+                _assessmentService.GetAssessmentInspectionDatas(inspectionID);
+            if (assessmentInspectionDatas.Count > 0) {
+                foreach (var assessmentInspectionData in assessmentInspectionDatas)
+                {
+                    int assessmentid = 0;
+                    if(assessmentInspectionData.AssessmentID == null)
+                    {
+                        continue;
+                    }
+                    assessmentid = assessmentInspectionData.AssessmentID ?? 0;
+                    if(assessmentid > 0){
+                        _assessmentService.CalculateAssessment(assessmentid);
+                    }
+                }
+            }
             result.IsSuccess = true;
             result.Message = "Success";
             result.Data = resultupdate;
@@ -288,23 +332,35 @@ public class InspectionController(
     public IActionResult DeleteInspection()
     {
         ResultClass result = new();
-        try{
-            if(!int.TryParse(Request.Form["id"], out int id))
+        try
+        {
+            if (!int.TryParse(Request.Form["id"], out int id))
             {
                 throw new Exception("Invalid ID");
             }
             int deletedBy = Convert.ToInt32(HttpContext.Session.GetString("Id"));
-            InspectionClass inspection = new()
+            List<AssessmentInspectionData> assessmentInspectionDatas =
+                _assessmentService.GetAssessmentInspectionDatas(id);
+            if (assessmentInspectionDatas.Count > 0)
             {
-                Id = id,
-                IsDeleted = true,
-                DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
-                DeletedBy = deletedBy,
-            };
-            InspectionData inspectionData = _inspectionService.DeleteInspection(inspection);
-            result.IsSuccess = true;
-            result.Message = "Inspection deleted successfully";
-            result.Data = inspectionData;
+                result.IsSuccess = false;
+                result.Message = "Inspection is associated in assessment";
+            }
+            else
+            {
+                InspectionClass inspection =
+                    new()
+                    {
+                        Id = id,
+                        IsDeleted = true,
+                        DeletedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                        DeletedBy = deletedBy,
+                    };
+                InspectionData inspectionData = _inspectionService.DeleteInspection(inspection);
+                result.IsSuccess = true;
+                result.Message = "Inspection deleted successfully";
+                result.Data = inspectionData;
+            }
             return Json(result);
         }
         catch (Exception e)
@@ -321,9 +377,13 @@ public class InspectionController(
     public IActionResult GetInspectionList()
     {
         ResultClass result = new();
-        try {
+        try
+        {
             int AssetID = Convert.ToInt32(Request.Query["AssetID"]);
-            List<InspectionData> inspectionList = _inspectionService.GetInspectionList(false, AssetID);
+            List<InspectionData> inspectionList = _inspectionService.GetInspectionList(
+                false,
+                AssetID
+            );
             result.IsSuccess = true;
             result.Message = "Success";
             result.Data = inspectionList;
@@ -342,11 +402,14 @@ public class InspectionController(
     [ValidateAntiForgeryToken]
     public IActionResult GetInspectionSidebar(int AssetID)
     {
-        List<InspectionData> inspectionSidebar = _inspectionService.GetInspectionList(false, AssetID);
+        List<InspectionData> inspectionSidebar = _inspectionService.GetInspectionList(
+            false,
+            AssetID
+        );
         List<Dictionary<string, string>> inspectionSidebarList = [];
         foreach (var item in inspectionSidebar)
         {
-            if(
+            if (
                 item.InspectionDate == null
                 || item.Asset == null
                 || item.Asset.BusinessArea == null
@@ -369,7 +432,9 @@ public class InspectionController(
             inspectionSidebarList.Add(inspectionSidebarItem);
         }
         inspectionSidebarList = inspectionSidebarList
-            .OrderByDescending(i => DateTime.ParseExact(i["Name"], "dd-MM-yyyy", CultureInfo.InvariantCulture))
+            .OrderByDescending(i =>
+                DateTime.ParseExact(i["Name"], "dd-MM-yyyy", CultureInfo.InvariantCulture)
+            )
             .ToList();
         return Json(inspectionSidebarList);
     }
