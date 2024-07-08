@@ -8,7 +8,8 @@
     var urlgetinspectionsidebar = Url.Action("GetInspectionSidebar", "Inspection");
     var urlgetmaintenancesidebar = Url.Action("GetMaintenanceSidebar", "Maintenance");
     var urlgetassessmentsidebar = Url.Action("GetAssessmentSidebar", "Assessment");
-    var urllevel4 = pageType.ToLower() == "inspection" ? urlgetinspectionsidebar : pageType.ToLower() == "maintenance" ? urlgetmaintenancesidebar : urlgetassessmentsidebar;
+    var urllevel4 = pageType.ToLower() == "inspection" ? urlgetinspectionsidebar : pageType.ToLower() == "maintenance" ?
+    urlgetmaintenancesidebar : urlgetassessmentsidebar;
     var urlassetsearch = Url.Action("GetAssetSidebarSearch", "AssetRegister");
 }
 @inject Microsoft.AspNetCore.Antiforgery.IAntiforgery Xsrf
@@ -37,19 +38,19 @@
                     @foreach (var item in inspectionSidebar as List<SidebarData>)
                     {
                         <li class="treeview">
-                            <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="1" attr-find-inspection="@item.Name">@item.Name</a>
+                            <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="1"
+                                attr-find-inspection="@item.Name">@item.Name</a>
                             <ul class="treeview-menu">
                                 @{
                                     var platforms = item.Child as List<SidebarData>;
-                                    if(platforms != null)
+                                    if (platforms != null)
                                     {
                                         foreach (var platform in platforms)
                                         {
                                             <li class="treeview">
-                                                <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="2" attr-find-inspection="@item.Name"
-                                                    attr-find-platform="@platform.Name"
-                                                    attr-find-platformid="@platform.Id"
-                                                    >@platform.Name</a>
+                                                <a class="sidebartreea" onclick="sidebarClick.apply(this)" attr-sidebar-level="2"
+                                                    attr-find-inspection="@item.Name" attr-find-platform="@platform.Name"
+                                                    attr-find-platformid="@platform.Id">@platform.Name</a>
                                                 <ul class="treeview-menu" attr-find-forsearch="@item.Name-@platform.Name">
                                                 </ul>
                                             </li>
@@ -72,5 +73,5 @@
 <input type="hidden" id="urlassetsearch" value="@urlassetsearch">
 
 @Html.PartialSectionScripts(
-@<script src="~/js/inspection-assessment-sidebar.js"></script>
+    @<script src="~/js/inspection-assessment-sidebar.js"></script>
 )

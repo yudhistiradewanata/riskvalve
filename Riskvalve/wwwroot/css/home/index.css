@@ -1,0 +1,29 @@
+
+td {
+    height: 30px;
+    width: 30px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+.risk-veryhigh {
+    background-color: rgb(233, 50, 35);
+}
+
+.risk-high {
+    background-color: rgb(237, 109, 45);
+}
+
+.risk-medium {
+    background-color: rgb(255, 254, 84);
+}
+
+.risk-low {
+    background-color: rgb(55, 125, 34);
+}
+
+.risk-verylow {
+    background-color: rgb(123, 163, 63);
+}

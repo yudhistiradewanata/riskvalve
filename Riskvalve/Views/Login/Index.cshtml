@@ -11,12 +11,7 @@
 }
 
 <body class="hold-transition login-page">
-    <style>
-        html,
-        body {
-            height: 100%;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/login/index.css" asp-append-version="true" />
     <div class="login-box">
         <div class="login-logo">
             <img src="~/lib/images/logo.jpg" />
@@ -60,45 +55,11 @@
         </div>
     </div>
     <div class="login-image" style="background-image: url('@baseurl/lib/images/u9.jpg')">
-
     </div>
+    <input type="hidden" id="baseurl" value="@baseurl">
+    <input type="hidden" id="urllogin" value="@urllogin">
+    <input type="hidden" id="requestVerificationToken" value="@tokens.RequestToken">
 </body>
-
 @section Scripts {
-    <script>
-        var requestVerificationToken = '@tokens.RequestToken';
-        $('#btn-signin').prop('disabled', true).text('Loading...');
-        $(document).ready(function () {
-            $('#btn-signin').prop('disabled', false).text('Login');
-            $('#btn-signin').click(function (e) {
-                e.preventDefault();
-                var username = $('input[name="username"]').val();
-                var password = $('input[name="password"]').val();
-                if ($('.login-form').valid()) {
-                    $(this).prop('disabled', true).text('Loading...');
-                    $.ajax({
-                        url: '@urllogin',
-                        type: 'POST',
-                        headers: {
-                            '__RequestVerificationToken': requestVerificationToken
-                        },
-                        data: {
-                            username: username,
-                            password: password
-                        },
-                        success: function (apiresult) {
-                            if (apiresult.isSuccess) {
-                                var data = apiresult.data;
-                                    var path = "@baseurl" + '/Home/Index';
-                                location.href = path;
-                            } else {
-                                alert(apiresult.message);
-                                $('#btn-signin').prop('disabled', false).text('Login');
-                            }
-                        },
-                    });
-                }
-            });
-        });
-    </script>
+    <script src="~/js/login/index.js" asp-append-version="true"></script>
 }

@@ -11,36 +11,7 @@
     var jsonAssessmentIntegrity = Json.Serialize(assessmentIntegrity);
     var assetDistribution = ViewData["AssetDistribution"] as Dictionary<string, int>;
 }
-<style>
-    td {
-        height: 30px;
-        width: 30px;
-    }
-
-    table {
-        border-collapse: collapse;
-    }
-
-    .risk-veryhigh {
-        background-color: rgb(233, 50, 35);
-    }
-
-    .risk-high {
-        background-color: rgb(237, 109, 45);
-    }
-
-    .risk-medium {
-        background-color: rgb(255, 254, 84);
-    }
-
-    .risk-low {
-        background-color: rgb(55, 125, 34);
-    }
-
-    .risk-verylow {
-        background-color: rgb(123, 163, 63);
-    }
-</style>
+<link rel="stylesheet" href="~/css/home/index.css" asp-append-version="true" />
 <div class="container-fluid">
     
     <div class="row">
@@ -158,356 +129,40 @@
     </div>
 </div>
 
+<input type="hidden" id="assessmentIntegrityveryhigh" value="@assessmentIntegrity["Very High"]">
+<input type="hidden" id="assessmentIntegrityhigh" value="@assessmentIntegrity["High"]">
+<input type="hidden" id="assessmentIntegritymedium" value="@assessmentIntegrity["Medium"]">
+<input type="hidden" id="assessmentIntegritylow" value="@assessmentIntegrity["Low"]">
+<input type="hidden" id="assessmentIntegrityverylow" value="@assessmentIntegrity["Very Low"]">
+<input type="hidden" id="assessmentMap1A" value="@assessmentMap["1A"]">
+<input type="hidden" id="assessmentMap1B" value="@assessmentMap["1B"]">
+<input type="hidden" id="assessmentMap1C" value="@assessmentMap["1C"]">
+<input type="hidden" id="assessmentMap1D" value="@assessmentMap["1D"]">
+<input type="hidden" id="assessmentMap1E" value="@assessmentMap["1E"]">
+<input type="hidden" id="assessmentMap2A" value="@assessmentMap["2A"]">
+<input type="hidden" id="assessmentMap2B" value="@assessmentMap["2B"]">
+<input type="hidden" id="assessmentMap2C" value="@assessmentMap["2C"]">
+<input type="hidden" id="assessmentMap2D" value="@assessmentMap["2D"]">
+<input type="hidden" id="assessmentMap2E" value="@assessmentMap["2E"]">
+<input type="hidden" id="assessmentMap3A" value="@assessmentMap["3A"]">
+<input type="hidden" id="assessmentMap3B" value="@assessmentMap["3B"]">
+<input type="hidden" id="assessmentMap3C" value="@assessmentMap["3C"]">
+<input type="hidden" id="assessmentMap3D" value="@assessmentMap["3D"]">
+<input type="hidden" id="assessmentMap3E" value="@assessmentMap["3E"]">
+<input type="hidden" id="assessmentMap4A" value="@assessmentMap["4A"]">
+<input type="hidden" id="assessmentMap4B" value="@assessmentMap["4B"]">
+<input type="hidden" id="assessmentMap4C" value="@assessmentMap["4C"]">
+<input type="hidden" id="assessmentMap4D" value="@assessmentMap["4D"]">
+<input type="hidden" id="assessmentMap4E" value="@assessmentMap["4E"]">
+<input type="hidden" id="assessmentMap5A" value="@assessmentMap["5A"]">
+<input type="hidden" id="assessmentMap5B" value="@assessmentMap["5B"]">
+<input type="hidden" id="assessmentMap5C" value="@assessmentMap["5C"]">
+<input type="hidden" id="assessmentMap5D" value="@assessmentMap["5D"]">
+<input type="hidden" id="assessmentMap5E" value="@assessmentMap["5E"]">
+<input type="hidden" id="jsonAssessmentPieChart" value="@Html.Raw(Html.Encode(jsonAssessmentPieChart))">
+<input type="hidden" id="jsonAssessmentBarChart" value="@Html.Raw(Html.Encode(jsonAssessmentBarChart))">
+
+
 @section Scripts {
-    <script>
-        $('#risk-barchart-horizontal').highcharts({
-            chart: {
-                type: 'bar'
-            },
-            title: {
-                text: ''
-            },
-            xAxis: {
-                categories: ['']
-            },
-            yAxis: {
-                title: {
-                    text: ''
-                },
-                tickInterval: 1
-            },
-            series: [{
-                name: 'Very High Priority',
-                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very High"] }],
-            }, {
-                name: 'High Priority',
-                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["High"] }],
-            },{
-                name: 'Medium Priority',
-                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Medium"] }],
-            },{
-                name: 'Low Priority',
-                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Low"] }],
-            },{
-                name: 'Very Low Priority',
-                data: [@if (assessmentIntegrity != null) { @assessmentIntegrity["Very Low"] }],
-            }
-            ],
-            colors: [
-                'red',
-                'orange',
-                'yellow',
-                'green',
-                '#81B014',
-            ],
-        });
-        const rawHeatmapData = [
-            { x: 0, y: 0, value: @assessmentMap["1A"] },
-            { x: 0, y: 1, value: @assessmentMap["1B"] },
-            { x: 0, y: 2, value: @assessmentMap["1C"] },
-            { x: 0, y: 3, value: @assessmentMap["1D"] },
-            { x: 0, y: 4, value: @assessmentMap["1E"] },
-            { x: 1, y: 0, value: @assessmentMap["2A"] },
-            { x: 1, y: 1, value: @assessmentMap["2B"] },
-            { x: 1, y: 2, value: @assessmentMap["2C"] },
-            { x: 1, y: 3, value: @assessmentMap["2D"] },
-            { x: 1, y: 4, value: @assessmentMap["2E"] },
-            { x: 2, y: 0, value: @assessmentMap["3A"] },
-            { x: 2, y: 1, value: @assessmentMap["3B"] },
-            { x: 2, y: 2, value: @assessmentMap["3C"] },
-            { x: 2, y: 3, value: @assessmentMap["3D"] },
-            { x: 2, y: 4, value: @assessmentMap["3E"] },
-            { x: 3, y: 0, value: @assessmentMap["4A"] },
-            { x: 3, y: 1, value: @assessmentMap["4B"] },
-            { x: 3, y: 2, value: @assessmentMap["4C"] },
-            { x: 3, y: 3, value: @assessmentMap["4D"] },
-            { x: 3, y: 4, value: @assessmentMap["4E"] },
-            { x: 4, y: 0, value: @assessmentMap["5A"] },
-            { x: 4, y: 1, value: @assessmentMap["5B"] },
-            { x: 4, y: 2, value: @assessmentMap["5C"] },
-            { x: 4, y: 3, value: @assessmentMap["5D"] },
-            { x: 4, y: 4, value: @assessmentMap["5E"] },
-        ]
-
-        const heatmapYMap = {
-            A: 0,
-            B: 1,
-            C: 2,
-            D: 3,
-            E: 4
-        }
-
-        @* function fillHeatmapData(data) {
-            Object.entries(data).forEach((dataItem) => {
-                const item = dataItem[1]
-                const key = dataItem[0]
-                const xPos = key.charAt(0) - 1
-                const yPos = heatmapYMap[key.charAt(1)]
-                const idx = rawHeatmapData.findIndex(mapItem => {
-                    // console.log(mapItem)
-                    // console.log(xPos)
-                    // console.log(yPos)
-                    return mapItem.x == xPos && mapItem.y == yPos
-                })
-                rawHeatmapData[idx]['value'] = Number(item)
-            })
-        } *@
-
-        $(function () {
-            var assessmentMap = JSON.parse('@Html.Raw(jsonAssessmentMap)');
-            @* fillHeatmapData(assessmentMap) *@
-            $('#risk-heatmap').highcharts({
-                chart: {
-                    type: 'heatmap',
-                    marginTop: 40,
-                    marginBottom: 60,
-                    plotBackgroundColor: 'none',
-                    events: {
-                        load: function () {
-                            var points = this.series[0].data,
-                                lenY = this.yAxis[0].tickPositions.length - 1,
-                                lenX = this.xAxis[0].tickPositions.length - 1,
-                                x = lenX,
-                                tmpX = 0,
-                                y = 0,
-                                j = 0;
-
-                            $.each(points, function (i, p) {
-                                if ((p.x == 0 && p.y == 0)
-                                    || (p.x == 0 && p.y == 1)
-                                    || (p.x == 1 && p.y == 0)) {
-                                    p.update({
-                                        color: '#81B014'
-                                    }, false);
-                                } else if ((p.x == 0 && p.y == 2)
-                                    || (p.x == 1 && p.y == 1)
-                                    || (p.x == 2 && p.y == 0)) {
-                                    p.update({
-                                        color: 'green'
-                                    }, false);
-                                } else if ((p.x == 0 && p.y == 3)
-                                    || (p.x == 1 && p.y == 2)
-                                    || (p.x == 2 && p.y == 2)
-                                    || (p.x == 2 && p.y == 1)
-                                    || (p.x == 3 && p.y == 0)) {
-                                    p.update({
-                                        color: 'yellow'
-                                    }, false);
-                                } else if ((p.x == 4 && p.y == 0)
-                                    || (p.x == 4 && p.y == 1)
-                                    || (p.x == 3 && p.y == 1)
-                                    || (p.x == 3 && p.y == 2)
-                                    || (p.x == 2 && p.y == 3)
-                                    || (p.x == 1 && p.y == 3)
-                                    || (p.x == 1 && p.y == 4)
-                                    || (p.x == 0 && p.y == 4)) {
-                                    p.update({
-                                        color: 'orange'
-                                    }, false);
-                                } else {
-                                    p.update({
-                                        color: 'red'
-                                    }, false);
-                                }
-                            });
-                            this.isDirty = true;
-                            this.redraw();
-                        }
-                    },
-                },
-                plotOptions: {
-                    heatmap: {
-                        borderWidth: 0.5,
-                        borderColor: '#333'
-                    }
-                },
-
-                title: null,
-
-                xAxis: {
-                    categories: ['1', '2', '3', '4', '5'],
-                    title: {
-                        text: "Likelihood of Failure"
-                    }
-                },
-                yAxis: {
-                    categories: ['A', 'B', 'C', 'D', 'E'],
-                    title: {
-                        enabled: true,
-                        text: 'Consequences of Failure',
-                        align: 'middle', // Align the title to the top of the axis
-                        offset: 0, // Adjust offset if needed
-                        x: -40,
-                        y: 0,
-                        useHTML: true
-                    }
-                },
-
-                colorAxis: {
-                    min: 0,
-                    minColor: 'transparent',
-                    maxColor: 'transparent'
-                    //maxColor: Highcharts.getOptions().colors[0]
-                },
-
-                legend: {
-                    enabled: false,
-                    align: 'right',
-                    layout: 'vertical',
-                    margin: 0,
-                    verticalAlign: 'top',
-                    y: 25,
-                    symbolHeight: 320
-                },
-                tooltip: {
-                    formatter: function () {
-                        return this.series.xAxis.categories[this.point.x] + this.series.yAxis.categories[this.point.y] + ': ' + Number(this.point.value)
-                    }
-                },
-                /*want to make this part dynamically populated*/
-                series: [{
-                    data: structuredClone(rawHeatmapData),
-                    dataLabels: {
-                        enabled: true,
-                        color: 'black',
-                        style: {
-                            textShadow: 'none'
-                        }
-                    }
-
-                }]
-
-            });
-
-            var jsonAssessmentPieChart = JSON.parse('@Html.Raw(jsonAssessmentPieChart)');
-            const pieChartData = []
-            Object.keys(jsonAssessmentPieChart).forEach(key => {
-                var value = parseInt(jsonAssessmentPieChart[key]);
-                if (isNaN(value)) {
-                    value = 0; // or any other default integer value
-                }
-                pieChartData.push({
-                    name: key,
-                    y: value
-                })
-            })
-            $('#risk-piechart').highcharts({
-                chart: {
-                    type: 'pie',
-                    spacing: [0, 0, 0, 0]
-                },
-                title: {
-                    text: '',
-                },
-                tooltip: {
-                },
-                plotOptions: {
-                    pie: {
-                        size: '100%',
-                        colors: [
-                            '#81B014',
-                            'green',
-                            'yellow',
-                            'orange',
-                            'red',
-                        ],
-                    },
-                    series: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
-                        dataLabels: [{
-                            enabled: false,
-                            distance: 20
-                        }, {
-                            enabled: true,
-                            distance: -40,
-                            format: '{point.y}',
-                            style: {
-                                fontSize: '1.2em',
-                                textOutline: 'none',
-                                opacity: 0.7
-                            },
-                            filter: {
-                                operator: '>',
-                                property: 'total',
-                                value: 10
-                            }
-                        }],
-                        showInLegend: true
-                    }
-                },
-                series: [
-                    {
-                        name: 'Total',
-                        data: pieChartData
-                    }
-                ]
-            });
-
-            // Bar Chart
-            var jsonAssessmentBarChart = JSON.parse('@Html.Raw(jsonAssessmentBarChart)');
-            // console.log(jsonAssessmentBarChart, 'bar chart')
-            const barSeriesData = {
-                'Very Low': {
-                    name: 'Very Low',
-                    data: []
-                },
-                'Low': {
-                    name: 'Low',
-                    data: []
-                },
-                'Medium': {
-                    name: 'Medium',
-                    data: []
-                },
-                'High': {
-                    name: 'High',
-                    data: []
-                },
-                'Very High': {
-                    name: 'Very High',
-                    data: []
-                },
-            }
-
-            Object.values(jsonAssessmentBarChart).forEach((val, index) => {
-                Object.keys(val).forEach(key => {
-                    barSeriesData[key].data.push(Number(val[key]))
-                })
-            })
-
-            $('#risk-barchart').highcharts({
-                chart: {
-                    type: 'column'
-                },
-                title: {
-                    text: '',
-                },
-                xAxis: {
-                    categories: Object.keys(jsonAssessmentBarChart),
-                    crosshair: true,
-                },
-                yAxis: {
-                    min: 0,
-                    tickInterval: 1
-                },
-                tooltip: {
-                },
-                plotOptions: {
-                    column: {
-                        pointPadding: 0.2,
-                        borderWidth: 0,
-                    }
-                },
-                colors: [
-                    '#81B014',
-                    'green',
-                    'yellow',
-                    'orange',
-                    'red',
-                ],
-                series: Object.values(barSeriesData)
-            });
-        });
-    </script>
+    <script src="~/js/home/index.js" asp-append-version="true"></script>
 }

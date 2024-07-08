@@ -7,12 +7,6 @@
     var jsonassessmentHeatMap = Newtonsoft.Json.JsonConvert.SerializeObject(assessmentHeatMap);
 }
 <div class="container-fluid">
-    <!-- @jsonassessment -->
-    <!-- @jsonassessmentHeatMap -->
-
-    <!-- <div class="text-center" style="margin: 15px;">
-        <button type="button" class="btn btn-block btn-primary btn-maincolor submit-button" onclick="saveImage()"><i class="bi bi-save"></i> Save as Image</button>
-    </div> -->
     <div id="print-area">
         <table class="assessment-print" id="assessment-print-table">
             <tr>
@@ -206,7 +200,6 @@
                 <td colspan="2" class="table-section no-transform">Inspection Date</td>
                 <td colspan="2" class="table-section no-transform">Inspection Method</td>
                 <td colspan="2" class="table-section no-transform">Inspection Description</td>
-                @* <td class="table-section no-transform">Visual Condition</td> *@
                 <td colspan="2" class="table-section no-transform">Function Condition</td>
                 <td colspan="2" class="table-section no-transform">Test Pressure</td>
                 <td colspan="2" class="table-section no-transform">Inspection Image</td>
@@ -220,7 +213,6 @@
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDate</td>
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionMethod</td>
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDescription</td>
-                        @* <td>assessment.InspectionHistory[i].VisualCondition</td> *@
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.FunctionCondition</td>
                         <td colspan="2">@assessment.InspectionHistory[i].Inspection.TestPressureIfAny</td>
                         <td colspan="2">@foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
