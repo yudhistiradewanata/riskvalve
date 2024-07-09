@@ -16,6 +16,7 @@ public class SuppressHeadersMiddleware
                 context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
             }
             context.Response.Headers.Remove("X-Powered-By");
+            context.Response.Headers.Remove("Server");
             return Task.CompletedTask;
         });
 
