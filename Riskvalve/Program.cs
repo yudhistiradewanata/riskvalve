@@ -67,6 +67,9 @@ builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".AdventureWorks.Session";
+    options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    options.Cookie.SameSite = SameSiteMode.Strict;
     options.IdleTimeout = TimeSpan.FromDays(365); // 1 year
     options.Cookie.IsEssential = true;
 });
