@@ -86,4 +86,20 @@ public class HomeController(
         ViewData["AssessmentList"] = assessmentList;
         return View();
     }
+
+    // public IActionResult RegenAssessment()
+    // {
+    //     List<int> ints = _assessmentService.GetAssessmentList().Select(x => x.Id).ToList();
+    //     AssessmentData assessment = new AssessmentData();
+    //     foreach (var item in ints)
+    //     {
+    //         try{
+    //         _assessmentService.CalculateAssessment(item);
+    //         }
+    //         catch(Exception e){
+    //             Console.WriteLine(e.Message);
+    //         }
+    //     }
+    //     return Json(assessment);
+    // }
 }

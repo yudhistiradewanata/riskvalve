@@ -881,7 +881,7 @@
                   'lof': Number(lofLeakageToAtmosphereA),
                   'cof': cof,
                   'xpos': Number(lofLeakageToAtmosphereAPos),
-                  'ypos': Number(ypos)-8,
+                  'ypos': Number(ypos),
                   'label': tpos1a,
                   'color': getHeatColor(tpos1a)
               },
@@ -889,7 +889,7 @@
                   'lof': Number(lofLeakageToAtmosphereB),
                   'cof': cof,
                   'xpos': Number(lofLeakageToAtmosphereBPos),
-                  'ypos': Number(ypos)-6,
+                  'ypos': Number(ypos),
                   'label': tpos1b,
                   'color': getHeatColor(tpos1b)
               },
@@ -897,7 +897,7 @@
                   'lof': Number(lofLeakageToAtmosphereC),
                   'cof': cof,
                   'xpos': Number(lofLeakageToAtmosphereCPos),
-                  'ypos': Number(ypos)-4,
+                  'ypos': Number(ypos),
                   'label': tpos1c,
                   'color': getHeatColor(tpos1c)
               },
@@ -905,7 +905,7 @@
                   'lof': Number(lofFailureOfFunctionA),
                   'cof': cof,
                   'xpos': Number(lofFailureOfFunctionAPos),
-                  'ypos': Number(ypos)-2,
+                  'ypos': Number(ypos),
                   'label': tpos2a,
                   'color': getHeatColor(tpos2a)
               },
@@ -921,7 +921,7 @@
                   'lof': Number(lofFailureOfFunctionC),
                   'cof': cof,
                   'xpos': Number(lofFailureOfFunctionCPos),
-                  'ypos': Number(ypos)+2,
+                  'ypos': Number(ypos),
                   'label': tpos2c,
                   'color': getHeatColor(tpos2c)
               },
@@ -929,7 +929,7 @@
                   'lof': Number(lofPassingAccrossValveA),
                   'cof': cof,
                   'xpos': Number(lofPassingAccrossValveAPos),
-                  'ypos': Number(ypos)+4,
+                  'ypos': Number(ypos),
                   'label': tpos3a,
                   'color': getHeatColor(tpos3a)
               },
@@ -937,7 +937,7 @@
                   'lof': Number(lofPassingAccrossValveB),
                   'cof': cof,
                   'xpos': Number(lofPassingAccrossValveBPos),
-                  'ypos': Number(ypos)+6,
+                  'ypos': Number(ypos),
                   'label': tpos3b,
                   'color': getHeatColor(tpos3b)
               },
@@ -945,7 +945,7 @@
                   'lof': Number(lofPassingAccrossValveC),
                   'cof': cof,
                   'xpos': Number(lofPassingAccrossValveCPos),
-                  'ypos': Number(ypos)+8,
+                  'ypos': Number(ypos),
                   'label': tpos3c,
                   'color': getHeatColor(tpos3c)
               }

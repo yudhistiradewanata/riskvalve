@@ -148,7 +148,7 @@ $(document).ready(function () {
                                 <td class="noshow">${item.loFScorePassingAccrosValveTP3}</td>
                                 <td class="noshow">${item.coFScore}</td>
                                 <td class="nowrap">
-                                    <button class="btn btn-light btn-sm" onclick="detailAssessment(${item.Id})">Assessment</button>
+                                    <button class="btn btn-light btn-sm" onclick="detailAssessment(${item.id})">Assessment</button>
                                     <button class="btn btn-light btn-sm" onclick="detailInspection(${item.lastInspectionId})">Inspection</button>
                                     <button class="btn btn-light btn-sm" onclick="detailMaintenance(${item.lastMaintenanceId})">Maintenance</button>
                                 </td>
