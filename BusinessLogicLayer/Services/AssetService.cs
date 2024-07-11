@@ -243,7 +243,7 @@ public class AssetService(
                             }
                         }
                     }
-                    else if (mappedValue.Equals("InstallationDate"))
+                    else if (mappedKey.Equals("InstallationDate"))
                     {
                         if (value.Contains("/"))
                         {

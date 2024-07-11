@@ -292,7 +292,7 @@ public class AssessmentService(
             .OrderByDescending(x =>
                 DateTime.ParseExact(
                     x.InspectionDate ?? "01-01-1900",
-                    "dd-MM-yyyy",
+                    SharedEnvironment.GetDateFormatString(false),
                     CultureInfo.InvariantCulture
                 )
             )
@@ -350,7 +350,7 @@ public class AssessmentService(
         */
         DateTime lastInspectionDate = DateTime.ParseExact(
             latestInspection.InspectionDate ?? "01-01-1900",
-            "dd-MM-yyyy",
+            SharedEnvironment.GetDateFormatString(false),
             CultureInfo.InvariantCulture
         );
         int timePeriod = int.Parse(oldAssessmentData.TimePeriode ?? "0");
@@ -721,7 +721,7 @@ public class AssessmentService(
             LeakageToAtmosphereTP3ID
         );
         DateTime loftp1adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp1aval));
-        newAssessmentData.TPTimeToActionA = loftp1adate.ToString("dd-MM-yyyy");
+        newAssessmentData.TPTimeToActionA = loftp1adate.ToString(SharedEnvironment.GetDateFormatString(false));
         double loftp2aval = DecideTTARAC(
             LoFScoreFailureOfFunctionTP1,
             LoFScoreFailureOfFunctionTP2,
@@ -735,7 +735,7 @@ public class AssessmentService(
             FailureOfFunctionTP3ID
         );
         DateTime loftp2adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp2aval));
-        newAssessmentData.TPTimeToActionB = loftp2adate.ToString("dd-MM-yyyy");
+        newAssessmentData.TPTimeToActionB = loftp2adate.ToString(SharedEnvironment.GetDateFormatString(false));
         double loftp3aval = DecideTTARAC(
             LoFScorePassingAccrosValveTP1,
             LoFScorePassingAccrosValveTP2,
@@ -749,9 +749,9 @@ public class AssessmentService(
             PassingAccrosValveTP3ID
         );
         DateTime loftp3adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp3aval));
-        newAssessmentData.TPTimeToActionC = loftp3adate.ToString("dd-MM-yyyy");
+        newAssessmentData.TPTimeToActionC = loftp3adate.ToString(SharedEnvironment.GetDateFormatString(false));
         DateTime tptimetoactionrisk = new[] { loftp1adate, loftp2adate, loftp3adate }.Min();
-        newAssessmentData.TPTimeToActionRisk = tptimetoactionrisk.ToString("dd-MM-yyyy");
+        newAssessmentData.TPTimeToActionRisk = tptimetoactionrisk.ToString(SharedEnvironment.GetDateFormatString(false));
         AssessmentData finalAssessmentData = UpdateAssessment(newAssessmentData);
         return finalAssessmentData;
     }
@@ -1457,7 +1457,7 @@ public class AssessmentService(
                 x.OrderByDescending(a =>
                         DateTime.ParseExact(
                             a.AssessmentDate ?? "01-01-1900",
-                            "dd-MM-yyyy",
+                            SharedEnvironment.GetDateFormatString(false),
                             CultureInfo.InvariantCulture
                         )
                     )
@@ -1485,7 +1485,7 @@ public class AssessmentService(
                     .InspectionHistory.OrderByDescending(i =>
                         DateTime.ParseExact(
                             i.Inspection?.InspectionDate ?? "01-01-1900",
-                            "dd-MM-yyyy",
+                            SharedEnvironment.GetDateFormatString(false),
                             CultureInfo.InvariantCulture
                         )
                     )
@@ -1512,7 +1512,7 @@ public class AssessmentService(
                     .MaintenanceHistory.OrderByDescending(m =>
                         DateTime.ParseExact(
                             m.Maintenance?.MaintenanceDate ?? "01-01-1900",
-                            "dd-MM-yyyy",
+                            SharedEnvironment.GetDateFormatString(false),
                             CultureInfo.InvariantCulture
                         )
                     )

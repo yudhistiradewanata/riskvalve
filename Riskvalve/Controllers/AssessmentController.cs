@@ -243,7 +243,7 @@ public class AssessmentController(
             IntegrityStatus = Request.Form["IntegrityStatus"],
             IsDeleted = false,
             CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-            CreatedAt = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")
+            CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
         };
         ResultClass result = new();
         try {
