@@ -72,23 +72,18 @@
           const nativeForm = form[0]
           const formData = new FormData(nativeForm);
           const selectedInspectionCount = form.find('input[name=selectedInspectionId]').length
-          /* const selectedMaintenanceCount = form.find('input[name=selectedMaintenanceId]').length */
           var alertmessage = '';
           if(!selectedInspectionCount){
               alertmessage += 'minimum 1 Inspection, ';
           }
-          /* if(!selectedMaintenanceCount){
-              if(!selectedInspectionCount){
-                  alertmessage = alertmessage.slice(0, -2);
-                  alertmessage += ' and ';
-              }
-              alertmessage += 'minimum 1 Maintenance, ';
-          } */
           if(alertmessage.length > 0){
               alert('Please select ' + alertmessage.slice(0, -2) + ' to proceed');
               return;
           }
+          const submitbutton = $(el);
+          const buttontext = submitbutton.text();
           if(form.valid()) {
+            submitbutton.prop("disabled", true).text("Loading...");
               if(form.hasClass('history-form')) {
                   // update
                   $.ajax({
@@ -113,9 +108,11 @@
                           } else {
                               alert(apiresult.message)
                           }
+                          submitbutton.removeAttr("disabled").text(buttontext);
                       },
                       error: function(xhr, status, error) {
                           alert('Error submitting the form')
+                          submitbutton.removeAttr("disabled").text(buttontext);
                       }
                   });
               } else {
@@ -160,10 +157,12 @@
                           } else {
                               alert(apiresult.message)
                           }
+                          submitbutton.removeAttr("disabled").text(buttontext);
                       },
                       error: function(xhr, status, error) {
                           // Handle error
                           alert('An assessment with the same asset and date already exists')
+                          submitbutton.removeAttr("disabled").text(buttontext);
                       }
                   });
               }

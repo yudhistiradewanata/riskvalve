@@ -31,8 +31,8 @@ function submitForm(el) {
     const formData = new FormData(nativeForm);
     const submitbutton = $(el);
     const buttontext = submitbutton.text();
-    submitbutton.prop("disabled", true).text("Loading...");
     if (form.valid()) {
+        submitbutton.prop("disabled", true).text("Loading...");
         if (form.hasClass('history-form')) {
             // update
             $.ajax({
