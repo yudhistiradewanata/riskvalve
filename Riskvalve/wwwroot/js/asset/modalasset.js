@@ -54,9 +54,9 @@ function editAction() {
                     $('#field-asset-toxicorflamablefluid').val(data.toxicOrFlamableFluidID);
                     $('#field-asset-equipmentname').val(data.assetName);
                     $('#field-asset-replacementcost').val(data.costOfReplacementAndRepair);
-                    $('#field-asset-status').val(data.status);
-                    $('#field-asset-usagetype').val(data.usageType);
-                    $('#field-asset-actuation').val(data.actuation);
+                    $('#field-asset-status').val(data.status.toLowerCase());
+                    $('#field-asset-usagetype').val(data.usageType.toLowerCase());
+                    $('#field-asset-actuation').val(data.actuation.toLowerCase());
                     $('#btn-asset-modal-delete').show();
                     $('#addAssetModal').modal('show');
                 } else {
