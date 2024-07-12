@@ -651,10 +651,10 @@ public class AssessmentService(
             _hSSEDefinisionRepository.GetHSSEDefinisionList();
         double COFByPLD = double.Parse(oldAssessmentData.ProductLossDefinition ?? "0");
         HSSEDefinisionData hssebypld = hSSEDefinisionList
-            .Where(x => x.MinBBSValue >= COFByPLD)
-            .OrderBy(x => x.MinBBSValue)
+            .Where(x => x.MinBBSValue <= COFByPLD)
+            .OrderByDescending(x => x.MinBBSValue)
             .First();
-        int COFByHSSE = oldAssessmentData.HSSEDefinisionID ?? 0;
+        int COFByHSSE = oldAssessmentData.HSSEDefinisionID ?? 5;
         HSSEDefinisionData hssebyhsse = hSSEDefinisionList.Where(x => x.Id == COFByHSSE).First();
         string cof =
             (
