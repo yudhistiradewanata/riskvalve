@@ -327,7 +327,12 @@
                       $('#product-loss-definition'+counter).val(data.productLossDefinition)
                       $('#hsse-definition'+counter).val(data.hsseDefinisionID)
                       $('#assessment-summary'+counter).val(data.summary)
-                      $('#recommended-action'+counter).val(data.recommendationActionID)
+                      if(data.integrityStatus != null){
+                        $('#integrity-status'+counter).val(data.integrityStatus)
+                      }
+                      if(data.recommendationActionID != null){
+                        $('#recommended-action'+counter).val(data.recommendationActionID)
+                      }
                       $('#detailed-recommendation'+counter).val(data.detailedRecommendation)
 
                       //LF1 & LF2
@@ -348,7 +353,6 @@
                       $('#passing-tp1'+counter).val(data.passingAccrosValveTP1ID)
                       $('#passing-tp2'+counter).val(data.passingAccrosValveTP2ID)
                       $('#passing-tp3'+counter).val(data.passingAccrosValveTP3ID)
-
 
                       //fill ID
                       $('#inspection'+counter).find('#data-id').val(id)
@@ -1011,7 +1015,10 @@
 
               $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item.label)
           }
-          $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr).val(getIntegrityStatus(tp1color));
+          var currentIntegrityStatus = $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr).val();
+          if(currentIntegrityStatus == null){
+            $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr).val(getIntegrityStatus(tp1color));
+          }
 
           //TTL NEW
           var timelimittp1 = timePeriod*1;
