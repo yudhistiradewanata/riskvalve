@@ -20,26 +20,6 @@
           } else if(assetIdParam) {
               $('.btn-add-new-inspection[attr-id=' + assetIdParam + ']').first().trigger('click')
           }
-          // development purpose
-          /* $('.btn-add-new-inspection').eq(0).trigger('click') */
-
-          /* $('.bbls-assessment').on('change', function () {
-              if($(this).val() < 0 || $(this).val() == ''){
-                  $(this).val(0);
-              }
-              var ctr = $(this).closest('.tab-pane').attr('tab-num');
-              var bbls = $(this).val()*1;
-              var hsseSelect = $('#hsse-definition' + ctr);
-              var hsseOptions = hsseSelect.find('option');
-              var selectedHsse = '';
-              hsseOptions.each(function(){
-                  var hsseValue = $(this).attr('attr-minvalue')*1;
-                  if(bbls >= hsseValue){
-                      selectedHsse = $(this).val();
-                  }
-              });
-              hsseSelect.val(selectedHsse);
-          }) */
       });
 
       const assessmentCalculatedField = [
@@ -492,8 +472,8 @@
           var idDoubtful = 2;
           var idExpected = 3;
           var tp_limit_1 = timePeriod;
-          var tp_limit_2 = 2 * timePeriod;
-          var tp_limit_3 = 3 * timePeriod;
+          var tp_limit_2 = timePeriod;
+          var tp_limit_3 = timePeriod;
           var timeToLimitAint = timeToLimitA*1;
           var timeToLimitBint = timeToLimitB*1;
           var timeToLimitCint = timeToLimitC*1;
@@ -504,23 +484,25 @@
           // TP1
           if (timeToLimitAint >= 2 * tp_limit_1) {
               calculated_lf2LeakageToAtmosphereTP1 = idImprobable;
-          } else if (timeToLimitAint > tp_limit_1) {
+          } else if (timeToLimitAint > tp_limit_1 && timeToLimitAint < 2 * tp_limit_1) {
               calculated_lf2LeakageToAtmosphereTP1 = idDoubtful;
           } else {
               calculated_lf2LeakageToAtmosphereTP1 = idExpected;
           }
           // TP2
-          if (timeToLimitAint >= 2 * tp_limit_2) {
+          var timeToLimitAintTP2 = timeToLimitAint - tp_limit_2;
+          if (timeToLimitAintTP2 >= 2 * tp_limit_2) {
               calculated_lf2LeakageToAtmosphereTP2 = idImprobable;
-          } else if (timeToLimitAint > tp_limit_2) {
+          } else if (timeToLimitAintTP2 > tp_limit_2 && timeToLimitAintTP2 < 2 * tp_limit_2) {
               calculated_lf2LeakageToAtmosphereTP2 = idDoubtful;
           } else {
               calculated_lf2LeakageToAtmosphereTP2 = idExpected;
           }
           // TP3
-          if (timeToLimitAint >= 2 * tp_limit_3) {
+          var timeToLimitAintTP3 = timeToLimitAintTP2 - tp_limit_3;
+          if (timeToLimitAintTP3 >= 2 * tp_limit_3) {
               calculated_lf2LeakageToAtmosphereTP3 = idImprobable;
-          } else if (timeToLimitAint > tp_limit_3) {
+          } else if (timeToLimitAintTP3 > tp_limit_3 && timeToLimitAintTP3 < 2 * tp_limit_3) {
               calculated_lf2LeakageToAtmosphereTP3 = idDoubtful;
           } else {
               calculated_lf2LeakageToAtmosphereTP3 = idExpected;
@@ -532,23 +514,25 @@
           // TP1
           if (timeToLimitBint >= 2 * tp_limit_1) {
               calculated_lf2FailureOfFunctionTP1 = idImprobable;
-          } else if (timeToLimitBint > tp_limit_1) {
+          } else if (timeToLimitBint > tp_limit_1 && timeToLimitBint < 2 * tp_limit_1) {
               calculated_lf2FailureOfFunctionTP1 = idDoubtful;
           } else {
               calculated_lf2FailureOfFunctionTP1 = idExpected;
           }
           // TP2
-          if (timeToLimitBint >= 2 * tp_limit_2) {
+          var timeToLimitBintTP2 = timeToLimitBint - tp_limit_2;
+          if (timeToLimitBintTP2 >= 2 * tp_limit_2) {
               calculated_lf2FailureOfFunctionTP2 = idImprobable;
-          } else if (timeToLimitBint > tp_limit_2) {
+          } else if (timeToLimitBintTP2 > tp_limit_2 && timeToLimitBintTP2 < 2 * tp_limit_2) {
               calculated_lf2FailureOfFunctionTP2 = idDoubtful;
           } else {
               calculated_lf2FailureOfFunctionTP2 = idExpected;
           }
           // TP3
-          if (timeToLimitBint >= 2 * tp_limit_3) {
+          var timeToLimitBintTP3 = timeToLimitBintTP2 - tp_limit_3;
+          if (timeToLimitBintTP3 >= 2 * tp_limit_3) {
               calculated_lf2FailureOfFunctionTP3 = idImprobable;
-          } else if (timeToLimitBint > tp_limit_3) {
+          } else if (timeToLimitBintTP3 > tp_limit_3 && timeToLimitBintTP3 < 2 * tp_limit_3) {
               calculated_lf2FailureOfFunctionTP3 = idDoubtful;
           } else {
               calculated_lf2FailureOfFunctionTP3 = idExpected;
@@ -560,23 +544,25 @@
           // TP1
           if (timeToLimitCint >= 2 * tp_limit_1) {
               calculated_lf2PassingAccrossValveTP1 = idImprobable;
-          } else if (timeToLimitCint > tp_limit_1) {
+          } else if (timeToLimitCint > tp_limit_1 && timeToLimitCint < 2 * tp_limit_1) {
               calculated_lf2PassingAccrossValveTP1 = idDoubtful;
           } else {
               calculated_lf2PassingAccrossValveTP1 = idExpected;
           }
           // TP2
-          if (timeToLimitCint >= 2 * tp_limit_2) {
+          var timeToLimitCintTP2 = timeToLimitCint - tp_limit_2;
+          if (timeToLimitCintTP2 >= 2 * tp_limit_2) {
               calculated_lf2PassingAccrossValveTP2 = idImprobable;
-          } else if (timeToLimitCint > tp_limit_2) {
+          } else if (timeToLimitCintTP2 > tp_limit_2 && timeToLimitCintTP2 < 2 * tp_limit_2) {
               calculated_lf2PassingAccrossValveTP2 = idDoubtful;
           } else {
               calculated_lf2PassingAccrossValveTP2 = idExpected;
           }
           // TP3
-          if (timeToLimitCint >= 2 * tp_limit_3) {
+          var timeToLimitCintTP3 = timeToLimitCintTP2 - tp_limit_3;
+          if (timeToLimitCintTP3 >= 2 * tp_limit_3) {
               calculated_lf2PassingAccrossValveTP3 = idImprobable;
-          } else if (timeToLimitCint > tp_limit_3) {
+          } else if (timeToLimitCintTP3 > tp_limit_3 && timeToLimitCintTP3 < 2 * tp_limit_3) {
               calculated_lf2PassingAccrossValveTP3 = idDoubtful;
           } else {
               calculated_lf2PassingAccrossValveTP3 = idExpected;
@@ -637,18 +623,33 @@
           var lf2PassingAccrossValveTP3Weighting = $('#passing-tp3' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
           var lf2PassingAccrossValveTP3Value = $('#passing-tp3' + ctr).find('option:selected').val();
           //LF3
+          if($('#inspection-effectiveness' + ctr).find('option:selected').length == 0 || $('#inspection-effectiveness' + ctr).find('option:selected').val() == '') {
+            return
+          }
           var lf3InspectionEffectiveness = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-value').replace(',','.');
           var lf3InspectionEffectivenessWeighting = $('#inspection-effectiveness' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
           //LF4
+          if($('#impact-of-internal-fluid' + ctr).find('option:selected').length == 0 || $('#impact-of-internal-fluid' + ctr).find('option:selected').val() == '') {
+            return
+          }
           var lf4ImpactOfInternalFluid = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-value').replace(',','.');
           var lf4ImpactOfInternalFluidWeighting = $('#impact-of-internal-fluid' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
           //LF5
+          if($('#impact-of-operating-envelopes' + ctr).find('option:selected').length == 0 || $('#impact-of-operating-envelopes' + ctr).find('option:selected').val() == '') {
+            return
+          }
           var lf5ImpactOfOperatingEnvelopes = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-value').replace(',','.');
           var lf5ImpactOfOperatingEnvelopesWeighting = $('#impact-of-operating-envelopes' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
           //LF6
+          if($('#used-within-oem-specification' + ctr).find('option:selected').length == 0 || $('#used-within-oem-specification' + ctr).find('option:selected').val() == '') {
+            return
+          }
           var lf6UsedWithinOEMSpecification = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-value').replace(',','.');
           var lf6UsedWithinOEMSpecificationWeighting = $('#used-within-oem-specification' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
           //LF7
+          if($('#repaired' + ctr).find('option:selected').length == 0 || $('#repaired' + ctr).find('option:selected').val() == '') {
+            return
+          }
           var lf7Repaired = $('#repaired' + ctr).find('option:selected').attr('attr-value').replace(',','.');
           var lf7RepairedWeighting = $('#repaired' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
           //CALCULATE
@@ -792,7 +793,7 @@
           });
           hsseSelect.val(selectedHsse);
           var hsseSelectReal = $('#hsse-definition' + ctr);
-          if(hsseSelectReal.find('option:selected').length == 0){
+          if(hsseSelectReal.find('option:selected').length == 0 || hsseSelectReal.find('option:selected').val() == '') {
               return
           }
           var cof1 = hsseSelectReal.find('option:selected').attr('attr-cofcategory');

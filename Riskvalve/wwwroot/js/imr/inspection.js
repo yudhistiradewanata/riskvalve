@@ -53,6 +53,7 @@ function submitForm(el) {
                         $('.btn-add-new-inspection[attr-inspection-id='+response.id+']').html(response.inspectionDate)
                         form.find('.preview-image-gallery .single-image').remove()
                         form.find('.preview-image-gallery input[type=file]').remove()
+                        form.find('.preview-image-gallery input[identifier^="delete-gallery-"]').remove()
                         fetchHistoryData({
                             id: response.id,
                             counter: ctr

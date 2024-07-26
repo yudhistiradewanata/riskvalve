@@ -52,7 +52,7 @@
                                 <div class="form-group-inline">
                                     <label for="field-asset-platform">Platform</label>
                                     <select id="field-asset-platform" name="platform" class="form-control" required>
-                                        <option value="">Select Platform</option>
+                                        <option value="" selected disabled>-- Select Platform --</option>
                                         @{
                                             if(platformList != null){
                                                 foreach (var item in platformList)
@@ -72,7 +72,7 @@
                                 <div class="form-group-inline">
                                     <label for="field-asset-valvetype">Valve Type</label>
                                     <select id="field-asset-valvetype" name="valvetype" class="form-control" required>
-                                        <option value="">Select Valve Type</option>
+                                        <option value="" selected disabled>-- Select Valve Type --</option>
                                         @{
                                             if(valveTypeList != null)
                                             {
@@ -112,6 +112,7 @@
                                 <div class="form-group-inline">
                                     <label for="field-asset-status">Status</label>
                                     <select id="field-asset-status" name="status" class="form-control" required>
+                                        <option value="" selected disabled>-- Select Status --</option>
                                         <option value="in-service">In-Service</option>
                                         <option value="waiting for refurbishment">Waiting for Refurbishment</option>
                                         <option value="spare">Spare</option>
@@ -120,6 +121,7 @@
                                 <div class="form-group-inline">
                                     <label for="field-asset-usagetype">Usage Type</label>
                                     <select id="field-asset-usagetype" name="usagetype" class="form-control" required>
+                                        <option value="" selected disabled>-- Select Usage Type --</option>
                                         <option value="manual valve">Manual Valve</option>
                                         <option value="auto on-off valve">Auto On-Off Valve</option>
                                         <option value="control valve">Control Valve</option>
@@ -129,6 +131,7 @@
                                 <div class="form-group-inline">
                                     <label for="field-asset-actuation">Actuation</label>
                                     <select id="field-asset-actuation" name="actuation" class="form-control" required>
+                                        <option value="" selected disabled>-- Select Actuation --</option>
                                         <option value="pneumatic">Pneumatic</option>
                                         <option value="hydraulic">Hydraulic</option>
                                         <option value="manual">Manual</option>
@@ -155,7 +158,7 @@
                                     <label for="field-asset-manualoverride">Manual Override</label>
                                     <select id="field-asset-manualoverride" name="manualoverride" class="form-control"
                                         required>
-                                        <option value="">Select Manual Override</option>
+                                        <option value="" selected disabled>-- Select Manual Override --</option>
                                         @{
                                             if(manualOverrideList != null)
                                             {
@@ -234,7 +237,7 @@
                                 <div class="form-group-inline">
                                     <label for="field-asset-fluidphase">Fluid Phase</label>
                                     <select id="field-asset-fluidphase" name="fluidphase" class="form-control" required>
-                                        <option value="">Select Fluid Phase</option>
+                                        <option value="" selected disabled>-- Select Fluid Phase --</option>
                                         @{
                                             if(fluidPhaseList != null)
                                             {
@@ -255,7 +258,7 @@
                                     <label for="field-asset-toxicorflamablefluid">Toxic or Flamable Fluid</label>
                                     <select id="field-asset-toxicorflamablefluid" name="toxicorflamablefluid"
                                         class="form-control" required>
-                                        <option value="">Select Toxic or Flamable Fluid</option>
+                                        <option value="" selected disabled>-- Select Toxic or Flamable Fluid --</option>
                                         @{
                                             if(toxicOrFlamableFluidList != null)
                                             {

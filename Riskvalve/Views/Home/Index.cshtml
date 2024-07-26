@@ -28,25 +28,10 @@
                 }
                 <div class="card">
                     <div class="card-header">
-                        <b>Asset Distribution</b>
+                        <b>Total Asset</b>
                     </div>
                     <div class="card-body" style="padding: 10px 5px;">
                         <div class="row">
-                            <div class="col-md-4">
-                                <div class="info-card blue">
-                                    <div class="info-card__title">
-                                        Central Business Unit
-                                    </div>
-                                    <div class="info-card__content">
-                                        <text style="font-size: larger">
-                                        @if (assetDistribution != null)
-                                        {
-                                            @assetDistribution["CBU"]
-                                        }
-                                        </text>
-                                    </div>
-                                </div>
-                            </div>
                             <div class="col-md-4">
                                 <div class="info-card orange">
                                     <div class="info-card__title">
@@ -72,6 +57,21 @@
                                         @if (assetDistribution != null)
                                         {
                                             @assetDistribution["SBU"]
+                                        }
+                                        </text>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="info-card blue">
+                                    <div class="info-card__title">
+                                        Central Business Unit
+                                    </div>
+                                    <div class="info-card__content">
+                                        <text style="font-size: larger">
+                                        @if (assetDistribution != null)
+                                        {
+                                            @assetDistribution["CBU"]
                                         }
                                         </text>
                                     </div>

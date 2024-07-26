@@ -1,3 +1,4 @@
+using System.Globalization;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -90,6 +91,18 @@ public class MaintenanceRepository(ApplicationDbContext context) : IMaintenanceR
 
     public MaintenanceData AddMaintenance(MaintenanceClass maintenance)
     {
+        if (
+            !DateTime.TryParseExact(
+                maintenance.MaintenanceDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Maintenance Date is not in the correct format (dd-MM-yyyy)");
+        }
         MaintenanceClass? maintenanceClass = _context
             .Maintenance.Where(m =>
                 m.MaintenanceDate == maintenance.MaintenanceDate
@@ -110,6 +123,18 @@ public class MaintenanceRepository(ApplicationDbContext context) : IMaintenanceR
 
     public MaintenanceData UpdateMaintenance(MaintenanceClass maintenance)
     {
+        if (
+            !DateTime.TryParseExact(
+                maintenance.MaintenanceDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Maintenance Date is not in the correct format (dd-MM-yyyy)");
+        }
         MaintenanceClass? oldMaintenance =
             _context
                 .Maintenance.Where(m => m.Id == maintenance.Id && m.IsDeleted == false)

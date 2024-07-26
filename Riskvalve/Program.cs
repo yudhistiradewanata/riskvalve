@@ -70,7 +70,7 @@ builder.Services.AddSession(options =>
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.Strict;
-    options.IdleTimeout = TimeSpan.FromDays(365); // 1 year
+    options.IdleTimeout = TimeSpan.FromHours(8); // 8 hours
     options.Cookie.IsEssential = true;
 });
 

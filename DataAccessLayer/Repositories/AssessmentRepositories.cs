@@ -1,3 +1,4 @@
+using System.Globalization;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -301,6 +302,18 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
     }
     public AssessmentData AddAssessment(AssessmentClass assessment)
     {
+        if (
+            !DateTime.TryParseExact(
+                assessment.AssessmentDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Assessment Date is not in the correct format (dd-MM-yyyy)");
+        }
         AssessmentClass? searchassessment = _context
             .Assessment.Where(a => 
                 a.AssessmentDate == assessment.AssessmentDate &&
@@ -324,6 +337,18 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
     }
     public AssessmentData UpdateAssessment(AssessmentClass assessment)
     {
+        if (
+            !DateTime.TryParseExact(
+                assessment.AssessmentDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Assessment Date is not in the correct format (dd-MM-yyyy)");
+        }
         AssessmentClass? oldAssessment = _context
             .Assessment.Where(a => a.Id == assessment.Id && a.IsDeleted == false)
             .FirstOrDefault() ?? throw new Exception("Assessment not found");

@@ -1,3 +1,4 @@
+using System.Globalization;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -186,6 +187,18 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
 
     public AssetData AddAsset(AssetClass asset)
     {
+        if (
+            !DateTime.TryParseExact(
+                asset.InstallationDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Installation Date is not in the correct format (dd-MM-yyyy)");
+        }
         AssetClass? searchasset = _context
             .Asset.Where(a => a.TagNo == asset.TagNo && a.IsDeleted == false)
             .FirstOrDefault();
@@ -200,6 +213,18 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
 
     public AssetData UpdateAsset(AssetClass asset)
     {
+        if (
+            !DateTime.TryParseExact(
+                asset.InstallationDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Installation Date is not in the correct format (dd-MM-yyyy)");
+        }
         AssetClass? oldAsset = _context
             .Asset.Where(a => a.Id == asset.Id && a.IsDeleted == false)
             .FirstOrDefault() ?? throw new Exception("Asset not found");

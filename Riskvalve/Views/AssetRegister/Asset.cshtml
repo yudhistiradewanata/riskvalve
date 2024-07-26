@@ -18,9 +18,14 @@
             </div>
             <div class="table-container">
                 <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div>
                     <button onclick="editAction.apply(this)" type="button" class="btn btn-primary custom btn-asset-action btn-with-icon" attr-mode="create">
                         <i class="fa-solid fa-plus"></i> Add New
                     </button>
+                    <button class="btn btn-primary custom btn-asset-action btn-with-icon" id="btnExcelAsset">
+                        <i class="bi bi-file-earmark-excel"></i> Export to Excel
+                    </button>
+                    </div>
                     <div class="">
                         <div class="input-group input-group-sm input-search">
                             <span class="input-group-text" id="basic-addon1">
@@ -44,7 +49,7 @@
                             <th>Parent Equipment No</th>
                             <th>Parent Equipment Description</th>
                             <th>Service Fluid</th>
-                            <th></th>
+                            <th class="notexport"></th>
                         </tr>
                     </thead>
                 </table>

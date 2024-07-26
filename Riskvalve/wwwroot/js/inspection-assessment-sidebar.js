@@ -57,7 +57,12 @@ function fold_all_sidebar_menu() {
 }
 
 function sidebarClick () {
-    if($(this).hasClass('child-open')) return
+    if($(this).hasClass('child-open')) {
+        $(this).removeClass('child-open')
+        $(this).closest('.treeview').find('.treeview,.child-data-entry').css('display', 'none')
+        $(this).closest('.treeview').find('.child-open').removeClass('child-open')
+        return
+    }
     $('.sidebartreea').removeClass('selected')
     $(this).addClass('selected')
     var level = $(this).attr('attr-sidebar-level');

@@ -1,3 +1,4 @@
+using System.Globalization;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -123,6 +124,18 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
 
     public InspectionData AddInspection(InspectionClass inspection)
     {
+        if (
+            !DateTime.TryParseExact(
+                inspection.InspectionDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Inspection Date is not in the correct format (dd-MM-yyyy)");
+        }
         InspectionClass? inspectionClass = _context
             .Inspection.Where(i => 
                 i.InspectionDate == inspection.InspectionDate
@@ -142,6 +155,18 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
 
     public InspectionData UpdateInspection(InspectionClass inspection)
     {
+        if (
+            !DateTime.TryParseExact(
+                inspection.InspectionDate,
+                SharedEnvironment.GetDateFormatString(false),
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.None,
+                out _
+            )
+        )
+        {
+            throw new FormatException("Inspection Date is not in the correct format (dd-MM-yyyy)");
+        }
         InspectionClass? oldInspection = 
             _context
                 .Inspection.Where(i => i.Id == inspection.Id && i.IsDeleted == false)

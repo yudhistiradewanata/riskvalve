@@ -161,7 +161,8 @@
                                                     Condition Leakage to Atmosphere</label>
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-a"
-                                                    name="CurrentConditionLeakeageToAtmosphereID">
+                                                    name="CurrentConditionLeakeageToAtmosphereID" required>
+                                                    <option value="" selected disabled>-- Select Current Condition --</option>
                                                     @if(limitState != null)
                                                     {
                                                         foreach (var item in limitState)
@@ -181,7 +182,8 @@
                                                     Condition Failure of Function</label>
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-b"
-                                                    name="CurrentConditionFailureOfFunctionID">
+                                                    name="CurrentConditionFailureOfFunctionID" required>
+                                                    <option value="" selected disabled>-- Select Current Condition --</option>
                                                     @if(limitState != null)
                                                     {
                                                         foreach (var item in limitState)
@@ -195,7 +197,8 @@
                                                 <label for="field-inspection-inspection-method">Inspection
                                                     Method</label>
                                                 <select class="form-control" id="field-inspection-inspection-method"
-                                                    name="InspectionMethodID">
+                                                    name="InspectionMethodID" required>
+                                                    <option value="" selected disabled>-- Select Inspection Method --</option>
                                                     @if(inspectionMethods != null)
                                                     {
                                                         foreach (var item in inspectionMethods)
@@ -210,7 +213,8 @@
                                                     Condition Passing Across Valve</label>
                                                 <select class="form-control"
                                                     id="field-inspection-current-condition-limit-state-c"
-                                                    name="CurrentConditionPassingAcrossValveID">
+                                                    name="CurrentConditionPassingAcrossValveID" required>
+                                                    <option value="" selected disabled>-- Select Current Condition --</option>
                                                     @if(limitState != null)
                                                     {
                                                         foreach (var item in limitState)
@@ -224,7 +228,8 @@
                                                 <label for="field-inspection-effectiveness">Inspection
                                                     Effectiveness</label>
                                                 <select class="form-control" id="field-inspection-effectiveness"
-                                                    name="InspectionEffectivenessID">
+                                                    name="InspectionEffectivenessID" required>
+                                                    <option value="" selected disabled>-- Select Inspection Effectiveness --</option>
                                                     @if(inspectionEffectivenessStates != null)
                                                     {
                                                         foreach (var item in inspectionEffectivenessStates)

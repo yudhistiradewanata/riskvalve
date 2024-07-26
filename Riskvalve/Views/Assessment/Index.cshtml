@@ -480,6 +480,7 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="leakage-to-atmosphere" name="LeakageToAtmosphereID" onchange="calculateAssessment.apply(this)">
+                                                                    <option value="" disabled selected>-- Select Inspection --</option>
                                                                     @if (limitState != null)
                                                                     {
                                                                         foreach (var item in limitState)
@@ -498,6 +499,7 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="failure-of-function" name="FailureOfFunctionID" onchange="calculateAssessment.apply(this)">
+                                                                    <option value="" disabled selected>-- Select Inspection --</option>
                                                                     @if(limitState != null)
                                                                     {
                                                                         foreach (var item in limitState)
@@ -516,6 +518,7 @@
                                                             </div>
                                                             <div class="col-6">
                                                                 <select class="form-select form-select-sm calculate-assessment readonly" id="passing-accross-valve" name="PassingAccrosValveID" onchange="calculateAssessment.apply(this)">
+                                                                    <option value="" disabled selected>-- Select Inspection --</option>
                                                                     @if(limitState != null)
                                                                     {
                                                                         foreach (var item in limitState)
@@ -687,7 +690,8 @@
                                                                 <label class="col-form-label" for="inspection-effectiveness">LF3 - Inspection Effectiveness</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment readonly" id="inspection-effectiveness" name="InspectionEffectivenessID" onchange="calculateAssessment.apply(this)">
+                                                                <select class="form-select form-select-sm calculate-assessment readonly" id="inspection-effectiveness" name="InspectionEffectivenessID" onchange="calculateAssessment.apply(this)" required>
+                                                                    <option value="" disabled selected>-- Select Inspection Effectiveness --</option>
                                                                     @if (inspectionEffectivenessStates != null)
                                                                     {
                                                                         foreach (var item in inspectionEffectivenessStates)
@@ -703,7 +707,8 @@
                                                                 <label class="col-form-label" for="impact-of-internal-fluid">LF4 - Impact of Internal Fluid Impurities</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-internal-fluid" name="ImpactOfInternalFluidImpuritiesID" onchange="calculateAssessment.apply(this)">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-internal-fluid" name="ImpactOfInternalFluidImpuritiesID" onchange="calculateAssessment.apply(this)" required>
+                                                                    <option value="" disabled selected>-- Select Impact of Internal Fluid Impurities --</option>
                                                                     @if(impactEffectStates != null)
                                                                     {
                                                                         foreach (var item in impactEffectStates)
@@ -719,7 +724,8 @@
                                                                 <label class="col-form-label" for="impact-of-operating-envelopes">LF5 - Impact of Operating Envelopes</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-operating-envelopes" name="ImpactOfOperatingEnvelopesID" onchange="calculateAssessment.apply(this)">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="impact-of-operating-envelopes" name="ImpactOfOperatingEnvelopesID" onchange="calculateAssessment.apply(this)" required>
+                                                                    <option value="" disabled selected>-- Select Impact of Operating Envelopes --</option>
                                                                     @if(impactEffectStates != null)
                                                                     {
                                                                         foreach (var item in impactEffectStates)
@@ -735,7 +741,8 @@
                                                                 <label class="col-form-label" for="used-within-oem-specification">LF6 - Used within OEM Specification</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="used-within-oem-specification" name="UsedWithinOEMSpecificationID" onchange="calculateAssessment.apply(this)">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="used-within-oem-specification" name="UsedWithinOEMSpecificationID" onchange="calculateAssessment.apply(this)" required>
+                                                                    <option value="" disabled selected>-- Select Used within OEM Specification --</option>
                                                                     @if(usedWithinOEMSpecifications != null)
                                                                     {
                                                                         foreach (var item in usedWithinOEMSpecifications)
@@ -751,7 +758,8 @@
                                                                 <label class="col-form-label" for="repaired">LF7 - Repaired</label>
                                                             </div>
                                                             <div class="col-6">
-                                                                <select class="form-select form-select-sm calculate-assessment" id="repaired" name="RepairedID" onchange="calculateAssessment.apply(this)">
+                                                                <select class="form-select form-select-sm calculate-assessment" id="repaired" name="RepairedID" onchange="calculateAssessment.apply(this)" required>
+                                                                    <option value="" disabled selected>-- Select Repaired --</option>
                                                                     @if(repairedStates != null)
                                                                     {
                                                                         foreach (var item in repairedStates)
@@ -795,9 +803,10 @@
                                                                         }
                                                                     }
                                                                 </select>
-                                                                <select class="form-select form-select-sm" id="hsse-definition" name="HSSEDefinisionID">
+                                                                <select class="form-select form-select-sm" id="hsse-definition" name="HSSEDefinisionID" required>
                                                                     @if(hsseDefinisions != null)
                                                                     {
+                                                                        <option value="" disabled selected>-- Select HSSE Definition --</option>
                                                                         foreach (var item in hsseDefinisions)
                                                                         {
                                                                             <option value="@item.Id" attr-minvalue="@item.MinBBSValue" attr-cofcategory="@item.CoFCategory" attr-score="@item.Score">@item.HSSEDefinision</option>
@@ -1203,7 +1212,7 @@
                                                                             </div>
                                                                         </span> *@
                                                                         <select id="integrity-status" class="form-select form-select-sm" name="IntegrityStatus" required>
-                                                                            <option disabled selected>-- Select One --</option>
+                                                                            <option value="" disabled selected>-- Select Integrity Status --</option>
                                                                             <option value="Very High Priority">Very High Priority</option>
                                                                             <option value="High Priority">High Priority</option>
                                                                             <option value="Medium Priority">Medium Priority</option>
@@ -1225,7 +1234,7 @@
                                                                 <div class="mb-3">
                                                                     <label class="form-label fw-500" for="recommended-action">Recommendation Action</label>
                                                                     <select class="form-select form-select-sm" id="recommended-action" name="RecommendationActionID" required>
-                                                                        <option disabled selected>-- Select One --</option>
+                                                                        <option value=""  disabled selected>-- Select Recommendation Action --</option>
                                                                         <option value="1">Inspection</option>
                                                                         <option value="2">Repair</option>
                                                                         <option value="3">Replace</option>

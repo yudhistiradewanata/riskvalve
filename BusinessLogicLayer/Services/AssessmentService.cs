@@ -367,97 +367,114 @@ public class AssessmentService(
         int idDoubtful = 2;
         int idExpected = 3;
         int tp_limit_1 = timePeriod;
-        int tp_limit_2 = 2 * timePeriod;
-        int tp_limit_3 = 3 * timePeriod;
+        int tp_limit_2 = timePeriod;
+        int tp_limit_3 = timePeriod;
         List<TimeToLimitStateData> timeToLimitStateList =
             _timeToLimitStateRepository.GetTimeToLimitStateList();
         // Leakage To Atmosphere
+        // TP1
         int LeakageToAtmosphereTP1ID =
             timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_1
                 ? idImprobable
-                : timeToLimitStateLeakageToAtmosphere > tp_limit_1
+                : timeToLimitStateLeakageToAtmosphere > tp_limit_1 && timeToLimitStateLeakageToAtmosphere < 2 * tp_limit_1
                     ? idDoubtful
                     : idExpected;
         double LeakageToAtmosphereTP1IDV =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP1ID).LimitStateValue ?? 0;
         double LeakageToAtmosphereTP1IDW =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP1ID).Weighting ?? 0;
+        // TP 2
+        int timeToLimitStateLeakageToAtmosphereTP2 = timeToLimitStateLeakageToAtmosphere - tp_limit_1;
         int LeakageToAtmosphereTP2ID =
-            timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_2
+            timeToLimitStateLeakageToAtmosphereTP2 >= 2 * tp_limit_2
                 ? idImprobable
-                : timeToLimitStateLeakageToAtmosphere > tp_limit_2
+                : timeToLimitStateLeakageToAtmosphereTP2 > tp_limit_2 && timeToLimitStateLeakageToAtmosphereTP2 < 2 * tp_limit_2
                     ? idDoubtful
                     : idExpected;
         double LeakageToAtmosphereTP2IDV =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP2ID).LimitStateValue ?? 0;
         double LeakageToAtmosphereTP2IDW =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP2ID).Weighting ?? 0;
+        // TP 3
+        int timeToLimitStateLeakageToAtmosphereTP3 = timeToLimitStateLeakageToAtmosphereTP2 - tp_limit_2;
         int LeakageToAtmosphereTP3ID =
-            timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_3
+            timeToLimitStateLeakageToAtmosphereTP3 >= 2 * tp_limit_3
                 ? idImprobable
-                : timeToLimitStateLeakageToAtmosphere > tp_limit_3
+                : timeToLimitStateLeakageToAtmosphereTP3 > tp_limit_3 && timeToLimitStateLeakageToAtmosphereTP3 < 2 * tp_limit_3
                     ? idDoubtful
                     : idExpected;
         double LeakageToAtmosphereTP3IDV =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP3ID).LimitStateValue ?? 0;
         double LeakageToAtmosphereTP3IDW =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP3ID).Weighting ?? 0;
+
         // Failure Of Function
+        // TP 1
         int FailureOfFunctionTP1ID =
             timeToLimitStateFailureOfFunction >= 2 * tp_limit_1
                 ? idImprobable
-                : timeToLimitStateFailureOfFunction > tp_limit_1
+                : timeToLimitStateFailureOfFunction > tp_limit_1 && timeToLimitStateFailureOfFunction < 2 * tp_limit_1
                     ? idDoubtful
                     : idExpected;
         double FailureOfFunctionTP1IDV =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP1ID).LimitStateValue ?? 0;
         double FailureOfFunctionTP1IDW =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP1ID).Weighting ?? 0;
+        // TP 2
+        int timeToLimitStateFailureOfFunctionTP2 = timeToLimitStateFailureOfFunction - tp_limit_1;
         int FailureOfFunctionTP2ID =
-            timeToLimitStateFailureOfFunction >= 2 * tp_limit_2
+            timeToLimitStateFailureOfFunctionTP2 >= 2 * tp_limit_2
                 ? idImprobable
-                : timeToLimitStateFailureOfFunction > tp_limit_2
+                : timeToLimitStateFailureOfFunctionTP2 > tp_limit_2 && timeToLimitStateFailureOfFunctionTP2 < 2 * tp_limit_2
                     ? idDoubtful
                     : idExpected;
         double FailureOfFunctionTP2IDV =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP2ID).LimitStateValue ?? 0;
         double FailureOfFunctionTP2IDW =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP2ID).Weighting ?? 0;
+        // TP 3
+        int timeToLimitStateFailureOfFunctionTP3 = timeToLimitStateFailureOfFunctionTP2 - tp_limit_2;
         int FailureOfFunctionTP3ID =
-            timeToLimitStateFailureOfFunction >= 2 * tp_limit_3
+            timeToLimitStateFailureOfFunctionTP3 >= 2 * tp_limit_3
                 ? idImprobable
-                : timeToLimitStateFailureOfFunction > tp_limit_3
+                : timeToLimitStateFailureOfFunctionTP3 > tp_limit_3 && timeToLimitStateFailureOfFunctionTP3 < 2 * tp_limit_3
                     ? idDoubtful
                     : idExpected;
         double FailureOfFunctionTP3IDV =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP3ID).LimitStateValue ?? 0;
         double FailureOfFunctionTP3IDW =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP3ID).Weighting ?? 0;
+
         // Passing Accros Valve
+        // TP 1
         int PassingAccrosValveTP1ID =
             timeToLimitStatePassingAccrosValve >= 2 * tp_limit_1
                 ? idImprobable
-                : timeToLimitStatePassingAccrosValve > tp_limit_1
+                : timeToLimitStatePassingAccrosValve > tp_limit_1 && timeToLimitStatePassingAccrosValve < 2 * tp_limit_1
                     ? idDoubtful
                     : idExpected;
         double PassingAccrosValveTP1IDV =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP1ID).LimitStateValue ?? 0;
         double PassingAccrosValveTP1IDW =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP1ID).Weighting ?? 0;
+        // TP 2
+        int timeToLimitStatePassingAccrosValveTP2 = timeToLimitStatePassingAccrosValve - tp_limit_1;
         int PassingAccrosValveTP2ID =
-            timeToLimitStatePassingAccrosValve >= 2 * tp_limit_2
+            timeToLimitStatePassingAccrosValveTP2 >= 2 * tp_limit_2
                 ? idImprobable
-                : timeToLimitStatePassingAccrosValve > tp_limit_2
+                : timeToLimitStatePassingAccrosValveTP2 > tp_limit_2 && timeToLimitStatePassingAccrosValveTP2 < 2 * tp_limit_2
                     ? idDoubtful
                     : idExpected;
         double PassingAccrosValveTP2IDV =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP2ID).LimitStateValue ?? 0;
         double PassingAccrosValveTP2IDW =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP2ID).Weighting ?? 0;
+        // TP 3
+        int timeToLimitStatePassingAccrosValveTP3 = timeToLimitStatePassingAccrosValveTP2 - tp_limit_2;
         int PassingAccrosValveTP3ID =
-            timeToLimitStatePassingAccrosValve >= 2 * tp_limit_3
+            timeToLimitStatePassingAccrosValveTP3 >= 2 * tp_limit_3
                 ? idImprobable
-                : timeToLimitStatePassingAccrosValve > tp_limit_3
+                : timeToLimitStatePassingAccrosValveTP3 > tp_limit_3 && timeToLimitStatePassingAccrosValveTP3 < 2 * tp_limit_3
                     ? idDoubtful
                     : idExpected;
         double PassingAccrosValveTP3IDV =
@@ -1766,10 +1783,13 @@ public class AssessmentService(
         recap_barchart_integritystatus.Add("Very High", integrity_veryhigh.ToString());
         recap_final.Add("heatmap", recap_heatmap);
         recap_final.Add("piechart", recap_piechart);
-        foreach (var item in recap_barchart)
-        {
-            recap_barchart_convert.Add(item.Key, JsonConvert.SerializeObject(item.Value));
-        }
+        // foreach (var item in recap_barchart)
+        // {
+        //     recap_barchart_convert.Add(item.Key, JsonConvert.SerializeObject(item.Value));
+        // }
+        recap_barchart_convert["NBU"] = JsonConvert.SerializeObject(recap_barchart["NBU"]);
+        recap_barchart_convert["SBU"] = JsonConvert.SerializeObject(recap_barchart["SBU"]);
+        recap_barchart_convert["CBU"] = JsonConvert.SerializeObject(recap_barchart["CBU"]);
         recap_final.Add("barchart", recap_barchart_convert);
         recap_final.Add("integritystatus", recap_barchart_integritystatus);
         return recap_final;

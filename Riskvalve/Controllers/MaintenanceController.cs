@@ -157,7 +157,11 @@ public class MaintenanceController(
                                 "Maintenance",
                                 maintenance.Id.ToString(),
                                 fileName
-                            )
+                            ),
+                            CreatedAt = DateTime.Now.ToString(
+                                SharedEnvironment.GetDateFormatString()
+                            ),
+                            CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                         };
                     _maintenanceService.AddMaintenanceFile(maintenanceFile);
                 }
@@ -255,7 +259,11 @@ public class MaintenanceController(
                                 "Maintenance",
                                 maintenance.Id.ToString(),
                                 fileName
-                            )
+                            ),
+                            CreatedAt = DateTime.Now.ToString(
+                                SharedEnvironment.GetDateFormatString()
+                            ),
+                            CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                         };
                     _maintenanceService.AddMaintenanceFile(maintenanceFile);
                 }

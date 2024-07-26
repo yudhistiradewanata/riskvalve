@@ -600,7 +600,7 @@ public class AssetRegisterController(
 
         // Paging
         int recordsTotal = assetList.Count;
-        var data = assetList.Skip(start).Take(length).ToList();
+        var data = length == -1 ? [.. assetList] : assetList.Skip(start).Take(length).ToList();
 
         return Json(
             new
