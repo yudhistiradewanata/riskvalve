@@ -127,6 +127,18 @@ public class AssessmentService(
                     }
                 }
             }
+            assessmentData.InspectionHistory = assessmentData.InspectionHistory.OrderByDescending(
+                x =>
+                    DateTime.TryParseExact(
+                        x.Inspection?.InspectionDate ?? "01-01-1900",
+                        SharedEnvironment.GetDateFormatString(false),
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out DateTime date
+                    )
+                        ? date
+                        : DateTime.MinValue
+            ).ToList();
             assessmentData.MaintenanceHistory =
                 _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
             foreach (var maintenance in assessmentData.MaintenanceHistory)
@@ -145,6 +157,18 @@ public class AssessmentService(
                     }
                 }
             }
+            assessmentData.MaintenanceHistory = assessmentData.MaintenanceHistory.OrderByDescending(
+                x =>
+                    DateTime.TryParseExact(
+                        x.Maintenance?.MaintenanceDate ?? "01-01-1900",
+                        SharedEnvironment.GetDateFormatString(false),
+                        CultureInfo.InvariantCulture,
+                        DateTimeStyles.None,
+                        out DateTime date
+                    )
+                        ? date
+                        : DateTime.MinValue
+            ).ToList();
             return assessmentData;
         }
         catch (Exception ex)

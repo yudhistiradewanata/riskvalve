@@ -10,13 +10,13 @@
     <div id="print-area">
         <table class="assessment-print" id="assessment-print-table">
             <tr>
-                <td colspan="10" class="heading" style="width: 100%; background-color: #1f487c !important;">Valve Passport</td>
-                <td colspan="2" rowspan="4" class="no-padding text-center">
-                    <img class="logo" src="~/lib/images/logo-square.jpg">
+                <td colspan="11" class="heading" style="width: 100%; background-color: #1f487c !important;">Valve Passport</td>
+                <td colspan="1" rowspan="4" class="no-padding text-center">
+                    <img class="logo" src="~/lib/images/logo-square-new.jpg">
                 </td>
             </tr>
             <tr>
-                <td colspan="3" style="width: 30%;">Valve Tag Number :</td>
+                <td colspan="2" style="width: 30%;">Valve Tag Number :</td>
                 <td colspan="3" style="width: 25%;">
                 @{
                     if(assessment.Asset.TagNo != null){
@@ -25,19 +25,19 @@
                 }
                 </td>
                 </td>
-                <td colspan="2" style="width: 20%;">Assessment Date :</td>
+                <td colspan="3" style="width: 20%;">Assessment Date :</td>
                 <td colspan="2" style="width: 20%;">@assessment.AssessmentDate</td>
             </tr>
             <tr>
-                <td colspan="3">Business Area :</td>
+                <td colspan="2">Business Area :</td>
                 <td colspan="3">@assessment.Asset.BusinessArea</td>
-                <td colspan="2">Assessment UID :</td>
+                <td colspan="3">Assessment UID :</td>
                 <td colspan="2">@assessment.AssessmentNo</td>
             </tr>
             <tr>
-                <td colspan="3">Platofrm :</td>
+                <td colspan="2">Platofrm :</td>
                 <td colspan="3">@assessment.Asset.Platform</td>
-                <td colspan="2">Valve Type :</td>
+                <td colspan="3">Valve Type :</td>
                 <td colspan="2">@assessment.Asset.ValveType</td>
             </tr>
             <!-- Second section -->
@@ -47,7 +47,7 @@
             <tr>
                 <td colspan="3" style="width: 30%;">Priority :</td>
                 <td colspan="3" style="width: 25%;">@assessment.IntegrityStatus</td>
-                <td colspan="6" rowspan="9" style="width: 20%;">
+                <td colspan="6" rowspan="8" style="width: 20%;">
                     <div class="risk-chart">
                         <img class="risk-matrix-legend" src="~/lib/images/risk-matrix-legend2.png">
                         <div class="print-risk-table">
@@ -63,25 +63,31 @@
             </tr>
             <tr>
                 <td colspan="3" style="width: 30%;">Current Status :</td>
-                <td colspan="3" style="width: 25%;"></td>
+                <td colspan="3" style="width: 25%;">@assessment.Asset.Status</td>
             </tr>
             <tr>
-                <td colspan="3" class="table-section no-transform">Risk</td>
-                <td width="60px" class="table-section no-transform">TP1</td>
-                <td width="60px" class="table-section no-transform">TP2</td>
-                <td width="60px" class="table-section no-transform">TP3</td>
-            </tr>   
-            <tr>
-                <td colspan="3">Time From Datum (Months) :</td>
-                <td class="text-center">@assessment.TPTimeToActionA</td>
-                <td class="text-center">@assessment.TPTimeToActionB</td>
-                <td class="text-center">@assessment.TPTimeToActionC</td>
+                <td colspan="3" class="table-section">Risk</td>
+                <td colspan="3" style="padding: 0px;border: 1px solid black;">
+                    <table style="width: calc(100% + 2px); border: none; margin-top: -1px; margin-left: -1px; margin-right: -1px; margin-bottom: -1px">
+                        <tr>
+                            <td style="width: 33%;" class="table-section">TP1</td>
+                            <td style="width: 33%;" class="table-section">TP2</td>
+                            <td style="width: 33%;" class="table-section">TP3</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr>
                 <td colspan="3">Risk for Most Severe Limit State :</td>
-                <td class="text-center" style="background-color: @assessmentHeatMap["TP1"]["color"];">@assessmentHeatMap["TP1"]["value"]</td>
-                <td class="text-center" style="background-color: @assessmentHeatMap["TP2"]["color"];">@assessmentHeatMap["TP2"]["value"]</td>
-                <td class="text-center" style="background-color: @assessmentHeatMap["TP3"]["color"];">@assessmentHeatMap["TP3"]["value"]</td>
+                <td colspan="3" style="padding: 0px;border: 1px solid black;">
+                    <table style="width: calc(100% + 2px); border: none; margin-top: -1px; margin-left: -1px; margin-right: -1px; margin-bottom: -1px">
+                        <tr>
+                            <td class="text-center" style="background-color: @assessmentHeatMap["TP1"]["color"];">@assessmentHeatMap["TP1"]["value"]</td>
+                            <td class="text-center" style="background-color: @assessmentHeatMap["TP2"]["color"];">@assessmentHeatMap["TP2"]["value"]</td>
+                            <td class="text-center" style="background-color: @assessmentHeatMap["TP3"]["color"];">@assessmentHeatMap["TP3"]["value"]</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
             <tr>
                 <td colspan="6" class="table-section">Integrity Action, Recommendation and Date</td>
@@ -91,7 +97,10 @@
                 <td colspan="3">@assessment.TPTimeToActionRisk</td>
             </tr>
             <tr>
-                <td colspan="6" rowspan="2" style="text-align: center;">@assessment.RecommendationAction</td>
+                <td colspan="6" rowspan="2">
+                    <div style="text-align: center;">@assessment.RecommendationAction</div>
+                    <div style="text-align: justify;">@assessment.DetailedRecommendation</div>
+                </td>
             </tr>
             <!-- Third section -->
             <tr>
@@ -100,6 +109,7 @@
                 <td colspan="12" class="table-section" style="width: 100%; background-color: #1f487c !important; color: white !important; text-align: center;">Maintenance History</td>
             </tr>
             @if(assessment.MaintenanceHistory.Count > 0){
+                assessment.MaintenanceHistory = assessment.MaintenanceHistory.OrderByDescending(x => x.Maintenance.MaintenanceDate).ToList();
                 for(int i = 0; i < assessment.MaintenanceHistory.Count; i++)
                 {
                     <tr>
@@ -115,20 +125,38 @@
                     <tr>
                         <td colspan="12" class="table-section">Maintenance Image</td>
                     </tr>
-                    <tr style="border: 1px solid black; border-collapse: collapse;">
-                        @{
-                            int ctr_maintenance_img = 0;
-                        }
-                        @foreach (var image in assessment.MaintenanceHistory[i].Maintenance.MaintenanceFiles) {
-                            <td colspan="2" style="border: none;">
-                                <img src="/@image.FilePath"/>
-                            </td>
-                            ctr_maintenance_img+=1;
-                            if(ctr_maintenance_img >=6){
-                                ctr_maintenance_img = 0;
-                                @:</tr><tr style="border: 1px solid black; border-collapse: collapse;">
-                            }
-                        }
+                    <tr>
+                        <td colspan="12" style="padding: 0px;border: 1px solid black;">
+                            <table style="width: calc(100% + 2px); border: none; margin-top: -1px; margin-left: -1px; margin-right: -1px; margin-bottom: -1px">
+                                <tr>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    @{
+                                        int ctr_maintenance_img = 0;
+                                    }
+                                    @foreach (var image in assessment.MaintenanceHistory[i].Maintenance.MaintenanceFiles) {
+                                        <td style="border: none; width: 20%;">
+                                            <img src="/@image.FilePath" style="width: 100%;"/>
+                                        </td>
+                                        ctr_maintenance_img+=1;
+                                        if(ctr_maintenance_img >=5){
+                                            ctr_maintenance_img = 0;
+                                            @:</tr><tr>
+                                        }
+                                    }
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
                 }
             }
@@ -158,8 +186,39 @@
                     <tr>
                         <td colspan="12" class="table-section">Inspection Image</td>
                     </tr>
-                    <tr style="border: 1px solid black; border-collapse: collapse;">
-                        @{
+                    <tr>
+                        <td colspan="12" style="padding: 0px;border: 1px solid black;">
+                            <table style="width: calc(100% + 2px); border: none; margin-top: -1px; margin-left: -1px; margin-right: -1px; margin-bottom: -1px">
+                                <tr>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                    <td style="border: none; width: 20%;">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    @{
+                                        int ctr_inspection_img = 0;
+                                    }
+                                    @foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
+                                        <td style="border: none; width: 20%;">
+                                            <img src="/@image.FilePath" style="width: 100%;"/>
+                                        </td>
+                                        ctr_inspection_img+=1;
+                                        if(ctr_inspection_img >=5){
+                                            ctr_inspection_img = 0;
+                                            @:</tr><tr>
+                                        }
+                                    }
+                                </tr>
+                            </table>
+                        </td>
+                        @* @{
                             int ctr_inspection_img = 0;
                         }
                         @foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
@@ -171,7 +230,7 @@
                                 ctr_inspection_img = 0;
                                 @:</tr><tr style="border: 1px solid black; border-collapse: collapse;">
                             }
-                        }
+                        } *@
                     </tr>
                 }
             }
@@ -298,24 +357,30 @@
                 <td colspan="12" class="table-section" style="width: 100%; background-color: #1f487c !important; color: white !important; text-align: center;">Approvals</td>
             </tr>
             <tr>
-                <td colspan="4" class="table-section sub-section">Author</td>
-                <td colspan="4" class="table-section sub-section">Reviewer</td>
-                <td colspan="4" class="table-section sub-section">Approvals</td>
-            </tr>
-            <tr>
-                <td colspan="4"><br/><br/><br/><br/><br/></td>
-                <td colspan="4"><br/><br/><br/><br/><br/></td>
-                <td colspan="4"><br/><br/><br/><br/><br/></td>
-            </tr>
-            <tr>
-                <td colspan="4">Name :</td>
-                <td colspan="4">Name :</td>
-                <td colspan="4">Name :</td>
-            </tr>
-            <tr>
-                <td colspan="4">Date :</td>
-                <td colspan="4">Date :</td>
-                <td colspan="4">Date :</td>
+                <td colspan="12" style="padding: 0px;border: 1px solid black;">
+                    <table style="width: calc(100% + 2px); border: none; margin-top: -1px; margin-left: -1px; margin-right: -1px; margin-bottom: -1px">
+                        <tr>
+                            <td style="width: 33%;" class="table-section sub-section">Author</td>
+                            <td style="width: 33%;" class="table-section sub-section">Reviewer</td>
+                            <td style="width: 33%;" class="table-section sub-section">Approvals</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%;"><br/><br/><br/><br/><br/></td>
+                            <td style="width: 33%;"><br/><br/><br/><br/><br/></td>
+                            <td style="width: 33%;"><br/><br/><br/><br/><br/></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%;">Name:</td>
+                            <td style="width: 33%;">Name:</td>
+                            <td style="width: 33%;">Name:</td>
+                        </tr>
+                        <tr>
+                            <td style="width: 33%;">Date:</td>
+                            <td style="width: 33%;">Date:</td>
+                            <td style="width: 33%;">Date:</td>
+                        </tr>
+                    </table>
+                </td>
             </tr>
         </table>
     </div>
