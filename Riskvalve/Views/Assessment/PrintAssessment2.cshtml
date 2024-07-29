@@ -1,0 +1,281 @@
+@using SharedLayer;
+@{
+    ViewData["Title"] = "Print Assessment";
+    var assessment = ViewData["Assessment"] as AssessmentData;
+    var jsonassessment = Newtonsoft.Json.JsonConvert.SerializeObject(assessment);
+    var assessmentHeatMap = ViewData["AssessmentHeatMap"] as Dictionary<string, Dictionary<string,string>>;
+    var jsonassessmentHeatMap = Newtonsoft.Json.JsonConvert.SerializeObject(assessmentHeatMap);
+}
+<div class="container-fluid">
+    <div id="print-area">
+        <table class="assessment-print" id="assessment-print-table">
+            <tr>
+                <td colspan="10" class="heading" style="width: 100%; background-color: #1f487c !important;">Valve Passport</td>
+                <td colspan="2" rowspan="4" class="no-padding text-center">
+                    <img class="logo" src="~/lib/images/logo-square.jpg">
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" style="width: 30%;">Tag Number</td>
+                <td colspan="2" style="width: 25%;">
+                @{
+                    if(assessment.Asset.TagNo != null){
+                        @assessment.Asset.TagNo
+                    }
+                }
+                </td>
+                </td>
+                <td colspan="2" style="width: 20%;">Assessment Date</td>
+                <td colspan="2" style="width: 20%;">@assessment.AssessmentDate</td>
+            </tr>
+            <tr>
+                <td colspan="4">Business Area</td>
+                <td colspan="2">@assessment.Asset.BusinessArea</td>
+                <td colspan="2">Assessment</td>
+                <td colspan="2">@assessment.AssessmentNo</td>
+            </tr>
+            <tr>
+                <td colspan="4">Platofrm</td>
+                <td colspan="2">@assessment.Asset.Platform</td>
+                <td colspan="2">Valve Type</td>
+                <td colspan="2">@assessment.Asset.ValveType</td>
+            </tr>
+            <!-- Second section -->
+            <tr>
+                <td colspan="6" class="table-section">Valve Information</td>
+                <td colspan="6" class="table-section">Process Information</td>
+            </tr>
+            <tr>
+                <td colspan="4">P&ID Number</td>
+                <td colspan="2">@assessment.Asset.PIDNo</td>
+                <td colspan="3">Operating Pressure (Psig)</td>
+                <td colspan="3">@assessment.Asset.OperatingPressure</td>
+            </tr>
+            <tr>
+                <td colspan="4">Parent Equipment No.</td>
+                <td colspan="2">@assessment.Asset.ParentEquipmentNo</td>
+                <td colspan="3">Operating Temperature (F)</td>
+                <td colspan="3">@assessment.Asset.OperatingTemperature</td>
+            </tr>
+            <tr>
+                <td colspan="4">Parent Equipment Desc</td>
+                <td colspan="2">@assessment.Asset.ParentEquipmentDescription</td>
+                <td colspan="3">Service Fluid</td>
+                <td colspan="3">@assessment.Asset.ServiceFluid</td>
+            </tr>
+            <tr>
+                <td colspan="4">Size (Inch)</td>
+                <td colspan="2">@assessment.Asset.Size</td>
+                <td colspan="3">Fluid Phase</td>
+                <td colspan="3">@assessment.Asset.FluidPhase</td>
+            </tr>
+            <tr>
+                <td colspan="4">Class Rating</td>
+                <td colspan="2">@assessment.Asset.ClassRating</td>
+                <td colspan="3">Toxic or Flamable Fluid</td>
+                <td colspan="3">@assessment.Asset.ToxicOrFlamableFluid</td>
+            </tr>
+            <tr>
+                <td colspan="4">Installation Date</td>
+                <td colspan="2">@assessment.Asset.InstallationDate</td>
+                <td colspan="6" rowspan="5"></td>
+            </tr>
+            <tr>
+                <td colspan="4">Manufacturer</td>
+                <td colspan="2">@assessment.Asset.Manufacturer</td>
+            </tr>
+            <tr>
+                <td colspan="4">Body Material</td>
+                <td colspan="2">@assessment.Asset.BodyMaterial</td>
+            </tr>
+            <tr>
+                <td colspan="4">Remaining Life (Year)</td>
+                <td colspan="2"></td>
+            </tr>
+            <tr>
+                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
+                <td colspan="2">@assessment.Asset.CostOfReplacementAndRepair</td>
+            </tr>
+            <tr>
+                <td colspan="6" class="table-section">Risk Result</td>
+                <td colspan="6" class="table-section">Usage Type</td>
+            </tr>
+            <tr>
+                <td colspan="6" rowspan="10">
+                    <div class="risk-chart">
+                        <img class="risk-matrix-legend" src="~/lib/images/risk-matrix-legend2.png">
+                        <div class="print-risk-table">
+                            <div class="risk-dots">
+                                <div class="dot-tp1 dot" style="bottom: @assessmentHeatMap["TP1"]["xpos"]%; left: @assessmentHeatMap["TP1"]["ypos"]%;"></div>
+                                <div class="dot-tp2 dot" style="bottom: @assessmentHeatMap["TP2"]["xpos"]%; left: @assessmentHeatMap["TP2"]["ypos"]%;"></div>
+                                <div class="dot-tp3 dot" style="bottom: @assessmentHeatMap["TP3"]["xpos"]%; left: @assessmentHeatMap["TP3"]["ypos"]%;"></div>
+                            </div>
+                            <img src="~/lib/images/risk-matrix.png">
+                        </div>
+                    </div>
+                </td>
+                <td colspan="5">Manual valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.UsageType.ToLower() == "manual valve" ? "checked" : "") /> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Auto On-Off Valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.UsageType.ToLower() == "auto on-off valve" ? "checked" : "")/> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Control Valve</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.UsageType.ToLower() == "control valve" ? "checked" : "")/> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">PSV/PRV</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.UsageType.ToLower() == "psv/prv" ? "checked" : "")/> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="table-section">Actuation</td>
+            </tr>
+            <tr>
+                <td colspan="5">Pneumatic</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.Actuation.ToLower() == "pneumatic" ? "checked" : "") />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Hydraulic</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.Actuation.ToLower() == "hydraulic" ? "checked" : "") /> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="5">Manual Override</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.ManualOverrideID == 1 ? "checked" : "")/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="6" class="table-section">Status</td>
+            </tr>
+            <tr>
+                <td colspan="5">In-service</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.Status.ToLower() == "in-service" ? "checked" : "")/> 
+                </td>
+            </tr>
+            <tr>
+                <td class="table-section no-transform">Tag Number</td>
+                <td width="60px" class="table-section no-transform">TP1</td>
+                <td width="60px" class="table-section no-transform">TP2</td>
+                <td width="60px" class="table-section no-transform">TP3</td>
+                <td class="table-section no-transform">Action Date</td>
+                <td class="table-section no-transform">Remarks</td>
+                <td colspan="5">Waiting For Refurbishment</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.Status.ToLower() == "waiting for refurbishment" ? "checked" : "")/> 
+                </td>
+            </tr>
+            <tr>
+                <td>@assessment.Asset.TagNo</td>
+                <td class="text-center" style="background-color: @assessmentHeatMap["TP1"]["color"];">@assessmentHeatMap["TP1"]["value"]</td>
+                <td class="text-center" style="background-color: @assessmentHeatMap["TP2"]["color"];">@assessmentHeatMap["TP2"]["value"]</td>
+                <td class="text-center" style="background-color: @assessmentHeatMap["TP3"]["color"];">@assessmentHeatMap["TP3"]["value"]</td>
+                <td class="text-center">@assessment.TPTimeToActionRisk</td>
+                <td></td>
+                <td colspan="5">Spare</td>
+                <td colspan="1" class="checkbox">
+                    <input type="checkbox" @(assessment.Asset.Status.ToLower() == "spare" ? "checked" : "")/> 
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12" class="table-section">Valve Inspection History</td>
+            </tr>
+            <!-- Inspection rows -->
+            
+            <tr>
+                <td colspan="2" class="table-section no-transform">Inspection Date</td>
+                <td colspan="2" class="table-section no-transform">Inspection Method</td>
+                <td colspan="2" class="table-section no-transform">Inspection Description</td>
+                <td colspan="2" class="table-section no-transform">Function Condition</td>
+                <td colspan="2" class="table-section no-transform">Test Pressure</td>
+                <td colspan="2" class="table-section no-transform">Inspection Image</td>
+                
+            </tr>
+            @if(assessment.InspectionHistory.Count > 0)
+            {
+                for(int i = 0; i < assessment.InspectionHistory.Count; i++)
+                {
+                    <tr class="inspection-maintenance-row">
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDate</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionMethod</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.InspectionDescription</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.FunctionCondition</td>
+                        <td colspan="2">@assessment.InspectionHistory[i].Inspection.TestPressureIfAny</td>
+                        <td colspan="2">@foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
+                            <img src="/@image.FilePath"/>
+                        }</td>
+                    </tr>
+                }
+            }
+            <tr>
+                <td colspan="12" class="table-section">Valve Maintenance History</td>
+            </tr>
+            <tr>
+                <td class="table-section no-transform" colspan="3">Maintenance Date</td>
+                <td class="table-section no-transform" colspan="2">Is Valve Repaired</td>
+                <td class="table-section no-transform" colspan="3">Maintenance Description</td>
+                <td class="table-section no-transform" colspan="4">Maintenance Image</td>
+            </tr>
+            @if(assessment.MaintenanceHistory.Count > 0){
+                for(int i = 0; i < assessment.MaintenanceHistory.Count; i++)
+                {
+                    <tr class="inspection-maintenance-row">
+                        <td colspan="3">@assessment.MaintenanceHistory[i].Maintenance.MaintenanceDate</td>
+                        <td colspan="2">@assessment.MaintenanceHistory[i].Maintenance.IsValveRepaired</td>
+                        <td colspan="3">@assessment.MaintenanceHistory[i].Maintenance.MaintenanceDescription</td>
+                        <td colspan="4">@foreach (var image in assessment.MaintenanceHistory[i].Maintenance.MaintenanceFiles) {
+                            <img src="/@image.FilePath"/>
+                        }</td>
+                    </tr>
+                }
+            }
+            <!-- Report summary -->
+            <tr>
+                <td colspan="12" class="table-section">Report Summary</td>
+            </tr>
+            <tr>
+                <td colspan="12">
+                    @assessment.Summary&nbsp;
+                </td>
+            </tr>
+            <tr>
+                <td colspan="12" class="table-section">Final Recommendation</td>
+            </tr>
+            <tr>
+                <td class="text-center" colspan="2">Action Date</td>
+                <td colspan="10" rowspan="2"><b>@assessment.RecommendationAction</b> @assessment.DetailedRecommendation</td>
+            </tr>
+            <tr>
+                <td class="text-center" colspan="2">@assessment.TPTimeToActionRisk</td>
+            </tr>
+            <tr>
+                <td colspan="4" class="table-section sub-section">Prepared By</td>
+                <td colspan="4" class="table-section sub-section">Reviewed By</td>
+                <td colspan="4" class="table-section sub-section">Approved By</td>
+            </tr>
+            <tr>
+                <td colspan="4">&nbsp;</td>
+                <td colspan="4">&nbsp;</td>
+                <td colspan="4">&nbsp;</td>
+            </tr>
+        </table>
+    </div>
+</div>
+@section Scripts {
+    <script src='~/js/printpage.js'></script>
+    <link rel="stylesheet" href="~/css/assessment/print.css" asp-append-version="true" />
+}
