@@ -95,20 +95,20 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Remaining Life</td>
-                <td colspan="2"></td>
+                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
+                <td colspan="2">@inspection.Asset.CostOfReplacementAndRepair</td>
                 <td colspan="5">Manual Override</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.ManualOverrideID == 1 ? "checked" : "") />
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
-                <td colspan="2">@inspection.Asset.CostOfReplacementAndRepair</td>
+                <td colspan="6" class="table-section">Valve Inspection</td>
                 <td colspan="6" class="table-section sub-section">Usage Type</td>
             </tr>
             <tr>
-                <td colspan="6" class="table-section">Valve Inspection</td>
+                <td colspan="4">Inspection Method</td>
+                <td colspan="2">@inspection.InspectionMethod</td>
                 <td colspan="5">Manual valve</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.UsageType.ToLower() == "manual valve" ? "checked" : "")/> 
@@ -116,74 +116,65 @@
             </tr>
             <!-- Inspection rows -->
             <tr>
-                <td colspan="4">Inspection Method</td>
-                <td colspan="2">@inspection.InspectionMethod</td>
+                <td colspan="4">Inspection Effectiveness</td>
+                <td colspan="2">@inspection.InspectionEffectiveness</td>
                 <td colspan="5">Auto On-Off Valve</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.UsageType.ToLower() == "auto on-off valve" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Inspection Effectiveness</td>
-                <td colspan="2">@inspection.InspectionEffectiveness</td>
+                <td colspan="4">Inspection Description</td>
+                <td colspan="2">@inspection.InspectionDescription</td>
                 <td colspan="5">Control Valve</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.UsageType.ToLower() == "control valve" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Inspection Description</td>
-                <td colspan="2">@inspection.InspectionDescription</td>
+                <td colspan="4">Functional Condition</td>
+                <td colspan="2">@inspection.FunctionCondition</td>
                 <td colspan="5">PSV/PRV</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.UsageType.ToLower() == "psv/prv" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Functional Condition</td>
-                <td colspan="2">@inspection.FunctionCondition</td>
+                <td colspan="4">Test Pressure if Any</td>
+                <td colspan="2">@inspection.TestPressureIfAny</td>
                 <td colspan="6" class="table-section sub-section">Status</td>
             </tr>
             <tr>
-                <td colspan="4">Test Pressure if Any</td>
-                <td colspan="2">@inspection.TestPressureIfAny</td>
+                <td colspan="4">Current Condition Leakeage To Atmosphere</td>
+                <td colspan="2">@inspection.CurrentConditionLeakeageToAtmosphere</td>
                 <td colspan="5">In-service</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.Status.ToLower() == "in-service" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>
-                <td rowspan="2" colspan="4">Inspection image</td>
-                <td rowspan="2" colspan="2">
-                    @foreach (var image in inspection.InspectionFiles) {
-                        <img style="max-width: 100px;" src="/@image.FilePath"/>
-                    }
-                </td>
+                <td colspan="4">Current Condition Failure of Function</td>
+                <td colspan="2">@inspection.CurrentConditionFailureOfFunction</td>
                 <td colspan="5">Waiting For Refurbishment</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.Status.ToLower() == "waiting for refurbishment" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>
+                <td colspan="4">Current Condition Passing Across Valve</td>
+                <td colspan="2">@inspection.CurrentConditionPassingAcrossValve</td>
                 <td colspan="5">Spare</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(inspection.Asset.Status.ToLower() == "spare" ? "checked" : "")/> 
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Current Condition Leakeage To Atmosphere</td>
-                <td colspan="2">@inspection.CurrentConditionLeakeageToAtmosphere</td>
-                <td colspan="6"></td>
-            </tr>
-            <tr>
-                <td colspan="4">Current Condition Failure of Function</td>
-                <td colspan="2">@inspection.CurrentConditionFailureOfFunction</td>
-                <td colspan="6"></td>
-            </tr>
-            <tr>
-                <td colspan="4">Current Condition Passing Across Valve</td>
-                <td colspan="2">@inspection.CurrentConditionPassingAcrossValve</td>
-                <td colspan="6"></td>
+                <td colspan="4">Inspection image</td>
+                <td colspan="8">
+                    @foreach (var image in inspection.InspectionFiles) {
+                        <img style="max-width: 100px;" src="/@image.FilePath"/>
+                    }
+                </td>
             </tr>
         </table>
     </div>

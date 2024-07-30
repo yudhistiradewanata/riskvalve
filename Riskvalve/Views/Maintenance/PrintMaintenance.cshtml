@@ -88,49 +88,46 @@
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Remaining Life</td>
-                <td colspan="2"></td>
+                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
+                <td colspan="2">@maintenance.Asset.CostOfReplacementAndRepair</td>
                 <td colspan="5">Manual Override</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(maintenance.Asset.ManualOverrideID == 1 ? "checked" : "") />
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Approx. cost of replacement and repair (USD)</td>
-                <td colspan="2">@maintenance.Asset.CostOfReplacementAndRepair</td>
+                <td colspan="6" class="table-section">Valve Maintenance</td>
                 <td colspan="6" class="table-section sub-section">Usage Type</td>
             </tr>
             <tr>
-                <td colspan="6" class="table-section">Valve Maintenance</td>
+                <td colspan="4">Is Valve Repaired</td>
+                <td colspan="2">@maintenance.IsValveRepaired</td>
                 <td colspan="5">Manual valve</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "manual valve" ? "checked" : "")/>
                 </td>
             </tr>
-            <!-- Maintenance rows -->
             <tr>
-                <td colspan="4">Is Valve Repaired</td>
-                <td colspan="2">@maintenance.IsValveRepaired</td>
+                <td colspan="4">Maintenance Description</td>
+                <td colspan="2">@maintenance.MaintenanceDescription</td>
                 <td colspan="5">Auto On-Off Valve</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "auto on-off valve" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
-                <td colspan="4">Maintenance Description</td>
-                <td colspan="2">@maintenance.MaintenanceDescription</td>
+                <td rowspan="6" colspan="4">Maintenance image</td>
+                <td rowspan="6" colspan="2">
+                    @foreach (var image in maintenance.MaintenanceFiles) {
+                        <img style="max-width: 100px;" src="/@image.FilePath"/>
+                    }
+                </td>
                 <td colspan="5">Control Valve</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "control valve" ? "checked" : "")/>
                 </td>
             </tr>
             <tr>
-                <td rowspan="5" colspan="4">Maintenance image</td>
-                <td rowspan="5" colspan="2">
-                    @foreach (var image in maintenance.MaintenanceFiles) {
-                        <img style="max-width: 100px;" src="/@image.FilePath"/>
-                    }
-                </td>
                 <td colspan="5">PSV/PRV</td>
                 <td colspan="1" class="checkbox">
                     <input type="checkbox" @(maintenance.Asset.UsageType.ToLower() == "psv/prv" ? "checked" : "")/>
