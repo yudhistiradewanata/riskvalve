@@ -35,7 +35,7 @@
                 <td colspan="2">@assessment.AssessmentNo</td>
             </tr>
             <tr>
-                <td colspan="2">Platofrm :</td>
+                <td colspan="2">Platform :</td>
                 <td colspan="3">@assessment.Asset.Platform</td>
                 <td colspan="3">Valve Type :</td>
                 <td colspan="2">@assessment.Asset.ValveType</td>
@@ -97,7 +97,7 @@
                 <td colspan="3">@assessment.TPTimeToActionRisk</td>
             </tr>
             <tr>
-                <td colspan="6" rowspan="2">
+                <td style="vertical-align: top;" colspan="6" rowspan="2">
                     <div style="text-align: center;">@assessment.RecommendationAction</div>
                     <div style="text-align: justify;">@assessment.DetailedRecommendation</div>
                 </td>
@@ -180,8 +180,8 @@
                         <td>@assessment.InspectionHistory[i].Inspection.InspectionDate</td>
                         <td>@assessment.InspectionHistory[i].Inspection.InspectionMethod</td>
                         <td colspan="3">@assessment.InspectionHistory[i].Inspection.InspectionDescription</td>
-                        <td>@assessment.InspectionHistory[i].Inspection.FunctionCondition</td>
-                        <td colspan="6">@assessment.InspectionHistory[i].Inspection.TestPressureIfAny</td>
+                        <td>@assessment.InspectionHistory[i].Inspection.TestPressureIfAny</td>
+                        <td colspan="6">@assessment.InspectionHistory[i].Inspection.FunctionCondition</td>
                     </tr>
                     <tr>
                         <td colspan="12" class="table-section">Inspection Image</td>
