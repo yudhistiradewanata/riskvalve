@@ -145,7 +145,7 @@
                                     }
                                     @foreach (var image in assessment.MaintenanceHistory[i].Maintenance.MaintenanceFiles) {
                                         <td style="border: none; width: 20%;">
-                                            <img src="https://vims.twi-dev.net/@image.FilePath" style="width: 100%;"/>
+                                            <img src="/@image.FilePath" style="width: 100%;"/>
                                         </td>
                                         ctr_maintenance_img+=1;
                                         if(ctr_maintenance_img >=5){
@@ -204,7 +204,7 @@
                                     }
                                     @foreach (var image in assessment.InspectionHistory[i].Inspection.InspectionFiles) {
                                         <td style="border: none; width: 20%;">
-                                            <img src="https://vims.twi-dev.net/@image.FilePath" style="width: 100%;"/>
+                                            <img src="/@image.FilePath" style="width: 100%;"/>
                                         </td>
                                         ctr_inspection_img+=1;
                                         if(ctr_inspection_img >=5){
