@@ -88,6 +88,11 @@ public class InspectionController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Inspection");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int id = Convert.ToInt32(Request.Query["id"]);
             var inspection = _inspectionService.GetInspection(id);
             result.IsSuccess = true;
@@ -108,34 +113,50 @@ public class InspectionController(
     [ValidateAntiForgeryToken]
     public IActionResult AddInspection()
     {
-        List<IFormFile> files = [.. Request.Form.Files];
-        InspectionClass inspection =
-            new()
-            {
-                AssetID = Convert.ToInt32(Request.Form["AssetID"]),
-                InspectionDate = Request.Form["InspectionDate"],
-                InspectionMethodID = Convert.ToInt32(Request.Form["InspectionMethodID"]),
-                InspectionEffectivenessID = Convert.ToInt32(
-                    Request.Form["InspectionEffectivenessID"]
-                ),
-                InspectionDescription = Request.Form["InspectionDescription"],
-                CurrentConditionLeakeageToAtmosphereID = Convert.ToInt32(
-                    Request.Form["CurrentConditionLeakeageToAtmosphereID"]
-                ),
-                CurrentConditionFailureOfFunctionID = Convert.ToInt32(
-                    Request.Form["CurrentConditionFailureOfFunctionID"]
-                ),
-                CurrentConditionPassingAcrossValveID = Convert.ToInt32(
-                    Request.Form["CurrentConditionPassingAcrossValveID"]
-                ),
-                FunctionCondition = Request.Form["FunctionCondition"],
-                TestPressureIfAny = Request.Form["TestPressureIfAny"],
-                CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
-                CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
-            };
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Inspection");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
+            List<IFormFile> files = [.. Request.Form.Files];
+            List<string> permittedExtensions = SharedEnvironment.GetPermittedExtension();
+            foreach (var file in files)
+            {
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+                {
+                    throw new Exception(
+                        "Invalid file extension. Only images and Excel files are allowed."
+                    );
+                }
+            }
+            InspectionClass inspection =
+                new()
+                {
+                    AssetID = Convert.ToInt32(Request.Form["AssetID"]),
+                    InspectionDate = Request.Form["InspectionDate"],
+                    InspectionMethodID = Convert.ToInt32(Request.Form["InspectionMethodID"]),
+                    InspectionEffectivenessID = Convert.ToInt32(
+                        Request.Form["InspectionEffectivenessID"]
+                    ),
+                    InspectionDescription = Request.Form["InspectionDescription"],
+                    CurrentConditionLeakeageToAtmosphereID = Convert.ToInt32(
+                        Request.Form["CurrentConditionLeakeageToAtmosphereID"]
+                    ),
+                    CurrentConditionFailureOfFunctionID = Convert.ToInt32(
+                        Request.Form["CurrentConditionFailureOfFunctionID"]
+                    ),
+                    CurrentConditionPassingAcrossValveID = Convert.ToInt32(
+                        Request.Form["CurrentConditionPassingAcrossValveID"]
+                    ),
+                    FunctionCondition = Request.Form["FunctionCondition"],
+                    TestPressureIfAny = Request.Form["TestPressureIfAny"],
+                    CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                    CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
+                };
             InspectionData inspectionData = _inspectionService.AddInspection(inspection);
             IWebHostEnvironment environment =
                 HttpContext.RequestServices.GetService<IWebHostEnvironment>()
@@ -201,7 +222,23 @@ public class InspectionController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Inspection");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             List<IFormFile> files = [.. Request.Form.Files];
+            List<string> permittedExtensions = SharedEnvironment.GetPermittedExtension();
+            foreach (var file in files)
+            {
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+                {
+                    throw new Exception(
+                        "Invalid file extension. Only images and Excel files are allowed."
+                    );
+                }
+            }
             List<InspectionFileClass>? inspectionFileClass = [];
             foreach (var key in Request.Form.Keys)
             {
@@ -299,16 +336,18 @@ public class InspectionController(
             // Update Assessment if Any
             List<AssessmentInspectionData> assessmentInspectionDatas =
                 _assessmentService.GetAssessmentInspectionDatas(inspectionID);
-            if (assessmentInspectionDatas.Count > 0) {
+            if (assessmentInspectionDatas.Count > 0)
+            {
                 foreach (var assessmentInspectionData in assessmentInspectionDatas)
                 {
                     int assessmentid = 0;
-                    if(assessmentInspectionData.AssessmentID == null)
+                    if (assessmentInspectionData.AssessmentID == null)
                     {
                         continue;
                     }
                     assessmentid = assessmentInspectionData.AssessmentID ?? 0;
-                    if(assessmentid > 0){
+                    if (assessmentid > 0)
+                    {
                         _assessmentService.CalculateAssessment(assessmentid);
                     }
                 }
@@ -334,6 +373,11 @@ public class InspectionController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Inspection");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["id"], out int id))
             {
                 throw new Exception("Invalid ID");
@@ -379,6 +423,11 @@ public class InspectionController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Inspection");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int AssetID = Convert.ToInt32(Request.Query["AssetID"]);
             List<InspectionData> inspectionList = _inspectionService.GetInspectionList(
                 false,
@@ -402,6 +451,11 @@ public class InspectionController(
     [ValidateAntiForgeryToken]
     public IActionResult GetInspectionSidebar(int AssetID)
     {
+        Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Inspection");
+        if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+        {
+            return Json(new List<Dictionary<string, string>>());
+        }
         List<InspectionData> inspectionSidebar = _inspectionService.GetInspectionList(
             false,
             AssetID

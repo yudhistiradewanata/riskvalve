@@ -1,3 +1,4 @@
+using System.Web;
 using DataAccessLayer;
 using SharedLayer;
 
@@ -38,17 +39,17 @@ public class InspectionFileRepository(ApplicationDbContext context) : IInspectio
                     Id = inspectionfile.Id,
                     InspectionID = inspectionfile.InspectionID,
                     MaintenanceID = inspectionfile.MaintenanceID,
-                    FileName = inspectionfile.FileName,
+                    FileName = HttpUtility.HtmlEncode(inspectionfile.FileName),
                     FileSize = inspectionfile.FileSize,
-                    FileType = inspectionfile.FileType,
-                    FilePath = inspectionfile.FilePath,
+                    FileType = HttpUtility.HtmlEncode(inspectionfile.FileType),
+                    FilePath = HttpUtility.HtmlEncode(inspectionfile.FilePath),
                     IsDeleted = inspectionfile.IsDeleted,
                     CreatedAt = inspectionfile.CreatedAt,
                     CreatedBy = inspectionfile.CreatedBy,
                     DeletedAt = inspectionfile.DeletedAt,
                     DeletedBy = inspectionfile.DeletedBy,
-                    CreatedByUser = subcreateby.Username ?? "",
-                    DeletedByUser = subdeleteby.Username ?? ""
+                    CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                    DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
                 }
             )
         ];
@@ -78,17 +79,17 @@ public class InspectionFileRepository(ApplicationDbContext context) : IInspectio
                     Id = inspectionfile.Id,
                     InspectionID = inspectionfile.InspectionID,
                     MaintenanceID = inspectionfile.MaintenanceID,
-                    FileName = inspectionfile.FileName,
+                    FileName = HttpUtility.HtmlEncode(inspectionfile.FileName),
                     FileSize = inspectionfile.FileSize,
-                    FileType = inspectionfile.FileType,
-                    FilePath = inspectionfile.FilePath,
+                    FileType = HttpUtility.HtmlEncode(inspectionfile.FileType),
+                    FilePath = HttpUtility.HtmlEncode(inspectionfile.FilePath),
                     IsDeleted = inspectionfile.IsDeleted,
                     CreatedAt = inspectionfile.CreatedAt,
                     CreatedBy = inspectionfile.CreatedBy,
                     DeletedAt = inspectionfile.DeletedAt,
                     DeletedBy = inspectionfile.DeletedBy,
-                    CreatedByUser = subcreateby.Username ?? "",
-                    DeletedByUser = subdeleteby.Username ?? ""
+                    CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                    DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
                 }
             )
         ];

@@ -59,6 +59,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int id = Convert.ToInt32(Request.Query["id"]);
             var area = _areaService.GetArea(id);
             result.IsSuccess = true;
@@ -81,6 +86,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -106,6 +116,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int createdBy = 0;
             if (HttpContext.Session.GetString("Id") != null)
             {
@@ -143,6 +158,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -224,9 +244,19 @@ public class AssetRegisterController(
     [ValidateAntiForgeryToken]
     public IActionResult GetPlatformList()
     {
-        int AreaID = Convert.ToInt32(Request.Query["AreaID"]);
-        List<PlatformData> platformList = _platformService.GetPlatformList(AreaID);
-        return Json(platformList);
+        List<PlatformData> platformList = [];
+        try {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
+            int AreaID = Convert.ToInt32(Request.Query["AreaID"]);
+            platformList = _platformService.GetPlatformList(AreaID);
+            return Json(platformList);
+        } catch (Exception ex) {
+            return Json(platformList);
+        }
     }
 
     [HttpGet]
@@ -236,6 +266,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int id = Convert.ToInt32(Request.Query["id"]);
             var platform = _platformService.GetPlatform(id);
             result.IsSuccess = true;
@@ -258,6 +293,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -290,6 +330,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int createdBy = 0;
             if (HttpContext.Session.GetString("Id") != null)
             {
@@ -329,6 +374,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -419,6 +469,19 @@ public class AssetRegisterController(
         string sortColumnDirection
     )
     {
+        Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+        if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+        {
+            return Json(
+                new
+                {
+                    draw = draw,
+                    recordsFiltered = 0,
+                    recordsTotal = 0,
+                    data = new List<AssetData>()
+                }
+            );
+        }
         List<AssetData> assetList = _assetService.GetAssetList();
 
         // Search
@@ -620,6 +683,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int id = Convert.ToInt32(Request.Query["id"]);
             var asset = _assetService.GetAsset(id);
             result.IsSuccess = true;
@@ -642,6 +710,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -721,6 +794,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int createdBy = 0;
             if (HttpContext.Session.GetString("Id") != null)
             {
@@ -805,6 +883,11 @@ public class AssetRegisterController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -870,64 +953,88 @@ public class AssetRegisterController(
     [ValidateAntiForgeryToken]
     public IActionResult GetAssetSidebar(int PlatformID)
     {
-        List<AssetData> assetList = _assetService.GetAssetList(0, PlatformID);
-        Console.WriteLine("=== DEBUG MODE ===");
-        Console.WriteLine("PlatformID: " + PlatformID);
-        Console.WriteLine("assetList: " + JsonConvert.SerializeObject(assetList));
-        Console.WriteLine("=== END DEBUG ===");
-        var selectedAssetList = assetList
-            .Select(asset => new
+        ResultClass result = new();
+        try{
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
             {
-                asset.Id,
-                asset.TagNo,
-                asset.BusinessArea,
-                asset.Platform
-            })
-            .ToList();
-        ResultClass result =
-            new()
-            {
-                Data = selectedAssetList,
-                IsSuccess = true,
-                Message = "Asset sidebar found"
-            };
-        return Json(result);
+                throw new Exception(Permission["Message"]);
+            }
+            List<AssetData> assetList = _assetService.GetAssetList(0, PlatformID);
+            var selectedAssetList = assetList
+                .Select(asset => new
+                {
+                    asset.Id,
+                    asset.TagNo,
+                    asset.BusinessArea,
+                    asset.Platform
+                })
+                .ToList();
+            result =
+                new()
+                {
+                    Data = selectedAssetList,
+                    IsSuccess = true,
+                    Message = "Asset sidebar found"
+                };
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            result.IsSuccess = false;
+            result.Message = ex.Message;
+            return Json(result);
+        }
     }
 
     [HttpGet]
     [ValidateAntiForgeryToken]
     public IActionResult GetAssetSidebarSearch(string search)
     {
-        List<AssetData> assetDatas = _assetService
-            .GetAssetList()
-            .Select(asset => new AssetData
+        ResultClass result = new();
+        try{
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
             {
-                Id = asset.Id,
-                TagNo = asset.TagNo,
-                BusinessArea = asset.BusinessArea,
-                Platform = asset.Platform
-            })
-            .Where(a =>
-                a.TagNo != null
-                && a.TagNo.Contains(search, StringComparison.CurrentCultureIgnoreCase)
-            )
-            .ToList();
-        Dictionary<string, List<AssetData>> areaPlatformAssetList = [];
-        foreach (var item in assetDatas)
-        {
-            if (!areaPlatformAssetList.ContainsKey(item.BusinessArea + "-" + item.Platform))
-            {
-                areaPlatformAssetList.Add(item.BusinessArea + "-" + item.Platform, []);
+                throw new Exception(Permission["Message"]);
             }
-            areaPlatformAssetList[item.BusinessArea + "-" + item.Platform].Add(item);
-        }
-        ResultClass result =
-            new()
+            List<AssetData> assetDatas = _assetService
+                .GetAssetList()
+                .Select(asset => new AssetData
+                {
+                    Id = asset.Id,
+                    TagNo = asset.TagNo,
+                    BusinessArea = asset.BusinessArea,
+                    Platform = asset.Platform
+                })
+                .Where(a =>
+                    a.TagNo != null
+                    && a.TagNo.Contains(search, StringComparison.CurrentCultureIgnoreCase)
+                )
+                .ToList();
+            Dictionary<string, List<AssetData>> areaPlatformAssetList = [];
+            foreach (var item in assetDatas)
             {
-                Data = areaPlatformAssetList,
-                IsSuccess = true,
-                Message = "Asset sidebar found"
-            };
-        return Json(result);
+                if (!areaPlatformAssetList.ContainsKey(item.BusinessArea + "-" + item.Platform))
+                {
+                    areaPlatformAssetList.Add(item.BusinessArea + "-" + item.Platform, []);
+                }
+                areaPlatformAssetList[item.BusinessArea + "-" + item.Platform].Add(item);
+            }
+            result =
+                new()
+                {
+                    Data = areaPlatformAssetList,
+                    IsSuccess = true,
+                    Message = "Asset sidebar found"
+                };
+            return Json(result);
+        }
+        catch (Exception ex)
+        {
+            result.IsSuccess = false;
+            result.Message = ex.Message;
+            return Json(result);
+        }
     }
 }

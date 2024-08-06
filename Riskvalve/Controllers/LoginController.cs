@@ -58,7 +58,7 @@ public class LoginController(IUserService userService) : Controller
         catch (Exception e)
         {
             result.IsSuccess = false;
-            result.Message = e.Message;
+            result.Message = "Invalid email or password";//e.Message;
             return Json(result);
         }
     }

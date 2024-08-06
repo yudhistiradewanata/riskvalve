@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class ManualOverrideRepository(ApplicationDbContext context) : IManualOve
             select new ManualOverrideData
             {
                 Id = manualoverride.Id,
-                ManualOverride = manualoverride.ManualOverride
+                ManualOverride = HttpUtility.HtmlEncode(manualoverride.ManualOverride)
             };
         manualoverridelist = [.. result];
         return manualoverridelist;

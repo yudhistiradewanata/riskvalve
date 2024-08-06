@@ -209,3 +209,8 @@ $(document).ready(function () {
 function getInputVal(id) {
   return $(id).val()
 }
+
+function checkPasswordValidation(password) {
+  const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{10,}$/;
+  return passwordRegex.test(password);
+}

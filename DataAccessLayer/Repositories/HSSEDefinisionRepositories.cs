@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -20,9 +21,9 @@ public class HSSEDefinisionRepository(ApplicationDbContext context) : IHSSEDefin
             select new HSSEDefinisionData
             {
                 Id = hsseDefinision.Id,
-                HSSEDefinision = hsseDefinision.HSSEDefinision,
+                HSSEDefinision = HttpUtility.HtmlEncode(hsseDefinision.HSSEDefinision),
                 MinBBSValue = hsseDefinision.MinBBSValue,
-                CoFCategory = hsseDefinision.CoFCategory,
+                CoFCategory = HttpUtility.HtmlEncode(hsseDefinision.CoFCategory),
                 Score = hsseDefinision.Score,
             };
         hsseDefinisionList = [.. result];

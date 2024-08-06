@@ -70,41 +70,49 @@ $(document).ready(function () {
             var isEngineer = $('#field-isengineer').prop('checked');
             var isViewer = $('#field-isviewer').prop('checked');
             if (mode == 'create') {
-                $.ajax({
-                    url: urladduser,
-                    type: 'POST',
-                    headers: {
-                        '__RequestVerificationToken': requestVerificationToken
-                    },
-                    data: { username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
-                    success: function (apiresult) {
-                        if (apiresult.isSuccess) {
-                            var data = apiresult.data;
-                            alert(apiresult.message);
-                            location.reload();
-                        } else {
-                            alert(apiresult.message);
+                if(checkPasswordValidation(password)) {
+                    $.ajax({
+                        url: urladduser,
+                        type: 'POST',
+                        headers: {
+                            '__RequestVerificationToken': requestVerificationToken
+                        },
+                        data: { username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                var data = apiresult.data;
+                                alert(apiresult.message);
+                                location.reload();
+                            } else {
+                                alert(apiresult.message);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    alert('Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character');
+                }
             } else if (mode == 'update') {
-                $.ajax({
-                    url: urlupdateuser,
-                    type: 'POST',
-                    headers: {
-                        '__RequestVerificationToken': requestVerificationToken
-                    },
-                    data: { id: id, username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
-                    success: function (apiresult) {
-                        if (apiresult.isSuccess) {
-                            var data = apiresult.data;
-                            alert(apiresult.message);
-                            location.reload();
-                        } else {
-                            alert(apiresult.message);
+                if(checkPasswordValidation(password) || password == '') {
+                    $.ajax({
+                        url: urlupdateuser,
+                        type: 'POST',
+                        headers: {
+                            '__RequestVerificationToken': requestVerificationToken
+                        },
+                        data: { id: id, username: username, password: password, role: role, isAdmin: isAdmin, isEngineer: isEngineer, isViewer: isViewer },
+                        success: function (apiresult) {
+                            if (apiresult.isSuccess) {
+                                var data = apiresult.data;
+                                alert(apiresult.message);
+                                location.reload();
+                            } else {
+                                alert(apiresult.message);
+                            }
                         }
-                    }
-                });
+                    });
+                } else {
+                    alert('Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character');
+                }
             }
         }
     });

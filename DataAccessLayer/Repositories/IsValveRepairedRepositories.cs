@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class IsValveRepairedRepository(ApplicationDbContext context) : IIsValveR
             select new IsValveRepairedData
             {
                 Id = isvalverepaired.Id,
-                IsValveRepaired = isvalverepaired.IsValveRepaired
+                IsValveRepaired = HttpUtility.HtmlEncode(isvalverepaired.IsValveRepaired)
             };
         isvalverepairedlist = [.. result];
         return isvalverepairedlist;

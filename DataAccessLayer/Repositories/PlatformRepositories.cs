@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -31,16 +32,16 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             {
                 Id = platform.Id,
                 AreaID = platform.AreaID,
-                Platform = platform.Platform,
-                Code = platform.Code,
-                BusinessArea = subarea.BusinessArea,
+                Platform = HttpUtility.HtmlEncode(platform.Platform),
+                Code = HttpUtility.HtmlEncode(platform.Code),
+                BusinessArea = HttpUtility.HtmlEncode(subarea.BusinessArea),
                 IsDeleted = subarea.IsDeleted,
                 CreatedBy = subarea.CreatedBy,
                 CreatedAt = subarea.CreatedAt,
                 DeletedBy = subarea.DeletedBy,
                 DeletedAt = subarea.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         platformdata = result.FirstOrDefault();
         if (platformdata == null)
@@ -67,16 +68,16 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             {
                 Id = platform.Id,
                 AreaID = platform.AreaID,
-                Platform = platform.Platform,
-                Code = platform.Code,
-                BusinessArea = subarea.BusinessArea,
+                Platform = HttpUtility.HtmlEncode(platform.Platform),
+                Code = HttpUtility.HtmlEncode(platform.Code),
+                BusinessArea = HttpUtility.HtmlEncode(subarea.BusinessArea),
                 IsDeleted = subarea.IsDeleted,
                 CreatedBy = subarea.CreatedBy,
                 CreatedAt = subarea.CreatedAt,
                 DeletedBy = subarea.DeletedBy,
                 DeletedAt = subarea.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         return [.. result];
     }

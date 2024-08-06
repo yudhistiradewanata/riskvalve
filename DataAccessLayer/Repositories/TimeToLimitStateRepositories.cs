@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -18,7 +19,7 @@ public class TimeToLimitStateRepository(ApplicationDbContext context) : ITimeToL
             select new TimeToLimitStateData
             {
                 Id = timeToLimitState.Id,
-                TimeToLimitState = timeToLimitState.TimeToLimitState,
+                TimeToLimitState = HttpUtility.HtmlEncode(timeToLimitState.TimeToLimitState),
                 LimitStateValue = timeToLimitState.LimitStateValue,
                 Weighting = timeToLimitState.Weighting,
             };

@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class CurrentConditionLimitStateRepository(ApplicationDbContext context) 
             select new CurrentConditionLimitStateData
             {
                 Id = currentConditionLimitState.Id,
-                CurrentConditionLimitState = currentConditionLimitState.CurrentConditionLimitState,
+                CurrentConditionLimitState = HttpUtility.HtmlEncode(currentConditionLimitState.CurrentConditionLimitState),
                 LimitStateValue = currentConditionLimitState.LimitStateValue,
                 Weighting = currentConditionLimitState.Weighting
             };

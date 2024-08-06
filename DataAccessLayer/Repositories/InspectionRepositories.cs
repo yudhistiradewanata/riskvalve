@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -46,21 +47,21 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
                 CurrentConditionFailureOfFunctionID = inspection.CurrentConditionFailureOfFunctionID,
                 CurrentConditionPassingAcrossValveID = inspection.CurrentConditionPassingAcrossValveID,
                 InspectionDate = inspection.InspectionDate,
-                InspectionDescription = inspection.InspectionDescription,
-                FunctionCondition = inspection.FunctionCondition,
-                TestPressureIfAny = inspection.TestPressureIfAny,
+                InspectionDescription = HttpUtility.HtmlEncode(inspection.InspectionDescription),
+                FunctionCondition = HttpUtility.HtmlEncode(inspection.FunctionCondition),
+                TestPressureIfAny = HttpUtility.HtmlEncode(inspection.TestPressureIfAny),
                 IsDeleted = inspection.IsDeleted,
                 CreatedBy = inspection.CreatedBy,
                 CreatedAt = inspection.CreatedAt,
                 DeletedBy = inspection.DeletedBy,
                 DeletedAt = inspection.DeletedAt,
-                InspectionMethod = subInspectionMethod.InspectionMethod ?? "",
-                InspectionEffectiveness = subInspectionEffectiveness.Effectiveness ?? "",
-                CurrentConditionLeakeageToAtmosphere = subCurrentConditionLimitStateA.CurrentConditionLimitState ?? "",
-                CurrentConditionFailureOfFunction = subCurrentConditionLimitStateB.CurrentConditionLimitState ?? "",
-                CurrentConditionPassingAcrossValve = subCurrentConditionLimitStateC.CurrentConditionLimitState ?? "",
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                InspectionMethod = HttpUtility.HtmlEncode(subInspectionMethod.InspectionMethod ?? ""),
+                InspectionEffectiveness = HttpUtility.HtmlEncode(subInspectionEffectiveness.Effectiveness ?? ""),
+                CurrentConditionLeakeageToAtmosphere = HttpUtility.HtmlEncode(subCurrentConditionLimitStateA.CurrentConditionLimitState ?? ""),
+                CurrentConditionFailureOfFunction = HttpUtility.HtmlEncode(subCurrentConditionLimitStateB.CurrentConditionLimitState ?? ""),
+                CurrentConditionPassingAcrossValve = HttpUtility.HtmlEncode(subCurrentConditionLimitStateC.CurrentConditionLimitState ?? ""),
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         inspectionData = result.FirstOrDefault();
         if (inspectionData == null)
@@ -102,21 +103,21 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
                 CurrentConditionFailureOfFunctionID = inspection.CurrentConditionFailureOfFunctionID,
                 CurrentConditionPassingAcrossValveID = inspection.CurrentConditionPassingAcrossValveID,
                 InspectionDate = inspection.InspectionDate,
-                InspectionDescription = inspection.InspectionDescription,
-                FunctionCondition = inspection.FunctionCondition,
-                TestPressureIfAny = inspection.TestPressureIfAny,
+                InspectionDescription = HttpUtility.HtmlEncode(inspection.InspectionDescription),
+                FunctionCondition = HttpUtility.HtmlEncode(inspection.FunctionCondition),
+                TestPressureIfAny = HttpUtility.HtmlEncode(inspection.TestPressureIfAny),
                 IsDeleted = inspection.IsDeleted,
                 CreatedBy = inspection.CreatedBy,
                 CreatedAt = inspection.CreatedAt,
                 DeletedBy = inspection.DeletedBy,
                 DeletedAt = inspection.DeletedAt,
-                InspectionMethod = subInspectionMethod.InspectionMethod ?? "",
-                InspectionEffectiveness = subInspectionEffectiveness.Effectiveness ?? "",
-                CurrentConditionLeakeageToAtmosphere = subCurrentConditionLimitStateA.CurrentConditionLimitState ?? "",
-                CurrentConditionFailureOfFunction = subCurrentConditionLimitStateB.CurrentConditionLimitState ?? "",
-                CurrentConditionPassingAcrossValve = subCurrentConditionLimitStateC.CurrentConditionLimitState ?? "",
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                InspectionMethod = HttpUtility.HtmlEncode(subInspectionMethod.InspectionMethod ?? ""),
+                InspectionEffectiveness = HttpUtility.HtmlEncode(subInspectionEffectiveness.Effectiveness ?? ""),
+                CurrentConditionLeakeageToAtmosphere = HttpUtility.HtmlEncode(subCurrentConditionLimitStateA.CurrentConditionLimitState ?? ""),
+                CurrentConditionFailureOfFunction = HttpUtility.HtmlEncode(subCurrentConditionLimitStateB.CurrentConditionLimitState ?? ""),
+                CurrentConditionPassingAcrossValve = HttpUtility.HtmlEncode(subCurrentConditionLimitStateC.CurrentConditionLimitState ?? ""),
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         inspectionDataList = [.. result];
         return inspectionDataList;

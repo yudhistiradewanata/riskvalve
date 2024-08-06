@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -36,15 +37,15 @@ public class MaintenanceRepository(ApplicationDbContext context) : IMaintenanceR
                 AssetID = maintenance.AssetID,
                 IsValveRepairedID = maintenance.IsValveRepairedID,
                 MaintenanceDate = maintenance.MaintenanceDate,
-                MaintenanceDescription = maintenance.MaintenanceDescription,
+                MaintenanceDescription = HttpUtility.HtmlEncode(maintenance.MaintenanceDescription),
                 IsDeleted = maintenance.IsDeleted,
                 CreatedBy = maintenance.CreatedBy,
                 CreatedAt = maintenance.CreatedAt,
                 DeletedBy = maintenance.DeletedBy,
                 DeletedAt = maintenance.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? "",
-                IsValveRepaired = subIsValveRepaired.IsValveRepaired
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? ""),
+                IsValveRepaired = HttpUtility.HtmlEncode(subIsValveRepaired.IsValveRepaired)
             };
         maintenanceData = result.FirstOrDefault();
         if (maintenanceData == null)
@@ -75,15 +76,15 @@ public class MaintenanceRepository(ApplicationDbContext context) : IMaintenanceR
                 AssetID = maintenance.AssetID,
                 IsValveRepairedID = maintenance.IsValveRepairedID,
                 MaintenanceDate = maintenance.MaintenanceDate,
-                MaintenanceDescription = maintenance.MaintenanceDescription,
+                MaintenanceDescription = HttpUtility.HtmlEncode(maintenance.MaintenanceDescription),
                 IsDeleted = maintenance.IsDeleted,
                 CreatedBy = maintenance.CreatedBy,
                 CreatedAt = maintenance.CreatedAt,
                 DeletedBy = maintenance.DeletedBy,
                 DeletedAt = maintenance.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? "",
-                IsValveRepaired = subIsValveRepaired.IsValveRepaired
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? ""),
+                IsValveRepaired = HttpUtility.HtmlEncode(subIsValveRepaired.IsValveRepaired)
             };
         maintenanceDataList = [.. result];
         return maintenanceDataList;

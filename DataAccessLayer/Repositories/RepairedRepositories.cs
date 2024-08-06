@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -18,7 +19,7 @@ public class RepairedRepository(ApplicationDbContext context) : IRepairedReposit
             select new RepairedData
             {
                 Id = repaired.Id,
-                Repaired = repaired.Repaired,
+                Repaired = HttpUtility.HtmlEncode(repaired.Repaired),
                 RepairedValue = repaired.RepairedValue,
                 Weighting = repaired.Weighting,
             };

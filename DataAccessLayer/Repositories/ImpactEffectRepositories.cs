@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -18,7 +19,7 @@ public class ImpactEffectRepository(ApplicationDbContext context) : IImpactEffec
             select new ImpactEffectData
             {
                 Id = impactEffect.Id,
-                ImpactEffect = impactEffect.ImpactEffect,
+                ImpactEffect = HttpUtility.HtmlEncode(impactEffect.ImpactEffect),
                 ImpactEffectValue = impactEffect.ImpactEffectValue,
                 Weighting = impactEffect.Weighting,
                 Weighting2 = impactEffect.Weighting2,

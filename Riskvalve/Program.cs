@@ -5,6 +5,12 @@ using SharedLayer;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure Kestrel to remove the Server header
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.AddServerHeader = false;
+});
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -28,7 +34,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<ILogRepository, LogRepository>();
-// Area Platfrom Asset
+// Area Platform Asset
 builder.Services.AddScoped<IAreaService, AreaService>();
 builder.Services.AddScoped<IAreaRepository, AreaRepository>();
 builder.Services.AddScoped<IPlatformService, PlatformService>();
@@ -44,7 +50,7 @@ builder.Services.AddScoped<IMaintenanceService, MaintenanceService>();
 builder.Services.AddScoped<IMaintenanceRepository, MaintenanceRepository>();
 builder.Services.AddScoped<IIsValveRepairedRepository, IsValveRepairedRepository>();
 builder.Services.AddScoped<IInspectionFileRepository, InspectionFileRepository>();
-// Inspecion
+// Inspection
 builder.Services.AddScoped<IInspectionService, InspectionService>();
 builder.Services.AddScoped<IInspectionRepository, InspectionRepository>();
 builder.Services.AddScoped<IInspectionMethodRepository, InspectionMethodRepository>();
@@ -76,7 +82,13 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-app.UseMiddleware<SuppressHeadersMiddleware>();
+// Middleware to remove Server header and other sensitive headers
+app.Use(async (context, next) =>
+{
+    context.Response.Headers.Remove("Server");
+    context.Response.Headers.Remove("X-Powered-By"); // Example of another header you might want to remove
+    await next();
+});
 
 app.UsePathBase(SharedEnvironment.app_path);
 app.UseStatusCodePagesWithReExecute("/Error/{0}");

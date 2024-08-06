@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class InspectionEffectivenessRepository(ApplicationDbContext context) : I
             select new InspectionEffectivenessData
             {
                 Id = inspectionEffectiveness.Id,
-                Effectiveness = inspectionEffectiveness.Effectiveness,
+                Effectiveness = HttpUtility.HtmlEncode(inspectionEffectiveness.Effectiveness),
                 EffectivenessValue = inspectionEffectiveness.EffectivenessValue,
                 Weighting = inspectionEffectiveness.Weighting
             };

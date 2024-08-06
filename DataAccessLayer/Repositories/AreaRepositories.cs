@@ -1,3 +1,4 @@
+using System.Web;
 using DataAccessLayer;
 using SharedLayer;
 
@@ -29,14 +30,14 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             select new AreaData
             {
                 Id = area.Id,
-                BusinessArea = area.BusinessArea,
+                BusinessArea = HttpUtility.HtmlEncode(area.BusinessArea),
                 IsDeleted = area.IsDeleted,
                 CreatedBy = area.CreatedBy,
                 CreatedAt = area.CreatedAt,
                 DeletedBy = area.DeletedBy,
                 DeletedAt = area.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         areadata = result.FirstOrDefault();
         if (areadata == null)
@@ -59,14 +60,14 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             select new AreaData
             {
                 Id = area.Id,
-                BusinessArea = area.BusinessArea,
+                BusinessArea = HttpUtility.HtmlEncode(area.BusinessArea),
                 IsDeleted = area.IsDeleted,
                 CreatedBy = area.CreatedBy,
                 CreatedAt = area.CreatedAt,
                 DeletedBy = area.DeletedBy,
                 DeletedAt = area.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         arealist = [.. result];
         return arealist;

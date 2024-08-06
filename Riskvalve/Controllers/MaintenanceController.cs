@@ -88,6 +88,11 @@ public class MaintenanceController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int id = Convert.ToInt32(Request.Query["id"]);
             var maintenance = _maintenanceService.GetMaintenance(id);
             result.IsSuccess = true;
@@ -123,6 +128,11 @@ public class MaintenanceController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             MaintenanceData maintenance = _maintenanceService.AddMaintenance(maintenanceClass);
             IWebHostEnvironment environment =
                 Request.HttpContext.RequestServices.GetService<IWebHostEnvironment>()
@@ -186,6 +196,11 @@ public class MaintenanceController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             List<IFormFile> files = [.. Request.Form.Files];
             List<InspectionFileClass>? inspectionFileClass = [];
             foreach (var key in Request.Form.Keys)
@@ -289,6 +304,11 @@ public class MaintenanceController(
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -341,6 +361,11 @@ public class MaintenanceController(
         ResultClass resultClass = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int AssetID = Convert.ToInt32(Request.Query["AssetID"]);
             List<MaintenanceData> maintenanceDatas = _maintenanceService.GetMaintenanceList(
                 false,
@@ -363,6 +388,11 @@ public class MaintenanceController(
     [ValidateAntiForgeryToken]
     public IActionResult GetMaintenanceSidebar(int AssetID)
     {
+        Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
+        if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+        {
+            return Json(new List<Dictionary<string, string>>());
+        }
         List<MaintenanceData> maintenanceList = _maintenanceService.GetMaintenanceList(
             false,
             AssetID

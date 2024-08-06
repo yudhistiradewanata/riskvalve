@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -18,7 +19,7 @@ public class InspectionMethodRepository(ApplicationDbContext context) : IInspect
             select new InspectionMethodData
             {
                 Id = inspectionMethod.Id,
-                InspectionMethod = inspectionMethod.InspectionMethod
+                InspectionMethod = HttpUtility.HtmlEncode(inspectionMethod.InspectionMethod)
             };
         inspectionMethodDataList = [.. result];
         return inspectionMethodDataList;

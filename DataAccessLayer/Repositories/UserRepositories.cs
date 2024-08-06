@@ -1,3 +1,4 @@
+using System.Web;
 using Newtonsoft.Json;
 using SharedLayer;
 
@@ -30,8 +31,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             select new UserData
             {
                 Id = user.Id,
-                Username = user.Username,
-                Role = user.Role,
+                Username = HttpUtility.HtmlEncode(user.Username),
+                Role = HttpUtility.HtmlEncode(user.Role),
                 IsAdmin = user.IsAdmin,
                 IsEngineer = user.IsEngineer,
                 IsViewer = user.IsViewer,
@@ -39,8 +40,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
                 CreatedAt = user.CreatedAt,
                 DeletedBy = user.DeletedBy,
                 DeletedAt = user.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         userdata = result.FirstOrDefault();
         if (userdata == null)
@@ -62,9 +63,9 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             select new UserData
             {
                 Id = user.Id,
-                Username = user.Username,
-                Password = user.Password,
-                Role = user.Role,
+                Username = HttpUtility.HtmlEncode(user.Username),
+                Password = HttpUtility.HtmlEncode(user.Password),
+                Role = HttpUtility.HtmlEncode(user.Role),
                 IsAdmin = user.IsAdmin,
                 IsEngineer = user.IsEngineer,
                 IsViewer = user.IsViewer,
@@ -72,8 +73,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
                 CreatedAt = user.CreatedAt,
                 DeletedBy = user.DeletedBy,
                 DeletedAt = user.DeletedAt,
-                CreatedByUser = subcreateby.Username ?? "",
-                DeletedByUser = subdeleteby.Username ?? ""
+                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
             };
         userdata = result.FirstOrDefault();
         if (userdata == null)
@@ -92,13 +93,13 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             select new UserData
             {
                 Id = user.Id,
-                Username = user.Username,
-                Role = user.Role,
+                Username = HttpUtility.HtmlEncode(user.Username),
+                Role = HttpUtility.HtmlEncode(user.Role),
                 IsAdmin = user.IsAdmin,
                 IsEngineer = user.IsEngineer,
                 IsViewer = user.IsViewer,
                 CreatedBy = user.CreatedBy,
-                CreatedAt = user.CreatedAt,
+                CreatedAt = user.CreatedAt
             };
         userdataList = [.. result];
         return userdataList;
@@ -133,7 +134,7 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
         }
         oldUser.Username = user.Username;
         oldUser.Role = user.Role;
-        if (user.Password != null)
+        if (user.Password != null && user.Password != "")
         {
             oldUser.Password = BCrypt.Net.BCrypt.HashPassword(user.Password);
         }

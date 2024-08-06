@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class ToxicOrFlamableFluidRepository(ApplicationDbContext context) : ITox
             select new ToxicOrFlamableFluidData
             {
                 Id = toxicorflamablefluid.Id,
-                ToxicOrFlamableFluid = toxicorflamablefluid.ToxicOrFlamableFluid
+                ToxicOrFlamableFluid = HttpUtility.HtmlEncode(toxicorflamablefluid.ToxicOrFlamableFluid)
             };
         toxicorflamablefluidlist = [.. result];
         return toxicorflamablefluidlist;

@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class ValveTypeRepository(ApplicationDbContext context) : IValveTypeRepos
             select new ValveTypeData
             {
                 Id = valvetype.Id,
-                ValveType = valvetype.ValveType
+                ValveType = HttpUtility.HtmlEncode(valvetype.ValveType)
             };
         valvetypelist = [.. result];
         return valvetypelist;

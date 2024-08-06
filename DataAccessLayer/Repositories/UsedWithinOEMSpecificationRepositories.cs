@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -18,7 +19,7 @@ public class UsedWithinOEMSpecificationRepository(ApplicationDbContext context) 
             select new UsedWithinOEMSpecificationData
             {
                 Id = usedWithinOEMSpecification.Id,
-                UsedWithinOEMSpecification = usedWithinOEMSpecification.UsedWithinOEMSpecification,
+                UsedWithinOEMSpecification = HttpUtility.HtmlEncode(usedWithinOEMSpecification.UsedWithinOEMSpecification),
                 UsedWithinOEMSpecificationValue = usedWithinOEMSpecification.UsedWithinOEMSpecificationValue,
                 Weighting = usedWithinOEMSpecification.Weighting,
             };

@@ -144,6 +144,11 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Assessment");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int id = Convert.ToInt32(Request.Query["id"]);
             var assessment = _assessmentService.GetAssessment(id);
             result.IsSuccess = true;
@@ -268,6 +273,11 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Assessment");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             AssessmentData assessmentData = _assessmentService.AddAssessment(assessment);
             List<int> inspectionIDs = Request
                 .Form["selectedInspectionId"]
@@ -418,6 +428,11 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Assessment");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             AssessmentData assessmentData = _assessmentService.UpdateAssessment(assessment);
             List<int> inspectionIDs = Request
                 .Form["selectedInspectionId"]
@@ -466,6 +481,11 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Assessment");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int AssessmentID))
             {
                 throw new Exception("Invalid Assessment ID");
@@ -497,6 +517,11 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
     [ValidateAntiForgeryToken]
     public IActionResult GetAssessmentList(int AreaID = 0, int PlatformID = 0)
     {
+        Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Assessment");
+        if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+        {
+            return Json(new List<AssessmentData>());
+        }
         List<AssessmentData> assessmentList = _assessmentService.GetAssessmentRecapList(
             AreaID,
             PlatformID,
@@ -510,6 +535,11 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
     [ValidateAntiForgeryToken]
     public IActionResult GetAssessmentSidebar(int AssetID)
     {
+        Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Assessment");
+        if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+        {
+            return Json(new List<Dictionary<string, string>>());
+        }
         List<AssessmentData> assessmentList = _assessmentService.GetAssessmentList(
             0,
             0,

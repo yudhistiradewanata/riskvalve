@@ -204,6 +204,11 @@ public class ToolController(
         }
         List<Dictionary<string, string>> result = [];
         try{
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Tool");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (mode.Equals("asset"))
             {
                 datares = _assetService.ImportAsset(data, int.Parse(HttpContext.Session.GetString("Id") ?? "0"));

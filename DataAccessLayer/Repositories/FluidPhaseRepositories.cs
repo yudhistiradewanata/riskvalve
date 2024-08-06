@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -19,7 +20,7 @@ public class FluidPhaseRepository(ApplicationDbContext context) : IFluidPhaseRep
             select new FluidPhaseData
             {
                 Id = fluidphase.Id,
-                FluidPhase = fluidphase.FluidPhase
+                FluidPhase = HttpUtility.HtmlEncode(fluidphase.FluidPhase)
             };
         fluidphaselist = [.. result];
         return fluidphaselist;

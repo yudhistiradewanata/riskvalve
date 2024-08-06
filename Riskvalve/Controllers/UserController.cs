@@ -43,6 +43,11 @@ public class UserController(IUserService userService) : Controller
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "User");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             var user = _userService.GetUser(id);
             result.IsSuccess = true;
             result.Message = "User found";
@@ -64,6 +69,11 @@ public class UserController(IUserService userService) : Controller
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "User");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             int createdBy = 0;
             if (HttpContext.Session.GetString("Id") != null)
             {
@@ -106,6 +116,11 @@ public class UserController(IUserService userService) : Controller
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "User");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -143,6 +158,11 @@ public class UserController(IUserService userService) : Controller
         ResultClass result = new();
         try
         {
+            Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "User");
+            if(Permission["Login"] == "false" || Permission["Permission"] == "false")
+            {
+                throw new Exception(Permission["Message"]);
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");

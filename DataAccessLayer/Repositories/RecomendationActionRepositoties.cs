@@ -1,3 +1,4 @@
+using System.Web;
 using SharedLayer;
 
 namespace DataAccessLayer;
@@ -18,7 +19,7 @@ public class RecomendationActionRepository(ApplicationDbContext context) : IReco
             select new RecommendationActionData
             {
                 Id = recomendationAction.Id,
-                RecommendationAction = recomendationAction.RecommendationAction,
+                RecommendationAction = HttpUtility.HtmlEncode(recomendationAction.RecommendationAction),
             };
         recomendationActionList = [.. result];
         return recomendationActionList;
