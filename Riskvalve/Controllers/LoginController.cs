@@ -22,7 +22,6 @@ public class LoginController(IUserService userService) : Controller
             ViewData["message"] = message;
             ViewData["IsLogin"] = IsLogin.ToString();
             ViewData["AppVersion"] = SharedEnvironment.GetAppVersion();
-            ViewData["GoogleSiteKey"] = SharedEnvironment.google_site_key;
         }
         return View();
     }
