@@ -7,7 +7,16 @@ namespace Riskvalve.Controllers;
 public class LoginController(IUserService userService) : Controller
 {
     private readonly IUserService _userService = userService;
-    private readonly string _recaptchaSecretKey = "6Ld9nyAqAAAAACvU1pBeY-5NvxBRYMBMuXqtRTzD";
+    private readonly string _recaptchaSecretKey = "6LcvJSIqAAAAAN5oit3PpEd1zk0S2N8dCpS0sTq2";
+    /**
+    Old Key
+    site: 6Ld9nyAqAAAAAL3-zkUtSM6OUtQXSRkmH2CDo-nH
+    secret: 6Ld9nyAqAAAAACvU1pBeY-5NvxBRYMBMuXqtRTzD
+    dont forget to update recaptcha.api.js file and site key in login/index.js
+    New Key
+    site: 6LcvJSIqAAAAACnY6Gqwz6AhE9SAzrPbSPQ8meUd
+    secret: 6LcvJSIqAAAAAN5oit3PpEd1zk0S2N8dCpS0sTq2
+    */
 
     public IActionResult Index()
     {

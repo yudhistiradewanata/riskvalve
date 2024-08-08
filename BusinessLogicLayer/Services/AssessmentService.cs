@@ -1582,6 +1582,9 @@ public class AssessmentService(
         Dictionary<string, Dictionary<string, string>> recap_barchart = [];
         Dictionary<string, string> recap_barchart_integritystatus = [];
         Dictionary<string, string> recap_barchart_convert = [];
+        recap_barchart_convert["NBU"] = "";
+        recap_barchart_convert["SBU"] = "";
+        recap_barchart_convert["CBU"] = "";
         int a1 = 0;
         int a2 = 0;
         int a3 = 0;
@@ -1807,13 +1810,18 @@ public class AssessmentService(
         recap_barchart_integritystatus.Add("Very High", integrity_veryhigh.ToString());
         recap_final.Add("heatmap", recap_heatmap);
         recap_final.Add("piechart", recap_piechart);
-        // foreach (var item in recap_barchart)
-        // {
-        //     recap_barchart_convert.Add(item.Key, JsonConvert.SerializeObject(item.Value));
-        // }
-        recap_barchart_convert["NBU"] = JsonConvert.SerializeObject(recap_barchart["NBU"]);
-        recap_barchart_convert["SBU"] = JsonConvert.SerializeObject(recap_barchart["SBU"]);
-        recap_barchart_convert["CBU"] = JsonConvert.SerializeObject(recap_barchart["CBU"]);
+        if (recap_barchart.TryGetValue("NBU", out Dictionary<string, string>? value))
+        {
+            recap_barchart_convert["NBU"] = JsonConvert.SerializeObject(value);
+        }
+        if (recap_barchart.TryGetValue("SBU", out Dictionary<string, string>? value2))
+        {
+            recap_barchart_convert["SBU"] = JsonConvert.SerializeObject(value2);
+        }
+        if (recap_barchart.TryGetValue("CBU", out Dictionary<string, string>? value3))
+        {
+            recap_barchart_convert["CBU"] = JsonConvert.SerializeObject(value3);
+        }
         recap_final.Add("barchart", recap_barchart_convert);
         recap_final.Add("integritystatus", recap_barchart_integritystatus);
         return recap_final;

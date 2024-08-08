@@ -8,7 +8,7 @@ $(document).ready(function () {
   $("#btn-signin").click(function (e) {
     e.preventDefault();
     grecaptcha.ready(function() {
-        grecaptcha.execute('6Ld9nyAqAAAAAL3-zkUtSM6OUtQXSRkmH2CDo-nH', {action: 'submit'}).then(function(token) {
+        grecaptcha.execute('6LcvJSIqAAAAACnY6Gqwz6AhE9SAzrPbSPQ8meUd', {action: 'submit'}).then(function(token) {
           var username = $('input[name="username"]').val();
           var password = $('input[name="password"]').val();
           if ($(".login-form").valid()) {
