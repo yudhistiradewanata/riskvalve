@@ -364,7 +364,7 @@
                                                                 <label class="col-form-label" for="assessment-no">Assessment No</label>
                                                             </div>
                                                             <div class="col-8">
-                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo" value="">
+                                                                <input class="form-control form-control-sm" id="assessment-no" name="AssessmentNo" value="" placeholder="-- Auto Generated --" readonly>
                                                             </div>
                                                         </div>
                                                         <div class="row g-3 align-items-center single-field">
@@ -465,7 +465,7 @@
                                             </div>
                                             <div class="card-content">
                                                 <div class="row">
-                                                    <div class="col-lg-8">
+                                                    <div class="col-lg-10">
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-12">
                                                                 LF1 - Current Condition
@@ -780,7 +780,7 @@
                                             </div>
                                             <div class="card-content">
                                                 <div class="row">
-                                                    <div class="col-lg-8">
+                                                    <div class="col-lg-10">
                                                         <div class="row g-3 align-items-center single-field">
                                                             <div class="col-6">
                                                                 <label class="col-form-label" for="product-loss-definition">Product loss definition (bbls)</label>
@@ -917,7 +917,7 @@
 
                                             <div class="card-content">
                                                 <div class="row">
-                                                    <div class="col-lg-8">
+                                                    <div class="col-lg-10">
                                                         <div class="row g-3 mb-4 mt-1">
                                                             <div class="col-12 d-flex">
                                                                 <div class="risk-table-container">
@@ -1201,7 +1201,7 @@
                                             </div>
                                             <div class="card-content">
                                                 <div class="row">
-                                                    <div class="col-lg-8">
+                                                    <div class="col-lg-10">
                                                         <div class="row g-3">
                                                             <div class="col-6">
                                                                 <div class="mb-3">
@@ -1365,7 +1365,7 @@
                                         <select class="form-control"
                                             id="field-inspection-current-condition-limit-state-a"
                                             name="CurrentConditionLeakeageToAtmosphereID"
-                                            readonly
+                                            readonly disabled
                                         >
                                             @if(limitState != null){
                                                 foreach (var item in limitState)
@@ -1378,7 +1378,7 @@
                                     <div class="form-group ">
                                         <label for="field-inspection-date">Inspection Date</label>
                                         <input id="field-inspection-date" type="text"
-                                            class="form-control datepicker" name="InspectionDate"
+                                            class="form-control" name="InspectionDate"
                                             readonly/>
                                     </div>
                                     <div class="form-group ">
@@ -1386,7 +1386,7 @@
                                         <select class="form-control"
                                             id="field-inspection-current-condition-limit-state-b"
                                             name="CurrentConditionFailureOfFunctionID"
-                                            readonly
+                                            readonly disabled
                                         >
                                             @if(limitState != null){
                                                 foreach (var item in limitState)
@@ -1399,7 +1399,7 @@
                                     <div class="form-group ">
                                         <label for="field-inspection-inspection-method">Inspection
                                             Method</label>
-                                        <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID" readonly>
+                                        <select class="form-control" id="field-inspection-inspection-method" name="InspectionMethodID" readonly disabled>
                                         @if(inspectionMethods != null){
                                             @foreach (var item in inspectionMethods)
                                             {
@@ -1414,7 +1414,7 @@
                                         <select class="form-control"
                                             id="field-inspection-current-condition-limit-state-c"
                                             name="CurrentConditionPassingAcrossValveID"
-                                            readonly
+                                            readonly disabled
                                         >
                                             @if(limitState != null){
                                                 foreach (var item in limitState)
@@ -1427,7 +1427,7 @@
                                     <div class="form-group ">
                                         <label for="field-inspection-effectiveness">Inspection
                                             Effectiveness</label>
-                                        <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID" readonly>
+                                        <select class="form-control" id="field-inspection-effectiveness" name="InspectionEffectivenessID" readonly disabled>
                                         @if(inspectionEffectivenessStates != null){
                                             foreach (var item in inspectionEffectivenessStates)
                                             {

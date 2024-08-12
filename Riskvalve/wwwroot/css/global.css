@@ -532,7 +532,7 @@ svg * {
 }
 
 .nav-tabs.nav-tab-menus > li > a.active {
-  background-color: rgb(242, 242, 242);
+  background-color: rgb(200, 200, 200);
 }
 
 .btn-close-inspection {

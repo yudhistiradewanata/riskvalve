@@ -33,7 +33,9 @@ buttonexport.click(function () {
 });
 
 $(document).ready(function () {
-  $("#assetTable").DataTable({
+  var searchColumnValue = {};
+  var searchColumn = {};
+  var table = $("#assetTable").DataTable({
     buttons: [
       {
         extend: "excel",
@@ -65,6 +67,8 @@ $(document).ready(function () {
         d.searchValue = $("#assetTable").DataTable().search();
         d.sortColumn = $("#assetTable").DataTable().order()[0][0];
         d.sortColumnDirection = $("#assetTable").DataTable().order()[0][1];
+        d.searchColumnValues = JSON.stringify(searchColumnValue);
+        d.searchColumns = JSON.stringify(searchColumn);
       },
       headers: {
         __RequestVerificationToken: requestVerificationToken,
@@ -139,6 +143,23 @@ $(document).ready(function () {
       topEnd: "search",
       bottomStart: ["paging", "pageLength"],
       bottomEnd: "info",
+    },
+    scrollX: true,
+    initComplete: function () {
+      this.api().columns(':not(:first-child):not(:last-child)').every(function () {
+        var column = this;
+        var input = $('<input type="text" placeholder="Search...">')
+          .appendTo($(column.header()))
+          .on('keyup change clear', debounce(function () {
+            // if (column.search() !== this.value) {
+              searchColumnValue[column.index()] = this.value;
+              searchColumn[column.index()] = $(column.header()).attr('data-column-name');
+              table.ajax.reload();
+            // }
+          },500)
+        );
+      });
+      this.api().draw();
     },
   });
 });

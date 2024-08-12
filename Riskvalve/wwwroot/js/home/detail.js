@@ -32,6 +32,18 @@ const dataTableOptions = {
         bottomEnd: "info",
     },
     ordering: true,
+    initComplete: function () {
+      this.api().columns(':not(:first-child):not(:last-child)').every(function () {
+        var column = this;
+        var input = $('<br/><input type="text" placeholder="Search...">')
+          .appendTo($(column.header()))
+          .on('keyup change clear', debounce(function () {
+            column.search(this.value).draw();
+          },500)
+        );
+      });
+      this.api().draw();
+    },
 }
 $(document).ready(function () {
     $('.havebgcolor').each(function () {
@@ -87,22 +99,22 @@ $(document).ready(function () {
                         item.lastMaintenanceDate.substring(0, 2) : item.lastMaintenanceDate;
                     var html = `
                             <tr>
-                                <td>${i + 1}</td>
-                                <td>${item.asset.businessArea}</td>
-                                <td>${item.asset.platform}</td>
-                                <td>${item.asset.tagNo}</td>
-                                <td>${item.asset.assetName}</td>
+                                <td class="nowrap">${i + 1}</td>
+                                <td class="nowrap">${item.asset.businessArea}</td>
+                                <td class="nowrap">${item.asset.platform}</td>
+                                <td class="nowrap">${item.asset.tagNo}</td>
+                                <td class="nowrap">${item.asset.assetName}</td>
                                 <td class="noshow">${item.asset.parentEquipmentNo}</td>
                                 <td class="noshow">${item.asset.parentEquipmentDescription}</td>
-                                <td>${item.asset.pidNo}</td>
-                                <td>${item.asset.valveType}</td>
-                                <td>${item.asset.size}</td>
-                                <td>${item.asset.classRating}</td>
-                                <td class="export-html" real-val="${item.asset.installationDate}"><span style="display: none;">${installationDate}</span>${item.asset.installationDate}</td>
-                                <td class="export-html" real-val="${item.assessmentDate}"><span style="display: none;">${assessmentDate}</span>${item.assessmentDate}</td>
-                                <td class="export-html" real-val="${item.lastInspectionDate}"><span style="display: none;">${lastInspectionDate}</span>${item.lastInspectionDate}</td>
-                                <td class="export-html" real-val="${item.lastMaintenanceDate}"><span style="display: none;">${lastMaintenanceDate}</span>${item.lastMaintenanceDate}</td>
-                                <td>${item.timePeriode}</td>
+                                <td class="nowrap">${item.asset.pidNo}</td>
+                                <td class="nowrap">${item.asset.valveType}</td>
+                                <td class="nowrap">${item.asset.size}</td>
+                                <td class="nowrap">${item.asset.classRating}</td>
+                                <td class="nowrap export-html" real-val="${item.asset.installationDate}"><span style="display: none;">${installationDate}</span>${item.asset.installationDate}</td>
+                                <td class="nowrap export-html" real-val="${item.assessmentDate}"><span style="display: none;">${assessmentDate}</span>${item.assessmentDate}</td>
+                                <td class="nowrap export-html" real-val="${item.lastInspectionDate}"><span style="display: none;">${lastInspectionDate}</span>${item.lastInspectionDate}</td>
+                                <td class="nowrap export-html" real-val="${item.lastMaintenanceDate}"><span style="display: none;">${lastMaintenanceDate}</span>${item.lastMaintenanceDate}</td>
+                                <td class="nowrap">${item.timePeriode}</td>
                                 <td class="noshow">${item.tP1A}</td>
                                 <td class="noshow">${item.tP2A}</td>
                                 <td class="noshow">${item.tP3A}</td>
@@ -112,11 +124,11 @@ $(document).ready(function () {
                                 <td class="noshow">${item.tP1C}</td>
                                 <td class="noshow">${item.tP2C}</td>
                                 <td class="noshow">${item.tP3C}</td>
-                                <td class="havebgcolor">${item.tP1Risk}</td>
-                                <td class="havebgcolor">${item.tP2Risk}</td>
-                                <td class="havebgcolor">${item.tP3Risk}</td>
-                                <td>${item.integrityStatus}</td>
-                                <td>${item.recommendationAction}</td>
+                                <td class="nowrap havebgcolor">${item.tP1Risk}</td>
+                                <td class="nowrap havebgcolor">${item.tP2Risk}</td>
+                                <td class="nowrap havebgcolor">${item.tP3Risk}</td>
+                                <td class="nowrap">${item.integrityStatus}</td>
+                                <td class="nowrap">${item.recommendationAction}</td>
                                 <td class="noshow">${item.tpTimeToActionRisk}</td>
                                 <td class="noshow">${item.leakageToAtmosphere}</td>
                                 <td class="noshow">${item.failureOfFunction}</td>
@@ -148,9 +160,9 @@ $(document).ready(function () {
                                 <td class="noshow">${item.loFScorePassingAccrosValveTP3}</td>
                                 <td class="noshow">${item.coFScore}</td>
                                 <td class="nowrap">
-                                    <button class="btn btn-light btn-sm" onclick="detailAssessment(${item.id})">Assessment</button>
                                     <button class="btn btn-light btn-sm" onclick="detailInspection(${item.lastInspectionId})">Inspection</button>
                                     <button class="btn btn-light btn-sm" onclick="detailMaintenance(${item.lastMaintenanceId})">Maintenance</button>
+                                    <button class="btn btn-light btn-sm" onclick="detailAssessment(${item.id})">Assessment</button>
                                 </td>
                             </tr>`
                     $('#table-detail').append(html);

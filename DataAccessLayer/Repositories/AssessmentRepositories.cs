@@ -325,13 +325,23 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
         {
             throw new Exception("Assessment on " + assessment.AssessmentDate + " already exists.");
         }
+        assessment.AssessmentNo = "IMPORT";
         assessment.IsDeleted = false;
         _context.Assessment.Add(assessment);
         _context.SaveChanges();
-        if(assessment.AssessmentNo == "IMPORT" || String.IsNullOrEmpty(assessment.AssessmentNo))
+
+        AssetClass? asset = _context.Asset.Where(a => a.Id == assessment.AssetID).FirstOrDefault();
+        string assettagno = asset?.TagNo ?? "";
+        string lastAssessmentNo = _context.Assessment.Where(a => a.AssetID == assessment.AssetID && a.AssessmentNo.EndsWith(assettagno)).OrderByDescending(a => a.Id).Select(a => a.AssessmentNo).FirstOrDefault() ?? "";
+        if(String.IsNullOrEmpty(lastAssessmentNo))
         {
-            assessment.AssessmentNo = "ASSESSMENT" + assessment.Id;
+            lastAssessmentNo = "ASSESSMENT-1-" + assettagno;
+        } else {
+            string[] splitAssessmentNo = lastAssessmentNo.Split("-");
+            int countAssessmentSameAsset = Int32.Parse(splitAssessmentNo[1]);
+            lastAssessmentNo = "ASSESSMENT-" + (countAssessmentSameAsset + 1) + "-" + assettagno;
         }
+        assessment.AssessmentNo = lastAssessmentNo;
         _context.Assessment.Update(assessment);
         _context.SaveChanges();
         return GetAssessment(assessment.Id);

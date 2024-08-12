@@ -466,7 +466,9 @@ public class AssetRegisterController(
         int length,
         string searchValue,
         string sortColumn,
-        string sortColumnDirection
+        string sortColumnDirection,
+        string searchColumnValues,
+        string searchColumns
     )
     {
         Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "AreaRegister");
@@ -484,12 +486,19 @@ public class AssetRegisterController(
         }
         List<AssetData> assetList = _assetService.GetAssetList();
 
-        // Search
         // Console.WriteLine("=== DEBUG MODE ===");
         // Console.WriteLine("searchValue: " + searchValue);
+        // Console.WriteLine("searchColumnValues: " + searchColumnValues);
+        // Console.WriteLine("searchColumns: " + searchColumns);
         // Console.WriteLine("sortColumn: " + sortColumn);
         // Console.WriteLine("sortColumnDirection: " + sortColumnDirection);
-        // Console.WriteLine("=== END DEBUG ===");
+        // foreach(var formx in Request.Form)
+        // {
+        //     Console.WriteLine("formx: " + formx.Key + " - " + formx.Value);
+        // }
+        Console.WriteLine("=== END DEBUG ===");
+
+        // Search
         if (!string.IsNullOrEmpty(searchValue))
         {
             assetList = assetList
@@ -565,6 +574,140 @@ public class AssetRegisterController(
                 )
                 .ToList();
         }
+
+        // Individual column search
+        Dictionary<string, string> searchColumnList = [];
+        if(!string.IsNullOrEmpty(searchColumns))
+        {
+            searchColumnList = JsonConvert.DeserializeObject<Dictionary<string, string>>(searchColumns);
+        }
+        Dictionary<string, string> searchColumnValueList = [];
+        if(!string.IsNullOrEmpty(searchColumnValues))
+        {
+            searchColumnValueList = JsonConvert.DeserializeObject<Dictionary<string, string>>(searchColumnValues);
+        }
+        
+        foreach(var searchColumnst in searchColumnList)
+        {
+            string searchColumn = searchColumnst.Value;
+            string searchColumnValue = searchColumnValueList[searchColumnst.Key];
+            Console.WriteLine("ayaya masuk: " + searchColumn + " - " + searchColumnValue);
+            if (!string.IsNullOrEmpty(searchColumnValue))
+            {
+                if(searchColumn.Equals("TagNo"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.TagNo != null
+                            && x.TagNo.Contains(searchColumnValue, StringComparison.CurrentCultureIgnoreCase)
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("BusinessArea"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.BusinessArea != null
+                            && x.BusinessArea.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("Platform"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.Platform != null
+                            && x.Platform.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("ValveType"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.ValveType != null
+                            && x.ValveType.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("Size"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.Size != null
+                            && x.Size.Contains(searchColumnValue, StringComparison.CurrentCultureIgnoreCase)
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("ClassRating"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.ClassRating != null
+                            && x.ClassRating.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("ParentEquipmentNo"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.ParentEquipmentNo != null
+                            && x.ParentEquipmentNo.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("ParentEquipmentDescription"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.ParentEquipmentDescription != null
+                            && x.ParentEquipmentDescription.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("PIDNo"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.PIDNo != null
+                            && x.PIDNo.Contains(searchColumnValue, StringComparison.CurrentCultureIgnoreCase)
+                        )
+                        .ToList();
+                }
+                if(searchColumn.Equals("ServiceFluid"))
+                {
+                    assetList = assetList
+                        .Where(x =>
+                            x.ServiceFluid != null
+                            && x.ServiceFluid.Contains(
+                                searchColumnValue,
+                                StringComparison.CurrentCultureIgnoreCase
+                            )
+                        )
+                        .ToList();
+                }
+            }
+        }
+        
 
         // Sorting
         if (!string.IsNullOrEmpty(sortColumn) && !string.IsNullOrEmpty(sortColumnDirection))

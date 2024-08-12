@@ -63,6 +63,9 @@ function initDatatable(options = {}) {
         scrollY: "60vh",
       }
     : {};
+  const initCompleteConfig = options.initComplete ? {
+    initComplete: options.initComplete
+  } : {}
   const table = $(selector).DataTable({
     /*
       columnDefs: [
@@ -85,6 +88,7 @@ function initDatatable(options = {}) {
       ...columnDefs
     ],
     ...scrollableConfig,
+    ...initCompleteConfig
   });
 
   /*
