@@ -33,16 +33,26 @@ const dataTableOptions = {
     },
     ordering: true,
     initComplete: function () {
-      this.api().columns(':not(:first-child):not(:last-child)').every(function () {
-        var column = this;
-        var input = $('<br/><input type="text" placeholder="Search...">')
-          .appendTo($(column.header()))
-          .on('keyup change clear', debounce(function () {
-            column.search(this.value).draw();
-          },500)
-        );
-      });
-      this.api().draw();
+        const api = this.api();
+        const headerRow = $(api.table().header()).find('tr').first();
+        const headerCells = headerRow.find('th');
+        const searchRow = $('<tr/>').appendTo(headerRow.parent());
+        headerCells.each(function (index) {
+            const header = $(this);
+            const title = header.text();
+            const searchCell = $('<th/>').appendTo(searchRow);
+            if (header.css('display') === 'none' || index === 0 || index === headerCells.length - 1) {
+                return;
+            }
+            $('<input type="text" placeholder="Search ' + title + '" />')
+                .appendTo(searchCell)
+                .on('keyup change clear', debounce(function () {
+                    const curridx = header.attr('data-dt-column');
+                    const searchValue = this.value;
+                    api.column(curridx).search(searchValue).draw();
+                }, 500));
+        });
+        api.draw();
     },
 }
 $(document).ready(function () {

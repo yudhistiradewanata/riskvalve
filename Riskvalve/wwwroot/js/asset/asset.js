@@ -146,20 +146,43 @@ $(document).ready(function () {
     },
     scrollX: true,
     initComplete: function () {
-      this.api().columns(':not(:first-child):not(:last-child)').every(function () {
-        var column = this;
-        var input = $('<input type="text" placeholder="Search...">')
-          .appendTo($(column.header()))
-          .on('keyup change clear', debounce(function () {
-            // if (column.search() !== this.value) {
-              searchColumnValue[column.index()] = this.value;
-              searchColumn[column.index()] = $(column.header()).attr('data-column-name');
+      const api = this.api();
+      const headerRow = $(api.table().header()).find('tr').first();
+      const headerCells = headerRow.find('th');
+      const searchRow = $('<tr/>').appendTo(headerRow.parent());
+      headerCells.each(function (index) {
+        const header = $(this);
+        const title = header.text();
+        const searchCell = $('<th/>').appendTo(searchRow);
+        if (header.css('display') === 'none' || index === 0 || index === headerCells.length - 1) {
+            return;
+        }
+        $('<input type="text" placeholder="Search ' + title + '" />')
+            .appendTo(searchCell)
+            .on('keyup change clear', debounce(function () {
+              const curridx = header.attr('data-dt-column');
+              const currname = header.attr('data-column-name');
+              const searchValue = this.value;
+              searchColumnValue[curridx] = searchValue;
+              searchColumn[curridx] = currname;
               table.ajax.reload();
-            // }
-          },500)
-        );
-      });
-      this.api().draw();
+            }, 500));
+    });
+    api.draw();
+      // this.api().columns(':not(:first-child):not(:last-child)').every(function () {
+      //   var column = this;
+      //   var input = $('<input type="text" placeholder="Search...">')
+      //     .appendTo($(column.header()))
+      //     .on('keyup change clear', debounce(function () {
+      //       // if (column.search() !== this.value) {
+      //         searchColumnValue[column.index()] = this.value;
+      //         searchColumn[column.index()] = $(column.header()).attr('data-column-name');
+      //         table.ajax.reload();
+      //       // }
+      //     },500)
+      //   );
+      // });
+      // this.api().draw();
     },
   });
 });
