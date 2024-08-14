@@ -36,12 +36,12 @@ const dataTableOptions = {
         const api = this.api();
         const headerRow = $(api.table().header()).find('tr').first();
         const headerCells = headerRow.find('th');
-        const searchRow = $('<tr/>').appendTo(headerRow.parent());
+        const searchRow = $('<tr/>').appendTo(headerRow.parent()).addClass('xx_temp');
         headerCells.each(function (index) {
             const header = $(this);
             const title = header.text();
             const searchCell = $('<th/>').appendTo(searchRow);
-            if (header.css('display') === 'none' || index === 0 || index === headerCells.length - 1) {
+            if (index === 0 || index === headerCells.length - 1) {
                 return;
             }
             $('<input type="text" placeholder="Search ' + title + '" />')
@@ -53,7 +53,7 @@ const dataTableOptions = {
                 }, 500));
         });
         api.draw();
-    },
+    }
 }
 $(document).ready(function () {
     $('.havebgcolor').each(function () {
@@ -92,21 +92,14 @@ $(document).ready(function () {
             success: function (data) {
                 $(".datatable").DataTable().destroy();
                 $('#table-detail').html('');
+                $('.xx_temp').remove();
                 $.each(data, function (i, item) {
                     item = sanitizeNull(item);
-                    var installationDate = item.asset.installationDate.length >= 10 ?
-                        item.asset.installationDate.substring(6, 4) + "-" +
-                        item.asset.installationDate.substring(3, 2) + "-" +
-                        item.asset.installationDate.substring(0, 2) : item.asset.installationDate;
-                    var assessmentDate = item.assessmentDate.length >= 10 ?
-                        item.assessmentDate.substring(6, 4) + "-" + item.assessmentDate.substring(3, 2) + "-" +
-                        item.assessmentDate.substring(0, 2) : item.assessmentDate;
-                    var lastInspectionDate = item.lastInspectionDate.length >= 10 ?
-                        item.lastInspectionDate.substring(6, 4) + "-" + item.lastInspectionDate.substring(3, 2) + "-" +
-                        item.lastInspectionDate.substring(0, 2) : item.lastInspectionDate;
-                    var lastMaintenanceDate = item.lastInspectionDate.length >= 10 ?
-                        item.lastMaintenanceDate.substring(6, 4) + "-" + item.lastMaintenanceDate.substring(3, 2) + "-" +
-                        item.lastMaintenanceDate.substring(0, 2) : item.lastMaintenanceDate;
+                    var installationDate = item.asset.installationDate.length >= 10 ? convertDateFormat(item.asset.installationDate) : item.asset.installationDate;
+                    var assessmentDate = item.assessmentDate.length >= 10 ? convertDateFormat(item.assessmentDate) : item.assessmentDate;
+                    var lastInspectionDate = item.lastInspectionDate.length >= 10 ? convertDateFormat(item.lastInspectionDate) : item.lastInspectionDate;
+                    var lastMaintenanceDate = item.lastInspectionDate.length >= 10 ? convertDateFormat(item.lastMaintenanceDate) : item.lastMaintenanceDate;
+                    var tpTimeToActionRisk = item.tpTimeToActionRisk.length >= 10 ? convertDateFormat(item.tpTimeToActionRisk) : item.tpTimeToActionRisk;
                     var html = `
                             <tr>
                                 <td class="nowrap">${i + 1}</td>
@@ -139,7 +132,7 @@ $(document).ready(function () {
                                 <td class="nowrap havebgcolor">${item.tP3Risk}</td>
                                 <td class="nowrap">${item.integrityStatus}</td>
                                 <td class="nowrap">${item.recommendationAction}</td>
-                                <td class="noshow">${item.tpTimeToActionRisk}</td>
+                                <td class="nowrap export-html" real-val="${item.tpTimeToActionRisk}"><span style="display: none;">${tpTimeToActionRisk}</span>${item.tpTimeToActionRisk}</td>
                                 <td class="noshow">${item.leakageToAtmosphere}</td>
                                 <td class="noshow">${item.failureOfFunction}</td>
                                 <td class="noshow">${item.passingAccrosValve}</td>
@@ -176,6 +169,7 @@ $(document).ready(function () {
                                 </td>
                             </tr>`
                     $('#table-detail').append(html);
+                    $('.noshow').hide();
                 });
                 initDatatable(dataTableOptions)
                 $('.havebgcolor').each(function () {

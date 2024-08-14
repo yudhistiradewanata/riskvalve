@@ -218,3 +218,10 @@ function checkPasswordValidation(password) {
   const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).{10,}$/;
   return passwordRegex.test(password);
 }
+
+function convertDateFormat(dateStr) {
+  const day = dateStr.substring(0, 2);
+  const month = dateStr.substring(3, 5);
+  const year = dateStr.substring(6, 10);
+  return `${year}-${month}-${day}`;
+}
