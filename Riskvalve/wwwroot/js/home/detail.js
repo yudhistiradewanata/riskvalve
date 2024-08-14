@@ -51,9 +51,13 @@ const dataTableOptions = {
                     const searchValue = this.value;
                     api.column(curridx).search(searchValue).draw();
                 }, 500));
+            $('.nosort').each(function () {
+                var sort_child = $(this).find('.dt-column-order');
+                sort_child.remove();
+            });
         });
         api.draw();
-    }
+    },
 }
 $(document).ready(function () {
     $('.havebgcolor').each(function () {
