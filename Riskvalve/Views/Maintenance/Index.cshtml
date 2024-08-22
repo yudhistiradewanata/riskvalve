@@ -5,6 +5,7 @@
     var inspectionEffectivenessStates = ViewData["InspectionEffectivenessData"] as List<InspectionEffectivenessData>;
     var inspectionMethods = ViewData["InspectionMethodData"] as List<InspectionMethodData>;
     var isValveRepairedStates = ViewData["IsValveRepairedData"] as List<IsValveRepairedData>;
+    var permittedExtensions = ViewData["PermittedExtensions"] as string;
     var baseurl = Url.Action("", "");
     var urlupdatemainenance = Url.Action("UpdateMaintenance", "Maintenance");
     var urladdmainenance = Url.Action("AddMaintenance", "Maintenance");
@@ -174,7 +175,7 @@
                                                 <label for="field-maintenance-image">Maintenance Image</label>
                                                 <div class="gallery-input">
                                                     <input type="file" class="form-control image-gallery-upload"
-                                                        id="field-maintenance-image" accept="image/*, .xls, .xlsx" multiple>
+                                                        id="field-maintenance-image" accept="@permittedExtensions" multiple>
                                                     <div class="preview-image-gallery">
                                                         <label class="add-image" for="field-maintenance-image"><i
                                                                 class="fa-solid fa-file-circle-plus"></i></label>

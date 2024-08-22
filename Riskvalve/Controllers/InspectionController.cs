@@ -47,6 +47,8 @@ public class InspectionController(
         ViewData["InspectionMethodData"] = _assessmentService.InspectionMethodDatas();
         ViewData["IsValveRepairedData"] = _assessmentService.IsValveRepairedDatas();
         ViewData["InspectionSidebar"] = _areaService.GetSidebarData();
+        List<string> permittedExtensionString = SharedEnvironment.GetPermittedExtension();
+        ViewData["PermittedExtensions"] = String.Join(", ", permittedExtensionString);
         ViewData["pageType"] = "Inspection";
         return View();
     }
@@ -128,8 +130,9 @@ public class InspectionController(
                 var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
                 if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
                 {
+                    string allowedType = String.Join(", ", permittedExtensions);
                     throw new Exception(
-                        "Invalid file extension. Only images and Excel files are allowed."
+                        "Invalid file extension. Only "+allowedType+" files are allowed."
                     );
                 }
             }
@@ -234,8 +237,9 @@ public class InspectionController(
                 var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
                 if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
                 {
+                    string allowedType = String.Join(", ", permittedExtensions);
                     throw new Exception(
-                        "Invalid file extension. Only images and Excel files are allowed."
+                        "Invalid file extension. Only "+allowedType+" files are allowed."
                     );
                 }
             }

@@ -47,6 +47,8 @@ public class MaintenanceController(
         ViewData["IsValveRepairedData"] = _assessmentService.IsValveRepairedDatas();
         ViewData["InspectionMethodData"] = _assessmentService.InspectionMethodDatas();
         ViewData["InspectionSidebar"] = _areaService.GetSidebarData();
+        List<string> permittedExtensionString = SharedEnvironment.GetPermittedExtension();
+        ViewData["PermittedExtensions"] = String.Join(", ", permittedExtensionString);
         ViewData["pageType"] = "Maintenance";
         return View();
     }
@@ -114,6 +116,7 @@ public class MaintenanceController(
     public IActionResult AddMaintenance()
     {
         List<IFormFile> files = [.. Request.Form.Files];
+        List<string> permittedExtensions = SharedEnvironment.GetPermittedExtension();
         MaintenanceClass maintenanceClass =
             new()
             {
@@ -128,6 +131,17 @@ public class MaintenanceController(
         ResultClass result = new();
         try
         {
+            foreach (var file in files)
+            {
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+                {
+                    string allowedType = String.Join(", ", permittedExtensions);
+                    throw new Exception(
+                        "Invalid file extension. Only "+allowedType+" files are allowed."
+                    );
+                }
+            }
             Dictionary<string, string> Permission = Session.CheckPermission(HttpContext, "Maintenance");
             if(Permission["Login"] == "false" || Permission["Permission"] == "false")
             {
@@ -202,6 +216,18 @@ public class MaintenanceController(
                 throw new Exception(Permission["Message"]);
             }
             List<IFormFile> files = [.. Request.Form.Files];
+            List<string> permittedExtensions = SharedEnvironment.GetPermittedExtension();
+            foreach (var file in files)
+            {
+                var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
+                if (string.IsNullOrEmpty(ext) || !permittedExtensions.Contains(ext))
+                {
+                    string allowedType = String.Join(", ", permittedExtensions);
+                    throw new Exception(
+                        "Invalid file extension. Only "+allowedType+" files are allowed."
+                    );
+                }
+            }
             List<InspectionFileClass>? inspectionFileClass = [];
             foreach (var key in Request.Form.Keys)
             {
