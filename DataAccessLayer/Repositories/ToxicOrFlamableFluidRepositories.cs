@@ -20,7 +20,7 @@ public class ToxicOrFlamableFluidRepository(ApplicationDbContext context) : ITox
             select new ToxicOrFlamableFluidData
             {
                 Id = toxicorflamablefluid.Id,
-                ToxicOrFlamableFluid = HttpUtility.HtmlEncode(toxicorflamablefluid.ToxicOrFlamableFluid)
+                ToxicOrFlamableFluid = SharedEnvironment.HtmlEncode(toxicorflamablefluid.ToxicOrFlamableFluid)
             };
         toxicorflamablefluidlist = [.. result];
         return toxicorflamablefluidlist;

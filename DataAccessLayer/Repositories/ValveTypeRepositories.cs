@@ -20,7 +20,7 @@ public class ValveTypeRepository(ApplicationDbContext context) : IValveTypeRepos
             select new ValveTypeData
             {
                 Id = valvetype.Id,
-                ValveType = HttpUtility.HtmlEncode(valvetype.ValveType)
+                ValveType = SharedEnvironment.HtmlEncode(valvetype.ValveType)
             };
         valvetypelist = [.. result];
         return valvetypelist;

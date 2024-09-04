@@ -19,7 +19,7 @@ public class TimeToLimitStateRepository(ApplicationDbContext context) : ITimeToL
             select new TimeToLimitStateData
             {
                 Id = timeToLimitState.Id,
-                TimeToLimitState = HttpUtility.HtmlEncode(timeToLimitState.TimeToLimitState),
+                TimeToLimitState = SharedEnvironment.HtmlEncode(timeToLimitState.TimeToLimitState),
                 LimitStateValue = timeToLimitState.LimitStateValue,
                 Weighting = timeToLimitState.Weighting,
             };

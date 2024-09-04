@@ -30,14 +30,14 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             select new AreaData
             {
                 Id = area.Id,
-                BusinessArea = HttpUtility.HtmlEncode(area.BusinessArea),
+                BusinessArea = SharedEnvironment.HtmlEncode(area.BusinessArea),
                 IsDeleted = area.IsDeleted,
                 CreatedBy = area.CreatedBy,
                 CreatedAt = area.CreatedAt,
                 DeletedBy = area.DeletedBy,
                 DeletedAt = area.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         areadata = result.FirstOrDefault();
         if (areadata == null)
@@ -60,14 +60,14 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             select new AreaData
             {
                 Id = area.Id,
-                BusinessArea = HttpUtility.HtmlEncode(area.BusinessArea),
+                BusinessArea = SharedEnvironment.HtmlEncode(area.BusinessArea),
                 IsDeleted = area.IsDeleted,
                 CreatedBy = area.CreatedBy,
                 CreatedAt = area.CreatedAt,
                 DeletedBy = area.DeletedBy,
                 DeletedAt = area.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         arealist = [.. result];
         return arealist;

@@ -19,7 +19,7 @@ public class RecomendationActionRepository(ApplicationDbContext context) : IReco
             select new RecommendationActionData
             {
                 Id = recomendationAction.Id,
-                RecommendationAction = HttpUtility.HtmlEncode(recomendationAction.RecommendationAction),
+                RecommendationAction = SharedEnvironment.HtmlEncode(recomendationAction.RecommendationAction),
             };
         recomendationActionList = [.. result];
         return recomendationActionList;

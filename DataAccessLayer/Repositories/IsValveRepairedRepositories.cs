@@ -20,7 +20,7 @@ public class IsValveRepairedRepository(ApplicationDbContext context) : IIsValveR
             select new IsValveRepairedData
             {
                 Id = isvalverepaired.Id,
-                IsValveRepaired = HttpUtility.HtmlEncode(isvalverepaired.IsValveRepaired)
+                IsValveRepaired = SharedEnvironment.HtmlEncode(isvalverepaired.IsValveRepaired)
             };
         isvalverepairedlist = [.. result];
         return isvalverepairedlist;

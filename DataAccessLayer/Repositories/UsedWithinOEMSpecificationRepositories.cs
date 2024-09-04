@@ -19,7 +19,7 @@ public class UsedWithinOEMSpecificationRepository(ApplicationDbContext context) 
             select new UsedWithinOEMSpecificationData
             {
                 Id = usedWithinOEMSpecification.Id,
-                UsedWithinOEMSpecification = HttpUtility.HtmlEncode(usedWithinOEMSpecification.UsedWithinOEMSpecification),
+                UsedWithinOEMSpecification = SharedEnvironment.HtmlEncode(usedWithinOEMSpecification.UsedWithinOEMSpecification),
                 UsedWithinOEMSpecificationValue = usedWithinOEMSpecification.UsedWithinOEMSpecificationValue,
                 Weighting = usedWithinOEMSpecification.Weighting,
             };

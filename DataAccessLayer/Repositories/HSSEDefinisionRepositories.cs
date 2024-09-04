@@ -21,9 +21,9 @@ public class HSSEDefinisionRepository(ApplicationDbContext context) : IHSSEDefin
             select new HSSEDefinisionData
             {
                 Id = hsseDefinision.Id,
-                HSSEDefinision = HttpUtility.HtmlEncode(hsseDefinision.HSSEDefinision),
+                HSSEDefinision = SharedEnvironment.HtmlEncode(hsseDefinision.HSSEDefinision),
                 MinBBSValue = hsseDefinision.MinBBSValue,
-                CoFCategory = HttpUtility.HtmlEncode(hsseDefinision.CoFCategory),
+                CoFCategory = SharedEnvironment.HtmlEncode(hsseDefinision.CoFCategory),
                 Score = hsseDefinision.Score,
             };
         hsseDefinisionList = [.. result];

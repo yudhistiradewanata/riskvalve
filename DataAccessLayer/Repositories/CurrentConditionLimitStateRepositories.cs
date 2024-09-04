@@ -20,7 +20,7 @@ public class CurrentConditionLimitStateRepository(ApplicationDbContext context) 
             select new CurrentConditionLimitStateData
             {
                 Id = currentConditionLimitState.Id,
-                CurrentConditionLimitState = HttpUtility.HtmlEncode(currentConditionLimitState.CurrentConditionLimitState),
+                CurrentConditionLimitState = SharedEnvironment.HtmlEncode(currentConditionLimitState.CurrentConditionLimitState),
                 LimitStateValue = currentConditionLimitState.LimitStateValue,
                 Weighting = currentConditionLimitState.Weighting
             };

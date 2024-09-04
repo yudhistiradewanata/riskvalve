@@ -19,7 +19,7 @@ public class InspectionMethodRepository(ApplicationDbContext context) : IInspect
             select new InspectionMethodData
             {
                 Id = inspectionMethod.Id,
-                InspectionMethod = HttpUtility.HtmlEncode(inspectionMethod.InspectionMethod)
+                InspectionMethod = SharedEnvironment.HtmlEncode(inspectionMethod.InspectionMethod)
             };
         inspectionMethodDataList = [.. result];
         return inspectionMethodDataList;

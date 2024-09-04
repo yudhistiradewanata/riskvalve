@@ -20,7 +20,7 @@ public class ManualOverrideRepository(ApplicationDbContext context) : IManualOve
             select new ManualOverrideData
             {
                 Id = manualoverride.Id,
-                ManualOverride = HttpUtility.HtmlEncode(manualoverride.ManualOverride)
+                ManualOverride = SharedEnvironment.HtmlEncode(manualoverride.ManualOverride)
             };
         manualoverridelist = [.. result];
         return manualoverridelist;

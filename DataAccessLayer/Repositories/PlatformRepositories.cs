@@ -32,16 +32,16 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             {
                 Id = platform.Id,
                 AreaID = platform.AreaID,
-                Platform = HttpUtility.HtmlEncode(platform.Platform),
-                Code = HttpUtility.HtmlEncode(platform.Code),
-                BusinessArea = HttpUtility.HtmlEncode(subarea.BusinessArea),
+                Platform = SharedEnvironment.HtmlEncode(platform.Platform),
+                Code = SharedEnvironment.HtmlEncode(platform.Code),
+                BusinessArea = SharedEnvironment.HtmlEncode(subarea.BusinessArea),
                 IsDeleted = subarea.IsDeleted,
                 CreatedBy = subarea.CreatedBy,
                 CreatedAt = subarea.CreatedAt,
                 DeletedBy = subarea.DeletedBy,
                 DeletedAt = subarea.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         platformdata = result.FirstOrDefault();
         if (platformdata == null)
@@ -68,16 +68,16 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             {
                 Id = platform.Id,
                 AreaID = platform.AreaID,
-                Platform = HttpUtility.HtmlEncode(platform.Platform),
-                Code = HttpUtility.HtmlEncode(platform.Code),
-                BusinessArea = HttpUtility.HtmlEncode(subarea.BusinessArea),
+                Platform = SharedEnvironment.HtmlEncode(platform.Platform),
+                Code = SharedEnvironment.HtmlEncode(platform.Code),
+                BusinessArea = SharedEnvironment.HtmlEncode(subarea.BusinessArea),
                 IsDeleted = subarea.IsDeleted,
                 CreatedBy = subarea.CreatedBy,
                 CreatedAt = subarea.CreatedAt,
                 DeletedBy = subarea.DeletedBy,
                 DeletedAt = subarea.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         return [.. result];
     }

@@ -20,7 +20,7 @@ public class FluidPhaseRepository(ApplicationDbContext context) : IFluidPhaseRep
             select new FluidPhaseData
             {
                 Id = fluidphase.Id,
-                FluidPhase = HttpUtility.HtmlEncode(fluidphase.FluidPhase)
+                FluidPhase = SharedEnvironment.HtmlEncode(fluidphase.FluidPhase)
             };
         fluidphaselist = [.. result];
         return fluidphaselist;

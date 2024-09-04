@@ -19,7 +19,7 @@ public class RepairedRepository(ApplicationDbContext context) : IRepairedReposit
             select new RepairedData
             {
                 Id = repaired.Id,
-                Repaired = HttpUtility.HtmlEncode(repaired.Repaired),
+                Repaired = SharedEnvironment.HtmlEncode(repaired.Repaired),
                 RepairedValue = repaired.RepairedValue,
                 Weighting = repaired.Weighting,
             };

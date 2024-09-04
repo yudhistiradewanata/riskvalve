@@ -31,8 +31,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             select new UserData
             {
                 Id = user.Id,
-                Username = HttpUtility.HtmlEncode(user.Username),
-                Role = HttpUtility.HtmlEncode(user.Role),
+                Username = SharedEnvironment.HtmlEncode(user.Username),
+                Role = SharedEnvironment.HtmlEncode(user.Role),
                 IsAdmin = user.IsAdmin,
                 IsEngineer = user.IsEngineer,
                 IsViewer = user.IsViewer,
@@ -40,8 +40,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
                 CreatedAt = user.CreatedAt,
                 DeletedBy = user.DeletedBy,
                 DeletedAt = user.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         userdata = result.FirstOrDefault();
         if (userdata == null)
@@ -63,9 +63,9 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             select new UserData
             {
                 Id = user.Id,
-                Username = HttpUtility.HtmlEncode(user.Username),
-                Password = HttpUtility.HtmlEncode(user.Password),
-                Role = HttpUtility.HtmlEncode(user.Role),
+                Username = SharedEnvironment.HtmlEncode(user.Username),
+                Password = SharedEnvironment.HtmlEncode(user.Password),
+                Role = SharedEnvironment.HtmlEncode(user.Role),
                 IsAdmin = user.IsAdmin,
                 IsEngineer = user.IsEngineer,
                 IsViewer = user.IsViewer,
@@ -73,8 +73,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
                 CreatedAt = user.CreatedAt,
                 DeletedBy = user.DeletedBy,
                 DeletedAt = user.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         userdata = result.FirstOrDefault();
         if (userdata == null)
@@ -93,8 +93,8 @@ public class UserRepository(ApplicationDbContext context) : IUserRepository
             select new UserData
             {
                 Id = user.Id,
-                Username = HttpUtility.HtmlEncode(user.Username),
-                Role = HttpUtility.HtmlEncode(user.Role),
+                Username = SharedEnvironment.HtmlEncode(user.Username),
+                Role = SharedEnvironment.HtmlEncode(user.Role),
                 IsAdmin = user.IsAdmin,
                 IsEngineer = user.IsEngineer,
                 IsViewer = user.IsViewer,

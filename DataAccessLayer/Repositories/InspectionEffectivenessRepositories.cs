@@ -20,7 +20,7 @@ public class InspectionEffectivenessRepository(ApplicationDbContext context) : I
             select new InspectionEffectivenessData
             {
                 Id = inspectionEffectiveness.Id,
-                Effectiveness = HttpUtility.HtmlEncode(inspectionEffectiveness.Effectiveness),
+                Effectiveness = SharedEnvironment.HtmlEncode(inspectionEffectiveness.Effectiveness),
                 EffectivenessValue = inspectionEffectiveness.EffectivenessValue,
                 Weighting = inspectionEffectiveness.Weighting
             };

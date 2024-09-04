@@ -48,49 +48,49 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
             select new AssetData
             {
                 Id = asset.Id,
-                TagNo = HttpUtility.HtmlEncode(asset.TagNo),
-                AssetName = HttpUtility.HtmlEncode(asset.AssetName),
+                TagNo = SharedEnvironment.HtmlEncode(asset.TagNo),
+                AssetName = SharedEnvironment.HtmlEncode(asset.AssetName),
                 PlatformID = asset.PlatformID,
-                Platform = HttpUtility.HtmlEncode(subplatform.Platform),
-                BusinessArea = HttpUtility.HtmlEncode(subarea.BusinessArea),
+                Platform = SharedEnvironment.HtmlEncode(subplatform.Platform),
+                BusinessArea = SharedEnvironment.HtmlEncode(subarea.BusinessArea),
                 ValveTypeID = asset.ValveTypeID,
-                ValveType = HttpUtility.HtmlEncode(subvalvetype.ValveType),
-                Size = HttpUtility.HtmlEncode(asset.Size),
-                ClassRating = HttpUtility.HtmlEncode(asset.ClassRating),
-                ParentEquipmentNo = HttpUtility.HtmlEncode(asset.ParentEquipmentNo),
-                ParentEquipmentDescription = HttpUtility.HtmlEncode(asset.ParentEquipmentDescription),
+                ValveType = SharedEnvironment.HtmlEncode(subvalvetype.ValveType),
+                Size = SharedEnvironment.HtmlEncode(asset.Size),
+                ClassRating = SharedEnvironment.HtmlEncode(asset.ClassRating),
+                ParentEquipmentNo = SharedEnvironment.HtmlEncode(asset.ParentEquipmentNo),
+                ParentEquipmentDescription = SharedEnvironment.HtmlEncode(asset.ParentEquipmentDescription),
                 InstallationDate = asset.InstallationDate,
-                PIDNo = HttpUtility.HtmlEncode(asset.PIDNo),
-                Manufacturer = HttpUtility.HtmlEncode(asset.Manufacturer),
-                BodyModel = HttpUtility.HtmlEncode(asset.BodyModel),
-                BodyMaterial = HttpUtility.HtmlEncode(asset.BodyMaterial),
-                EndConnection = HttpUtility.HtmlEncode(asset.EndConnection),
-                SerialNo = HttpUtility.HtmlEncode(asset.SerialNo),
+                PIDNo = SharedEnvironment.HtmlEncode(asset.PIDNo),
+                Manufacturer = SharedEnvironment.HtmlEncode(asset.Manufacturer),
+                BodyModel = SharedEnvironment.HtmlEncode(asset.BodyModel),
+                BodyMaterial = SharedEnvironment.HtmlEncode(asset.BodyMaterial),
+                EndConnection = SharedEnvironment.HtmlEncode(asset.EndConnection),
+                SerialNo = SharedEnvironment.HtmlEncode(asset.SerialNo),
                 ManualOverrideID = asset.ManualOverrideID,
-                ManualOverride = HttpUtility.HtmlEncode(submanualoverride.ManualOverride),
-                ActuatorMfg = HttpUtility.HtmlEncode(asset.ActuatorMfg),
-                ActuatorSerialNo = HttpUtility.HtmlEncode(asset.ActuatorSerialNo),
-                ActuatorTypeModel = HttpUtility.HtmlEncode(asset.ActuatorTypeModel),
-                ActuatorPower = HttpUtility.HtmlEncode(asset.ActuatorPower),
-                OperatingTemperature = HttpUtility.HtmlEncode(asset.OperatingTemperature),
-                OperatingPressure = HttpUtility.HtmlEncode(asset.OperatingPressure),
-                FlowRate = HttpUtility.HtmlEncode(asset.FlowRate),
-                ServiceFluid = HttpUtility.HtmlEncode(asset.ServiceFluid),
+                ManualOverride = SharedEnvironment.HtmlEncode(submanualoverride.ManualOverride),
+                ActuatorMfg = SharedEnvironment.HtmlEncode(asset.ActuatorMfg),
+                ActuatorSerialNo = SharedEnvironment.HtmlEncode(asset.ActuatorSerialNo),
+                ActuatorTypeModel = SharedEnvironment.HtmlEncode(asset.ActuatorTypeModel),
+                ActuatorPower = SharedEnvironment.HtmlEncode(asset.ActuatorPower),
+                OperatingTemperature = SharedEnvironment.HtmlEncode(asset.OperatingTemperature),
+                OperatingPressure = SharedEnvironment.HtmlEncode(asset.OperatingPressure),
+                FlowRate = SharedEnvironment.HtmlEncode(asset.FlowRate),
+                ServiceFluid = SharedEnvironment.HtmlEncode(asset.ServiceFluid),
                 FluidPhaseID = asset.FluidPhaseID,
-                FluidPhase = HttpUtility.HtmlEncode(subfluidphase.FluidPhase),
+                FluidPhase = SharedEnvironment.HtmlEncode(subfluidphase.FluidPhase),
                 ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID,
-                ToxicOrFlamableFluid = HttpUtility.HtmlEncode(subtoxicorflamablefluid.ToxicOrFlamableFluid),
-                UsageType = HttpUtility.HtmlEncode(asset.UsageType),
-                CostOfReplacementAndRepair = HttpUtility.HtmlEncode(asset.CostOfReplacementAndRepair),
-                Status = HttpUtility.HtmlEncode(asset.Status),
-                Actuation = HttpUtility.HtmlEncode(asset.Actuation),
+                ToxicOrFlamableFluid = SharedEnvironment.HtmlEncode(subtoxicorflamablefluid.ToxicOrFlamableFluid),
+                UsageType = SharedEnvironment.HtmlEncode(asset.UsageType),
+                CostOfReplacementAndRepair = SharedEnvironment.HtmlEncode(asset.CostOfReplacementAndRepair),
+                Status = SharedEnvironment.HtmlEncode(asset.Status),
+                Actuation = SharedEnvironment.HtmlEncode(asset.Actuation),
                 IsDeleted = asset.IsDeleted,
                 CreatedBy = asset.CreatedBy,
                 CreatedAt = asset.CreatedAt,
                 DeletedBy = asset.DeletedBy,
                 DeletedAt = asset.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         assetdata = result.FirstOrDefault();
         if (assetdata == null)
@@ -138,49 +138,49 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
             select new AssetData
             {
                 Id = asset.Id,
-                TagNo = HttpUtility.HtmlEncode(asset.TagNo),
-                AssetName = HttpUtility.HtmlEncode(asset.AssetName),
+                TagNo = SharedEnvironment.HtmlEncode(asset.TagNo),
+                AssetName = SharedEnvironment.HtmlEncode(asset.AssetName),
                 PlatformID = asset.PlatformID,
-                Platform = HttpUtility.HtmlEncode(subplatform.Platform),
-                BusinessArea = HttpUtility.HtmlEncode(subarea.BusinessArea),
+                Platform = SharedEnvironment.HtmlEncode(subplatform.Platform),
+                BusinessArea = SharedEnvironment.HtmlEncode(subarea.BusinessArea),
                 ValveTypeID = asset.ValveTypeID,
-                ValveType = HttpUtility.HtmlEncode(subvalvetype.ValveType),
-                Size = HttpUtility.HtmlEncode(asset.Size),
-                ClassRating = HttpUtility.HtmlEncode(asset.ClassRating),
-                ParentEquipmentNo = HttpUtility.HtmlEncode(asset.ParentEquipmentNo),
-                ParentEquipmentDescription = HttpUtility.HtmlEncode(asset.ParentEquipmentDescription),
+                ValveType = SharedEnvironment.HtmlEncode(subvalvetype.ValveType),
+                Size = SharedEnvironment.HtmlEncode(asset.Size),
+                ClassRating = SharedEnvironment.HtmlEncode(asset.ClassRating),
+                ParentEquipmentNo = SharedEnvironment.HtmlEncode(asset.ParentEquipmentNo),
+                ParentEquipmentDescription = SharedEnvironment.HtmlEncode(asset.ParentEquipmentDescription),
                 InstallationDate = asset.InstallationDate,
-                PIDNo = HttpUtility.HtmlEncode(asset.PIDNo),
-                Manufacturer = HttpUtility.HtmlEncode(asset.Manufacturer),
-                BodyModel = HttpUtility.HtmlEncode(asset.BodyModel),
-                BodyMaterial = HttpUtility.HtmlEncode(asset.BodyMaterial),
-                EndConnection = HttpUtility.HtmlEncode(asset.EndConnection),
-                SerialNo = HttpUtility.HtmlEncode(asset.SerialNo),
+                PIDNo = SharedEnvironment.HtmlEncode(asset.PIDNo),
+                Manufacturer = SharedEnvironment.HtmlEncode(asset.Manufacturer),
+                BodyModel = SharedEnvironment.HtmlEncode(asset.BodyModel),
+                BodyMaterial = SharedEnvironment.HtmlEncode(asset.BodyMaterial),
+                EndConnection = SharedEnvironment.HtmlEncode(asset.EndConnection),
+                SerialNo = SharedEnvironment.HtmlEncode(asset.SerialNo),
                 ManualOverrideID = asset.ManualOverrideID,
-                ManualOverride = HttpUtility.HtmlEncode(submanualoverride.ManualOverride),
-                ActuatorMfg = HttpUtility.HtmlEncode(asset.ActuatorMfg),
-                ActuatorSerialNo = HttpUtility.HtmlEncode(asset.ActuatorSerialNo),
-                ActuatorTypeModel = HttpUtility.HtmlEncode(asset.ActuatorTypeModel),
-                ActuatorPower = HttpUtility.HtmlEncode(asset.ActuatorPower),
-                OperatingTemperature = HttpUtility.HtmlEncode(asset.OperatingTemperature),
-                OperatingPressure = HttpUtility.HtmlEncode(asset.OperatingPressure),
-                FlowRate = HttpUtility.HtmlEncode(asset.FlowRate),
-                ServiceFluid = HttpUtility.HtmlEncode(asset.ServiceFluid),
+                ManualOverride = SharedEnvironment.HtmlEncode(submanualoverride.ManualOverride),
+                ActuatorMfg = SharedEnvironment.HtmlEncode(asset.ActuatorMfg),
+                ActuatorSerialNo = SharedEnvironment.HtmlEncode(asset.ActuatorSerialNo),
+                ActuatorTypeModel = SharedEnvironment.HtmlEncode(asset.ActuatorTypeModel),
+                ActuatorPower = SharedEnvironment.HtmlEncode(asset.ActuatorPower),
+                OperatingTemperature = SharedEnvironment.HtmlEncode(asset.OperatingTemperature),
+                OperatingPressure = SharedEnvironment.HtmlEncode(asset.OperatingPressure),
+                FlowRate = SharedEnvironment.HtmlEncode(asset.FlowRate),
+                ServiceFluid = SharedEnvironment.HtmlEncode(asset.ServiceFluid),
                 FluidPhaseID = asset.FluidPhaseID,
-                FluidPhase = HttpUtility.HtmlEncode(subfluidphase.FluidPhase),
+                FluidPhase = SharedEnvironment.HtmlEncode(subfluidphase.FluidPhase),
                 ToxicOrFlamableFluidID = asset.ToxicOrFlamableFluidID,
-                ToxicOrFlamableFluid = HttpUtility.HtmlEncode(subtoxicorflamablefluid.ToxicOrFlamableFluid),
-                UsageType = HttpUtility.HtmlEncode(asset.UsageType),
-                CostOfReplacementAndRepair = HttpUtility.HtmlEncode(asset.CostOfReplacementAndRepair),
-                Status = HttpUtility.HtmlEncode(asset.Status),
-                Actuation = HttpUtility.HtmlEncode(asset.Actuation),
+                ToxicOrFlamableFluid = SharedEnvironment.HtmlEncode(subtoxicorflamablefluid.ToxicOrFlamableFluid),
+                UsageType = SharedEnvironment.HtmlEncode(asset.UsageType),
+                CostOfReplacementAndRepair = SharedEnvironment.HtmlEncode(asset.CostOfReplacementAndRepair),
+                Status = SharedEnvironment.HtmlEncode(asset.Status),
+                Actuation = SharedEnvironment.HtmlEncode(asset.Actuation),
                 IsDeleted = asset.IsDeleted,
                 CreatedBy = asset.CreatedBy,
                 CreatedAt = asset.CreatedAt,
                 DeletedBy = asset.DeletedBy,
                 DeletedAt = asset.DeletedAt,
-                CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
         assetlist = [.. result];
         return assetlist;
@@ -188,28 +188,30 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
 
     public AssetData AddAsset(AssetClass asset)
     {
-        if (
-            !DateTime.TryParseExact(
-                asset.InstallationDate,
-                SharedEnvironment.GetDateFormatString(false),
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out _
+        lock(this){
+            if (
+                !DateTime.TryParseExact(
+                    asset.InstallationDate,
+                    SharedEnvironment.GetDateFormatString(false),
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _
+                )
             )
-        )
-        {
-            throw new FormatException("Installation Date is not in the correct format (dd-MM-yyyy)");
+            {
+                throw new FormatException("Installation Date is not in the correct format (dd-MM-yyyy)");
+            }
+            AssetClass? searchasset = _context
+                .Asset.Where(a => a.TagNo == asset.TagNo && a.IsDeleted == false)
+                .FirstOrDefault();
+            if (searchasset != null)
+            {
+                throw new Exception("Asset with Tag No " + asset.TagNo + " already exists.");
+            }
+            _context.Asset.Add(asset);
+            _context.SaveChanges();
+            return GetAsset(asset.Id);
         }
-        AssetClass? searchasset = _context
-            .Asset.Where(a => a.TagNo == asset.TagNo && a.IsDeleted == false)
-            .FirstOrDefault();
-        if (searchasset != null)
-        {
-            throw new Exception("Asset with Tag No " + asset.TagNo + " already exists.");
-        }
-        _context.Asset.Add(asset);
-        _context.SaveChanges();
-        return GetAsset(asset.Id);
     }
 
     public AssetData UpdateAsset(AssetClass asset)

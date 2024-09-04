@@ -983,7 +983,7 @@
           // Risk
           var tp1risk = Math.max(tpos1a_lof, tpos2a_lof, tpos3a_lof) + cof;
           var tp2risk = Math.max(tpos1b_lof, tpos2b_lof, tpos3b_lof) + cof;
-          var tp3risk = Math.max(tpos1c_lof, tpos3c_lof, tpos3c_lof) + cof;
+          var tp3risk = Math.max(tpos1c_lof, tpos2c_lof, tpos3c_lof) + cof;
           var map_risk = {
               'TP1RISK': {
                   'label' : tp1risk,

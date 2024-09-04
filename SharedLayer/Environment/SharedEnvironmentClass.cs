@@ -1,11 +1,13 @@
 using System.Reflection.Metadata;
+using System.Text.Encodings.Web;
+using System.Web;
 
 namespace SharedLayer;
 
 public static class SharedEnvironment
 {
     public const string app_path = "/vims";
-    public const string app_version = "v0.24.8.10";
+    public const string app_version = "v0.24.8.11";
 
     public static string GetDateFormatString(bool withTime = true)
     {
@@ -28,5 +30,12 @@ public static class SharedEnvironment
         // string[] permittedExcelExtensions = [".xls", ".xlsx"];
         // string[] permittedExtensions = [.. permittedImageExtensions, .. permittedExcelExtensions];
         return [.. permittedImageExtensions];
+    }
+
+    public static string? HtmlEncode(string? value){
+        if (string.IsNullOrEmpty(value)) return string.Empty;
+        string encoded = HttpUtility.HtmlEncode(value);
+        encoded = encoded.Replace("&quot;", "\"").Replace("&amp;", "&");
+        return encoded;
     }
 }

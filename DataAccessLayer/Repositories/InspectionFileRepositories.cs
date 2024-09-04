@@ -39,17 +39,17 @@ public class InspectionFileRepository(ApplicationDbContext context) : IInspectio
                     Id = inspectionfile.Id,
                     InspectionID = inspectionfile.InspectionID,
                     MaintenanceID = inspectionfile.MaintenanceID,
-                    FileName = HttpUtility.HtmlEncode(inspectionfile.FileName),
+                    FileName = SharedEnvironment.HtmlEncode(inspectionfile.FileName),
                     FileSize = inspectionfile.FileSize,
-                    FileType = HttpUtility.HtmlEncode(inspectionfile.FileType),
-                    FilePath = HttpUtility.HtmlEncode(inspectionfile.FilePath),
+                    FileType = SharedEnvironment.HtmlEncode(inspectionfile.FileType),
+                    FilePath = SharedEnvironment.HtmlEncode(inspectionfile.FilePath),
                     IsDeleted = inspectionfile.IsDeleted,
                     CreatedAt = inspectionfile.CreatedAt,
                     CreatedBy = inspectionfile.CreatedBy,
                     DeletedAt = inspectionfile.DeletedAt,
                     DeletedBy = inspectionfile.DeletedBy,
-                    CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                    DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                    CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                    DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
                 }
             )
         ];
@@ -79,17 +79,17 @@ public class InspectionFileRepository(ApplicationDbContext context) : IInspectio
                     Id = inspectionfile.Id,
                     InspectionID = inspectionfile.InspectionID,
                     MaintenanceID = inspectionfile.MaintenanceID,
-                    FileName = HttpUtility.HtmlEncode(inspectionfile.FileName),
+                    FileName = SharedEnvironment.HtmlEncode(inspectionfile.FileName),
                     FileSize = inspectionfile.FileSize,
-                    FileType = HttpUtility.HtmlEncode(inspectionfile.FileType),
-                    FilePath = HttpUtility.HtmlEncode(inspectionfile.FilePath),
+                    FileType = SharedEnvironment.HtmlEncode(inspectionfile.FileType),
+                    FilePath = SharedEnvironment.HtmlEncode(inspectionfile.FilePath),
                     IsDeleted = inspectionfile.IsDeleted,
                     CreatedAt = inspectionfile.CreatedAt,
                     CreatedBy = inspectionfile.CreatedBy,
                     DeletedAt = inspectionfile.DeletedAt,
                     DeletedBy = inspectionfile.DeletedBy,
-                    CreatedByUser = HttpUtility.HtmlEncode(subcreateby.Username ?? ""),
-                    DeletedByUser = HttpUtility.HtmlEncode(subdeleteby.Username ?? "")
+                    CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
+                    DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
                 }
             )
         ];
