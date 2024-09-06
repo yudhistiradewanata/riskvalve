@@ -149,10 +149,10 @@
                                             + "-" + item.LastMaintenanceDate.Substring(0, 2) :
                                             item.LastMaintenanceDate;
 
-                                            string timeToAction = item.TPTimeToActionRisk.Length >= 10 ?
-                                            item.TPTimeToActionRisk.Substring(6, 4) + "-" + item.TPTimeToActionRisk.Substring(3, 2)
-                                            + "-" + item.TPTimeToActionRisk.Substring(0, 2) :
-                                            item.TPTimeToActionRisk;
+                                            string timeToAction = item.TimeToAction.Length >= 10 ?
+                                            item.TimeToAction.Substring(6, 4) + "-" + item.TimeToAction.Substring(3, 2)
+                                            + "-" + item.TimeToAction.Substring(0, 2) :
+                                            item.TimeToAction;
 
                                             ctr++;
                                             <tr>
@@ -188,7 +188,7 @@
                                                         <td class="nowrap havebgcolor">@item.TP3Risk</td>
                                                         <td class="nowrap">@item.IntegrityStatus</td>
                                                         <td class="nowrap">@item.RecommendationAction</td>
-                                                        <td class="nowrap export-html" real-val="@item.TPTimeToActionRisk"><span style="display: none;">@timeToAction</span>@item.TPTimeToActionRisk</td>
+                                                        <td class="nowrap export-html" real-val="@item.TimeToAction"><span style="display: none;">@timeToAction</span>@item.TimeToAction</td>
                                                         <td class="noshow">@item.LeakageToAtmosphere</td>
                                                         <td class="noshow">@item.FailureOfFunction</td>
                                                         <td class="noshow">@item.PassingAccrosValve</td>

@@ -60,6 +60,7 @@ public class AssessmentClass
     public double? LoFScorePassingAccrosValveTP3 { get; set; }
     public double? CoFScore { get; set; }
     public string? IntegrityStatus { get; set; }
+    public string? TimeToAction { get; set; }
     public bool? IsDeleted { get; set; }
     public string? CreatedAt { get; set; }
     public int? CreatedBy { get; set; }

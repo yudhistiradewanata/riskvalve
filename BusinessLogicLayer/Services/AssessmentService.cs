@@ -793,6 +793,7 @@ public class AssessmentService(
         newAssessmentData.TPTimeToActionC = loftp3adate.ToString(SharedEnvironment.GetDateFormatString(false));
         DateTime tptimetoactionrisk = new[] { loftp1adate, loftp2adate, loftp3adate }.Min();
         newAssessmentData.TPTimeToActionRisk = tptimetoactionrisk.ToString(SharedEnvironment.GetDateFormatString(false));
+        newAssessmentData.TimeToAction = oldAssessmentData.TimeToAction;
         AssessmentData finalAssessmentData = UpdateAssessment(newAssessmentData);
         return finalAssessmentData;
     }

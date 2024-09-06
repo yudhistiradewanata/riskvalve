@@ -28,7 +28,10 @@ builder.Services.Configure<CookiePolicyOptions>(options =>
 
 // Add DbContext
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.EnableSensitiveDataLogging();
+});
 
 // Add services
 builder.Services.AddScoped<IUserService, UserService>();

@@ -103,7 +103,7 @@ $(document).ready(function () {
                     var assessmentDate = item.assessmentDate.length >= 10 ? convertDateFormat(item.assessmentDate) : item.assessmentDate;
                     var lastInspectionDate = item.lastInspectionDate.length >= 10 ? convertDateFormat(item.lastInspectionDate) : item.lastInspectionDate;
                     var lastMaintenanceDate = item.lastInspectionDate.length >= 10 ? convertDateFormat(item.lastMaintenanceDate) : item.lastMaintenanceDate;
-                    var tpTimeToActionRisk = item.tpTimeToActionRisk.length >= 10 ? convertDateFormat(item.tpTimeToActionRisk) : item.tpTimeToActionRisk;
+                    var tpTimeToActionRisk = item.timeToAction.length >= 10 ? convertDateFormat(item.timeToAction) : item.timeToAction;
                     var html = `
                             <tr>
                                 <td class="nowrap">${i + 1}</td>
@@ -136,7 +136,7 @@ $(document).ready(function () {
                                 <td class="nowrap havebgcolor">${item.tP3Risk}</td>
                                 <td class="nowrap">${item.integrityStatus}</td>
                                 <td class="nowrap">${item.recommendationAction}</td>
-                                <td class="nowrap export-html" real-val="${item.tpTimeToActionRisk}"><span style="display: none;">${tpTimeToActionRisk}</span>${item.tpTimeToActionRisk}</td>
+                                <td class="nowrap export-html" real-val="${item.timeToAction}"><span style="display: none;">${tpTimeToActionRisk}</span>${item.timeToAction}</td>
                                 <td class="noshow">${item.leakageToAtmosphere}</td>
                                 <td class="noshow">${item.failureOfFunction}</td>
                                 <td class="noshow">${item.passingAccrosValve}</td>

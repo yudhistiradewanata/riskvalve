@@ -310,6 +310,9 @@
                       if(data.integrityStatus != null){
                         $('#integrity-status'+counter).val(data.integrityStatus)
                       }
+                      if(data.timeToAction != null){
+                        $('#time-to-action'+counter).val(data.timeToAction)
+                      }
                       if(data.recommendationActionID != null){
                         $('#recommended-action'+counter).val(data.recommendationActionID)
                       }
@@ -1071,7 +1074,10 @@
               dotLabel.text(item)
               $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item)
           }
-          $('#time-to-action' + ctr).val(map_ttl['TPRISK-TTA']);
+          var currentTTA = $('.tab-pane[tab-num='+ctr+']').find('#time-to-action'+ctr).val();
+          if(currentTTA == "" || currentTTA == null){
+            $('.tab-pane[tab-num='+ctr+']').find('#time-to-action'+ctr).val(map_ttl['TPRISK-TTA']);
+          }
       }
 
       function decideTTARAC(loftp1, loftp2, loftp3, timelimittp1, timelimittp2, timelimittp3, rac, loftp1val, loftp2val, loftp3val){

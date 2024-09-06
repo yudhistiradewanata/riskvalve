@@ -150,6 +150,7 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 Repaired = SharedEnvironment.HtmlEncode(subrepaired.Repaired ?? ""),
                 HSSEDefinision = SharedEnvironment.HtmlEncode(subhssedefinision.HSSEDefinision ?? ""),
                 RecommendationAction = SharedEnvironment.HtmlEncode(subrecomendationaction.RecommendationAction ?? ""),
+                TimeToAction = SharedEnvironment.HtmlEncode(assessment.TimeToAction),
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
                 DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
@@ -295,6 +296,7 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 Repaired = SharedEnvironment.HtmlEncode(subrepaired.Repaired ?? ""),
                 HSSEDefinision = SharedEnvironment.HtmlEncode(subhssedefinision.HSSEDefinision ?? ""),
                 RecommendationAction = SharedEnvironment.HtmlEncode(subrecomendationaction.RecommendationAction ?? ""),
+                TimeToAction = SharedEnvironment.HtmlEncode(assessment.TimeToAction),
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
                 DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
             };
@@ -431,6 +433,7 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
         oldAssessment.LoFScorePassingAccrosValveTP3 = assessment.LoFScorePassingAccrosValveTP3;
         oldAssessment.CoFScore = assessment.CoFScore;
         oldAssessment.IntegrityStatus = assessment.IntegrityStatus;
+        oldAssessment.TimeToAction = assessment.TimeToAction;
         _context.Assessment.Update(oldAssessment);
         _context.SaveChanges();
         return GetAssessment(assessment.Id);

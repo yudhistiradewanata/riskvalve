@@ -266,6 +266,7 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
                 ),
                 CoFScore = Convert.ToDouble(Request.Form["CoFScore"]),
                 IntegrityStatus = Request.Form["IntegrityStatus"],
+                TimeToAction = Request.Form["TimeToAction"],
                 IsDeleted = false,
                 CreatedBy = Convert.ToInt32(HttpContext.Session.GetString("Id")),
                 CreatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
@@ -423,6 +424,7 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
                 ),
                 CoFScore = Convert.ToDouble(Request.Form["CoFScore"]),
                 IntegrityStatus = Request.Form["IntegrityStatus"],
+                TimeToAction = Request.Form["TimeToAction"],
                 IsDeleted = false
             };
         ResultClass result = new();
