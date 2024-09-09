@@ -43,7 +43,11 @@ function editAction () {
 
 $(document).ready(function () {
   $('#btn-platform-modal-save').click(function () {
-      if($('#platform-form').valid()) {    
+      const submitButton = $(this);
+      const submitButtonText = submitButton.text();
+      if($('#platform-form').valid()) {
+          submitButton.text('Loading...');
+          submitButton.attr('disabled', true); 
           var mode = $('#field-platform-mode').val();
           if (mode == 'create') {
               $.ajax({
@@ -64,6 +68,10 @@ $(document).ready(function () {
                       } else {
                           alert(apiresult.message);
                       }
+                      submitButton.removeAttr('disabled').text(submitButtonText);
+                  },
+                  error: function (apiresult) {
+                    submitButton.removeAttr('disabled').text(submitButtonText);
                   }
               });
           } else if (mode == 'update') {
@@ -87,6 +95,9 @@ $(document).ready(function () {
                       } else {
                           alert(apiresult.message);
                       }
+                  },
+                  error: function (apiresult) {
+                    submitButton.removeAttr('disabled').text(submitButtonText);
                   }
               });
           }

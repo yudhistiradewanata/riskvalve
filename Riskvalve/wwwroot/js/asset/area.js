@@ -37,11 +37,16 @@ function editAction() {
 
 $(document).ready(function () {
   $('#btn-area-modal-save').click(function () {
+      const submitButton = $(this);
+      const submitButtonText = submitButton.text();
       if ($('.asset-form').valid()) {
+          submitButton.text('Loading...');
+          submitButton.attr('disabled', true);
           var mode = $('#field-business-area-mode').val();
           var name = $('#field-business-area-name').val();
           if (name == '') {
               alert('Business Area Name is required');
+              submitButton.removeAttr('disabled').text(submitButtonText);
               return;
           } else {
               if (mode == 'create') {
@@ -59,6 +64,10 @@ $(document).ready(function () {
                           } else {
                               alert(apiresult.message);
                           }
+                          submitButton.removeAttr('disabled').text(submitButtonText);
+                      },
+                      error: function (apiresult) {
+                          submitButton.removeAttr('disabled').text(submitButtonText);
                       }
                   });
               } else if (mode == 'update') {
@@ -77,6 +86,10 @@ $(document).ready(function () {
                           } else {
                               alert(apiresult.message);
                           }
+                          submitButton.removeAttr('disabled').text(submitButtonText);
+                      },
+                      error: function (apiresult) {
+                          submitButton.removeAttr('disabled').text(submitButtonText);
                       }
                   });
               }
