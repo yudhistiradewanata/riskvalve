@@ -60,7 +60,11 @@ $(document).ready(function () {
         }
     });
     $('#btn-user-modal-save').click(function () {
+        const submitButton = $(this);
+        const submitButtonText = submitButton.text();
         if ($('.user-form').valid()) {
+            submitButton.text('Loading...');
+            submitButton.attr('disabled', true);
             var mode = $('#field-user-mode').val();
             var id = $('#field-user-id').val();
             var username = $('#field-username').val();
@@ -86,10 +90,15 @@ $(document).ready(function () {
                             } else {
                                 alert(apiresult.message);
                             }
+                            submitButton.removeAttr('disabled').text(submitButtonText);
+                        },
+                        error: function (apiresult) {
+                            submitButton.removeAttr('disabled').text(submitButtonText);
                         }
                     });
                 } else {
                     alert('Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character');
+                    submitButton.removeAttr('disabled').text(submitButtonText);
                 }
             } else if (mode == 'update') {
                 if(checkPasswordValidation(password) || password == '') {
@@ -108,10 +117,15 @@ $(document).ready(function () {
                             } else {
                                 alert(apiresult.message);
                             }
+                            submitButton.removeAttr('disabled').text(submitButtonText);
+                        },
+                        error: function (apiresult) {
+                            submitButton.removeAttr('disabled').text(submitButtonText);
                         }
                     });
                 } else {
                     alert('Password must contain at least 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number, and 1 special character');
+                    submitButton.removeAttr('disabled').text(submitButtonText);
                 }
             }
         }
