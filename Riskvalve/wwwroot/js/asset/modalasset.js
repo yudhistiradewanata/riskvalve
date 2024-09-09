@@ -71,6 +71,9 @@ function editAction() {
 $(document).ready(function () {
     $('#btn-asset-modal-save').click(function () {
         if ($('#asset-form').valid()) {
+            const submitbutton = $(this);
+            const buttontext = submitbutton.text();
+            submitbutton.prop("disabled", true).text("Loading...");
             var mode = $('#field-asset-mode').val();
             var classrating = $('#field-asset-classrating').val();
             var tagno = $('#field-asset-tagno').val();
@@ -150,6 +153,10 @@ $(document).ready(function () {
                         } else {
                             alert(apiresult.message);
                         }
+                        submitbutton.removeAttr("disabled").text(buttontext);
+                    },
+                    error: function (error) {
+                        submitbutton.removeAttr("disabled").text(buttontext);
                     }
                 });
             } else if (mode == 'update') {
@@ -202,6 +209,10 @@ $(document).ready(function () {
                         } else {
                             alert(apiresult.message);
                         }
+                        submitbutton.removeAttr("disabled").text(buttontext);
+                    },
+                    error: function (error) {
+                        submitbutton.removeAttr("disabled").text(buttontext);
                     }
                 });
             }
