@@ -92,34 +92,36 @@ public class MaintenanceRepository(ApplicationDbContext context) : IMaintenanceR
 
     public MaintenanceData AddMaintenance(MaintenanceClass maintenance)
     {
-        if (
-            !DateTime.TryParseExact(
-                maintenance.MaintenanceDate,
-                SharedEnvironment.GetDateFormatString(false),
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out _
+        lock(this){
+            if (
+                !DateTime.TryParseExact(
+                    maintenance.MaintenanceDate,
+                    SharedEnvironment.GetDateFormatString(false),
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _
+                )
             )
-        )
-        {
-            throw new FormatException("Maintenance Date is not in the correct format (dd-MM-yyyy)");
+            {
+                throw new FormatException("Maintenance Date is not in the correct format (dd-MM-yyyy)");
+            }
+            MaintenanceClass? maintenanceClass = _context
+                .Maintenance.Where(m =>
+                    m.MaintenanceDate == maintenance.MaintenanceDate
+                    && m.AssetID == maintenance.AssetID
+                    && m.IsDeleted == false
+                )
+                .FirstOrDefault();
+            if (maintenanceClass != null)
+            {
+                throw new Exception(
+                    "Maintenance on " + maintenance.MaintenanceDate + " already exists"
+                );
+            }
+            _context.Maintenance.Add(maintenance);
+            _context.SaveChanges();
+            return GetMaintenance(maintenance.Id);
         }
-        MaintenanceClass? maintenanceClass = _context
-            .Maintenance.Where(m =>
-                m.MaintenanceDate == maintenance.MaintenanceDate
-                && m.AssetID == maintenance.AssetID
-                && m.IsDeleted == false
-            )
-            .FirstOrDefault();
-        if (maintenanceClass != null)
-        {
-            throw new Exception(
-                "Maintenance on " + maintenance.MaintenanceDate + " already exists"
-            );
-        }
-        _context.Maintenance.Add(maintenance);
-        _context.SaveChanges();
-        return GetMaintenance(maintenance.Id);
     }
 
     public MaintenanceData UpdateMaintenance(MaintenanceClass maintenance)

@@ -125,33 +125,35 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
 
     public InspectionData AddInspection(InspectionClass inspection)
     {
-        if (
-            !DateTime.TryParseExact(
-                inspection.InspectionDate,
-                SharedEnvironment.GetDateFormatString(false),
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out _
+        lock(this){
+            if (
+                !DateTime.TryParseExact(
+                    inspection.InspectionDate,
+                    SharedEnvironment.GetDateFormatString(false),
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _
+                )
             )
-        )
-        {
-            throw new FormatException("Inspection Date is not in the correct format (dd-MM-yyyy)");
+            {
+                throw new FormatException("Inspection Date is not in the correct format (dd-MM-yyyy)");
+            }
+            InspectionClass? inspectionClass = _context
+                .Inspection.Where(i => 
+                    i.InspectionDate == inspection.InspectionDate
+                    && i.AssetID == inspection.AssetID
+                    && i.IsDeleted == false
+                )
+                .FirstOrDefault();
+            if (inspectionClass != null)
+            {
+                throw new Exception("Inspection on "+inspection.InspectionDate+" already exists");
+            }
+            inspection.IsDeleted = false;
+            _context.Inspection.Add(inspection);
+            _context.SaveChanges();
+            return GetInspection(inspection.Id);
         }
-        InspectionClass? inspectionClass = _context
-            .Inspection.Where(i => 
-                i.InspectionDate == inspection.InspectionDate
-                && i.AssetID == inspection.AssetID
-                && i.IsDeleted == false
-            )
-            .FirstOrDefault();
-        if (inspectionClass != null)
-        {
-            throw new Exception("Inspection on "+inspection.InspectionDate+" already exists");
-        }
-        inspection.IsDeleted = false;
-        _context.Inspection.Add(inspection);
-        _context.SaveChanges();
-        return GetInspection(inspection.Id);
     }
 
     public InspectionData UpdateInspection(InspectionClass inspection)

@@ -305,48 +305,50 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
     }
     public AssessmentData AddAssessment(AssessmentClass assessment)
     {
-        if (
-            !DateTime.TryParseExact(
-                assessment.AssessmentDate,
-                SharedEnvironment.GetDateFormatString(false),
-                CultureInfo.InvariantCulture,
-                DateTimeStyles.None,
-                out _
+        lock(this){
+            if (
+                !DateTime.TryParseExact(
+                    assessment.AssessmentDate,
+                    SharedEnvironment.GetDateFormatString(false),
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out _
+                )
             )
-        )
-        {
-            throw new FormatException("Assessment Date is not in the correct format (dd-MM-yyyy)");
-        }
-        AssessmentClass? searchassessment = _context
-            .Assessment.Where(a => 
-                a.AssessmentDate == assessment.AssessmentDate &&
-                a.AssetID == assessment.AssetID &&
-                a.IsDeleted == false)
-            .FirstOrDefault();
-        if (searchassessment != null)
-        {
-            throw new Exception("Assessment on " + assessment.AssessmentDate + " already exists.");
-        }
-        assessment.AssessmentNo = "IMPORT";
-        assessment.IsDeleted = false;
-        _context.Assessment.Add(assessment);
-        _context.SaveChanges();
+            {
+                throw new FormatException("Assessment Date is not in the correct format (dd-MM-yyyy)");
+            }
+            AssessmentClass? searchassessment = _context
+                .Assessment.Where(a => 
+                    a.AssessmentDate == assessment.AssessmentDate &&
+                    a.AssetID == assessment.AssetID &&
+                    a.IsDeleted == false)
+                .FirstOrDefault();
+            if (searchassessment != null)
+            {
+                throw new Exception("Assessment on " + assessment.AssessmentDate + " already exists.");
+            }
+            assessment.AssessmentNo = "IMPORT";
+            assessment.IsDeleted = false;
+            _context.Assessment.Add(assessment);
+            _context.SaveChanges();
 
-        AssetClass? asset = _context.Asset.Where(a => a.Id == assessment.AssetID).FirstOrDefault();
-        string assettagno = asset?.TagNo ?? "";
-        string lastAssessmentNo = _context.Assessment.Where(a => a.AssetID == assessment.AssetID && a.AssessmentNo.EndsWith(assettagno)).OrderByDescending(a => a.Id).Select(a => a.AssessmentNo).FirstOrDefault() ?? "";
-        if(String.IsNullOrEmpty(lastAssessmentNo))
-        {
-            lastAssessmentNo = "ASSESSMENT-1-" + assettagno;
-        } else {
-            string[] splitAssessmentNo = lastAssessmentNo.Split("-");
-            int countAssessmentSameAsset = Int32.Parse(splitAssessmentNo[1]);
-            lastAssessmentNo = "ASSESSMENT-" + (countAssessmentSameAsset + 1) + "-" + assettagno;
+            AssetClass? asset = _context.Asset.Where(a => a.Id == assessment.AssetID).FirstOrDefault();
+            string assettagno = asset?.TagNo ?? "";
+            string lastAssessmentNo = _context.Assessment.Where(a => a.AssetID == assessment.AssetID && a.AssessmentNo.EndsWith(assettagno)).OrderByDescending(a => a.Id).Select(a => a.AssessmentNo).FirstOrDefault() ?? "";
+            if(String.IsNullOrEmpty(lastAssessmentNo))
+            {
+                lastAssessmentNo = "ASSESSMENT-1-" + assettagno;
+            } else {
+                string[] splitAssessmentNo = lastAssessmentNo.Split("-");
+                int countAssessmentSameAsset = Int32.Parse(splitAssessmentNo[1]);
+                lastAssessmentNo = "ASSESSMENT-" + (countAssessmentSameAsset + 1) + "-" + assettagno;
+            }
+            assessment.AssessmentNo = lastAssessmentNo;
+            _context.Assessment.Update(assessment);
+            _context.SaveChanges();
+            return GetAssessment(assessment.Id);
         }
-        assessment.AssessmentNo = lastAssessmentNo;
-        _context.Assessment.Update(assessment);
-        _context.SaveChanges();
-        return GetAssessment(assessment.Id);
     }
     public AssessmentData UpdateAssessment(AssessmentClass assessment)
     {
