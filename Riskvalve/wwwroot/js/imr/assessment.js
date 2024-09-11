@@ -307,11 +307,13 @@
                       $('#product-loss-definition'+counter).val(data.productLossDefinition)
                       $('#hsse-definition'+counter).val(data.hsseDefinisionID)
                       $('#assessment-summary'+counter).val(data.summary)
-                      if(data.integrityStatus != null){
+                      if(data.integrityStatus != null && data.integrityStatus != ''){
                         $('#integrity-status'+counter).val(data.integrityStatus)
+                        $('#integrity-status'+counter).attr('x-fromdb', 'true')
                       }
-                      if(data.timeToAction != null){
+                      if(data.timeToAction != null && data.timeToAction != ''){
                         $('#time-to-action'+counter).val(data.timeToAction)
+                        $('#time-to-action'+counter).attr('x-fromdb', 'true')
                       }
                       if(data.recommendationActionID != null){
                         $('#recommended-action'+counter).val(data.recommendationActionID)
@@ -590,6 +592,9 @@
               calculated_lf2PassingAccrossValveTP2,
               calculated_lf2PassingAccrossValveTP3
           })
+          if($('#leakage-to-atmosphere' + ctr).find('option:selected') == null) {
+            return;
+          }
           //LF1
           var lf1LeakageToAtmosphere = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-value').replace(',','.');
           var lf1LeakageToAtmosphereWeighting = $('#leakage-to-atmosphere' + ctr).find('option:selected').attr('attr-weighting').replace(',','.');
@@ -1019,8 +1024,9 @@
 
               $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item.label)
           }
-          var currentIntegrityStatus = $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr).val();
-          if(currentIntegrityStatus == null){
+          var currentIntegrityStatus = $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr);
+          console.log("AYAYA DEBUG", $(currentIntegrityStatus).attr('x-fromdb'));
+          if(currentIntegrityStatus.attr('x-fromdb') != 'true'){
             $('.tab-pane[tab-num='+ctr+']').find('#integrity-status'+ctr).val(getIntegrityStatus(tp1color));
           }
 
@@ -1074,8 +1080,9 @@
               dotLabel.text(item)
               $('.tab-pane[tab-num='+ctr+']').find('#'+key+'-field').val(item)
           }
-          var currentTTA = $('.tab-pane[tab-num='+ctr+']').find('#time-to-action'+ctr).val();
-          if(currentTTA == "" || currentTTA == null){
+          var currentTTA = $('.tab-pane[tab-num='+ctr+']').find('#time-to-action'+ctr);
+          console.log("AYAYA DEBUG X", $(currentTTA).attr('x-fromdb'));
+          if(currentTTA.attr('x-fromdb') != 'true'){
             $('.tab-pane[tab-num='+ctr+']').find('#time-to-action'+ctr).val(map_ttl['TPRISK-TTA']);
           }
       }
@@ -1229,6 +1236,14 @@
                   addMaintenance($(this))
               }
           })
+
+          $('.integrity-status').on('focusout', function(){
+              $(this).attr('x-fromdb', 'true')
+          })
+
+          $('.time-to-action').on('focusout', function(){
+            $(this).attr('x-fromdb', 'true');
+          });
 
           initDatepicker()
           moveToLastTab()

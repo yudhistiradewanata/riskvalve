@@ -844,76 +844,16 @@
                                             <input type="hidden" name='TP2Risk' id="TP2RISK-field" />
                                             <input type="hidden" name='TP3Risk' id="TP3RISK-field" />
                                             <input type="hidden" name="TPTimeToActionRisk" id="TPRISK-TTA-field" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScoreLeakageToAtmophereTP1</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreLeakageToAtmophereTP1" id="TP1A-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScoreLeakageToAtmophereTP2</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreLeakageToAtmophereTP2" id="TP2A-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScoreLeakageToAtmophereTP3</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreLeakageToAtmophereTP3" id="TP3A-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScoreFailureOfFunctionTP1</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreFailureOfFunctionTP1" id="TP1B-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScoreFailureOfFunctionTP2</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreFailureOfFunctionTP2" id="TP2B-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScoreFailureOfFunctionTP3</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScoreFailureOfFunctionTP3" id="TP3B-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScorePassingAccrossValveTP1</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScorePassingAccrossValveTP1" id="TP1C-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScorePassingAccrossValveTP2</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScorePassingAccrossValveTP2" id="TP2C-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>LoFScorePassingAccrossValveTP3</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="LoFScorePassingAccrossValveTP3" id="TP3C-value" />
-                                            @{
-                                                if(devmode){
-                                                    <br/>
-                                                    <b>CoFScore</b>
-                                                }
-                                            }
-                                            <input class="col-md-3" type="@hidden_dev" name="CoFScore" id="COF-value" />
+                                            <input type="hidden" name="LoFScoreLeakageToAtmophereTP1" id="TP1A-value" />
+                                            <input type="hidden" name="LoFScoreLeakageToAtmophereTP2" id="TP2A-value" />
+                                            <input type="hidden" name="LoFScoreLeakageToAtmophereTP3" id="TP3A-value" />
+                                            <input type="hidden" name="LoFScoreFailureOfFunctionTP1" id="TP1B-value" />
+                                            <input type="hidden" name="LoFScoreFailureOfFunctionTP2" id="TP2B-value" />
+                                            <input type="hidden" name="LoFScoreFailureOfFunctionTP3" id="TP3B-value" />
+                                            <input type="hidden" name="LoFScorePassingAccrossValveTP1" id="TP1C-value" />
+                                            <input type="hidden" name="LoFScorePassingAccrossValveTP2" id="TP2C-value" />
+                                            <input type="hidden" name="LoFScorePassingAccrossValveTP3" id="TP3C-value" />
+                                            <input type="hidden" name="CoFScore" id="COF-value" />
 
                                             <div class="card-content">
                                                 <div class="row">
@@ -1211,7 +1151,7 @@
                                                                             <div class="status-box green">
                                                                             </div>
                                                                         </span> *@
-                                                                        <select id="integrity-status" class="form-select form-select-sm" name="IntegrityStatus" required>
+                                                                        <select id="integrity-status" class="form-select form-select-sm integrity-status" name="IntegrityStatus" x-fromdb="false" required>
                                                                             <option value="" disabled selected>-- Select Integrity Status --</option>
                                                                             <option value="Very High Priority">Very High Priority</option>
                                                                             <option value="High Priority">High Priority</option>
@@ -1229,7 +1169,7 @@
                                                             <div class="col-6">
                                                                 <div class="mb-3">
                                                                     <label class="form-label fw-500">Time To Action</label>
-                                                                    <input id="time-to-action" class="form-control datepicker form-control-sm" name="TimeToAction" required/>
+                                                                    <input id="time-to-action" class="form-control datepicker form-control-sm time-to-action" name="TimeToAction" x-fromdb="false" required/>
                                                                 </div>
                                                                 <div class="mb-3">
                                                                     <label class="form-label fw-500" for="recommended-action">Recommendation Action</label>
