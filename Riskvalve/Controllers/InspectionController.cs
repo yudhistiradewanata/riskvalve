@@ -230,6 +230,11 @@ public class InspectionController(
             {
                 throw new Exception(Permission["Message"]);
             }
+            int updateby = 0;
+            if (!int.TryParse(HttpContext.Session.GetString("Id"), out updateby))
+            {
+                throw new Exception("Invalid User");
+            }
             List<IFormFile> files = [.. Request.Form.Files];
             List<string> permittedExtensions = SharedEnvironment.GetPermittedExtension();
             foreach (var file in files)
@@ -293,6 +298,8 @@ public class InspectionController(
                     ),
                     FunctionCondition = Request.Form["FunctionCondition"],
                     TestPressureIfAny = Request.Form["TestPressureIfAny"],
+                    UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
+                    UpdatedBy = updateby
                 };
             IWebHostEnvironment environment =
                 HttpContext.RequestServices.GetService<IWebHostEnvironment>()

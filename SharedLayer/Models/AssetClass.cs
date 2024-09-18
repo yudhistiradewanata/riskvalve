@@ -38,6 +38,8 @@ public class AssetClass
     public string? CreatedAt { get; set; }
     public int? DeletedBy { get; set; }
     public string? DeletedAt { get; set; }
+    public int? UpdatedBy { get; set; }
+    public string? UpdatedAt { get; set; }
 }
 
 public class AssetData : AssetClass
@@ -51,6 +53,7 @@ public class AssetData : AssetClass
     public string? ToxicOrFlamableFluid { get; set; }
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
+    public string? UpdatedByUser { get; set; }
     public InspectionData? LastInspection { get; set; }
     public MaintenanceData? LastMaintenance { get; set; }
     public AssessmentData? LastAssessment { get; set; }

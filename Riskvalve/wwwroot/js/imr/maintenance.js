@@ -251,6 +251,14 @@ function fetchHistoryData({ id, counter }) {
 
                 //fill ID
                 $('#inspection' + counter).find('#data-id').val(id)
+
+                let recordmeta = $('#record-meta' + counter);
+                console.log(recordmeta)
+                $('#record-meta' + counter).html(`Created by ${data.createdByUser} on ${data.createdAt}`);
+                if(data.updatedByUser){
+                    $('#record-meta' + counter).html($('#record-meta' + counter).html() + `, Last updated by ${data.updatedByUser} on ${data.updatedAt}`);
+                }
+                $('#record-info' + counter).show();
             } else {
                 alert(apiresult.message);
                 $('#inspectionheader' + counter).remove();
@@ -340,6 +348,18 @@ function addTab() {
     tabcontentlabel.each(function () {
         let label = $(this).attr('for') + ctr;
         $(this).attr('for', label);
+    });
+
+    //other
+    let recordinfo = tabcontentcontainer.find('.recordinfo');
+    recordinfo.each(function () {
+        let name = $(this).attr('id') + ctr;
+        $(this).attr('id', name);
+    });
+    let recordmeta = tabcontentcontainer.find('.recordmeta');
+    recordmeta.each(function () {
+        let name = $(this).attr('id') + ctr;
+        $(this).attr('id', name);
     });
 
     $('#inspectionheader' + ctr).find('a').click();

@@ -17,6 +17,7 @@ function editAction() {
         $('#btn-user-modal-delete').hide();
         $('#field-password').attr('required', 'true')
         $('#field-password').attr('placeholder', 'Password');
+        $('.modalinfo').hide();
         $('#addUserModal').modal('show');
     } else if (mode == 'view') {
         var id = $(this).attr('attr-itemid');
@@ -40,6 +41,18 @@ function editAction() {
                     $('#field-isviewer').prop('checked', data.isViewer);
                     $('#field-user-mode').val('update');
                     $('#btn-user-modal-delete').show();
+                    // Example data
+                    const createdBy = data.createdByUser;
+                    const createdOn = data.createdAt;
+                    const lastUpdatedBy = data.updatedByUser;
+                    const lastUpdatedOn = data.updatedAt;
+                    // Update the text
+                    var recordMetaText = `Created by ${createdBy} on ${createdOn}`;
+                    if(lastUpdatedBy != null && lastUpdatedBy != '') {
+                      recordMetaText = `${recordMetaText}\nLast updated by ${lastUpdatedBy} on ${lastUpdatedOn}`;
+                    }
+                    $('.modalinfo').show();
+                    $('#record-meta').text(recordMetaText);
                     $('#addUserModal').modal('show');
                 } else {
                     alert(apiresult.message);

@@ -215,6 +215,14 @@ public class MaintenanceController(
             {
                 throw new Exception(Permission["Message"]);
             }
+            int updatedBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out updatedBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
             List<IFormFile> files = [.. Request.Form.Files];
             List<string> permittedExtensions = SharedEnvironment.GetPermittedExtension();
             foreach (var file in files)
@@ -263,7 +271,9 @@ public class MaintenanceController(
                     AssetID = Convert.ToInt32(Request.Form["AssetID"]),
                     IsValveRepairedID = Convert.ToInt32(Request.Form["IsValveRepairedID"]),
                     MaintenanceDate = Request.Form["MaintenanceDate"],
-                    MaintenanceDescription = Request.Form["MaintenanceDescription"]
+                    MaintenanceDescription = Request.Form["MaintenanceDescription"],
+                    UpdatedBy = updatedBy,
+                    UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
                 };
             Console.WriteLine("==APP AYAYA==");
             Console.WriteLine(JsonSerializer.Serialize(maintenance));

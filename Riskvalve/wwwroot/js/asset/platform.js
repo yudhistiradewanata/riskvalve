@@ -13,6 +13,7 @@ function editAction () {
   if (mode == 'create') {
       $('#field-platform-mode').val('create');
       $('#btn-platform-modal-delete').hide();
+      $('.modalinfo').hide();
       $('#addPlatformModal').modal('show');
   } else if (mode == 'view') {
       var id = $(this).attr('attr-itemid');
@@ -32,6 +33,18 @@ function editAction () {
                   $('#field-platform-name').val(data.platform);
                   $('#field-platform-code').val(data.code);
                   $('#btn-platform-modal-delete').show();
+                  // Example data
+                  const createdBy = data.createdByUser;
+                  const createdOn = data.createdAt;
+                  const lastUpdatedBy = data.updatedByUser;
+                  const lastUpdatedOn = data.updatedAt;
+                  // Update the text
+                  var recordMetaText = `Created by ${createdBy} on ${createdOn}`;
+                  if(lastUpdatedBy != null && lastUpdatedBy != '') {
+                    recordMetaText = `${recordMetaText}\nLast updated by ${lastUpdatedBy} on ${lastUpdatedOn}`;
+                  }
+                  $('.modalinfo').show();
+                  $('#record-meta').text(recordMetaText);
                   $('#addPlatformModal').modal('show');
               } else {
                   alert(apiresult.message);

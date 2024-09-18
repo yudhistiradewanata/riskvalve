@@ -9,6 +9,7 @@ function editAction() {
   if (mode == 'create') {
       $('#field-business-area-mode').val('create');
       $('#btn-area-modal-delete').hide();
+      $('.modalinfo').hide();
       $('#addAreaModal').modal('show');
   } else if (mode == 'view') {
       var id = $(this).attr('attr-itemid');
@@ -26,6 +27,18 @@ function editAction() {
                   $('#field-business-area-id').val(data.id);
                   $('#field-business-area-name').val(data.businessArea);
                   $('#btn-area-modal-delete').show();
+                  // Example data
+                  const createdBy = data.createdByUser;
+                  const createdOn = data.createdAt;
+                  const lastUpdatedBy = data.updatedByUser;
+                  const lastUpdatedOn = data.updatedAt;
+                  // Update the text
+                  var recordMetaText = `Created by ${createdBy} on ${createdOn}`;
+                  if(lastUpdatedBy != null && lastUpdatedBy != '') {
+                    recordMetaText = `${recordMetaText}\nLast updated by ${lastUpdatedBy} on ${lastUpdatedOn}`;
+                  }
+                  $('.modalinfo').show();
+                  $('#record-meta').text(recordMetaText);
                   $('#addAreaModal').modal('show');
               } else {
                   alert(apiresult.message);

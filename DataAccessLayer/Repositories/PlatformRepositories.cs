@@ -23,10 +23,12 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             from platform in _context.Platform
             join area in _context.Area on platform.AreaID equals area.Id into sc
             from subarea in sc.DefaultIfEmpty()
-            join createby in _context.User on subarea.CreatedBy equals createby.Id into cc
+            join createby in _context.User on platform.CreatedBy equals createby.Id into cc
             from subcreateby in cc.DefaultIfEmpty()
-            join deleteby in _context.User on subarea.DeletedBy equals deleteby.Id into dc
+            join deleteby in _context.User on platform.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on platform.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where platform.Id == id
             select new PlatformData
             {
@@ -35,13 +37,16 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
                 Platform = SharedEnvironment.HtmlEncode(platform.Platform),
                 Code = SharedEnvironment.HtmlEncode(platform.Code),
                 BusinessArea = SharedEnvironment.HtmlEncode(subarea.BusinessArea),
-                IsDeleted = subarea.IsDeleted,
-                CreatedBy = subarea.CreatedBy,
-                CreatedAt = subarea.CreatedAt,
-                DeletedBy = subarea.DeletedBy,
-                DeletedAt = subarea.DeletedAt,
+                IsDeleted = platform.IsDeleted,
+                CreatedBy = platform.CreatedBy,
+                CreatedAt = platform.CreatedAt,
+                DeletedBy = platform.DeletedBy,
+                DeletedAt = platform.DeletedAt,
+                UpdatedBy = platform.UpdatedBy,
+                UpdatedAt = platform.UpdatedAt,
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         platformdata = result.FirstOrDefault();
         if (platformdata == null)
@@ -57,10 +62,12 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
             from platform in _context.Platform
             join area in _context.Area on platform.AreaID equals area.Id into sc
             from subarea in sc.DefaultIfEmpty()
-            join createby in _context.User on subarea.CreatedBy equals createby.Id into cc
+            join createby in _context.User on platform.CreatedBy equals createby.Id into cc
             from subcreateby in cc.DefaultIfEmpty()
-            join deleteby in _context.User on subarea.DeletedBy equals deleteby.Id into dc
+            join deleteby in _context.User on platform.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on platform.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where
                 (platform.AreaID == AreaID || AreaID == 0)
                 && (IncludeDeleted == true || platform.IsDeleted == false)
@@ -71,13 +78,16 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
                 Platform = SharedEnvironment.HtmlEncode(platform.Platform),
                 Code = SharedEnvironment.HtmlEncode(platform.Code),
                 BusinessArea = SharedEnvironment.HtmlEncode(subarea.BusinessArea),
-                IsDeleted = subarea.IsDeleted,
-                CreatedBy = subarea.CreatedBy,
-                CreatedAt = subarea.CreatedAt,
-                DeletedBy = subarea.DeletedBy,
-                DeletedAt = subarea.DeletedAt,
+                IsDeleted = platform.IsDeleted,
+                CreatedBy = platform.CreatedBy,
+                CreatedAt = platform.CreatedAt,
+                DeletedBy = platform.DeletedBy,
+                DeletedAt = platform.DeletedAt,
+                UpdatedBy = platform.UpdatedBy,
+                UpdatedAt = platform.UpdatedAt,
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         return [.. result];
     }
@@ -97,6 +107,8 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
                 "Platform named " + platform.Platform + " already exists."
             );
         }
+        platform.UpdatedAt = platform.CreatedAt;
+        platform.UpdatedBy = platform.CreatedBy;
         _context.Platform.Add(platform);
         _context.SaveChanges();
         return GetPlatform(platform.Id);
@@ -125,6 +137,8 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
         oldPlatform.AreaID = platform.AreaID;
         oldPlatform.Platform = platform.Platform;
         oldPlatform.Code = platform.Code;
+        oldPlatform.UpdatedBy = platform.UpdatedBy;
+        oldPlatform.UpdatedAt = platform.UpdatedAt;
         _context.Platform.Update(oldPlatform);
         _context.SaveChanges();
         return GetPlatform(platform.Id);
@@ -139,6 +153,8 @@ public class PlatformRepository(ApplicationDbContext context) : IPlatformReposit
         searchplatform.IsDeleted = true;
         searchplatform.DeletedBy = platform.DeletedBy;
         searchplatform.DeletedAt = platform.DeletedAt;
+        searchplatform.UpdatedBy = platform.DeletedBy;
+        searchplatform.UpdatedAt = platform.DeletedAt;
         _context.Platform.Update(searchplatform);
         _context.SaveChanges();
         return GetPlatform(platform.Id);

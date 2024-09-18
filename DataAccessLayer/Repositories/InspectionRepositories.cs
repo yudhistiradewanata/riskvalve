@@ -36,6 +36,8 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on inspection.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on inspection.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where inspection.Id == id
             select new InspectionData
             {
@@ -55,13 +57,16 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
                 CreatedAt = inspection.CreatedAt,
                 DeletedBy = inspection.DeletedBy,
                 DeletedAt = inspection.DeletedAt,
+                UpdatedBy = inspection.UpdatedBy,
+                UpdatedAt = inspection.UpdatedAt,
                 InspectionMethod = SharedEnvironment.HtmlEncode(subInspectionMethod.InspectionMethod ?? ""),
                 InspectionEffectiveness = SharedEnvironment.HtmlEncode(subInspectionEffectiveness.Effectiveness ?? ""),
                 CurrentConditionLeakeageToAtmosphere = SharedEnvironment.HtmlEncode(subCurrentConditionLimitStateA.CurrentConditionLimitState ?? ""),
                 CurrentConditionFailureOfFunction = SharedEnvironment.HtmlEncode(subCurrentConditionLimitStateB.CurrentConditionLimitState ?? ""),
                 CurrentConditionPassingAcrossValve = SharedEnvironment.HtmlEncode(subCurrentConditionLimitStateC.CurrentConditionLimitState ?? ""),
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         inspectionData = result.FirstOrDefault();
         if (inspectionData == null)
@@ -91,6 +96,8 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on inspection.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on inspection.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where (IncludeDeleted || inspection.IsDeleted == false)
                 && (AssetID == 0 || inspection.AssetID == AssetID)
             select new InspectionData
@@ -111,13 +118,16 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
                 CreatedAt = inspection.CreatedAt,
                 DeletedBy = inspection.DeletedBy,
                 DeletedAt = inspection.DeletedAt,
+                UpdatedBy = inspection.UpdatedBy,
+                UpdatedAt = inspection.UpdatedAt,
                 InspectionMethod = SharedEnvironment.HtmlEncode(subInspectionMethod.InspectionMethod ?? ""),
                 InspectionEffectiveness = SharedEnvironment.HtmlEncode(subInspectionEffectiveness.Effectiveness ?? ""),
                 CurrentConditionLeakeageToAtmosphere = SharedEnvironment.HtmlEncode(subCurrentConditionLimitStateA.CurrentConditionLimitState ?? ""),
                 CurrentConditionFailureOfFunction = SharedEnvironment.HtmlEncode(subCurrentConditionLimitStateB.CurrentConditionLimitState ?? ""),
                 CurrentConditionPassingAcrossValve = SharedEnvironment.HtmlEncode(subCurrentConditionLimitStateC.CurrentConditionLimitState ?? ""),
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         inspectionDataList = [.. result];
         return inspectionDataList;
@@ -150,6 +160,8 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
                 throw new Exception("Inspection on "+inspection.InspectionDate+" already exists");
             }
             inspection.IsDeleted = false;
+            inspection.UpdatedBy = inspection.CreatedBy;
+            inspection.UpdatedAt = inspection.CreatedAt;
             _context.Inspection.Add(inspection);
             _context.SaveChanges();
             return GetInspection(inspection.Id);
@@ -197,6 +209,8 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
         oldInspection.CurrentConditionPassingAcrossValveID = inspection.CurrentConditionPassingAcrossValveID;
         oldInspection.FunctionCondition = inspection.FunctionCondition;
         oldInspection.TestPressureIfAny = inspection.TestPressureIfAny;
+        oldInspection.UpdatedBy = inspection.UpdatedBy;
+        oldInspection.UpdatedAt = inspection.UpdatedAt;
         _context.Inspection.Update(oldInspection);
         _context.SaveChanges();
         return GetInspection(inspection.Id);
@@ -210,6 +224,8 @@ public class InspectionRepository(ApplicationDbContext context) : IInspectionRep
         searchInspection.IsDeleted = true;
         searchInspection.DeletedBy = inspection.DeletedBy;
         searchInspection.DeletedAt = inspection.DeletedAt;
+        searchInspection.UpdatedBy = inspection.DeletedBy;
+        searchInspection.UpdatedAt = inspection.DeletedAt;
         _context.Inspection.Update(searchInspection);
         _context.SaveChanges();
         return GetInspection(inspection.Id);

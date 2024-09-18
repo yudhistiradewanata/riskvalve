@@ -26,6 +26,8 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on area.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on area.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where area.Id == id
             select new AreaData
             {
@@ -36,8 +38,11 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
                 CreatedAt = area.CreatedAt,
                 DeletedBy = area.DeletedBy,
                 DeletedAt = area.DeletedAt,
+                UpdatedBy = area.UpdatedBy,
+                UpdatedAt = area.UpdatedAt,
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         areadata = result.FirstOrDefault();
         if (areadata == null)
@@ -56,6 +61,8 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on area.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on area.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where IncludeDeleted == true || area.IsDeleted == false
             select new AreaData
             {
@@ -66,8 +73,11 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
                 CreatedAt = area.CreatedAt,
                 DeletedBy = area.DeletedBy,
                 DeletedAt = area.DeletedAt,
+                UpdatedBy = area.UpdatedBy,
+                UpdatedAt = area.UpdatedAt,
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         arealist = [.. result];
         return arealist;
@@ -82,6 +92,8 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
         {
             throw new Exception("Area named " + area.BusinessArea + " already exists.");
         }
+        area.UpdatedBy = area.CreatedBy;
+        area.UpdatedAt = area.CreatedAt;
         _context.Area.Add(area);
         _context.SaveChanges();
         return GetArea(area.Id);
@@ -100,6 +112,8 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
             throw new Exception("Area named " + area.BusinessArea + " already exists.");
         }
         oldArea.BusinessArea = area.BusinessArea;
+        oldArea.UpdatedBy = area.UpdatedBy;
+        oldArea.UpdatedAt = area.UpdatedAt;
         _context.Area.Update(oldArea);
         _context.SaveChanges();
         return GetArea(area.Id);
@@ -113,6 +127,8 @@ public class AreaRepository(ApplicationDbContext context) : IAreaRepository
         searcharea.IsDeleted = true;
         searcharea.DeletedBy = area.DeletedBy;
         searcharea.DeletedAt = area.DeletedAt;
+        searcharea.UpdatedBy = area.DeletedBy;
+        searcharea.UpdatedAt = area.DeletedAt;
         _context.Area.Update(searcharea);
         _context.SaveChanges();
         return GetArea(area.Id);

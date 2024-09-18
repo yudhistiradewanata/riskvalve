@@ -435,6 +435,16 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
             {
                 throw new Exception(Permission["Message"]);
             }
+            int updatedBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out updatedBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
+            assessment.UpdatedBy = updatedBy;
+            assessment.UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString());
             AssessmentData assessmentData = _assessmentService.UpdateAssessment(assessment);
             List<int> inspectionIDs = Request
                 .Form["selectedInspectionId"]
@@ -456,13 +466,16 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
             _assessmentService.AddMaintenanceToAssessment(assessmentData.Id, maintenanceIDs, true);
             try
             {
+                Console.WriteLine("YYXXXX assessment: " + assessmentData.UpdatedBy);
                 _assessmentService.CalculateAssessment(assessmentData.Id);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
+                Console.WriteLine("YYXXXX assessment: " + assessmentData.UpdatedBy);
             assessmentData = _assessmentService.GetAssessment(assessmentData.Id);
+                Console.WriteLine("YYXXXX assessment: " + assessmentData.UpdatedBy);
             result.IsSuccess = true;
             result.Message = "Assessment updated successfully";
             result.Data = assessmentData;

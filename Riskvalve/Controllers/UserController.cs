@@ -121,6 +121,14 @@ public class UserController(IUserService userService) : Controller
             {
                 throw new Exception(Permission["Message"]);
             }
+            int updateby = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out updateby))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -136,6 +144,8 @@ public class UserController(IUserService userService) : Controller
                     IsEngineer = Request.Form["IsEngineer"].ToString().ToLower().Equals("true"),
                     IsViewer = Request.Form["IsViewer"].ToString().ToLower().Equals("true"),
                     IsDeleted = false,
+                    UpdatedBy = updateby,
+                    UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString()),
                 };
             UserData userresult = _userService.UpdateUser(user);
             result.IsSuccess = true;

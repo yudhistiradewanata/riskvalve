@@ -12,6 +12,8 @@ public class MaintenanceClass
     public string? CreatedAt { get; set; }
     public int? DeletedBy { get; set; }
     public string? DeletedAt { get; set; }
+    public int? UpdatedBy { get; set; }
+    public string? UpdatedAt { get; set; }
 }
 
 public class MaintenanceData : MaintenanceClass
@@ -21,4 +23,5 @@ public class MaintenanceData : MaintenanceClass
     public List<InspectionFileData>? MaintenanceFiles { get; set; }
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
+    public string? UpdatedByUser { get; set; }
 }

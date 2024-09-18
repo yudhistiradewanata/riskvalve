@@ -91,11 +91,26 @@ public class AssetRegisterController(
             {
                 throw new Exception(Permission["Message"]);
             }
+            int updatedBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out updatedBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
             }
-            AreaClass area = new() { Id = id, BusinessArea = Request.Form["BusinessArea"] };
+            AreaClass area =
+                new()
+                {
+                    Id = id,
+                    BusinessArea = Request.Form["BusinessArea"],
+                    UpdatedBy = updatedBy,
+                    UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
+                };
             AreaData areaData = _areaService.UpdateArea(area);
             result.IsSuccess = true;
             result.Message = "Area updated successfully";
@@ -298,6 +313,14 @@ public class AssetRegisterController(
             {
                 throw new Exception(Permission["Message"]);
             }
+            int updatedBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out updatedBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
             if (!int.TryParse(Request.Form["Id"], out int id))
             {
                 throw new Exception("Invalid Id");
@@ -308,7 +331,9 @@ public class AssetRegisterController(
                     Id = id,
                     AreaID = Convert.ToInt32(Request.Form["AreaID"]),
                     Platform = Request.Form["Platform"],
-                    Code = Request.Form["Code"]
+                    Code = Request.Form["Code"],
+                    UpdatedBy = updatedBy,
+                    UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
                 };
             PlatformData platformData = _platformService.UpdatePlatform(platform);
             result.IsSuccess = true;
@@ -862,6 +887,14 @@ public class AssetRegisterController(
             {
                 throw new Exception("Invalid Id");
             }
+            int updatedBy = 0;
+            if (HttpContext.Session.GetString("Id") != null)
+            {
+                if (!int.TryParse(HttpContext.Session.GetString("Id"), out updatedBy))
+                {
+                    throw new Exception("Invalid session Id");
+                }
+            }
             string? platformIdString = Request.Form["PlatformID"];
             int platformId = string.IsNullOrEmpty(platformIdString)
                 ? 0
@@ -916,6 +949,8 @@ public class AssetRegisterController(
                     Status = Request.Form["Status"],
                     UsageType = Request.Form["UsageType"],
                     Actuation = Request.Form["Actuation"],
+                    UpdatedBy = updatedBy,
+                    UpdatedAt = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString())
                 };
             AssetData assetData = _assetService.UpdateAsset(asset);
             result.IsSuccess = true;

@@ -893,3 +893,25 @@ select.readonly {
 .info-card.green {
   --info-color: #90d053;
 }
+
+#record-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  height: auto;
+}
+
+.pull-right-small-gray {
+  align-self: flex-end;
+  font-size: 0.6em;
+  color: gray;
+  margin: 0;
+  white-space: pre-line;
+  text-align: right;
+}
+
+.modalinfo {
+  margin: 0;
+  padding: 0;
+  display: none;
+}

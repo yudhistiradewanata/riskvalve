@@ -44,6 +44,8 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on asset.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on asset.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where asset.Id == id
             select new AssetData
             {
@@ -89,8 +91,11 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
                 CreatedAt = asset.CreatedAt,
                 DeletedBy = asset.DeletedBy,
                 DeletedAt = asset.DeletedAt,
+                UpdatedBy = asset.UpdatedBy,
+                UpdatedAt = asset.UpdatedAt,
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         assetdata = result.FirstOrDefault();
         if (assetdata == null)
@@ -131,6 +136,8 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on asset.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on asset.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where
                 (AreaID == 0 || subplatform.AreaID == AreaID)
                 && (PlatformID == 0 || asset.PlatformID == PlatformID)
@@ -179,8 +186,11 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
                 CreatedAt = asset.CreatedAt,
                 DeletedBy = asset.DeletedBy,
                 DeletedAt = asset.DeletedAt,
+                UpdatedBy = asset.UpdatedBy,
+                UpdatedAt = asset.UpdatedAt,
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         assetlist = [.. result];
         return assetlist;
@@ -208,6 +218,8 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
             {
                 throw new Exception("Asset with Tag No " + asset.TagNo + " already exists.");
             }
+            asset.UpdatedAt = asset.CreatedAt;
+            asset.UpdatedBy = asset.CreatedBy;
             _context.Asset.Add(asset);
             _context.SaveChanges();
             return GetAsset(asset.Id);
@@ -268,6 +280,8 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
         oldAsset.CostOfReplacementAndRepair = asset.CostOfReplacementAndRepair;
         oldAsset.Actuation = asset.Actuation;
         oldAsset.Status = asset.Status;
+        oldAsset.UpdatedBy = asset.UpdatedBy;
+        oldAsset.UpdatedAt = asset.UpdatedAt;
         _context.Asset.Update(oldAsset);
         _context.SaveChanges();
         return GetAsset(asset.Id);
@@ -281,6 +295,8 @@ public class AssetRepository(ApplicationDbContext context) : IAssetRepository
         searchasset.IsDeleted = true;
         searchasset.DeletedBy = asset.DeletedBy;
         searchasset.DeletedAt = asset.DeletedAt;
+        searchasset.UpdatedBy = asset.DeletedBy;
+        searchasset.UpdatedAt = asset.DeletedAt;
         _context.Asset.Update(searchasset);
         _context.SaveChanges();
         return GetAsset(asset.Id);

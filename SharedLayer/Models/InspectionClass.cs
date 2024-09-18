@@ -18,6 +18,8 @@ public class InspectionClass
     public string? CreatedAt { get; set; }
     public int? DeletedBy { get; set; }
     public string? DeletedAt { get; set; }
+    public int? UpdatedBy { get; set; }
+    public string? UpdatedAt { get; set; }
 }
 
 public class InspectionData : InspectionClass
@@ -31,4 +33,5 @@ public class InspectionData : InspectionClass
     public List<InspectionFileData>? InspectionFiles { get; set; }
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
+    public string? UpdatedByUser { get; set; }
 }

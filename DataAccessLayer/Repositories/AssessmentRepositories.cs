@@ -65,6 +65,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on assessment.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on assessment.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where assessment.Id == id
             select new AssessmentData
             {
@@ -131,6 +133,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 CreatedAt = assessment.CreatedAt,
                 DeletedBy = assessment.DeletedBy,
                 DeletedAt = assessment.DeletedAt,
+                UpdatedBy = assessment.UpdatedBy,
+                UpdatedAt = assessment.UpdatedAt,
                 LeakageToAtmosphere = SharedEnvironment.HtmlEncode(subleakagetoatmosphere.CurrentConditionLimitState ?? ""),
                 FailureOfFunction = SharedEnvironment.HtmlEncode(subfailureoffunction.CurrentConditionLimitState ?? ""),
                 PassingAccrosValve = SharedEnvironment.HtmlEncode(subpassingacrossvalve.CurrentConditionLimitState ?? ""),
@@ -152,7 +156,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 RecommendationAction = SharedEnvironment.HtmlEncode(subrecomendationaction.RecommendationAction ?? ""),
                 TimeToAction = SharedEnvironment.HtmlEncode(assessment.TimeToAction),
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         assessmentdata = result.FirstOrDefault();
         if(assessmentdata == null)
@@ -210,6 +215,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
             from subcreateby in sc.DefaultIfEmpty()
             join deleteby in _context.User on assessment.DeletedBy equals deleteby.Id into dc
             from subdeleteby in dc.DefaultIfEmpty()
+            join updateby in _context.User on assessment.UpdatedBy equals updateby.Id into uc
+            from subupdateby in uc.DefaultIfEmpty()
             where  (IncludeDeleted || assessment.IsDeleted == false)
                 && (AssetID == 0 || assessment.AssetID == AssetID)
             select new AssessmentData
@@ -277,6 +284,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 CreatedAt = assessment.CreatedAt,
                 DeletedBy = assessment.DeletedBy,
                 DeletedAt = assessment.DeletedAt,
+                UpdatedBy = assessment.UpdatedBy,
+                UpdatedAt = assessment.UpdatedAt,
                 LeakageToAtmosphere = SharedEnvironment.HtmlEncode(subleakagetoatmosphere.CurrentConditionLimitState ?? ""),
                 FailureOfFunction = SharedEnvironment.HtmlEncode(subfailureoffunction.CurrentConditionLimitState ?? ""),
                 PassingAccrosValve = SharedEnvironment.HtmlEncode(subpassingacrossvalve.CurrentConditionLimitState ?? ""),
@@ -298,7 +307,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 RecommendationAction = SharedEnvironment.HtmlEncode(subrecomendationaction.RecommendationAction ?? ""),
                 TimeToAction = SharedEnvironment.HtmlEncode(assessment.TimeToAction),
                 CreatedByUser = SharedEnvironment.HtmlEncode(subcreateby.Username ?? ""),
-                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? "")
+                DeletedByUser = SharedEnvironment.HtmlEncode(subdeleteby.Username ?? ""),
+                UpdatedByUser = SharedEnvironment.HtmlEncode(subupdateby.Username ?? "")
             };
         assessmentlist = [.. result];
         return assessmentlist;
@@ -345,6 +355,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
                 lastAssessmentNo = "ASSESSMENT-" + (countAssessmentSameAsset + 1) + "-" + assettagno;
             }
             assessment.AssessmentNo = lastAssessmentNo;
+            assessment.UpdatedAt = assessment.CreatedAt;
+            assessment.UpdatedBy = assessment.CreatedBy;
             _context.Assessment.Update(assessment);
             _context.SaveChanges();
             return GetAssessment(assessment.Id);
@@ -436,6 +448,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
         oldAssessment.CoFScore = assessment.CoFScore;
         oldAssessment.IntegrityStatus = assessment.IntegrityStatus;
         oldAssessment.TimeToAction = assessment.TimeToAction;
+        oldAssessment.UpdatedAt = assessment.UpdatedAt;
+        oldAssessment.UpdatedBy = assessment.UpdatedBy;
         _context.Assessment.Update(oldAssessment);
         _context.SaveChanges();
         return GetAssessment(assessment.Id);
@@ -448,6 +462,8 @@ public class AssessmentRepository(ApplicationDbContext context) : IAssessmentRep
         oldAssessment.IsDeleted = true;
         oldAssessment.DeletedAt = assessment.DeletedAt;
         oldAssessment.DeletedBy = assessment.DeletedBy;
+        oldAssessment.UpdatedAt = assessment.DeletedAt;
+        oldAssessment.UpdatedBy = assessment.DeletedBy;
         _context.Assessment.Update(oldAssessment);
         _context.SaveChanges();
         return GetAssessment(assessment.Id);

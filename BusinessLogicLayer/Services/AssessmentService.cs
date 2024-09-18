@@ -295,7 +295,9 @@ public class AssessmentService(
             RecommendationActionID = oldAssessmentData.RecommendationActionID,
             DetailedRecommendation = oldAssessmentData.DetailedRecommendation,
             CoFScore = oldAssessmentData.CoFScore,
-            IntegrityStatus = oldAssessmentData.IntegrityStatus
+            IntegrityStatus = oldAssessmentData.IntegrityStatus,
+            UpdatedAt = oldAssessmentData.UpdatedAt,
+            UpdatedBy = oldAssessmentData.UpdatedBy,
         };
         // GET LAST INSPECTION
         List<AssessmentInspectionData>? inspectionDatas = oldAssessmentData.InspectionHistory;

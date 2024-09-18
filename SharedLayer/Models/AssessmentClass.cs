@@ -66,6 +66,8 @@ public class AssessmentClass
     public int? CreatedBy { get; set; }
     public string? DeletedAt { get; set; }
     public int? DeletedBy { get; set; }
+    public int? UpdatedBy { get; set; }
+    public string? UpdatedAt { get; set; }
 }
 
 public class AssessmentData : AssessmentClass
@@ -92,6 +94,7 @@ public class AssessmentData : AssessmentClass
     public string? RecommendationAction { get; set; }
     public string? CreatedByUser { get; set; }
     public string? DeletedByUser { get; set; }
+    public string? UpdatedByUser { get; set; }
     public List<AssessmentInspectionData>? InspectionHistory { get; set; }
     public List<AssessmentMaintenanceData>? MaintenanceHistory { get; set; }
     public string? RiskMax { get; set; }
