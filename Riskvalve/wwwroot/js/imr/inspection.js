@@ -256,13 +256,17 @@ function fetchHistoryData({ id, counter }) {
                 //fill ID
                 $('#inspection' + counter).find('#data-id').val(id)
 
-                let recordmeta = $('#record-meta' + counter);
-                console.log(recordmeta)
-                $('#record-meta' + counter).html(`Created by ${data.createdByUser} on ${data.createdAt}`);
-                if(data.updatedByUser){
-                    $('#record-meta' + counter).html($('#record-meta' + counter).html() + `, Last updated by ${data.updatedByUser} on ${data.updatedAt}`);
-                }
-                $('#record-info' + counter).show();
+                // let recordmeta = $('#record-meta' + counter);
+                // console.log(recordmeta)
+                // $('#record-meta' + counter).html(`Created by ${data.createdByUser} on ${data.createdAt}`);
+                // if(data.updatedByUser){
+                //     $('#record-meta' + counter).html($('#record-meta' + counter).html() + `, Last updated by ${data.updatedByUser} on ${data.updatedAt}`);
+                // }
+                // $('#record-info' + counter).show();
+                $('#createdby' + counter).val(data.createdByUser);
+                $('#createdat' + counter).val(data.createdAt);
+                $('#updatedby' + counter).val(data.updatedByUser);
+                $('#updatedat' + counter).val(data.updatedAt);
             } else {
                 alert(apiresult.message);
                 $('#inspectionheader' + counter).remove();

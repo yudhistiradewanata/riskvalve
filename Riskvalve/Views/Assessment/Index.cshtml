@@ -70,6 +70,7 @@
                                             <div class="submenu-item" onclick="changeContentCard('riskassessment', this)"><i class="bi bi-search"></i> Risk Assessment</div>
                                             <div class="submenu-item" onclick="changeContentCard('riskmatrix', this)"><i class="bi bi-bar-chart"></i> Risk Matrix</div>
                                             <div class="submenu-item" onclick="changeContentCard('integrityplan', this)"><i class="bi bi-calendar2-check"></i> Integrity Plan</div>
+                                            <div class="submenu-item" onclick="changeContentCard('recordinformation', this)"><i class="bi bi-clock-history"></i> Record Information</div>
                                         </div>
                                         <div class="submenu-action">
                                             <div class="top-row">
@@ -1186,6 +1187,47 @@
                                                                 <div class="mb-3">
                                                                     <label class="form-label fw-500" for="detailed-recommendation">Detailed Recommendation</label>
                                                                     <textarea class="form-control form-control-sm" style="height: 124px;" id="detailed-recommendation" name="DetailedRecommendation"></textarea>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="assessment-content-card card-group-recordinformation  first-in-group last-in-group">
+                                            <div class="card-header">
+                                                Record Information
+                                            </div>
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-lg-10">
+                                                        <div class="row g-3">
+                                                            <div class="col-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Created By</label>                                  
+                                                                    <div class="input-group input-group-sm input-search">
+                                                                        <input id="createdby" class="form-control form-control-sm" disabled/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Created At</label>                                  
+                                                                    <div class="input-group input-group-sm input-search">
+                                                                        <input id="createdat" class="form-control form-control-sm" disabled/>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-6">
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Updated By</label>                                  
+                                                                    <div class="input-group input-group-sm input-search">
+                                                                        <input id="updatedby" class="form-control form-control-sm" disabled/>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="mb-3">
+                                                                    <label class="form-label fw-500">Updated At</label>                                  
+                                                                    <div class="input-group input-group-sm input-search">
+                                                                        <input id="updatedat" class="form-control form-control-sm" disabled/>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
