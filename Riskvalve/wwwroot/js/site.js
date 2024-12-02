@@ -4,16 +4,41 @@
 // Write your JavaScript code.
 function initDatepicker() {
   $(".datepicker")
+    .each(function () {
+      const currentVal = $(this).val();
+      if (currentVal) {
+        // Initialize the datepicker with the current value as the selected date
+        $(this).datepicker("setDate", currentVal);
+      }
+    })
     .datepicker({
       format: "dd-mm-yyyy",
       autoclose: true,
       todayHighlight: true,
     })
-    .on("changeDate", function (e) {
-      $(this).removeClass("error");
+    .on("show", function () {
+      const currentVal = $(this).val();
+      if (currentVal) {
+        // Highlight the currently selected date when the datepicker opens
+        $(this).datepicker("setDate", currentVal);
+      }
+      // Store the current value before the datepicker is shown
+      $(this).data("prevValue", $(this).val());
+    })
+    .on("hide", function () {
+      // Restore the previous value if the user cancels
+      const prevValue = $(this).data("prevValue");
+      if (!$(this).datepicker("getDate")) {
+        $(this).val(prevValue);
+      }
+    })
+    .on("changeDate", function () {
+      // Remove 'error' class and add 'selected' class for highlighting
+      $(this).removeClass("error").addClass("selected");
       $(this).trigger("change");
     });
 }
+
 
 $(document).ready(function () {
   $(".btn-inspection").click(function () {
