@@ -4,13 +4,6 @@
 // Write your JavaScript code.
 function initDatepicker() {
   $(".datepicker")
-    .each(function () {
-      const currentVal = $(this).val();
-      if (currentVal) {
-        // Initialize the datepicker with the current value as the selected date
-        $(this).datepicker("setDate", currentVal);
-      }
-    })
     .datepicker({
       format: "dd-mm-yyyy",
       autoclose: true,
@@ -19,8 +12,13 @@ function initDatepicker() {
     .on("show", function () {
       const currentVal = $(this).val();
       if (currentVal) {
-        // Highlight the currently selected date when the datepicker opens
-        $(this).datepicker("setDate", currentVal);
+        $(this)
+          .datepicker({
+            format: "dd-mm-yyyy",
+            autoclose: true,
+            todayHighlight: true,
+          })
+          // .datepicker("setDate", currentVal);
       }
       // Store the current value before the datepicker is shown
       $(this).data("prevValue", $(this).val());
@@ -38,7 +36,6 @@ function initDatepicker() {
       $(this).trigger("change");
     });
 }
-
 
 $(document).ready(function () {
   $(".btn-inspection").click(function () {
@@ -80,7 +77,7 @@ function initDatatable(options = {}) {
     layout = defaultLayout,
     paging = true,
     ordering = false,
-    columnDefs = []
+    columnDefs = [],
   } = options || {};
   const scrollableConfig = options.scrollable
     ? {
@@ -88,9 +85,11 @@ function initDatatable(options = {}) {
         scrollY: "60vh",
       }
     : {};
-  const initCompleteConfig = options.initComplete ? {
-    initComplete: options.initComplete
-  } : {}
+  const initCompleteConfig = options.initComplete
+    ? {
+        initComplete: options.initComplete,
+      }
+    : {};
   const table = $(selector).DataTable({
     /*
       columnDefs: [
@@ -110,10 +109,10 @@ function initDatatable(options = {}) {
         targets: "noshow",
         visible: false,
       },
-      ...columnDefs
+      ...columnDefs,
     ],
     ...scrollableConfig,
-    ...initCompleteConfig
+    ...initCompleteConfig,
   });
 
   /*
@@ -202,41 +201,41 @@ $.validator.setDefaults({
 function debounce(func, wait) {
   let timeout;
 
-  return function(...args) {
+  return function (...args) {
     const context = this;
-    
+
     clearTimeout(timeout);
-    
+
     timeout = setTimeout(() => {
       func.apply(context, args);
     }, wait);
   };
 }
-var urllogout = $('#urllogout').val();
-var requestVerificationToken = $('#verification-token').val();
+var urllogout = $("#urllogout").val();
+var requestVerificationToken = $("#verification-token").val();
 
 $(document).ready(function () {
-    $("#btn-signout, #btn-signout-icon").click(function () {
-        if (confirm('Are you sure you want to sign out?')) {
-            $.ajax({
-                url: urllogout,
-                type: 'POST',
-                headers: {
-                    '__RequestVerificationToken': requestVerificationToken
-                },
-                success: function (apiresult) {
-                    if (apiresult.isSuccess) {
-                        var data = apiresult.data;
-                        location.reload();
-                    }
-                },
-            });
-        }
-    });
+  $("#btn-signout, #btn-signout-icon").click(function () {
+    if (confirm("Are you sure you want to sign out?")) {
+      $.ajax({
+        url: urllogout,
+        type: "POST",
+        headers: {
+          __RequestVerificationToken: requestVerificationToken,
+        },
+        success: function (apiresult) {
+          if (apiresult.isSuccess) {
+            var data = apiresult.data;
+            location.reload();
+          }
+        },
+      });
+    }
+  });
 });
 
 function getInputVal(id) {
-  return $(id).val()
+  return $(id).val();
 }
 
 function checkPasswordValidation(password) {
