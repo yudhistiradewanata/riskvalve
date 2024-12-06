@@ -127,8 +127,8 @@ public class AssessmentService(
                     }
                 }
             }
-            assessmentData.InspectionHistory = assessmentData.InspectionHistory.OrderByDescending(
-                x =>
+            assessmentData.InspectionHistory = assessmentData
+                .InspectionHistory.OrderByDescending(x =>
                     DateTime.TryParseExact(
                         x.Inspection?.InspectionDate ?? "01-01-1900",
                         SharedEnvironment.GetDateFormatString(false),
@@ -138,7 +138,8 @@ public class AssessmentService(
                     )
                         ? date
                         : DateTime.MinValue
-            ).ToList();
+                )
+                .ToList();
             assessmentData.MaintenanceHistory =
                 _assessmentMaintenanceRepository.GetAssessmentMaintenanceList(assessmentData.Id);
             foreach (var maintenance in assessmentData.MaintenanceHistory)
@@ -157,8 +158,8 @@ public class AssessmentService(
                     }
                 }
             }
-            assessmentData.MaintenanceHistory = assessmentData.MaintenanceHistory.OrderByDescending(
-                x =>
+            assessmentData.MaintenanceHistory = assessmentData
+                .MaintenanceHistory.OrderByDescending(x =>
                     DateTime.TryParseExact(
                         x.Maintenance?.MaintenanceDate ?? "01-01-1900",
                         SharedEnvironment.GetDateFormatString(false),
@@ -168,7 +169,8 @@ public class AssessmentService(
                     )
                         ? date
                         : DateTime.MinValue
-            ).ToList();
+                )
+                .ToList();
             return assessmentData;
         }
         catch (Exception ex)
@@ -269,36 +271,35 @@ public class AssessmentService(
     public AssessmentData CalculateAssessment(int assessmentID)
     {
         AssessmentData oldAssessmentData = GetAssessment(assessmentID);
-        AssessmentClass newAssessmentData = new()
-        {
-            Id = oldAssessmentData.Id,
-            AssetID = oldAssessmentData.AssetID,
-            AssessmentNo = oldAssessmentData.AssessmentNo,
-            AssessmentDate = oldAssessmentData.AssessmentDate,
-            TimePeriode = oldAssessmentData.TimePeriode,
-            TimeToLimitStateLeakageToAtmosphere =
-            oldAssessmentData.TimeToLimitStateLeakageToAtmosphere,
-            TimeToLimitStateFailureOfFunction =
-            oldAssessmentData.TimeToLimitStateFailureOfFunction,
-            TimeToLimitStatePassingAccrosValve =
-            oldAssessmentData.TimeToLimitStatePassingAccrosValve,
-            ImpactOfInternalFluidImpuritiesID =
-            oldAssessmentData.ImpactOfInternalFluidImpuritiesID,
-            ImpactOfOperatingEnvelopesID =
-            oldAssessmentData.ImpactOfOperatingEnvelopesID,
-            UsedWithinOEMSpecificationID =
-            oldAssessmentData.UsedWithinOEMSpecificationID,
-            RepairedID = oldAssessmentData.RepairedID,
-            ProductLossDefinition = oldAssessmentData.ProductLossDefinition,
-            HSSEDefinisionID = oldAssessmentData.HSSEDefinisionID,
-            Summary = oldAssessmentData.Summary,
-            RecommendationActionID = oldAssessmentData.RecommendationActionID,
-            DetailedRecommendation = oldAssessmentData.DetailedRecommendation,
-            CoFScore = oldAssessmentData.CoFScore,
-            IntegrityStatus = oldAssessmentData.IntegrityStatus,
-            UpdatedAt = oldAssessmentData.UpdatedAt,
-            UpdatedBy = oldAssessmentData.UpdatedBy,
-        };
+        AssessmentClass newAssessmentData =
+            new()
+            {
+                Id = oldAssessmentData.Id,
+                AssetID = oldAssessmentData.AssetID,
+                AssessmentNo = oldAssessmentData.AssessmentNo,
+                AssessmentDate = oldAssessmentData.AssessmentDate,
+                TimePeriode = oldAssessmentData.TimePeriode,
+                TimeToLimitStateLeakageToAtmosphere =
+                    oldAssessmentData.TimeToLimitStateLeakageToAtmosphere,
+                TimeToLimitStateFailureOfFunction =
+                    oldAssessmentData.TimeToLimitStateFailureOfFunction,
+                TimeToLimitStatePassingAccrosValve =
+                    oldAssessmentData.TimeToLimitStatePassingAccrosValve,
+                ImpactOfInternalFluidImpuritiesID =
+                    oldAssessmentData.ImpactOfInternalFluidImpuritiesID,
+                ImpactOfOperatingEnvelopesID = oldAssessmentData.ImpactOfOperatingEnvelopesID,
+                UsedWithinOEMSpecificationID = oldAssessmentData.UsedWithinOEMSpecificationID,
+                RepairedID = oldAssessmentData.RepairedID,
+                ProductLossDefinition = oldAssessmentData.ProductLossDefinition,
+                HSSEDefinisionID = oldAssessmentData.HSSEDefinisionID,
+                Summary = oldAssessmentData.Summary,
+                RecommendationActionID = oldAssessmentData.RecommendationActionID,
+                DetailedRecommendation = oldAssessmentData.DetailedRecommendation,
+                CoFScore = oldAssessmentData.CoFScore,
+                IntegrityStatus = oldAssessmentData.IntegrityStatus,
+                UpdatedAt = oldAssessmentData.UpdatedAt,
+                UpdatedBy = oldAssessmentData.UpdatedBy,
+            };
         // GET LAST INSPECTION
         List<AssessmentInspectionData>? inspectionDatas = oldAssessmentData.InspectionHistory;
         if (inspectionDatas == null || inspectionDatas.Count == 0)
@@ -389,46 +390,55 @@ public class AssessmentService(
         int timeToLimitStatePassingAccrosValve = int.Parse(
             oldAssessmentData.TimeToLimitStatePassingAccrosValve ?? "0"
         );
-        int idImprobable = 1;
-        int idDoubtful = 2;
-        int idExpected = 3;
-        int tp_limit_1 = timePeriod;
-        int tp_limit_2 = timePeriod;
-        int tp_limit_3 = timePeriod;
+        // int idImprobable = 1;
+        // int idDoubtful = 2;
+        // int idExpected = 3;
+        // int tp_limit_1 = timePeriod;
+        // int tp_limit_2 = timePeriod;
+        // int tp_limit_3 = timePeriod;
         List<TimeToLimitStateData> timeToLimitStateList =
             _timeToLimitStateRepository.GetTimeToLimitStateList();
         // Leakage To Atmosphere
         // TP1
-        int LeakageToAtmosphereTP1ID =
-            timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_1
-                ? idImprobable
-                : timeToLimitStateLeakageToAtmosphere > tp_limit_1 && timeToLimitStateLeakageToAtmosphere < 2 * tp_limit_1
-                    ? idDoubtful
-                    : idExpected;
+        int LeakageToAtmosphereTP1ID = DecidePosTTL(
+            timeToLimitStateLeakageToAtmosphere,
+            timePeriod
+        );
+        // timeToLimitStateLeakageToAtmosphere >= 2 * tp_limit_1
+        //     ? idImprobable
+        //     : timeToLimitStateLeakageToAtmosphere > tp_limit_1 && timeToLimitStateLeakageToAtmosphere < 2 * tp_limit_1
+        //         ? idDoubtful
+        //         : idExpected;
         double LeakageToAtmosphereTP1IDV =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP1ID).LimitStateValue ?? 0;
         double LeakageToAtmosphereTP1IDW =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP1ID).Weighting ?? 0;
         // TP 2
-        int timeToLimitStateLeakageToAtmosphereTP2 = timeToLimitStateLeakageToAtmosphere - tp_limit_1;
-        int LeakageToAtmosphereTP2ID =
-            timeToLimitStateLeakageToAtmosphereTP2 >= 2 * tp_limit_2
-                ? idImprobable
-                : timeToLimitStateLeakageToAtmosphereTP2 > tp_limit_2 && timeToLimitStateLeakageToAtmosphereTP2 < 2 * tp_limit_2
-                    ? idDoubtful
-                    : idExpected;
+        // int timeToLimitStateLeakageToAtmosphereTP2 = timeToLimitStateLeakageToAtmosphere - tp_limit_1;
+        int LeakageToAtmosphereTP2ID = DecidePosTTL(
+            timeToLimitStateLeakageToAtmosphere,
+            timePeriod * 2
+        );
+        // timeToLimitStateLeakageToAtmosphereTP2 >= 2 * tp_limit_2
+        //     ? idImprobable
+        //     : timeToLimitStateLeakageToAtmosphereTP2 > tp_limit_2 && timeToLimitStateLeakageToAtmosphereTP2 < 2 * tp_limit_2
+        //         ? idDoubtful
+        //         : idExpected;
         double LeakageToAtmosphereTP2IDV =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP2ID).LimitStateValue ?? 0;
         double LeakageToAtmosphereTP2IDW =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP2ID).Weighting ?? 0;
         // TP 3
-        int timeToLimitStateLeakageToAtmosphereTP3 = timeToLimitStateLeakageToAtmosphereTP2 - tp_limit_2;
-        int LeakageToAtmosphereTP3ID =
-            timeToLimitStateLeakageToAtmosphereTP3 >= 2 * tp_limit_3
-                ? idImprobable
-                : timeToLimitStateLeakageToAtmosphereTP3 > tp_limit_3 && timeToLimitStateLeakageToAtmosphereTP3 < 2 * tp_limit_3
-                    ? idDoubtful
-                    : idExpected;
+        // int timeToLimitStateLeakageToAtmosphereTP3 = timeToLimitStateLeakageToAtmosphereTP2 - tp_limit_2;
+        int LeakageToAtmosphereTP3ID = DecidePosTTL(
+            timeToLimitStateLeakageToAtmosphere,
+            timePeriod * 3
+        );
+        // timeToLimitStateLeakageToAtmosphereTP3 >= 2 * tp_limit_3
+        //     ? idImprobable
+        //     : timeToLimitStateLeakageToAtmosphereTP3 > tp_limit_3 && timeToLimitStateLeakageToAtmosphereTP3 < 2 * tp_limit_3
+        //         ? idDoubtful
+        //         : idExpected;
         double LeakageToAtmosphereTP3IDV =
             timeToLimitStateList.First(x => x.Id == LeakageToAtmosphereTP3ID).LimitStateValue ?? 0;
         double LeakageToAtmosphereTP3IDW =
@@ -436,36 +446,42 @@ public class AssessmentService(
 
         // Failure Of Function
         // TP 1
-        int FailureOfFunctionTP1ID =
-            timeToLimitStateFailureOfFunction >= 2 * tp_limit_1
-                ? idImprobable
-                : timeToLimitStateFailureOfFunction > tp_limit_1 && timeToLimitStateFailureOfFunction < 2 * tp_limit_1
-                    ? idDoubtful
-                    : idExpected;
+        int FailureOfFunctionTP1ID = DecidePosTTL(timeToLimitStateFailureOfFunction, timePeriod);
+        // timeToLimitStateFailureOfFunction >= 2 * tp_limit_1
+        //     ? idImprobable
+        //     : timeToLimitStateFailureOfFunction > tp_limit_1 && timeToLimitStateFailureOfFunction < 2 * tp_limit_1
+        //         ? idDoubtful
+        //         : idExpected;
         double FailureOfFunctionTP1IDV =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP1ID).LimitStateValue ?? 0;
         double FailureOfFunctionTP1IDW =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP1ID).Weighting ?? 0;
         // TP 2
-        int timeToLimitStateFailureOfFunctionTP2 = timeToLimitStateFailureOfFunction - tp_limit_1;
-        int FailureOfFunctionTP2ID =
-            timeToLimitStateFailureOfFunctionTP2 >= 2 * tp_limit_2
-                ? idImprobable
-                : timeToLimitStateFailureOfFunctionTP2 > tp_limit_2 && timeToLimitStateFailureOfFunctionTP2 < 2 * tp_limit_2
-                    ? idDoubtful
-                    : idExpected;
+        // int timeToLimitStateFailureOfFunctionTP2 = timeToLimitStateFailureOfFunction - tp_limit_1;
+        int FailureOfFunctionTP2ID = DecidePosTTL(
+            timeToLimitStateFailureOfFunction,
+            timePeriod * 2
+        );
+        // timeToLimitStateFailureOfFunctionTP2 >= 2 * tp_limit_2
+        //     ? idImprobable
+        //     : timeToLimitStateFailureOfFunctionTP2 > tp_limit_2 && timeToLimitStateFailureOfFunctionTP2 < 2 * tp_limit_2
+        //         ? idDoubtful
+        //         : idExpected;
         double FailureOfFunctionTP2IDV =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP2ID).LimitStateValue ?? 0;
         double FailureOfFunctionTP2IDW =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP2ID).Weighting ?? 0;
         // TP 3
-        int timeToLimitStateFailureOfFunctionTP3 = timeToLimitStateFailureOfFunctionTP2 - tp_limit_2;
-        int FailureOfFunctionTP3ID =
-            timeToLimitStateFailureOfFunctionTP3 >= 2 * tp_limit_3
-                ? idImprobable
-                : timeToLimitStateFailureOfFunctionTP3 > tp_limit_3 && timeToLimitStateFailureOfFunctionTP3 < 2 * tp_limit_3
-                    ? idDoubtful
-                    : idExpected;
+        // int timeToLimitStateFailureOfFunctionTP3 = timeToLimitStateFailureOfFunctionTP2 - tp_limit_2;
+        int FailureOfFunctionTP3ID = DecidePosTTL(
+            timeToLimitStateFailureOfFunction,
+            timePeriod * 3
+        );
+        // timeToLimitStateFailureOfFunctionTP3 >= 2 * tp_limit_3
+        //     ? idImprobable
+        //     : timeToLimitStateFailureOfFunctionTP3 > tp_limit_3 && timeToLimitStateFailureOfFunctionTP3 < 2 * tp_limit_3
+        //         ? idDoubtful
+        //         : idExpected;
         double FailureOfFunctionTP3IDV =
             timeToLimitStateList.First(x => x.Id == FailureOfFunctionTP3ID).LimitStateValue ?? 0;
         double FailureOfFunctionTP3IDW =
@@ -473,36 +489,42 @@ public class AssessmentService(
 
         // Passing Accros Valve
         // TP 1
-        int PassingAccrosValveTP1ID =
-            timeToLimitStatePassingAccrosValve >= 2 * tp_limit_1
-                ? idImprobable
-                : timeToLimitStatePassingAccrosValve > tp_limit_1 && timeToLimitStatePassingAccrosValve < 2 * tp_limit_1
-                    ? idDoubtful
-                    : idExpected;
+        int PassingAccrosValveTP1ID = DecidePosTTL(timeToLimitStatePassingAccrosValve, timePeriod);
+        // timeToLimitStatePassingAccrosValve >= 2 * tp_limit_1
+        //     ? idImprobable
+        //     : timeToLimitStatePassingAccrosValve > tp_limit_1 && timeToLimitStatePassingAccrosValve < 2 * tp_limit_1
+        //         ? idDoubtful
+        //         : idExpected;
         double PassingAccrosValveTP1IDV =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP1ID).LimitStateValue ?? 0;
         double PassingAccrosValveTP1IDW =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP1ID).Weighting ?? 0;
         // TP 2
-        int timeToLimitStatePassingAccrosValveTP2 = timeToLimitStatePassingAccrosValve - tp_limit_1;
-        int PassingAccrosValveTP2ID =
-            timeToLimitStatePassingAccrosValveTP2 >= 2 * tp_limit_2
-                ? idImprobable
-                : timeToLimitStatePassingAccrosValveTP2 > tp_limit_2 && timeToLimitStatePassingAccrosValveTP2 < 2 * tp_limit_2
-                    ? idDoubtful
-                    : idExpected;
+        // int timeToLimitStatePassingAccrosValveTP2 = timeToLimitStatePassingAccrosValve - tp_limit_1;
+        int PassingAccrosValveTP2ID = DecidePosTTL(
+            timeToLimitStatePassingAccrosValve,
+            timePeriod * 2
+        );
+        // timeToLimitStatePassingAccrosValveTP2 >= 2 * tp_limit_2
+        //     ? idImprobable
+        //     : timeToLimitStatePassingAccrosValveTP2 > tp_limit_2 && timeToLimitStatePassingAccrosValveTP2 < 2 * tp_limit_2
+        //         ? idDoubtful
+        //         : idExpected;
         double PassingAccrosValveTP2IDV =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP2ID).LimitStateValue ?? 0;
         double PassingAccrosValveTP2IDW =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP2ID).Weighting ?? 0;
         // TP 3
-        int timeToLimitStatePassingAccrosValveTP3 = timeToLimitStatePassingAccrosValveTP2 - tp_limit_2;
-        int PassingAccrosValveTP3ID =
-            timeToLimitStatePassingAccrosValveTP3 >= 2 * tp_limit_3
-                ? idImprobable
-                : timeToLimitStatePassingAccrosValveTP3 > tp_limit_3 && timeToLimitStatePassingAccrosValveTP3 < 2 * tp_limit_3
-                    ? idDoubtful
-                    : idExpected;
+        // int timeToLimitStatePassingAccrosValveTP3 = timeToLimitStatePassingAccrosValveTP2 - tp_limit_2;
+        int PassingAccrosValveTP3ID = DecidePosTTL(
+            timeToLimitStatePassingAccrosValve,
+            timePeriod * 3
+        );
+        // timeToLimitStatePassingAccrosValveTP3 >= 2 * tp_limit_3
+        //     ? idImprobable
+        //     : timeToLimitStatePassingAccrosValveTP3 > tp_limit_3 && timeToLimitStatePassingAccrosValveTP3 < 2 * tp_limit_3
+        //         ? idDoubtful
+        //         : idExpected;
         double PassingAccrosValveTP3IDV =
             timeToLimitStateList.First(x => x.Id == PassingAccrosValveTP3ID).LimitStateValue ?? 0;
         double PassingAccrosValveTP3IDW =
@@ -706,38 +728,57 @@ public class AssessmentService(
                     : hssebyhsse.CoFCategory
             ) ?? "A";
         newAssessmentData.ConsequenceOfFailure = cof;
-        Dictionary<string, int> cof_rac = new()
-        {
-            { "A", 3769 },
-            { "B", 891 },
-            { "C", 891 },
-            { "D", 49 },
-            { "E", 49 }
-        };
+        Dictionary<string, int> cof_rac =
+            new()
+            {
+                { "A", 3769 },
+                { "B", 891 },
+                { "C", 891 },
+                { "D", 49 },
+                { "E", 49 }
+            };
         int rac = cof_rac[cof];
         var cofToYpos = new Dictionary<string, double>
-            {
-                {"E", 10},
-                {"D", 30},
-                {"C", 50},
-                {"B", 70},
-                {"A", 90}
-            };
+        {
+            { "E", 10 },
+            { "D", 30 },
+            { "C", 50 },
+            { "B", 70 },
+            { "A", 90 }
+        };
         double ypos = cofToYpos.TryGetValue(cof, out double value) ? value : 0;
-        string TP1A = Math.Min(Math.Floor((LoFScoreLeakageToAtmophereTP1XPos/20))+1, 5).ToString() + cof;
-        string TP2A = Math.Min(Math.Floor((LoFScoreLeakageToAtmophereTP2XPos/20))+1, 5).ToString() + cof;
-        string TP3A = Math.Min(Math.Floor((LoFScoreLeakageToAtmophereTP3XPos/20))+1, 5).ToString() + cof;
-        string TP1B = Math.Min(Math.Floor((LoFScoreFailureOfFunctionTP1XPos/20) )+1 , 5).ToString() + cof;
-        string TP2B = Math.Min(Math.Floor((LoFScoreFailureOfFunctionTP2XPos/20) )+1 , 5).ToString() + cof;
-        string TP3B = Math.Min(Math.Floor((LoFScoreFailureOfFunctionTP3XPos/20) )+1 , 5).ToString() + cof;
-        string TP1C = Math.Min(Math.Floor((LoFScorePassingAccrosValveTP1XPos/20))+1, 5).ToString() + cof;
-        string TP2C = Math.Min(Math.Floor((LoFScorePassingAccrosValveTP2XPos/20))+1, 5).ToString() + cof;
-        string TP3C = Math.Min(Math.Floor((LoFScorePassingAccrosValveTP3XPos/20))+1, 5).ToString() + cof;
-        int TP1Riskv = Math.Max(Math.Max(int.Parse(TP1A[..1]), int.Parse(TP1B[..1])), int.Parse(TP1C[..1]));
+        string TP1A =
+            Math.Min(Math.Floor(LoFScoreLeakageToAtmophereTP1XPos / 20) + 1, 5).ToString() + cof;
+        string TP2A =
+            Math.Min(Math.Floor(LoFScoreLeakageToAtmophereTP2XPos / 20) + 1, 5).ToString() + cof;
+        string TP3A =
+            Math.Min(Math.Floor(LoFScoreLeakageToAtmophereTP3XPos / 20) + 1, 5).ToString() + cof;
+        string TP1B =
+            Math.Min(Math.Floor(LoFScoreFailureOfFunctionTP1XPos / 20) + 1, 5).ToString() + cof;
+        string TP2B =
+            Math.Min(Math.Floor(LoFScoreFailureOfFunctionTP2XPos / 20) + 1, 5).ToString() + cof;
+        string TP3B =
+            Math.Min(Math.Floor(LoFScoreFailureOfFunctionTP3XPos / 20) + 1, 5).ToString() + cof;
+        string TP1C =
+            Math.Min(Math.Floor(LoFScorePassingAccrosValveTP1XPos / 20) + 1, 5).ToString() + cof;
+        string TP2C =
+            Math.Min(Math.Floor(LoFScorePassingAccrosValveTP2XPos / 20) + 1, 5).ToString() + cof;
+        string TP3C =
+            Math.Min(Math.Floor(LoFScorePassingAccrosValveTP3XPos / 20) + 1, 5).ToString() + cof;
+        int TP1Riskv = Math.Max(
+            Math.Max(int.Parse(TP1A[..1]), int.Parse(TP1B[..1])),
+            int.Parse(TP1C[..1])
+        );
         string TP1Risk = TP1Riskv.ToString() + TP1A[1..];
-        int TP2Riskv = Math.Max(Math.Max(int.Parse(TP2A[..1]), int.Parse(TP2B[..1])), int.Parse(TP2C[..1]));
+        int TP2Riskv = Math.Max(
+            Math.Max(int.Parse(TP2A[..1]), int.Parse(TP2B[..1])),
+            int.Parse(TP2C[..1])
+        );
         string TP2Risk = TP2Riskv.ToString() + TP1B[1..];
-        int TP3Riskv = Math.Max(Math.Max(int.Parse(TP3A[..1]), int.Parse(TP3B[..1])), int.Parse(TP3C[..1]));
+        int TP3Riskv = Math.Max(
+            Math.Max(int.Parse(TP3A[..1]), int.Parse(TP3B[..1])),
+            int.Parse(TP3C[..1])
+        );
         string TP3Risk = TP3Riskv.ToString() + TP1C[1..];
         newAssessmentData.TP1A = TP1A;
         newAssessmentData.TP2A = TP2A;
@@ -751,6 +792,9 @@ public class AssessmentService(
         newAssessmentData.TP1Risk = TP1Risk;
         newAssessmentData.TP2Risk = TP2Risk;
         newAssessmentData.TP3Risk = TP3Risk;
+        int tp_limit_1 = timePeriod;
+        int tp_limit_2 = timePeriod * 2;
+        int tp_limit_3 = timePeriod * 3;
         double loftp1aval = DecideTTARAC(
             LoFScoreLeakageToAtmophereTP1,
             LoFScoreLeakageToAtmophereTP2,
@@ -764,7 +808,9 @@ public class AssessmentService(
             LeakageToAtmosphereTP3ID
         );
         DateTime loftp1adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp1aval));
-        newAssessmentData.TPTimeToActionA = loftp1adate.ToString(SharedEnvironment.GetDateFormatString(false));
+        newAssessmentData.TPTimeToActionA = loftp1adate.ToString(
+            SharedEnvironment.GetDateFormatString(false)
+        );
         double loftp2aval = DecideTTARAC(
             LoFScoreFailureOfFunctionTP1,
             LoFScoreFailureOfFunctionTP2,
@@ -778,7 +824,9 @@ public class AssessmentService(
             FailureOfFunctionTP3ID
         );
         DateTime loftp2adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp2aval));
-        newAssessmentData.TPTimeToActionB = loftp2adate.ToString(SharedEnvironment.GetDateFormatString(false));
+        newAssessmentData.TPTimeToActionB = loftp2adate.ToString(
+            SharedEnvironment.GetDateFormatString(false)
+        );
         double loftp3aval = DecideTTARAC(
             LoFScorePassingAccrosValveTP1,
             LoFScorePassingAccrosValveTP2,
@@ -792,9 +840,13 @@ public class AssessmentService(
             PassingAccrosValveTP3ID
         );
         DateTime loftp3adate = lastInspectionDate.AddMonths((int)Math.Floor(loftp3aval));
-        newAssessmentData.TPTimeToActionC = loftp3adate.ToString(SharedEnvironment.GetDateFormatString(false));
+        newAssessmentData.TPTimeToActionC = loftp3adate.ToString(
+            SharedEnvironment.GetDateFormatString(false)
+        );
         DateTime tptimetoactionrisk = new[] { loftp1adate, loftp2adate, loftp3adate }.Min();
-        newAssessmentData.TPTimeToActionRisk = tptimetoactionrisk.ToString(SharedEnvironment.GetDateFormatString(false));
+        newAssessmentData.TPTimeToActionRisk = tptimetoactionrisk.ToString(
+            SharedEnvironment.GetDateFormatString(false)
+        );
         newAssessmentData.TimeToAction = oldAssessmentData.TimeToAction;
         AssessmentData finalAssessmentData = UpdateAssessment(newAssessmentData);
         return finalAssessmentData;
@@ -815,7 +867,7 @@ public class AssessmentService(
         double cat5max = 16050;
 
         double xpos = 0;
-        if (value <= cat1min)
+        if (value < cat1min)
         {
             xpos = 0;
         }
@@ -846,7 +898,37 @@ public class AssessmentService(
         return xpos;
     }
 
-    public static double DecideTTARAC(double loftp1, double loftp2, double loftp3, double timelimittp1, double timelimittp2, double timelimittp3, double rac, double loftp1val, double loftp2val, double loftp3val)
+    private static int DecidePosTTL(double ls, double tp)
+    {
+        int idImprobable = 1;
+        int idDoubtful = 2;
+        int idExpected = 3;
+        if (ls >= 2 * tp)
+        {
+            return idImprobable;
+        }
+        else if (ls > tp && ls < 2 * tp)
+        {
+            return idDoubtful;
+        }
+        else
+        {
+            return idExpected;
+        }
+    }
+
+    public static double DecideTTARAC(
+        double loftp1,
+        double loftp2,
+        double loftp3,
+        double timelimittp1,
+        double timelimittp2,
+        double timelimittp3,
+        double rac,
+        double loftp1val,
+        double loftp2val,
+        double loftp3val
+    )
     {
         double calculate;
         if (loftp1 > rac)
@@ -857,20 +939,53 @@ public class AssessmentService(
         {
             if (loftp3 > rac && loftp2 <= rac)
             {
-                calculate = (int)Math.Floor(((timelimittp3 - timelimittp2) / 12.0 * (rac - loftp2) / (loftp3 - loftp2) + (timelimittp2 / 12.0)) * 12);
+                calculate = (int)
+                    Math.Floor(
+                        (
+                            (timelimittp3 - timelimittp2)
+                                / 12.0
+                                * (rac - loftp2)
+                                / (loftp3 - loftp2)
+                            + (timelimittp2 / 12.0)
+                        ) * 12
+                    );
             }
             else if (loftp2 > rac)
             {
-                calculate = (int)Math.Floor(((timelimittp2 - timelimittp1) / 12.0 * (rac - loftp1) / (loftp2 - loftp1) + (timelimittp1 / 12.0)) * 12);
+                calculate = (int)
+                    Math.Floor(
+                        (
+                            (timelimittp2 - timelimittp1)
+                                / 12.0
+                                * (rac - loftp1)
+                                / (loftp2 - loftp1)
+                            + (timelimittp1 / 12.0)
+                        ) * 12
+                    );
             }
             else
             {
-                calculate = DecideTTL(loftp1val, loftp2val, loftp3val, timelimittp1, timelimittp2, timelimittp3);
+                calculate = DecideTTL(
+                    loftp1val,
+                    loftp2val,
+                    loftp3val,
+                    timelimittp1,
+                    timelimittp2,
+                    timelimittp3
+                );
             }
         }
         return calculate;
     }
-    public static double DecideTTL(double tp1, double tp2, double tp3, double tp1val, double tp2val, double tp3val)
+
+    public static double DecideTTL(
+        double tp1,
+        double tp2,
+        double tp3,
+        double tp1val,
+        double tp2val,
+        double tp3val
+    )
     {
         if (tp1 == 1 && tp2 == 1 && tp3 == 1)
         {
@@ -901,6 +1016,7 @@ public class AssessmentService(
             return 0;
         }
     }
+
     public AssessmentData UpdateAssessment(AssessmentClass assessment)
     {
         try

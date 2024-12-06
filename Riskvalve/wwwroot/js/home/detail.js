@@ -250,7 +250,7 @@ function calculateXPos(value) {
 
     value = value*1;
     xpos = 0;
-    if(value <= cat1min){
+    if(value < cat1min){
         xpos = 0;
     } else if(value<=cat1max) {
         xpos = ((value-cat1min)/(cat1max-cat1min) * 20) + (gapx*0);
