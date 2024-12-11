@@ -479,6 +479,8 @@ public class AssessmentController(IAreaService areaService, IAssessmentService a
             result.IsSuccess = true;
             result.Message = "Assessment updated successfully";
             result.Data = assessmentData;
+            result.DataTemp = assessment;
+            result.DataTempString = assessment.ConsequenceOfFailure;
             return Json(result);
         }
         catch (Exception ex)
