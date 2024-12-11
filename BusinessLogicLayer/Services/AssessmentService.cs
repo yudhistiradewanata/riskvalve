@@ -748,23 +748,23 @@ public class AssessmentService(
         };
         double ypos = cofToYpos.TryGetValue(cof, out double value) ? value : 0;
         string TP1A =
-            Math.Min(Math.Floor(LoFScoreLeakageToAtmophereTP1XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScoreLeakageToAtmophereTP1XPos / 20) + 0, 5).ToString() + cof;
         string TP2A =
-            Math.Min(Math.Floor(LoFScoreLeakageToAtmophereTP2XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScoreLeakageToAtmophereTP2XPos / 20) + 0, 5).ToString() + cof;
         string TP3A =
-            Math.Min(Math.Floor(LoFScoreLeakageToAtmophereTP3XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScoreLeakageToAtmophereTP3XPos / 20) + 0, 5).ToString() + cof;
         string TP1B =
-            Math.Min(Math.Floor(LoFScoreFailureOfFunctionTP1XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScoreFailureOfFunctionTP1XPos / 20) + 0, 5).ToString() + cof;
         string TP2B =
-            Math.Min(Math.Floor(LoFScoreFailureOfFunctionTP2XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScoreFailureOfFunctionTP2XPos / 20) + 0, 5).ToString() + cof;
         string TP3B =
-            Math.Min(Math.Floor(LoFScoreFailureOfFunctionTP3XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScoreFailureOfFunctionTP3XPos / 20) + 0, 5).ToString() + cof;
         string TP1C =
-            Math.Min(Math.Floor(LoFScorePassingAccrosValveTP1XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScorePassingAccrosValveTP1XPos / 20) + 0, 5).ToString() + cof;
         string TP2C =
-            Math.Min(Math.Floor(LoFScorePassingAccrosValveTP2XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScorePassingAccrosValveTP2XPos / 20) + 0, 5).ToString() + cof;
         string TP3C =
-            Math.Min(Math.Floor(LoFScorePassingAccrosValveTP3XPos / 20) + 1, 5).ToString() + cof;
+            Math.Min(Math.Ceiling(LoFScorePassingAccrosValveTP3XPos / 20) + 0, 5).ToString() + cof;
         int TP1Riskv = Math.Max(
             Math.Max(int.Parse(TP1A[..1]), int.Parse(TP1B[..1])),
             int.Parse(TP1C[..1])
