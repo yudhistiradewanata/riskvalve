@@ -736,6 +736,20 @@ public class AssessmentService(
                     ? hssebypld.CoFCategory
                     : hssebyhsse.CoFCategory
             ) ?? "A";
+        // Logging COF
+        LogClass logclass2a = new();
+        logclass2a.Module = "XX==ASSESSMENT-2A";
+        logclass2a.CreatedAt = logdatetime;
+        logclass2a.Message = assessmentID.ToString();
+        string[] logg =
+        [
+            $"COFByPLD: {COFByPLD}",
+            $"hssebypld.CoFCategory: {hssebypld?.CoFCategory}",
+            $"hssebyhsse.CoFCategory: {hssebyhsse?.CoFCategory}",
+            $"Final COF: {cof}"
+        ];
+        logclass2a.Data = JsonConvert.SerializeObject(logg);
+        _logRepository.AddLog(logclass2a);
         // START LOGGING
         LogClass logclass2 = new();
         logclass2.Module = "XX==ASSESSMENT-2";
