@@ -270,7 +270,16 @@ public class AssessmentService(
 
     public AssessmentData CalculateAssessment(int assessmentID)
     {
+        string logdatetime = DateTime.Now.ToString(SharedEnvironment.GetDateFormatString(true));
         AssessmentData oldAssessmentData = GetAssessment(assessmentID);
+        // START LOGGING
+        LogClass logclass = new();
+        logclass.Module = "XX==ASSESSMENT-1";
+        logclass.CreatedAt = logdatetime;
+        logclass.Message = assessmentID.ToString();
+        logclass.Data = JsonConvert.SerializeObject(oldAssessmentData);
+        _logRepository.AddLog(logclass);
+        // END LOGGING
         AssessmentClass newAssessmentData =
             new()
             {
@@ -727,7 +736,23 @@ public class AssessmentService(
                     ? hssebypld.CoFCategory
                     : hssebyhsse.CoFCategory
             ) ?? "A";
+        // START LOGGING
+        LogClass logclass2 = new();
+        logclass2.Module = "XX==ASSESSMENT-2";
+        logclass2.CreatedAt = logdatetime;
+        logclass2.Message = assessmentID.ToString();
+        logclass2.Data = JsonConvert.SerializeObject(newAssessmentData);
+        _logRepository.AddLog(logclass2);
+        // END LOGGING
         newAssessmentData.ConsequenceOfFailure = cof;
+        // START LOGGING
+        LogClass logclass3 = new();
+        logclass3.Module = "XX==ASSESSMENT-3";
+        logclass3.CreatedAt = logdatetime;
+        logclass3.Message = assessmentID.ToString();
+        logclass3.Data = JsonConvert.SerializeObject(newAssessmentData);
+        _logRepository.AddLog(logclass3);
+        // END LOGGING
         Dictionary<string, int> cof_rac =
             new()
             {

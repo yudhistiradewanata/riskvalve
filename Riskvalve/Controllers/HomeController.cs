@@ -9,10 +9,12 @@ public class HomeController(
     IAreaService areaService,
     IAssessmentService assessmentService,
     IAssetService assetService
-) : Controller{
+) : Controller
+{
     private readonly IAreaService _areaService = areaService;
     private readonly IAssessmentService _assessmentService = assessmentService;
     private readonly IAssetService _assetService = assetService;
+
     public IActionResult Index()
     {
         bool IsLogin = Session.IsLogin(HttpContext);
@@ -74,7 +76,10 @@ public class HomeController(
             {
                 ViewData[item.Key] = item.Value;
             }
-            if (ViewData.ContainsKey("IsEngineer") && ViewData["IsEngineer"]?.ToString()?.ToLower().Equals("false") == true)
+            if (
+                ViewData.ContainsKey("IsEngineer")
+                && ViewData["IsEngineer"]?.ToString()?.ToLower().Equals("false") == true
+            )
             {
                 TempData["Message"] = "You are not authorized to access that page";
                 return Redirect(SharedEnvironment.app_path + "/Home/Index");
@@ -93,13 +98,29 @@ public class HomeController(
         AssessmentData assessment = new AssessmentData();
         foreach (var item in ints)
         {
-            try{
-            _assessmentService.CalculateAssessment(item);
+            try
+            {
+                _assessmentService.CalculateAssessment(item);
             }
-            catch(Exception e){
+            catch (Exception e)
+            {
                 Console.WriteLine(e.Message);
             }
         }
         return Json(assessment);
+    }
+
+    public IActionResult RegenAssessmentX(int id)
+    {
+        AssessmentData assessmentData = null;
+        try
+        {
+            assessmentData = _assessmentService.CalculateAssessment(id);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+        }
+        return Json(assessmentData);
     }
 }
