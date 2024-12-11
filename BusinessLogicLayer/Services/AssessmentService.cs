@@ -723,7 +723,9 @@ public class AssessmentService(
         // Calculate COF
         List<HSSEDefinisionData> hSSEDefinisionList =
             _hSSEDefinisionRepository.GetHSSEDefinisionList();
-        double COFByPLD = double.Parse(oldAssessmentData.ProductLossDefinition ?? "0");
+        string PLD = oldAssessmentData.ProductLossDefinition ?? "0";
+        PLD = PLD.Replace(",", ".");
+        double COFByPLD = double.Parse(PLD, CultureInfo.InvariantCulture);
         HSSEDefinisionData hssebypld = hSSEDefinisionList
             .Where(x => x.MinBBSValue <= COFByPLD)
             .OrderByDescending(x => x.MinBBSValue)
